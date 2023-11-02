@@ -23,7 +23,7 @@ export async function queryShopify(query: string): Promise<GraphQLResponse<Produ
 export async function getProducts() {
 	const query = `
     {
-      products (first: 3) {
+      products (first: 10) {
         edges {
           node {
             id
