@@ -13,7 +13,7 @@
 
 <div>
 	{#if products}
-		<div class="flex flex-wrap gap-x-[16px] gap-y-[80px]">
+		<div class="flex flex-wrap gap-x-[16px] gap-y-[80px] mt-[32px]">
 			{#each products.edges as { node: product }}
 				<ProductCard {product} />
 			{/each}
