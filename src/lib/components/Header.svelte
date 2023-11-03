@@ -17,6 +17,6 @@
 	</div>
 
 	<div class="md:hidden flex-1 flex items-center justify-end">
-		<img src="/icons/BurgerMenu.svg" alt="Menu" />
+		<img src="/icons/burger-menu.svg" alt="Menu" />
 	</div>
 </div>
