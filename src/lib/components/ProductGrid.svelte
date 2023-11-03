@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { exposeMetafields, getProducts } from '$lib/shopify';
+	import { getProducts } from '$lib/shopify';
 	import type { Products } from '$lib/models/shopifyTypes';
 	import ProductCard from '$lib/components/ProductCard.svelte';
 

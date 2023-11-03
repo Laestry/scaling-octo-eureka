@@ -1,3 +1,20 @@
+export interface PriceV2 {
+	amount: string;
+	currencyCode: string;
+}
+
+export interface VariantNode {
+	id: string;
+	title: string;
+	priceV2: PriceV2;
+}
+
+export interface Variants {
+	edges: {
+		node: VariantNode;
+	}[];
+}
+
 export interface ImageNode {
 	originalSrc: string;
 }
@@ -12,23 +29,14 @@ export interface Metafield {
 	value: string;
 }
 
-export interface MoneyValue {
-	amount: string;
-	currency_code: string;
-}
-
-export interface Money {
-	value: string; // Original JSON string value
-	parsedValue?: MoneyValue; // Parsed object value
-}
-
 export interface ProductNode {
 	id: string;
 	title: string;
 	tags: string[];
-	color: Metafield;
-	ml: Metafield;
-	brand: Metafield;
+	color: Metafield | null; // Updated to accommodate null values
+	ml: Metafield | null; // Updated to accommodate null values
+	brand: Metafield | null; // Updated to accommodate null values
+	variants: Variants; // New field for variants
 	images: Images;
 	description?: string;
 }

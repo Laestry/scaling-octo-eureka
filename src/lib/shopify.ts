@@ -22,37 +22,50 @@ export async function queryShopify(query: string): Promise<GraphQLResponse<Produ
 export async function getProducts() {
 	const query = `
     {
-      products (first: 10) {
-        edges {
-          node {
-             id
-             title
-             tags
-             color: metafield(namespace: "custom", key: "color"){
-             	value
-             }
-             ml: metafield(namespace: "custom", key: "mll"){
-             	value
-             }
-             brand: metafield(namespace: "custom", key: "brand"){
-             	value
-             }
-             images(first: 1) {
-               edges {
-                 node {
-                   originalSrc
-                 }
-               }
-             }
-          }
-        }
-      }
-    }
+	  products(first: 10) {
+		edges {
+		  node {
+			id
+			... on Product {
+			  variants(first: 2) {
+				edges {
+				  node {
+					id
+					title
+					priceV2 {
+					  amount
+					  currencyCode
+					}
+				  }
+				}
+			  }
+			}
+			title
+			tags
+			color: metafield(namespace: "custom", key: "color") {
+			  value
+			}
+			ml: metafield(namespace: "custom", key: "mll") {
+			  value
+			}
+			brand: metafield(namespace: "custom", key: "brand") {
+			  value
+			}
+			images(first: 1) {
+			  edges {
+				node {
+				  originalSrc
+				}
+			  }
+			}
+		  }
+		}
+	  }
+	}
+
   `;
 	const response = await queryShopify(query);
-	console.log(response);
-	const products = response.data.products;
-	return products;
+	return response.data.products;
 }
 
 export async function exposeMetafields() {
