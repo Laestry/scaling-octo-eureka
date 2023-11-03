@@ -5,8 +5,7 @@ import {
 } from '$env/static/public';
 import type { GraphQLResponse, ProductData } from '$lib/models/shopifyTypes';
 
-const SHOPIFY_ENDPOINT =
-	PUBLIC_SHOPIFY_BASE_URL + '/api/' + PUBLIC_SHOPIFY_API_VERSION + '/graphql.json';
+const SHOPIFY_ENDPOINT = `${PUBLIC_SHOPIFY_BASE_URL}api/${PUBLIC_SHOPIFY_API_VERSION}/graphql.json`;
 
 export async function queryShopify(query: string): Promise<GraphQLResponse<ProductData>> {
 	const response = await fetch(SHOPIFY_ENDPOINT, {
@@ -26,13 +25,37 @@ export async function getProducts() {
       products (first: 10) {
         edges {
           node {
-            id
-            title
+             id
+             title
+             tags
+             color: metafield(namespace: "custom", key: "color"){
+             	value
+             }
+             ml: metafield(namespace: "custom", key: "mll"){
+             	value
+             }
+             brand: metafield(namespace: "custom", key: "brand"){
+             	value
+             }
+             images(first: 1) {
+               edges {
+                 node {
+                   originalSrc
+                 }
+               }
+             }
           }
         }
       }
     }
   `;
+	const response = await queryShopify(query);
+	console.log(response);
+	const products = response.data.products;
+	return products;
+}
 
-	return (await queryShopify(query)).data.products;
+export async function exposeMetafields() {
+	const response = await fetch('/api/expose-metafiels');
+	console.log(response);
 }
