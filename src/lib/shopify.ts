@@ -67,7 +67,51 @@ export async function getProducts() {
 	return response.data.products;
 }
 
-export async function searchProducts(searchQuery: string): Promise<GraphQLResponse<ProductData>> {
+export async function getProduct(id: string) {
+	const query = `
+    {
+	  product(id: "gid:\\/\\/shopify\\/Product\\/${id.toString()}") {
+			id
+			... on Product {
+			  variants(first: 2) {
+				edges {
+				  node {
+					id
+					title
+					priceV2 {
+					  amount
+					  currencyCode
+					}
+				  }
+				}
+			  }
+			}
+			title
+			color: metafield(namespace: "custom", key: "color") {
+			  value
+			}
+			ml: metafield(namespace: "custom", key: "mll") {
+			  value
+			}
+			brand: metafield(namespace: "custom", key: "brand") {
+			  value
+			}
+			images(first: 1) {
+			  edges {
+				node {
+				  originalSrc
+				}
+			  }
+			}
+		  }
+		}
+  `;
+
+	const response = await queryShopify(query);
+	return response.data;
+}
+
+export async function searchProducts(searchQuery: string) {
 	const query = `
 	{
 		products(first: 10, query: "${searchQuery}") {

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { searchProducts } from '$lib/shopify';
-	import { debounce } from '$lib/utils';
+	import { debounce, getNumberFromId } from '$lib/utils';
 	import type { Products } from '$lib/models/shopifyTypes';
 
 	export let enabledFilters;
@@ -40,7 +40,9 @@
 			<div class="absolute">
 				<div class="relative bg-white border top-[25px]">
 					{#each searchResults.edges as { node: product }}
-						<div>{product.title}</div>
+						<a href="/products/{getNumberFromId(product.id)}">
+							<div>{product.title}</div>
+						</a>
 					{/each}
 				</div>
 			</div>
@@ -50,5 +52,5 @@
 </div>
 <div class="flex justify-between mt-[24px]">
 	<div>All Wines</div>
-	<div on:click={clearFilters}>Clear Filter</div>
+	<button on:click={clearFilters}>Clear Filter</button>
 </div>
