@@ -33,10 +33,10 @@ export interface ProductNode {
 	id: string;
 	title: string;
 	tags: string[];
-	color: Metafield | null; // Updated to accommodate null values
-	ml: Metafield | null; // Updated to accommodate null values
-	brand: Metafield | null; // Updated to accommodate null values
-	variants: Variants; // New field for variants
+	color: Metafield | null;
+	ml: Metafield | null;
+	brand: Metafield | null;
+	variants: Variants;
 	images: Images;
 	description?: string;
 }

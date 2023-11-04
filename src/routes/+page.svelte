@@ -12,10 +12,12 @@
 		products = await getProducts();
 		console.log('productgrid', products);
 	});
+
+	let enabledFilters;
 </script>
 
 <div class="uppercase">
-	<SearchBar class="mt-[59px]" />
-	<FilterBar class="mt-[24px]" />
+	<SearchBar class="mt-[59px]" bind:enabledFilters />
+	<FilterBar class="mt-[24px]" bind:enabledFilters />
 	<ProductGrid class="mt-[32px]" bind:products />
 </div>

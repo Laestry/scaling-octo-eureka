@@ -41,7 +41,6 @@ export async function getProducts() {
 			  }
 			}
 			title
-			tags
 			color: metafield(namespace: "custom", key: "color") {
 			  value
 			}
@@ -68,7 +67,50 @@ export async function getProducts() {
 	return response.data.products;
 }
 
-export async function exposeMetafields() {
-	const response = await fetch('/api/expose-metafiels');
-	console.log(response);
+export async function searchProducts(searchQuery: string): Promise<GraphQLResponse<ProductData>> {
+	const query = `
+	{
+		products(first: 10, query: "${searchQuery}") {
+			edges {
+				node {
+					id
+					... on Product {
+						variants(first: 2) {
+							edges {
+								node {
+									id
+									title
+									priceV2 {
+										amount
+										currencyCode
+									}
+								}
+							}
+						}
+					}
+					title
+					color: metafield(namespace: "custom", key: "color") {
+						value
+					}
+					ml: metafield(namespace: "custom", key: "ml") {
+						value
+					}
+					brand: metafield(namespace: "custom", key: "brand") {
+						value
+					}
+					images(first: 1) {
+						edges {
+							node {
+								originalSrc
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	`;
+
+	const response = await queryShopify(query);
+	return response.data.products;
 }
