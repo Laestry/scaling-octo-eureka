@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Tag from '$lib/components/Tag.svelte';
+	import Tag from './Tag.svelte';
 	import type { ProductNode, VariantNode } from '$lib/models/shopifyTypes';
 	import { getNumberFromId } from '$lib/utils.js';
 
@@ -9,8 +9,7 @@
 	const bottleVariant: VariantNode | undefined = product.variants.edges[0]?.node;
 	const caseVariant: VariantNode | undefined = product.variants.edges[1]?.node;
 
-	const bottlePrice: string = bottleVariant ? bottleVariant.priceV2.amount : 'N/A';
-	const casePrice: string = caseVariant ? caseVariant.priceV2.amount : 'N/A';
+	const bottlePrice: number = bottleVariant ? bottleVariant.priceV2.amount : 'N/A';
 </script>
 
 <a href="/products/{getNumberFromId(product.id)}">
@@ -22,13 +21,15 @@
 			style="object-fit: cover;"
 		/>
 		<div class="border-y-2 px-[16px] py-[8px]">
-			<div class="uppercase">{product.title}</div>
+			<div class="t1">{product.title}</div>
 			<div class="flex flex-wrap justify-between gap-y-[14px] mt-[12px]">
-				<Tag>{product?.brand?.value ?? 'N/A'}</Tag>
+				<Tag>{product?.producer?.value ?? 'N/A'}</Tag>
 				<Tag>{product?.color?.value ?? 'N/A'}</Tag>
 				<Tag>{product?.ml?.value ?? 'N/A'}ml</Tag>
-				<Tag>{parseInt(bottlePrice).toString()} CAD/Btl.</Tag>
-				<Tag>{parseInt(casePrice).toString()} CAD/Caisse</Tag>
+				<div class="flex justify-between w-full">
+					<Tag>{Math.trunc(bottlePrice)} CAD/Btl.</Tag>
+					<Tag>{Math.trunc(bottlePrice * 6)} CAD/Caisse</Tag>
+				</div>
 			</div>
 		</div>
 	</div>

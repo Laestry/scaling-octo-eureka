@@ -47,7 +47,7 @@ export async function getProducts() {
 			ml: metafield(namespace: "custom", key: "mll") {
 			  value
 			}
-			brand: metafield(namespace: "custom", key: "brand") {
+			producer: metafield(namespace: "custom", key: "producer") {
 			  value
 			}
 			images(first: 1) {
@@ -87,13 +87,26 @@ export async function getProduct(id: string) {
 			  }
 			}
 			title
+			descriptionHtml
 			color: metafield(namespace: "custom", key: "color") {
 			  value
 			}
 			ml: metafield(namespace: "custom", key: "mll") {
 			  value
 			}
-			brand: metafield(namespace: "custom", key: "brand") {
+			producer: metafield(namespace: "custom", key: "producer") {
+			  value
+			}
+			year: metafield(namespace: "custom", key: "year") {
+			  value
+			}
+			region: metafield(namespace: "custom", key: "region") {
+			  value
+			}
+			varietal: metafield(namespace: "custom", key: "varietal") {
+			  value
+			}
+			producer: metafield(namespace: "custom", key: "producer") {
 			  value
 			}
 			images(first: 1) {
@@ -157,4 +170,24 @@ export async function searchProducts(searchQuery: string) {
 
 	const response = await queryShopify(query);
 	return response.data.products;
+}
+
+export async function getProductRecommendations(productId: string) {
+	const recommendationsUrl = `${PUBLIC_SHOPIFY_BASE_URL}recommendations/products.json?product_id=${productId}&limit=5&section_id=product-recommendations&intent=related`;
+	try {
+		const response = await fetch(recommendationsUrl, {
+			method: 'GET'
+		});
+
+		if (!response.ok) {
+			throw new Error(`Failed to fetch recommendations. Status: ${response.status}`);
+		}
+
+		const responseData = await response.json();
+
+		return responseData.products; // Assuming you want to return the 'products' array from the response
+	} catch (error) {
+		console.error(error);
+		throw error; // Re-throw the error for further handling
+	}
 }

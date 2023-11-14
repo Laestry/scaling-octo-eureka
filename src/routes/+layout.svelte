@@ -1,6 +1,6 @@
 <script>
 	import '../app.css';
-	import Header from '$lib/components/Header.svelte';
+	import Header from './Header.svelte';
 </script>
 
 <div class="flex justify-center">

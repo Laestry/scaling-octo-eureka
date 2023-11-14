@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { Products } from '$lib/models/shopifyTypes';
-	import ProductCard from '$lib/components/ProductCard.svelte';
+	import ProductCard from './ProductCard.svelte';
 
 	export let products: Products | null = null;
 </script>

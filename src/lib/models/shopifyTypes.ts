@@ -35,10 +35,13 @@ export interface ProductNode {
 	tags: string[];
 	color: Metafield | null;
 	ml: Metafield | null;
-	brand: Metafield | null;
+	producer: Metafield | null;
+	region: Metafield | null;
+	year: Metafield | null;
+	varietal: Metafield | null;
 	variants: Variants;
 	images: Images;
-	description?: string;
+	descriptionHtml?: string;
 }
 
 export interface Products {

@@ -1,8 +1,7 @@
 <script>
 	import Filter from '$lib/components/Filters/Filter.svelte';
 
-	export let enabledFilters = ['Rouge', 'GrosJus'];
-	$: console.log(enabledFilters);
+	export let enabledFilters = [];
 </script>
 
 <div class="flex flex-wrap justify-between flex-1 gap-y-[16px] {$$props.class}">
