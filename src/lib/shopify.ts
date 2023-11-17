@@ -196,3 +196,45 @@ export async function getProductRecommendations(productId: string) {
 		throw error; // Re-throw the error for further handling
 	}
 }
+
+export async function getCollectionsWithProducts() {
+	const query = `
+    {
+      collections(first: 5) {
+        edges {
+          node {
+            id
+            title
+            products(first: 10) {
+              edges {
+                node {
+                  id
+                  title
+                  images(first: 1) {
+                    edges {
+                      node {
+                        originalSrc
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    `;
+
+	const response = await fetch(SHOPIFY_ENDPOINT, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+			'X-Shopify-Storefront-Access-Token': PUBLIC_SHOPIFY_STOREFRONT
+		},
+		body: JSON.stringify({ query })
+	});
+
+	const jsonResponse = await response.json();
+	return jsonResponse.data.collections;
+}

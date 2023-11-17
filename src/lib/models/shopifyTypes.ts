@@ -57,3 +57,15 @@ export interface ProductData {
 export interface GraphQLResponse<T> {
 	data: T;
 }
+
+export interface CollectionNode {
+	id: string;
+	title: string;
+	products: Products; // Reusing the Products interface you already have
+}
+
+export interface Collections {
+	edges: {
+		node: CollectionNode;
+	}[];
+}

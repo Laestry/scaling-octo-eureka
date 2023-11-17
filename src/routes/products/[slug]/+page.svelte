@@ -44,7 +44,7 @@
 						{@html product?.descriptionHtml ?? ''}
 					</div>
 				</div>
-				<dic class="flex gap-[42px]">
+				<div class="flex gap-[42px]">
 					<div class="tpr p-[8px] w-fit" style="border-bottom: 1px solid var(--border--02);">
 						<div>
 							<span class="tpb">R</span>{product?.variants?.edges[0]?.node?.priceV2?.amount ??
@@ -56,7 +56,7 @@
 						</div>
 					</div>
 					<button class="button px-[9px] py-[12px] rounded-[4px] border">add to cart</button>
-				</dic>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -75,7 +75,7 @@
 			{#if recommendedProducts}
 				<div class="flex gap-[26px] mt-[16px]">
 					{#each recommendedProducts as p}
-						<MiniProductCard product={p} />
+						<MiniProductCard title={p.handle} image={p.featured_image} id={p.id} />
 					{/each}
 				</div>
 			{/if}
