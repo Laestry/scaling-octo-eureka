@@ -8,7 +8,7 @@ body{
 
 .header{
     font-size: 20px;
-    font-family: Overpass;
+    font-family: 'Overpass', sans-serif;
     font-weight: 400;
     letter-spacing: -0.02em;
     line-height: 150%;
@@ -17,9 +17,8 @@ body{
 
 .button{
     font-size: 16px;
-    font-family: Overpass;
+    font-family: 'Overpass', sans-serif;
     font-weight: 600;
-    letter-spacing: 0em;
     line-height: 150%;
     text-transform: uppercase;
 }
@@ -42,6 +41,12 @@ h3{
     line-height: 150%;
 }
 
+.h3{
+    font-size: 36px;
+    font-weight: 500;
+    line-height: 150%;
+}
+
 h4{
     font-size: 24px;
     font-weight: 500;
@@ -57,7 +62,7 @@ h4{
 
 .coc{
     font-size: 13px;
-    font-family: 'Overpass';
+    font-family: 'Overpass', sans-serif;
     font-weight: 400;
     line-height: 150%;
 }
@@ -70,21 +75,21 @@ h4{
 
 .t1{
     font-size: 20px;
-    font-family: Overpass;
+    font-family: 'Overpass', sans-serif;
     font-weight: 500;
     line-height: 150%;
 }
 
 .t2{
     font-size: 16px;
-    font-family: Overpass;
+    font-family: 'Overpass', sans-serif;
     font-weight: 400;
     line-height: 150%;
 }
 
 .ot{
     font-size: 16px;
-    font-family: Overpass;
+    font-family: 'Overpass', sans-serif;
     font-weight: 400;
     line-height: 150%;
     text-transform: uppercase;

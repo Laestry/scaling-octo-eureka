@@ -1,10 +1,6 @@
 <div class="flex lg:h-[113px] md:h-[96px] h-[48px] items-center">
 	<a href="/" class="h-fit">
-		<img
-			src="/logo.svg"
-			alt="logo"
-			class="lg:mt-[8px] mt-none lg:w-[158px] md:w-[64px] w-[32px]"
-		/>
+		<img src="/logo.svg" alt="logo" class="lg:mt-[8px] mt-none lg:w-[158px] md:w-[64px] w-[32px]" />
 	</a>
 
 	<div
@@ -19,7 +15,7 @@
 
 		<div class="flex-1" />
 
-		<div>Buy Wine</div>
+		<a href="/products">Buy Wine</a>
 	</div>
 
 	<div class="md:hidden flex-1 flex items-center justify-end">
