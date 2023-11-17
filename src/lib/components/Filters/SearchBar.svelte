@@ -1,11 +1,11 @@
 <script lang="ts">
 	import { searchProducts } from '$lib/shopify';
-	import { debounce, getNumberFromId } from '$lib/utils';
+	import { debounce } from '$lib/utils';
 	import type { Products } from '$lib/models/shopifyTypes';
 
 	export let enabledFilters;
-	let searchString = '';
-	let searchResults: Products | null = null;
+	export let searchString = '';
+	export let searchResults: Products | null = null;
 
 	const debouncedSearch = debounce(async (query: string) => {
 		if (searchString === '') {
@@ -35,18 +35,6 @@
 				}}
 			/>
 		</div>
-
-		{#if searchResults && searchResults.edges.length > 0}
-			<div class="absolute">
-				<div class="relative bg-white border top-[25px]">
-					{#each searchResults.edges as { node: product }}
-						<a href="/products/{getNumberFromId(product.id)}">
-							<div>{product.title}</div>
-						</a>
-					{/each}
-				</div>
-			</div>
-		{/if}
 	</div>
 	<img src="/icons/search.svg" alt="" class="h-[24px]" />
 </div>

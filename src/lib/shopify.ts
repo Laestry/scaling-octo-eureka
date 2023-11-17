@@ -132,7 +132,7 @@ export async function searchProducts(searchQuery: string) {
 				node {
 					id
 					... on Product {
-						variants(first: 2) {
+						variants(first: 1) {
 							edges {
 								node {
 									id
@@ -147,20 +147,25 @@ export async function searchProducts(searchQuery: string) {
 					}
 					title
 					color: metafield(namespace: "custom", key: "color") {
-						value
+					  value
 					}
-					ml: metafield(namespace: "custom", key: "ml") {
-						value
+					ml: metafield(namespace: "custom", key: "mll") {
+					  value
 					}
-					brand: metafield(namespace: "custom", key: "brand") {
-						value
+					producer: metafield(namespace: "custom", key: "producer") {
+					  value
 					}
-					images(first: 1) {
-						edges {
-							node {
-								originalSrc
-							}
-						}
+					year: metafield(namespace: "custom", key: "year") {
+					  value
+					}
+					region: metafield(namespace: "custom", key: "region") {
+					  value
+					}
+					varietal: metafield(namespace: "custom", key: "varietal") {
+					  value
+					}
+					producer: metafield(namespace: "custom", key: "producer") {
+					  value
 					}
 				}
 			}
@@ -180,7 +185,7 @@ export async function getProductRecommendations(productId: string) {
 		});
 
 		if (!response.ok) {
-			throw new Error(`Failed to fetch recommendations. Status: ${response.status}`);
+			console.log(`Failed to fetch recommendations. Status: ${response.status}`);
 		}
 
 		const responseData = await response.json();

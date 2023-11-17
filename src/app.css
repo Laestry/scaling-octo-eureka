@@ -4,6 +4,7 @@
 
 body{
     font: 20px 'Inter';
+    scroll-behavior: smooth;
 }
 
 .header{
@@ -111,18 +112,6 @@ h4{
     font-size: 12px;
     font-weight: 300;
     line-height: 150%;
-}
-
-.th{
-    font-size: 16px;
-    font-weight: 500;
-    line-height: 100%;
-}
-
-.tc{
-    font-size: 16px;
-    font-weight: 300;
-    line-height: 100%;
 }
 
 .tpr{
