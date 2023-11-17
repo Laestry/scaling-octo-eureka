@@ -2,17 +2,10 @@
 	import ProductGrid from './ProductGrid.svelte';
 	import FilterBar from '$lib/components/Filters/FilterBar.svelte';
 	import SearchBar from '$lib/components/Filters/SearchBar.svelte';
-	import { onMount } from 'svelte';
-	import { getProducts } from '$lib/shopify';
 	import type { Products } from '$lib/models/shopifyTypes';
 	import SearchResults from './SearchResults.svelte';
 
-	let products: Products | null = null;
-
-	onMount(async () => {
-		products = await getProducts();
-		console.log('productgrid', products);
-	});
+	export let data: Products | null = null;
 
 	let enabledFilters;
 	let searchResults: Products | null = null;
@@ -24,6 +17,6 @@
 	{#if searchResults}
 		<SearchResults {searchResults} />
 	{:else}
-		<ProductGrid class="mt-[32px]" bind:products />
+		<ProductGrid class="mt-[32px]" bind:products={data} />
 	{/if}
 </div>
