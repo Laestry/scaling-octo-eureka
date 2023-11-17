@@ -5,14 +5,14 @@
 	export let products: Products | null = null;
 </script>
 
-<div in:fade class={$$props.class}>
+<div class={$$props.class}>
 	{#if products}
-		<div class="flex flex-wrap gap-x-[16px] gap-y-[80px]">
+		<div in:fade class="flex flex-wrap gap-x-[16px] gap-y-[80px]">
 			{#each products.edges as { node: product }}
 				<ProductCard {product} />
 			{/each}
 		</div>
 	{:else}
-		<p>Loading...</p>
+		<p class="absolute top-[50%] right-[50%]">Loading...</p>
 	{/if}
 </div>
