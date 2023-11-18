@@ -2,6 +2,7 @@
 	import { getNumberFromId } from '$lib/utils.js';
 	import type { Products } from '$lib/models/shopifyTypes';
 	import { fade } from 'svelte/transition';
+	import FavoriteButton from '$lib/components/FavoriteButton.svelte';
 
 	export let searchResults: Products | null = null;
 
@@ -41,7 +42,7 @@
 					>
 					<td class=" lowercase"> {product.ml?.value ?? ''}ml</td>
 					<td class="!p-0 flex items-center justify-center">
-						<img height="24" src="/icons/heart.svg" alt="" />
+						<FavoriteButton />
 					</td>
 				</tr>
 			{/each}
@@ -64,7 +65,7 @@
 		line-height: 100%;
 		padding: 8px 16px;
 		border-bottom: 1px solid var(--border--02);
-		height: 48px;
+		height: 49px;
 	}
 
 	td {
@@ -77,6 +78,6 @@
 		line-height: 100%;
 		padding: 8px 16px;
 		border-bottom: 1px solid var(--border--02);
-		height: 48px;
+		height: 49px;
 	}
 </style>

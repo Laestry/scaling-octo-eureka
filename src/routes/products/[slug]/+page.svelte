@@ -4,6 +4,7 @@
 	import ProductTags from './ProductTags.svelte';
 	import { onMount } from 'svelte';
 	import MiniProductCard from '$lib/components/MiniProductCard.svelte';
+	import FavoriteButton from '$lib/components/FavoriteButton.svelte';
 
 	export let data;
 	let product: ProductNode;
@@ -44,18 +45,19 @@
 						{@html product?.descriptionHtml ?? ''}
 					</div>
 				</div>
-				<div class="flex gap-[42px]">
+				<div class="flex gap-[42px] items-center">
 					<div class="tpr p-[8px] w-fit" style="border-bottom: 1px solid var(--border--02);">
 						<div>
-							<span class="tpb">R</span>{product?.variants?.edges[0]?.node?.priceV2?.amount ??
-								'N/A'}$/btl
+							<span class="tpb">R</span>
+							{parseInt(product?.variants?.edges[0]?.node?.priceV2?.amount) ?? 'N/A'}$/btl
 						</div>
 						<div class="text-contents">
-							<span class="tpb">R</span>{product?.variants?.edges[0]?.node?.priceV2?.amount ??
-								'N/A'}$/btl
+							<span class="tpb">R</span>
+							{parseInt(product?.variants?.edges[0]?.node?.priceV2?.amount) * 6 ?? 'N/A'}$/btl
 						</div>
 					</div>
 					<button class="button px-[9px] py-[12px] rounded-[4px] border">add to cart</button>
+					<FavoriteButton />
 				</div>
 			</div>
 		</div>
@@ -73,8 +75,8 @@
 		</Accordion>
 		<Accordion title="You might also like">
 			{#if recommendedProducts}
-				<div class="flex gap-[26px] mt-[16px]">
-					{#each recommendedProducts as p}
+				<div class="flex gap-[32px] mt-[16px]">
+					{#each recommendedProducts.slice(0, 4) as p}
 						<MiniProductCard title={p.handle} image={p.featured_image} id={p.id} />
 					{/each}
 				</div>
