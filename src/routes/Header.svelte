@@ -1,3 +1,12 @@
+<script lang="ts">
+	import { cartStore } from '$lib/store';
+	import { onMount } from 'svelte';
+
+	onMount(() => {
+		console.log(cartStore.length);
+	});
+</script>
+
 <div class="flex lg:h-[113px] md:h-[96px] h-[48px] items-center">
 	<a href="/" class="h-fit">
 		<img src="/logo.svg" alt="logo" class="lg:mt-[8px] mt-none lg:w-[158px] md:w-[64px] w-[32px]" />
@@ -16,6 +25,10 @@
 		<div class="flex-1" />
 
 		<a href="/products">Buy Wine</a>
+
+		{#if $cartStore && $cartStore.length > 0}
+			<a class="ml-[10px]" href="/cart">Cart {$cartStore.length}</a>
+		{/if}
 	</div>
 
 	<div class="md:hidden flex-1 flex items-center justify-end">

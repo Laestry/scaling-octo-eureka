@@ -61,11 +61,42 @@ export interface GraphQLResponse<T> {
 export interface CollectionNode {
 	id: string;
 	title: string;
-	products: Products; // Reusing the Products interface you already have
+	products: Products;
 }
 
 export interface Collections {
 	edges: {
 		node: CollectionNode;
 	}[];
+}
+
+export interface ProductVariant {
+	id: string;
+	priceV2: PriceV2;
+	product: {
+		title: string;
+		color: Metafield | null;
+		ml: Metafield | null;
+		producer: Metafield | null;
+		year: Metafield | null;
+		region: Metafield | null;
+		varietal: Metafield | null;
+	};
+}
+
+export interface CartLineNode {
+	id: string;
+	quantity: number;
+	merchandise: ProductVariant;
+}
+
+export interface CartLines {
+	edges: {
+		node: CartLineNode;
+	}[];
+}
+
+export interface Cart {
+	id: string;
+	lines: CartLines;
 }

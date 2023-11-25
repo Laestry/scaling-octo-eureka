@@ -1,3 +1,5 @@
+import type { ProductNode } from '$lib/models/shopifyTypes';
+
 export function debounce<F extends (...args: unknown[]) => void>(
 	func: F,
 	timeout: number = 300

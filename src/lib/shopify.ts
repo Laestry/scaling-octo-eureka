@@ -4,6 +4,7 @@ import {
 	PUBLIC_SHOPIFY_STOREFRONT
 } from '$env/static/public';
 import type { GraphQLResponse, ProductData } from '$lib/models/shopifyTypes';
+import { getNumberFromId } from '$lib/utils';
 
 const SHOPIFY_ENDPOINT = `${PUBLIC_SHOPIFY_BASE_URL}api/${PUBLIC_SHOPIFY_API_VERSION}/graphql.json`;
 
@@ -237,4 +238,155 @@ export async function getCollectionsWithProducts() {
 
 	const jsonResponse = await response.json();
 	return jsonResponse.data.collections;
+}
+
+export async function createCart(merchandiseId: string) {
+	const query = `
+     mutation {
+      cartCreate(
+        input: {
+          lines: [
+            {
+              quantity: 1,
+              merchandiseId: "${merchandiseId}"
+            }
+          ],
+        }
+      ) {
+        cart {
+          id
+          lines(first: 10) {
+			edges {
+			  node {
+				id
+				quantity
+				merchandise {
+				  ... on ProductVariant {
+					id
+					priceV2 {
+					  amount
+					  currencyCode
+					}
+					product {
+						title
+						color: metafield(namespace: "custom", key: "color") {
+						  value
+						}
+						ml: metafield(namespace: "custom", key: "mll") {
+						  value
+						}
+						producer: metafield(namespace: "custom", key: "producer") {
+						  value
+						}
+						year: metafield(namespace: "custom", key: "year") {
+						  value
+						}
+						region: metafield(namespace: "custom", key: "region") {
+						  value
+						}
+						varietal: metafield(namespace: "custom", key: "varietal") {
+						  value
+						}
+						producer: metafield(namespace: "custom", key: "producer") {
+						  value
+						}
+                	}
+				  }
+				}
+			  }
+			}
+      	  }
+        }
+      }
+    }
+    `;
+
+	const response = await fetch(SHOPIFY_ENDPOINT, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+			'X-Shopify-Storefront-Access-Token': PUBLIC_SHOPIFY_STOREFRONT
+		},
+		body: JSON.stringify({ query })
+	});
+
+	const jsonResponse = await response.json();
+	return jsonResponse.data.cartCreate.cart;
+}
+
+export async function updateCartItem(cartId, merchandiseId, quantity) {
+	const query = `
+    mutation {
+      cartLinesAdd(cartId: "${cartId}", lines: [{ quantity: ${quantity}, merchandiseId: "${merchandiseId}" }]) {
+        cart {
+          id
+          lines(first: 99) {
+            edges {
+              node {
+                id
+                merchandise {
+                  ... on ProductVariant {
+                    id
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  `;
+
+	const response = await fetch(SHOPIFY_ENDPOINT, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+			'X-Shopify-Storefront-Access-Token': PUBLIC_SHOPIFY_STOREFRONT
+		},
+		body: JSON.stringify({ query })
+	});
+
+	return response.json();
+}
+
+export async function getCartItems(cartId) {
+	const query = `
+        query {
+            cart(id: "${cartId}") {
+                id
+                lines(first: 10) {  
+                    edges {
+                        node {
+                            id
+                            quantity
+                            merchandise {
+                                ... on ProductVariant {
+                                    id
+                                    product {
+                                        title
+                                    }
+                                    priceV2 {
+                                        amount
+                                        currencyCode
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    `;
+
+	const response = await fetch(SHOPIFY_ENDPOINT, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+			'X-Shopify-Storefront-Access-Token': PUBLIC_SHOPIFY_STOREFRONT
+		},
+		body: JSON.stringify({ query })
+	});
+
+	const jsonResponse = await response.json();
+	return jsonResponse.data.cart;
 }

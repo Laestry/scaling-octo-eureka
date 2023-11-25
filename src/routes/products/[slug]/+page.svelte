@@ -5,11 +5,14 @@
 	import { onMount } from 'svelte';
 	import MiniProductCard from '$lib/components/MiniProductCard.svelte';
 	import FavoriteButton from '$lib/components/FavoriteButton.svelte';
+	import { cartStore } from '$lib/store';
+	import { updateCart } from '$lib/cart';
 
 	export let data;
 	let product: ProductNode;
 	$: product = data.product;
 	let recommendedProducts;
+
 	onMount(async () => {
 		console.log(product);
 		const productId = product.id;
@@ -20,8 +23,8 @@
 			},
 			body: JSON.stringify({ productId })
 		});
+
 		recommendedProducts = await response.json();
-		console.log(recommendedProducts);
 	});
 </script>
 
@@ -49,14 +52,21 @@
 					<div class="tpr p-[8px] w-fit" style="border-bottom: 1px solid var(--border--02);">
 						<div>
 							<span class="tpb">R</span>
-							{parseInt(product?.variants?.edges[0]?.node?.priceV2?.amount) ?? 'N/A'}$/btl
+							{parseInt(product?.variants?.edges[0]?.node?.priceV2?.amount / 6) ?? 'N/A'}$/btl
 						</div>
 						<div class="text-contents">
-							<span class="tpb">R</span>
-							{parseInt(product?.variants?.edges[0]?.node?.priceV2?.amount) * 6 ?? 'N/A'}$/btl
+							<span class="tpb">P</span>
+							{parseInt(product?.variants?.edges[0]?.node?.priceV2?.amount) ?? 'N/A'}$/btl
 						</div>
 					</div>
-					<button class="button px-[9px] py-[12px] rounded-[4px] border">add to cart</button>
+					<button
+						on:click={() => {
+							updateCart(product, 1);
+						}}
+						class="button px-[9px] py-[12px] rounded-[4px] border"
+					>
+						add to cart
+					</button>
 					<FavoriteButton />
 				</div>
 			</div>
