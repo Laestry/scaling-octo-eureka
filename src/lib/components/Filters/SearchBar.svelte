@@ -13,7 +13,6 @@
 			return;
 		}
 		searchResults = await searchProducts(query);
-		console.log(searchResults);
 	}, 500);
 
 	function clearFilters() {

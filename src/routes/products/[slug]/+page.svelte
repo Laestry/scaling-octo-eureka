@@ -6,7 +6,7 @@
 	import MiniProductCard from '$lib/components/MiniProductCard.svelte';
 	import FavoriteButton from '$lib/components/FavoriteButton.svelte';
 	import { cartStore } from '$lib/store';
-	import { updateCart } from '$lib/cart';
+	import { addToCart } from '$lib/cart';
 
 	export let data;
 	let product: ProductNode;
@@ -14,7 +14,6 @@
 	let recommendedProducts;
 
 	onMount(async () => {
-		console.log(product);
 		const productId = product.id;
 		const response = await fetch('/api/getRecommendedProducts', {
 			method: 'POST',
@@ -61,7 +60,7 @@
 					</div>
 					<button
 						on:click={() => {
-							updateCart(product, 1);
+							addToCart(product, 1);
 						}}
 						class="button px-[9px] py-[12px] rounded-[4px] border"
 					>

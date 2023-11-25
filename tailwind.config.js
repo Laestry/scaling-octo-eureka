@@ -17,11 +17,13 @@ module.exports = {
 			contents: '#a8a8a8',
 			border1: '#000000',
 			border2: '#ebebeb',
+			buttonP: '#DFDFDF',
+			buttonS: '#000'
 		},
 		extend: {
 			borderColor: {
 				DEFAULT: 'rgb(0, 0, 0, 1)'
-			},
+			}
 		}
 	},
 	plugins: []

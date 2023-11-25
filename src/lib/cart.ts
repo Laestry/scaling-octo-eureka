@@ -1,11 +1,24 @@
 import type { ProductNode } from '$lib/models/shopifyTypes';
 import Cookies from 'js-cookie';
 import { cartStore } from '$lib/store';
+import { get } from 'svelte/store';
 
-export function updateCart(product: ProductNode, quantity: number) {
-	let products = JSON.parse(Cookies.get('cart'));
+export interface CartItem {
+	title: string;
+	id: string;
+	variantId: string;
+	picture: string;
+	price: string;
+	color: string;
+	style: string;
+	quantity: number;
+}
 
-	const item = {
+export function addToCart(product: ProductNode, quantity: number) {
+	let products = get(cartStore);
+	if (!products) products = [];
+
+	const item: CartItem = {
 		title: product.title,
 		id: product.id,
 		variantId: product.variants.edges[0].node.id,
@@ -30,5 +43,24 @@ export function updateCart(product: ProductNode, quantity: number) {
 
 	const productsCookie = JSON.stringify(products);
 
+	Cookies.set('cart', productsCookie, { path: '/' });
+}
+
+export function updateCart(itemId: string, quantity: number) {
+	let products = get(cartStore);
+	if (!products) return;
+
+	if (quantity <= 0) {
+		products = products.filter((item) => item.id !== itemId);
+	} else {
+		const index = products.findIndex((item) => item.id === itemId);
+
+		if (index !== -1) {
+			products[index].quantity = quantity;
+		}
+	}
+
+	cartStore.set(products);
+	const productsCookie = JSON.stringify(products);
 	Cookies.set('cart', productsCookie, { path: '/' });
 }

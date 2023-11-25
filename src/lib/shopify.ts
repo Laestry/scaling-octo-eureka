@@ -240,62 +240,23 @@ export async function getCollectionsWithProducts() {
 	return jsonResponse.data.collections;
 }
 
-export async function createCart(merchandiseId: string) {
+export async function createCart(items) {
+	const lines = items
+		.map((item) => {
+			return `{ quantity: ${item.quantity}, merchandiseId: "${item.variantId}" }`;
+		})
+		.join(',');
+
 	const query = `
      mutation {
       cartCreate(
         input: {
-          lines: [
-            {
-              quantity: 1,
-              merchandiseId: "${merchandiseId}"
-            }
-          ],
+          lines: [${lines}],
         }
       ) {
         cart {
           id
-          lines(first: 10) {
-			edges {
-			  node {
-				id
-				quantity
-				merchandise {
-				  ... on ProductVariant {
-					id
-					priceV2 {
-					  amount
-					  currencyCode
-					}
-					product {
-						title
-						color: metafield(namespace: "custom", key: "color") {
-						  value
-						}
-						ml: metafield(namespace: "custom", key: "mll") {
-						  value
-						}
-						producer: metafield(namespace: "custom", key: "producer") {
-						  value
-						}
-						year: metafield(namespace: "custom", key: "year") {
-						  value
-						}
-						region: metafield(namespace: "custom", key: "region") {
-						  value
-						}
-						varietal: metafield(namespace: "custom", key: "varietal") {
-						  value
-						}
-						producer: metafield(namespace: "custom", key: "producer") {
-						  value
-						}
-                	}
-				  }
-				}
-			  }
-			}
-      	  }
+          checkoutUrl
         }
       }
     }

@@ -1,4 +1,10 @@
 export async function load({ cookies }) {
-	const cart = JSON.parse(cookies.get('cart'));
+	const cartCookie = cookies.get('cart');
+	let cart;
+	if (cartCookie) {
+		cart = JSON.parse(cookies.get('cart'));
+	} else {
+		cart = undefined;
+	}
 	return { cart };
 }

@@ -4,8 +4,6 @@
 	import { getNumberFromId } from '$lib/utils.js';
 
 	export let data: Collections;
-
-	console.log(data);
 </script>
 
 <div>

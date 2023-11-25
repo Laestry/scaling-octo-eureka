@@ -1,10 +1,6 @@
 <script lang="ts">
 	import { cartStore } from '$lib/store';
 	import { onMount } from 'svelte';
-
-	onMount(() => {
-		console.log(cartStore.length);
-	});
 </script>
 
 <div class="flex lg:h-[113px] md:h-[96px] h-[48px] items-center">
