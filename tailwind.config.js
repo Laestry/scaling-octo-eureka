@@ -18,7 +18,9 @@ module.exports = {
 			border1: '#000000',
 			border2: '#ebebeb',
 			buttonP: '#DFDFDF',
-			buttonS: '#000'
+			buttonS: '#000',
+			color5: '#2D63B0',
+			color1: '#F04F30'
 		},
 		extend: {
 			borderColor: {

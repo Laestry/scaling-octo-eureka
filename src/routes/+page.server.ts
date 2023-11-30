@@ -1,5 +1,5 @@
-import { getCollectionsWithProducts } from '$lib/shopify';
+import { getCollectionWithProducts } from '$lib/shopify';
 
 export async function load() {
-	return await getCollectionsWithProducts();
+	return await getCollectionWithProducts('611985195338');
 }

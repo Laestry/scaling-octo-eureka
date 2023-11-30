@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { cartStore } from '$lib/store';
-	import { onMount } from 'svelte';
 </script>
 
 <div class="flex lg:h-[113px] md:h-[96px] h-[48px] items-center">

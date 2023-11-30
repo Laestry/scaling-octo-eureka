@@ -211,6 +211,20 @@ export async function getCollectionsWithProducts() {
                 node {
                   id
                   title
+                  ... on Product {
+						variants(first: 1) {
+							edges {
+								node {
+									id
+									title
+									priceV2 {
+										amount
+										currencyCode
+									}
+								}
+							}
+						}
+					}
                   images(first: 1) {
                     edges {
                       node {
@@ -238,6 +252,55 @@ export async function getCollectionsWithProducts() {
 
 	const jsonResponse = await response.json();
 	return jsonResponse.data.collections;
+}
+export async function getCollectionWithProducts(collectionId: string) {
+	const query = `
+{
+  collection(id: "gid://shopify/Collection/${collectionId}") {
+    id
+    title
+    descriptionHtml
+    products(first: 14) {
+      edges {
+        node {
+          id
+          title
+          variants(first: 1) {
+            edges {
+              node {
+                id
+                title
+                priceV2 {
+                  amount
+                  currencyCode
+                }
+              }
+            }
+          }
+          images(first: 1) {
+            edges {
+              node {
+                originalSrc
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+`;
+	const response = await fetch(SHOPIFY_ENDPOINT, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+			'X-Shopify-Storefront-Access-Token': PUBLIC_SHOPIFY_STOREFRONT
+		},
+		body: JSON.stringify({ query })
+	});
+
+	const jsonResponse = await response.json();
+	return jsonResponse.data.collection;
 }
 
 export async function createCart(items) {

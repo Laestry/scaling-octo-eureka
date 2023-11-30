@@ -14,6 +14,7 @@
 	let recommendedProducts;
 
 	onMount(async () => {
+		console.log(product);
 		const productId = product.id;
 		const response = await fetch('/api/getRecommendedProducts', {
 			method: 'POST',

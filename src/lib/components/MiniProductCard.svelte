@@ -1,13 +1,11 @@
 <script>
-	import { invalidateAll } from '$app/navigation';
-
 	export let title;
 	export let image;
 	export let id;
 </script>
 
 <div class="w-[256px]">
-	<a href="/products/{id}" on:click={invalidateAll}>
+	<a href="/products/{id}">
 		<img class="w-full h-[280px] rounded-[6px] bg-no-repeat object-cover" src={image} alt="Wine" />
 		<div
 			class="flex flex-col justify-between
