@@ -2,13 +2,15 @@
 	import type { Products } from '$lib/models/shopifyTypes';
 	import Footer from '$lib/components/Footer.svelte';
 	import MainProductCard from './MainProductCard.svelte';
+	import Header from '$lib/components/Header.svelte';
 
 	export let data: Products;
 	let products: Products = data.products;
 	console.log('products', products.edges[0]);
 </script>
 
-<div class="backdrop" />
+<Header />
+<div class="backdrop -mt-[176px]" />
 
 <div class="flex flex-col items-center">
 	<div class="min-h-[90vh] lg:w-[1136px] md:w-[680px] w-[358px]">

@@ -2,31 +2,41 @@
 	import { cartStore } from '$lib/store';
 </script>
 
-<div class="flex lg:h-[113px] md:h-[96px] h-[48px] items-center">
-	<a href="/" class="h-fit">
-		<img src="/logo.svg" alt="logo" class="lg:mt-[8px] mt-none lg:w-[158px] md:w-[64px] w-[32px]" />
+<div class="flex flex-col w-full lg:h-[176px] md:h-[96px] h-[48px] items-center">
+	<a href="/" class="h-[120px] w-[120px] flex items-center justify-center">
+		<img
+			src="/logo.svg"
+			alt="logo"
+			class="lg:mb-[16px] mt-none lg:w-[102px] md:w-[64px] w-[32px]"
+		/>
 	</a>
 
-	<div
-		class="md:flex hidden uppercase items-center lg:h-[96px] h-auto lg:ml-[42px] md:ml-[16px] flex-1"
-	>
-		<div class="flex gap-[16px]">
-			<div>About</div>
-			<div>Philosophy</div>
-			<div>Faq</div>
-			<div>Contact</div>
-		</div>
-
-		<div class="flex-1" />
-
-		<a href="/products">Buy Wine</a>
-
-		{#if $cartStore && $cartStore.length > 0}
-			<a class="ml-[10px]" href="/cart">Cart {$cartStore.length}</a>
-		{/if}
+	<div class=" self-end absolute mt-[33px] flex gap-[3px] text-[10px] items-center">
+		<a href="/cart">Sign Up</a>
+		<a
+			class="h-[24px] w-[24px] pr-[1px] flex items-center justify-center rounded-2xl border"
+			href="/cart"
+		>
+			{$cartStore?.length ?? 0}
+		</a>
 	</div>
 
-	<div class="md:hidden flex-1 flex items-center justify-end">
-		<img src="/icons/burger-menu.svg" alt="Menu" />
+	<div class="md:flex hidden uppercase items-center lg:h-[96px] h-auto flex-1">
+		<div class="flex gap-[16px]">
+			<a class="header-links" href="/associes">Associes</a>
+			<a class="header-links" href="/vision">Vision</a>
+			<a class="header-links" href="/vins">Vins</a>
+		</div>
 	</div>
 </div>
+
+<style>
+	.header-links {
+		text-transform: capitalize;
+		width: 176px;
+		height: 40px;
+		padding-top: 9px;
+		text-align: center;
+		border-bottom: 0.5px solid #000;
+	}
+</style>
