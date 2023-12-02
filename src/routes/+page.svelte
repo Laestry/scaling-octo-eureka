@@ -9,8 +9,8 @@
 	console.log('products', products.edges[0]);
 </script>
 
-<Header />
-<div class="backdrop -mt-[176px]" />
+<Header color="#DE6643" class="-mb-[176px]" />
+<div class="backdrop" />
 
 <div class="flex flex-col items-center">
 	<div class="min-h-[90vh] lg:w-[1136px] md:w-[680px] w-[358px]">
@@ -65,8 +65,6 @@
 			Find more <span class="text-color5">+</span>
 		</a>
 	</div>
-
-	<Footer />
 </div>
 
 <style>

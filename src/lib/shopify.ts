@@ -146,6 +146,13 @@ export async function searchProducts(searchQuery: string) {
 							}
 						}
 					}
+					images(first: 1) {
+						edges {
+						  node {
+							originalSrc
+						  }
+						}
+				    }
 					title
 					color: metafield(namespace: "custom", key: "color") {
 					  value

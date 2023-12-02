@@ -47,8 +47,6 @@
 				</tr>
 			{/each}
 		</table>
-	{:else if searchResults.edges.length === 0}
-		<div class="mt-[100px]">No Wines found under that search</div>
 	{/if}
 </div>
 

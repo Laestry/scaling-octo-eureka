@@ -8,5 +8,4 @@
 		<Header />
 		<slot />
 	</div>
-	<Footer />
 </div>
