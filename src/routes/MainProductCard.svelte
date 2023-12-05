@@ -27,7 +27,7 @@
 
 <style>
 	.product-name {
-		font-family: Overpass;
+		font-family: Overpass, sans-serif;
 		font-size: 12px;
 		font-style: normal;
 		font-weight: 400;
@@ -36,7 +36,7 @@
 	}
 
 	.product-price {
-		font-family: Overpass;
+		font-family: Overpass, sans-serif;
 		font-size: 12px;
 		font-style: normal;
 		font-weight: 700;

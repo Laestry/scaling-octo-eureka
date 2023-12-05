@@ -34,7 +34,7 @@
 
 	.title {
 		color: #191c1c;
-		font-family: 'Overpass';
+		font-family: Overpass, sans-serif;
 		font-size: 30px;
 		font-style: normal;
 		font-weight: 400;
@@ -42,7 +42,7 @@
 	}
 	.content {
 		color: #de6643;
-		font-family: 'Overpass';
+		font-family: Overpass, sans-serif;
 		font-size: 100px;
 		font-style: normal;
 		font-weight: 400;

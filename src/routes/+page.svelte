@@ -1,6 +1,5 @@
 <script lang="ts">
 	import type { Products } from '$lib/models/shopifyTypes';
-	import Footer from '$lib/components/Footer.svelte';
 	import MainProductCard from './MainProductCard.svelte';
 	import Header from '$lib/components/Header.svelte';
 
@@ -78,7 +77,7 @@
 	}
 
 	.description {
-		font-family: Overpass;
+		font-family: Overpass, sans-serif;
 		font-size: 32px;
 		font-style: normal;
 		font-weight: 400;
@@ -86,7 +85,7 @@
 	}
 
 	.title {
-		font-family: Overpass;
+		font-family: Overpass, sans-serif;
 		font-size: 32px;
 		font-style: normal;
 		font-weight: 500;
@@ -94,7 +93,7 @@
 	}
 
 	.description2 {
-		font-family: Overpass;
+		font-family: Overpass, sans-serif;
 		font-size: 52px;
 		font-style: normal;
 		font-weight: 500;
@@ -102,7 +101,7 @@
 	}
 
 	.main-page-button {
-		font-family: Overpass;
+		font-family: Overpass, sans-serif;
 		font-size: 30px;
 		font-style: normal;
 		font-weight: 500;
