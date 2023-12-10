@@ -267,7 +267,7 @@ export async function getCollectionWithProducts(collectionId: string) {
     id
     title
     descriptionHtml
-    products(first: 14) {
+    products(first: 20) {
       edges {
         node {
           id
@@ -291,6 +291,27 @@ export async function getCollectionWithProducts(collectionId: string) {
               }
             }
           }
+          color: metafield(namespace: "custom", key: "color") {
+		    value
+		  }
+		  ml: metafield(namespace: "custom", key: "mll") {
+		    value
+		  }
+		  producer: metafield(namespace: "custom", key: "producer") {
+		    value
+		  }
+		  year: metafield(namespace: "custom", key: "year") {
+		    value
+		  }
+		  region: metafield(namespace: "custom", key: "region") {
+		    value
+		  }
+		  varietal: metafield(namespace: "custom", key: "varietal") {
+		    value
+		  }
+		  producer: metafield(namespace: "custom", key: "producer") {
+		    value
+		  }
         }
       }
     }
