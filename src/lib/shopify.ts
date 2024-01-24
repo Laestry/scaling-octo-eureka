@@ -4,7 +4,6 @@ import {
 	PUBLIC_SHOPIFY_STOREFRONT
 } from '$env/static/public';
 import type { GraphQLResponse, ProductData } from '$lib/models/shopifyTypes';
-import { getNumberFromId } from '$lib/utils';
 
 const SHOPIFY_ENDPOINT = `${PUBLIC_SHOPIFY_BASE_URL}api/${PUBLIC_SHOPIFY_API_VERSION}/graphql.json`;
 
@@ -328,6 +327,7 @@ export async function getCollectionWithProducts(collectionId: string) {
 	});
 
 	const jsonResponse = await response.json();
+	console.log(jsonResponse.data.products);
 	return jsonResponse.data.collection;
 }
 
