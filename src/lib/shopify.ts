@@ -326,6 +326,7 @@ export async function getCollectionWithProducts(collectionId: string) {
 		body: JSON.stringify({ query })
 	});
 
+	console.log(SHOPIFY_ENDPOINT, PUBLIC_SHOPIFY_STOREFRONT, '*********', query, response);
 	const jsonResponse = await response.json();
 	console.log(jsonResponse.data.products);
 	return jsonResponse.data.collection;
