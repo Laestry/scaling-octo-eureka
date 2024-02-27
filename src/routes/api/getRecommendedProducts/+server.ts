@@ -5,7 +5,7 @@ import { getNumberFromId } from '$lib/utils.js';
 export async function POST({ request }) {
 	const { productId } = await request.json();
 
-	let recommendedProducts = await getProductRecommendations(getNumberFromId(productId));
-
+	const recommendedProducts = await getProductRecommendations(getNumberFromId(productId));
+	console.log(recommendedProducts);
 	return json(recommendedProducts);
 }
