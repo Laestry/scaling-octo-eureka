@@ -1,5 +1,6 @@
 import { getCollectionWithProducts } from '$lib/shopify';
+import { PUBLIC_COLLECTION_ID } from '$env/static/public';
 
 export async function load() {
-	return await getCollectionWithProducts('611985195338');
+	return await getCollectionWithProducts(PUBLIC_COLLECTION_ID);
 }
