@@ -1,24 +1,30 @@
 <script lang="ts">
-	import type { Products } from '$lib/models/shopifyTypes';
+	import type { Products, ProductData } from '$lib/models/shopifyTypes';
 	import MainProductCard from './MainProductCard.svelte';
 	import Header from '$lib/components/Header.svelte';
 
-	export let data: Products;
+	export let data: ProductData;
 	let products: Products = data.products;
 	console.log('products', products);
 </script>
 
-<Header color="#DE6643" class="-mb-[176px]" />
-<div class="backdrop" />
+<Header page="main" color="#DE6643" class="absolute top-0 left-2/4 translate-x-[-50%] z-10" />
+<!-- <div class="backdrops">
+</div> -->
 
 <div class="flex flex-col items-center">
 	<div class="flex flex-col min-h-[90vh] lg:w-[1136px] md:w-[680px] w-[358px]">
-		<div class="h3 description mt-[134px] mb-[137px] text-color1">
-			Lorem ipsum dolor sit amet consectetur. Leo justo enim et in. Aliquam at feugiat tortor purus
-			quis eu ultrices quis tincidunt. Tellus integer egestas lectus ac.
+		<div class="flex mt-[134px] mb-[137px]">
+			<div class="h3 description max-w-[844px] text-color1">
+				Lorem ipsum dolor sit amet consectetur. Leo justo enim et in. Aliquam at feugiat tortor purus
+				quis eu ultrices quis tincidunt. Tellus integer egestas lectus ac.
+			</div>
+			<div class="ml-auto mt-2 w-[15px] h-[15px] rounded-full bg-color1"></div>
+			<div class="ml-[14px] mt-2 w-[15px] h-[15px] rounded-full bg-colorPurple"></div>
+			<div class="ml-[14px] mt-2 w-[15px] h-[15px] rounded-full bg-colorBlue"></div>
 		</div>
 
-		<div class="title mb-[15px]">Our Wines</div>
+		<div class="title mb-[19px]">Nos vins</div>
 		<div class="flex gap-x-[16px] mb-[39px] flex-wrap">
 			<MainProductCard product={products.edges[0].node} size="m" />
 			<MainProductCard product={products.edges[1].node} size="s" />
@@ -57,21 +63,12 @@
 		</div>
 
 		<a href="/products" class="main-page-button self-end">
-			Find more <span class="text-color5">+</span>
+			Encore plus <span class="text-color5">+</span>
 		</a>
 	</div>
 </div>
 
 <style>
-	.backdrop {
-		width: 100%;
-		height: 772px;
-		background-image: url('/images/mainbackdrop.png');
-		background-size: cover;
-		background-repeat: no-repeat;
-		background-position: center center;
-	}
-
 	.description {
 		font-family: Overpass, sans-serif;
 		font-size: 32px;
@@ -82,9 +79,9 @@
 
 	.title {
 		font-family: Overpass, sans-serif;
-		font-size: 32px;
+		font-size: 30px;
 		font-style: normal;
-		font-weight: 500;
+		font-weight: 700;
 		line-height: 125%;
 	}
 
@@ -100,7 +97,7 @@
 		font-family: Overpass, sans-serif;
 		font-size: 30px;
 		font-style: normal;
-		font-weight: 500;
+		font-weight: 700;
 		line-height: 125%;
 	}
 </style>
