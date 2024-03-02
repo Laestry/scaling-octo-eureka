@@ -1,4 +1,4 @@
-export async function load({ cookies }) {
+export async function load({ cookies, url }) {
 	const cartCookie = cookies.get('cart');
 	let cart;
 	if (cartCookie) {
@@ -6,5 +6,5 @@ export async function load({ cookies }) {
 	} else {
 		cart = undefined;
 	}
-	return { cart };
+	return { cart, url: url.pathname,};
 }

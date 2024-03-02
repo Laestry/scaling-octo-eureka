@@ -26,6 +26,8 @@
 
 		recommendedProducts = await response.json();
 	});
+
+	console.log(product);
 </script>
 
 <div class="mt-[40px]">

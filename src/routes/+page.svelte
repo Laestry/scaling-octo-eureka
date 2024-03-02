@@ -8,7 +8,7 @@
 	console.log('products', products);
 </script>
 
-<Header page="main" color="#DE6643" class="absolute top-0 left-2/4 translate-x-[-50%] z-10" />
+<!-- <Header page="main" color="#DE6643" class="absolute top-0 left-2/4 translate-x-[-50%] z-10" /> -->
 <!-- <div class="backdrops">
 </div> -->
 

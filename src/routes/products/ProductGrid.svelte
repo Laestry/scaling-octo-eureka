@@ -6,7 +6,7 @@
 </script>
 
 <div class={$$props.class}>
-	<div in:fade class="flex flex-wrap gap-x-[16px] gap-y-[80px]">
+	<div in:fade class="flex flex-wrap gap-x-[16px] gap-y-[34px]">
 		{#each searchResults.edges as { node: product }}
 			<ProductCard {product} />
 		{/each}

@@ -1,7 +1,7 @@
 <script>
 </script>
 
-<div class="pt-[106px] pb-[48px] flex flex-col justify-center items-center bg-color1 mt-[53px] w-full">
+<div class="pt-[106px] pb-[48px] flex flex-col justify-center items-center bg-color1 w-full">
 	<img class="h-[102px] w-auto" src="/images/Ward%20&%20Associes.svg" alt="Ward & Associes" />
 
 	<div class="mt-[104px] max-w-[1154px] w-full flex items-start footer">

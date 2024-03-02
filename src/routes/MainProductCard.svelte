@@ -27,7 +27,7 @@
 			<div class="flex flex-col">
 				<div class="product-price">${parseInt(product.variants.edges[0].node.priceV2.amount)}</div>
 				<button
-					class="text-color5 text-sm font-bold cursor-cell"
+					class="text-color5 text-sm font-bold cursor-cell text-nowrap"
 					on:click|preventDefault={() => {
 						addToCart(product, 1);
 					}}>ADD +</button

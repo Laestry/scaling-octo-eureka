@@ -7,7 +7,7 @@
 	export let page = '';
 </script>
 
-<div class="backdrops" class:backdrops--1={page === 'main'} class:backdrops--2={page === 'associes'} class:backdrops--3={page === 'vision'}>
+<div class="backdrops" class:backdrops--1={page === '/'} class:backdrops--2={page === '/associes'} class:backdrops--3={page === '/vision'}>
 	<div
 		class="z-10 left-2/4 absolute translate-x-[-50%] flex flex-col lg:h-[176px] items-center lg:w-[1120px] md:w-[680px] w-[358px] {$$props.class}"
 		style="--dynamic-color: {color}; color: var(--dynamic-color);"
@@ -39,14 +39,13 @@
 		<div class="md:flex hidden uppercase items-center lg:h-[96px] h-auto flex-1 mt-[22px]">
 			<div class="flex gap-[16px]">
 				<a class="header-links" style="color: var(--dynamic-color);" href="/associes">Associes</a>
-				<a class="header-links" style="color: var(--dynamic-color);" href="/py-[3px] px-[13px] rounded-[12px]">Vision</a>
+				<a class="header-links" style="color: var(--dynamic-color);" href="/vision">Vision</a>
 				<a class="header-links" style="color: var(--dynamic-color);" href="/products">Vins</a>
 			</div>
 		</div>
 	</div>
 	<!-- <div transition:fade class="w-[100px] h-[100px] bg-color1 absolute z-20"></div> -->
 	<!-- <div transition:fade class="left-[100px] w-[100px] h-[100px] bg-primary absolute z-20"></div> -->
-	Route
 	{#if page !== ''}
 		<a href="/" class="backdrop backdrop--1"></a>
 		<a href="/associes" class="backdrop backdrop--2"></a>
@@ -55,26 +54,6 @@
 </div>
 
 <style>
-	@keyframes backdrop1 {
-		0% {
-			transform: translateX(-140px);
-			width: 210px;
-		}
-		100% {
-			transform: translateX(-140px);
-			width: 100%;
-		}
-	}
-	@keyframes backdrop2 {
-		0% {
-			transform: translateX(-70px);
-			width: 210px;
-		}
-		100% {
-			transform: translateX(-70px);
-			width: 100%;
-		}
-	}
 	.header-links {
 		text-transform: capitalize;
 		width: 176px;
@@ -96,7 +75,7 @@
 		left: 0;
 		top: 0;
 		height: 100%;
-		transition: .3s ease;
+		transition: 1s ease;
 	}
 	.backdrop--1 {
 		transform: translateX(-140px);
@@ -111,32 +90,33 @@
 		background-image: url('/images/vision.png');
 		z-index: 1;
 	}
-
-	.backdrops--1 .backdrop--1 {
-		animation: backdrop1 1s linear both;
-	}
 	.backdrops--1 .backdrop--2 {
-		animation: backdrop2 1s linear both;
+		width: 100%;
 	}
-
+	.backdrops--1 .backdrop--3 {
+		width: 100%;
+	}
 	.backdrops--2 .backdrop--1 {
-		animation: backdrop1 1s linear both reverse;
+		width: 210px;
 	}
-	.backdrops--2 .backdrop--2 {
-		animation: backdrop2 1s linear both ;
+	.backdrops--2 .backdrop--3 {
+		width: 100%;
 	}
-
 	.backdrops--3 .backdrop--1 {
-		animation: backdrop1 1s linear both reverse;
+		width: 210px;
 	}
 	.backdrops--3 .backdrop--2 {
-		animation: backdrop2 1s linear both reverse;
+		width: 210px;
 	}
+
 
 	.backdrops {
 		display: flex;
 		position: relative;
 		height: 772px;
 		width: 100%;
+	}
+	.backdrops:not(:is(.backdrops--1, .backdrops--2, .backdrops--3)) {
+		height: 200px;
 	}
 </style>
