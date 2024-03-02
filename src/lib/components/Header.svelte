@@ -1,13 +1,18 @@
 <script lang="ts">
 	import { cartStore } from '$lib/store';
 	import Logo from '$lib/components/Logo.svelte';
-  // import { fade, fly } from 'svelte/transition';	
+	// import { fade, fly } from 'svelte/transition';
 
 	export let color = '#000';
 	export let page = '';
 </script>
 
-<div class="backdrops" class:backdrops--1={page === '/'} class:backdrops--2={page === '/associes'} class:backdrops--3={page === '/vision'}>
+<div
+	class="backdrops"
+	class:backdrops--1={page === '/'}
+	class:backdrops--2={page === '/associes'}
+	class:backdrops--3={page === '/vision'}
+>
 	<div
 		class="z-10 left-2/4 absolute translate-x-[-50%] flex flex-col lg:h-[176px] items-center lg:w-[1120px] md:w-[680px] w-[358px] {$$props.class}"
 		style="--dynamic-color: {color}; color: var(--dynamic-color);"
@@ -29,9 +34,15 @@
 				style="border: 1px solid white; background-color: white; color: #000"
 				href="/cart"
 			>
-				<svg width="15" height="14" viewBox="0 0 15 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-					<line x1="10.2415" y1="9.80921" x2="14.3413" y2="13.6343" stroke="black"/>
-					<circle cx="6" cy="6" r="5.5" stroke="black"/>
+				<svg
+					width="15"
+					height="14"
+					viewBox="0 0 15 14"
+					fill="none"
+					xmlns="http://www.w3.org/2000/svg"
+				>
+					<line x1="10.2415" y1="9.80921" x2="14.3413" y2="13.6343" stroke="black" />
+					<circle cx="6" cy="6" r="5.5" stroke="black" />
 				</svg>
 			</a>
 		</div>
@@ -47,9 +58,9 @@
 	<!-- <div transition:fade class="w-[100px] h-[100px] bg-color1 absolute z-20"></div> -->
 	<!-- <div transition:fade class="left-[100px] w-[100px] h-[100px] bg-primary absolute z-20"></div> -->
 	{#if page !== ''}
-		<a href="/" class="backdrop backdrop--1"></a>
-		<a href="/associes" class="backdrop backdrop--2"></a>
-		<a href="/vision" class="backdrop backdrop--3"></a>
+		<a href="/" class="backdrop backdrop--1" />
+		<a href="/associes" class="backdrop backdrop--2" />
+		<a href="/vision" class="backdrop backdrop--3" />
 	{/if}
 </div>
 
@@ -60,17 +71,17 @@
 		height: 40px;
 		padding: 2px 0;
 		text-align: center;
-		color: #DE6643;
+		color: #de6643;
 		font-size: 24px;
 		font-weight: 400;
-		line-height: 150%; 
+		line-height: 150%;
 	}
 	.backdrop {
 		width: 100%;
 		background-image: url('/images/mainbackdrop.png');
 		background-size: cover;
 		background-repeat: no-repeat;
-		background-position: top left;
+		background-position: calc(50% - 12px) bottom;
 		position: absolute;
 		left: 0;
 		top: 0;
@@ -108,7 +119,6 @@
 	.backdrops--3 .backdrop--2 {
 		width: 210px;
 	}
-
 
 	.backdrops {
 		display: flex;
