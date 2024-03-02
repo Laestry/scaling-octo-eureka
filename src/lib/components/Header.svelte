@@ -81,7 +81,7 @@
 		background-image: url('/images/mainbackdrop.png');
 		background-size: cover;
 		background-repeat: no-repeat;
-		background-position: calc(50% - 12px) bottom;
+		background-position: center bottom;
 		position: absolute;
 		left: 0;
 		top: 0;
