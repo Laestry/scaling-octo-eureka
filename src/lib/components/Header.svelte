@@ -32,7 +32,7 @@
 			<a
 				class="h-[24px] w-[24px] flex items-center justify-center rounded-full"
 				style="border: 1px solid white; background-color: white; color: #000"
-				href="/cart"
+				href="/product"
 			>
 				<svg
 					width="15"
@@ -101,23 +101,20 @@
 		background-image: url('/images/vision.png');
 		z-index: 1;
 	}
-	.backdrops--1 .backdrop--2 {
-		width: 100%;
+	/* .backdrops--1 .backdrop--2 {
+		transform: translateX();
 	}
 	.backdrops--1 .backdrop--3 {
 		width: 100%;
-	}
+	} */
 	.backdrops--2 .backdrop--1 {
-		width: 210px;
-	}
-	.backdrops--2 .backdrop--3 {
-		width: 100%;
+		transform: translateX(calc(-100% + 70px));
 	}
 	.backdrops--3 .backdrop--1 {
-		width: 210px;
+		transform: translateX(calc(-100% + 70px));
 	}
 	.backdrops--3 .backdrop--2 {
-		width: 210px;
+		transform: translateX(calc(-100% + 140px));
 	}
 
 	.backdrops {

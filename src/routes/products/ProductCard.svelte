@@ -25,7 +25,7 @@
 		<div class="flex justify-between pt-4 gap-4">
 			<div class="flex flex-col">
 				<p class="type">
-					Type de {product.type ?? 'N/A'}
+					Type de vin
 					<br><br>
 					<b class="font-bold">{product.title ?? 'N/A'}</b>
 					<br>

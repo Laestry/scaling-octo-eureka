@@ -1,6 +1,8 @@
 <script lang="ts">
 	import Filter from './Filter.svelte';
+	import { createEventDispatcher } from 'svelte';
 
+	const dispatch = createEventDispatcher();
 	const filters = [
 	{
 		name: 'Producteur',
@@ -54,7 +56,7 @@
 		<Filter info={filters[6]}/>
 	</div>
 	<div class="flex justify-end gap-2">
-		<button class="py-[8px] px-[10px] bg-[#fff]">
+		<button class="py-[8px] px-[10px] bg-[#fff]" on:click={() => dispatch('switchView', false)}>
 			<svg width="15" height="9" viewBox="0 0 15 9" fill="none" xmlns="http://www.w3.org/2000/svg">
 				<line y1="0.5" x2="15" y2="0.5" stroke="black"/>
 				<line y1="2.5" x2="15" y2="2.5" stroke="black"/>
@@ -63,7 +65,7 @@
 				<line y1="8.5" x2="15" y2="8.5" stroke="black"/>
 			</svg>
 		</button>
-		<button class="py-[8px] px-[10px] bg-[#fff]">
+		<button class="py-[8px] px-[10px] bg-[#fff]" on:click={() => dispatch('switchView', true)}>
 			<svg width="15" height="9" viewBox="0 0 15 9" fill="none" xmlns="http://www.w3.org/2000/svg">
 				<rect width="3" height="4" fill="#DE6643"/>
 				<rect x="4" width="3" height="4" fill="#DE6643"/>
