@@ -32,7 +32,7 @@
 			<a
 				class="h-[24px] w-[24px] flex items-center justify-center rounded-full"
 				style="border: 1px solid white; background-color: white; color: #000"
-				href="/product"
+				href="/products"
 			>
 				<svg
 					width="15"

@@ -7,6 +7,7 @@
 	import FavoriteButton from '$lib/components/FavoriteButton.svelte';
 	import { cartStore } from '$lib/store';
 	import { addToCart } from '$lib/cart';
+	import ProductCard from '../ProductCard.svelte';
 
 	export let data;
 	let product: ProductNode;
@@ -28,6 +29,10 @@
 		});
 
 		recommendedProducts = await response.json();
+		if(recommendedProducts.length === undefined) {
+			recommendedProducts = null
+			console.log(recommendedProducts)
+		}
 	});
 
 	console.log(product);
@@ -162,16 +167,17 @@
 		</div>
 	</div>
 
-	<div class="mt-[48px] flex flex-col gap-[48px]">
-		<Accordion title="Try it before you buy it">
-			<div>body</div>
-		</Accordion>
-		<Accordion title="About this producer">
-			<div>body</div>
-		</Accordion>
-		<Accordion title="More from this Producer">
-			<div>body</div>
-		</Accordion>
+	<div class="mt-[20px] flex flex-col gap-[13px]">
+		{#if recommendedProducts}
+			<div class="flex flex-col pt-[13px] px-[13px] border-t-[1px] border-t-[#000]">
+				<p class="recommended__title">Si vous aimez ceci, vous aimerez aussi...</p>
+				<div class="flex gap-4">
+					{#each recommendedProducts?.slice(0, 4) as p}
+						<ProductCard product={p} />
+					{/each}
+				</div>
+			</div>
+		{/if}
 		<!-- <Accordion title="You might also like">
 			{#if recommendedProducts}
 				<div class="flex gap-[32px] mt-[16px]">
@@ -181,6 +187,15 @@
 				</div>
 			{/if}
 		</Accordion> -->
+		<Accordion title="Du même producteur">
+			<div>body</div>
+		</Accordion>
+		<Accordion title="De la même région">
+			<div>body</div>
+		</Accordion>
+		<Accordion title="Vu récemment">
+			<div>body</div>
+		</Accordion>
 	</div>
 </div>
 <style>
