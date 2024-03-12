@@ -15,19 +15,16 @@
 			alt="Wine"
 		/>
 		<div class="flex justify-between mt-[7px]">
-			<div class="flex flex-col">
-				<div class="product-name uppercase truncate w-full">
-					<b>{product.title}</b>
-					<br>
+			<div class="flex flex-col product-name uppercase w-full" style="width: calc(100% - 80px)">
+				<b> {product.title}</b>
+				<div>
 					{product?.producer?.value ?? 'N/A'}, {product?.year?.value ?? 'N/A'}
 				</div>
-				<div class="">
-				</div>
 			</div>
-			<div class="flex flex-col">
+			<div class="flex flex-col items-end">
 				<div class="product-price">${parseInt(product.variants.edges[0].node.priceV2.amount)}</div>
 				<button
-					class="text-color5 text-sm font-bold cursor-cell text-nowrap"
+					class="text-color5 text-sm font-bold cursor-cell whitespace-nowrap"
 					on:click|preventDefault={() => {
 						addToCart(product, 1);
 					}}>ADD +</button
@@ -83,7 +80,7 @@
 		line-height: 150%; /* 18px */
 		text-transform: capitalize;
 	}
-	
+
 	.product-name b {
 		font-weight: 700;
 	}
