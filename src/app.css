@@ -2,6 +2,47 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+    font-family: 'Overpass';
+    src: url('./fonts/Overpass-Regular.eot');
+    src: url('./fonts/Overpass-Regular.woff') format('woff'),
+         url('./fonts/Overpass-Regular.woff2') format('woff2'),
+         url('./fonts/Overpass-Regular.ttf') format('truetype');
+    font-style: normal;
+    font-weight: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Overpass';
+    src: url('./fonts/Overpass-Bold.eot');
+    src: url('./fonts/Overpass-Bold.woff') format('woff'),
+         url('./fonts/Overpass-Bold.woff2') format('woff2'),
+         url('./fonts/Overpass-Bold.ttf') format('truetype');
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Overpass';
+    src: url('./fonts/Overpass-SemiBold.eot');
+    src: url('./fonts/Overpass-SemiBold.woff') format('woff'),
+         url('./fonts/Overpass-SemiBold.woff2') format('woff2'),
+         url('./fonts/Overpass-SemiBold.ttf') format('truetype');
+    font-style: normal;
+    font-weight: 600;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Overpass';
+    src: url('./fonts/Overpass-SemiBold.eot');
+    src: url('./fonts/Overpass-SemiBold.woff') format('woff'),
+         url('./fonts/Overpass-SemiBold.woff2') format('woff2'),
+         url('./fonts/Overpass-SemiBold.ttf') format('truetype');
+    font-style: normal;
+    font-weight: 500;
+    font-display: swap;
+}
+
 body{
     font: 20px 'Inter';
     scroll-behavior: smooth;

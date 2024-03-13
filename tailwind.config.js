@@ -20,7 +20,9 @@ module.exports = {
 			buttonP: '#DFDFDF',
 			buttonS: '#000',
 			color5: '#2D63B0',
-			color1: '#F04F30'
+			color1: '#DE6643',
+			colorPurple: '#CA6097',
+			colorBlue: '#4975B8'
 		},
 		extend: {
 			borderColor: {

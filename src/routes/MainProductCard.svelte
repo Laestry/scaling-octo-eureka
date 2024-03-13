@@ -15,21 +15,27 @@
 			alt="Wine"
 		/>
 		<div class="flex justify-between mt-[7px]">
-			<div class="product-price t1 uppercase truncate w-full">{product.title}</div>
-			<div class="product-price">${parseInt(product.variants.edges[0].node.priceV2.amount)}</div>
+			<div class="flex flex-col product-name uppercase w-full" style="width: calc(100% - 80px)">
+				<b> {product.title}</b>
+				<div>
+					{product?.producer?.value ?? 'N/A'}, {product?.year?.value ?? 'N/A'}
+				</div>
+			</div>
+			<div class="flex flex-col items-end">
+				<div class="product-price">${parseInt(product.variants.edges[0].node.priceV2.amount)}</div>
+				<button
+					class="text-color5 text-sm font-bold cursor-cell whitespace-nowrap"
+					on:click|preventDefault={() => {
+						addToCart(product, 1);
+					}}>ADD +</button
+				>
+			</div>
+		</div>
+		<!-- <div class="flex justify-between mt-[7px]">
 		</div>
 		<div class="flex justify-between mt-[7px] product-name">
-			<div class="">
-				{product?.producer?.value ?? 'N/A'}, {product?.year?.value ?? 'N/A'}
-			</div>
 
-			<button
-				class="text-color5 cursor-cell"
-				on:click|preventDefault={() => {
-					addToCart(product, 1);
-				}}>ADD +</button
-			>
-		</div>
+		</div> -->
 	</a>
 </div>
 
@@ -59,7 +65,7 @@
 
 	.product-name {
 		font-family: Overpass, sans-serif;
-		font-size: 12px;
+		font-size: 14px;
 		font-style: normal;
 		font-weight: 400;
 		line-height: 150%; /* 18px */
@@ -68,10 +74,14 @@
 
 	.product-price {
 		font-family: Overpass, sans-serif;
-		font-size: 12px;
+		font-size: 14px;
 		font-style: normal;
 		font-weight: 700;
 		line-height: 150%; /* 18px */
 		text-transform: capitalize;
+	}
+
+	.product-name b {
+		font-weight: 700;
 	}
 </style>

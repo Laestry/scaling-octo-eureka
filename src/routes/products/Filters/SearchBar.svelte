@@ -2,7 +2,6 @@
 	import { searchProducts } from '$lib/shopify';
 	import { debounce } from '$lib/utils';
 	import type { Products } from '$lib/models/shopifyTypes';
-	import Filter from './Filter.svelte';
 
 	export let enabledFilters;
 	export let defaultResult;
@@ -28,7 +27,7 @@
 </script>
 
 <div>
-	<div class="flex items-end gap-[8px] h-[40px] bg-[#fff] border-b mt-[59px]">
+	<div class="flex items-end gap-[8px] h-[40px] bg-[#fff] border-b mt-[56px]">
 		<div class="flex flex-1">
 			<div class="flex-1 flex">
 				<input
@@ -47,12 +46,3 @@
 <!--	<div class="h4">All Wines</div>-->
 <!--	<button on:click={clearFilters} class="h4">Clear Filter</button>-->
 <!--</div>-->
-
-<div class="flex flex-wrap justify-between flex-1 gap-y-[16px] mt-[59px]">
-	<Filter>Producteur</Filter>
-	<Filter>Region</Filter>
-	<Filter>Type</Filter>
-	<Filter>Couleur</Filter>
-	<Filter>Format</Filter>
-	<Filter>Associes</Filter>
-</div>

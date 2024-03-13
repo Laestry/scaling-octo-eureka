@@ -3,7 +3,7 @@
 	import Logo from '$lib/components/Logo.svelte';
 </script>
 
-<!-- <Header page="associes" color="#fff" class="lg:-mb-[176px]" /> -->
+<Header page="associes" color="#fff" class="lg:-mb-[176px]" />
 
 <!-- <div class="backdrop" /> -->
 
@@ -45,18 +45,16 @@
 			</div>
 		</div>
 
-		<div class="flex mb-[150px]">
+		<div class="flex">
 			<div>
 				<div class="title mt-[58px] mb-[10px]">Our Story</div>
 				<div class="flex">
 					<div class="w-[464px] content2 mr-[15px]">
-						Lorem ipsum dolor sit amet consectetur. Leo justo enim et in. Aliquam at feugiat tortor
-						purus quis eu ultrices quis tincidunt. Tellus integer egestas lectus ac.
+						Lorem ipsum dolor sit amet consectetur. Leo justo enim et in. Aliquam at feugiat tortor purus quis eu ultrices quis tincidunt. Tellus integer egestas lectus. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
 					</div>
 
 					<div class="w-[464px] content2">
-						Lorem ipsum dolor sit amet consectetur. Leo justo enim et in. Aliquam at feugiat tortor
-						purus quis eu ultrices quis tincidunt. Tellus integer egestas lectus ac.
+						Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia/
 					</div>
 				</div>
 			</div>
@@ -64,28 +62,44 @@
 				<Logo color="#DE6643" height={132} />
 			</div>
 		</div>
+
+		<div class="flex mt-[136px] gap-4">
+			<div class="flex flex-col gap-3">
+				<img class='w-[368px] h-[518px]' src="/images/thirstyPerson.png" alt="">
+				<p class="name">Events</p>
+			</div>
+			<div class="flex flex-col gap-3">
+				<img class='w-[368px] h-[518px]' src="/images/associes-img-01.png" alt="">
+				<p class="name">Wine Makers</p>
+			</div>
+			<div class="flex flex-col gap-3">
+				<img class='w-[368px] h-[518px]' src="/images/associes-img-02.png" alt="">
+				<p class="name">Regions</p>
+			</div>
+		</div>
+
+		<div class="w-[844px] content2 mt-[60px]">
+			Lorem ipsum dolor sit amet consectetur. Leo justo enim et in. Aliquam at feugiat tortor purus quis eu ultrices quis tincidunt. Tellus integer egestas lectus ac.
+		</div>
 	</div>
 </div>
 
-<div class="h-[442px] w-full bg-[#4975B8] -mb-[53px] content3" style="padding: 81px 0 0 152px">
+<!-- <div class="h-[442px] w-full bg-[#4975B8] -mb-[53px] content3" style="padding: 81px 0 0 152px">
 	<div class="w-[943px]">
 		Never miss a drop. <br />
 		Be the first to know about our exclusive imports, latest releases & events.
 	</div>
-	<div class="mt-[3px]">
-		<button>I love a good form, take me there.</button>
-		<button>Keep in simple, sign me up quickly!</button>
-		<!-- <input type="text" placeholder="Email Address" /> -->
-		<!-- <button>Subscribe</button> -->
+	<div class="mt-[35px]">
+		<input type="text" placeholder="Email Address" />
+		<button>Subscribe</button>
 	</div>
-</div>
+</div> -->
 
 <style>
 	button {
-		@apply py-[3px] px-[13px] rounded-[12px];
 		background: white;
 		height: 24px;
-		width: auto;
+		width: 176px;
 		color: #000;
 		text-align: center;
 		font-family: Overpass, sans-serif;
@@ -97,9 +111,38 @@
 		border-top: 1px solid;
 	}
 
+	input {
+		height: 24px;
+		width: 176px;
+		color: #000;
+		text-align: center;
+		font-family: Overpass, sans-serif;
+		font-size: 12px;
+		font-style: normal;
+		font-weight: 500;
+		line-height: 150%; /* 18px */
+		letter-spacing: -0.132px;
+		border-top: 1px solid;
+	}
+
+	input:focus {
+		outline: none;
+	}
+
+	input::placeholder {
+		color: #000;
+		text-align: center;
+		font-family: Overpass, sans-serif;
+		font-size: 12px;
+		font-style: normal;
+		font-weight: 500;
+		line-height: 150%; /* 18px */
+		letter-spacing: -0.132px;
+	}
+
 	.backdrop {
 		width: 100%;
-		height: 772px;
+		height: 752px;
 		background-image: url('/images/winefermenting.png');
 		background-size: cover;
 		background-repeat: no-repeat;

@@ -2,7 +2,8 @@
 	import ProductGrid from './ProductGrid.svelte';
 	import SearchBar from './Filters/SearchBar.svelte';
 	import type { Products } from '$lib/models/shopifyTypes';
-	import SearchResults from './SearchResults.svelte';
+	import ProductList from './ProductList.svelte';
+	import Filters from './Filters/Filters.svelte';
 
 	export let data: Products | null = null;
 
@@ -13,13 +14,15 @@
 	console.log('first search', searchResults);
 </script>
 
-<div class="uppercase">
-	<SearchBar bind:enabledFilters bind:searchResults {defaultResult} />
+<div>
+	<!-- <SearchBar bind:enabledFilters bind:searchResults {defaultResult} /> -->
+	<Filters on:switchView={(e) => (isGrid = e.detail)}/>
 	{#if searchResults?.edges?.length}
 		{#if isGrid}
 			<ProductGrid class="mt-[32px]" {searchResults} />
-		{:else}
-			<SearchResults {searchResults} />
+			{:else}
+			<ProductList {searchResults} />
+			<!-- <SearchResults {searchResults} /> -->
 		{/if}
 	{:else if searchResults.edges.length === 0}
 		<div class="mt-[100px]">No Wines found under that search</div>

@@ -8,7 +8,7 @@
 
 <div>
 	<button
-		class="oai border-t flex justify-between w-full"
+		class="oai border-t flex justify-between w-full bg-[#fff] px-[6px] py-[3px] text-[#DE6643] cursor-pointer"
 		on:click={() => {
 			closed = !closed;
 		}}
@@ -28,7 +28,7 @@
 	</button>
 
 	{#if !closed}
-		<div transition:slide>
+		<div class="bg-[#fff] p-[6px]" transition:slide>
 			<slot />
 		</div>
 	{/if}
