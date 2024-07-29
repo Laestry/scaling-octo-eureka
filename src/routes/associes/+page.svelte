@@ -7,7 +7,7 @@
 
 <!-- <div class="backdrop" /> -->
 
-<div class="w-full flex justify-center">
+<div class="flex justify-center w-full lg:max-w-[1212px] px-[38px] md:max-w-[836px] max-w-[376px]">
 	<div class="w-[1130px] flex flex-col mt-[129px]">
 		<div class="content w-[944px]">
 			We place human values at the heart of our experience and in the origin of the import leo justo

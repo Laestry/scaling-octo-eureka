@@ -145,15 +145,10 @@
 							</div>
 						</div>
 						<div class="flex flex-col gap-2">
-							<button class="product-table__button">Ajouter à ma liste</button>
+							<button class="product-table__button product-table__button--favorite">Liste d’attente</button>
 							<button class="product-table__button">Ajouter au panier</button>
 						</div>
 						<p class="absolute text-[16px] bg-[#F6F1F2] text-[#DE6643] bottom-[-12px] pr-1">*</p>
-						<button class="product-table__favorite">
-							<svg width="25" height="20" viewBox="0 0 25 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-								<path d="M5.75514 14.4777C4.92965 13.7961 3.91602 12.88 3.06162 11.8219C2.35851 10.9511 0.999901 9.07663 1 6.62155C1.00013 3.51674 3.71008 0.999883 7.05285 1C9.44853 1.00008 11.5191 2.29293 12.5 4.1684C13.481 2.29286 15.5516 1 17.9474 1C21.2901 1 24 3.51695 24 6.62176C24 9.07676 22.6414 10.9512 21.9383 11.8219C21.0839 12.88 20.0703 13.7961 19.2448 14.4777C15.7624 17.3527 15.5953 17.0834 12.5 19C10.1847 17.5664 7.84151 16.2002 5.75514 14.4777Z" fill="white" stroke="#F04F30" stroke-linejoin="round"/>
-							</svg>
-						</button>
 					</div>
 					<p class="product-table__description">
 						Le prix inclut les taxes et le frais d’agent de 16%.
@@ -275,6 +270,9 @@
 }
 .product-table__button:last-child {
 	background: #2D63B0;
+}
+.product-table__button--favorite {
+	background: var(--WARD-RED, #F15A38);
 }
 .product-table__count {
 	color: #1E1E1E;

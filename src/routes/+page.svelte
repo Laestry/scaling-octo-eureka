@@ -13,7 +13,7 @@
 </div> -->
 
 <div class="flex flex-col items-center">
-	<div class="flex flex-col min-h-[90vh] lg:w-[1136px] md:w-[680px] w-[358px]">
+	<div class="flex flex-col min-h-[90vh] w-full lg:max-w-[1212px] px-[38px] md:max-w-[836px] max-w-[376px]">
 		<div class="flex mt-[134px] mb-[137px]">
 			<div class="h3 description max-w-[844px] text-color1">
 				Lorem ipsum dolor sit amet consectetur. Leo justo enim et in. Aliquam at feugiat tortor purus
@@ -25,37 +25,43 @@
 		</div>
 
 		<div class="title mb-[19px]">Nos vins</div>
-		<div class="flex gap-x-[16px] mb-[39px] flex-wrap">
+		<div class="flex lg:gap-x-[16px] gap-x-[10px] md:gap-x-[11px] lg:mb-[39px] mb-[20px] flex-wrap">
 			<MainProductCard product={products.edges[0].node} size="m" />
 			<MainProductCard product={products.edges[1].node} size="s" />
 			<MainProductCard product={products.edges[2].node} size="l" />
 			<MainProductCard product={products.edges[3].node} size="m" />
 		</div>
 
-		<div class="flex gap-x-[16px] mb-[39px] flex-wrap">
+		<div class="flex lg:gap-x-[16px] gap-x-[10px] md:gap-x-[11px] lg:mb-[39px] mb-[20px] flex-wrap">
 			<MainProductCard product={products.edges[5].node} size="l" />
 			<MainProductCard product={products.edges[6].node} size="m" />
 			<MainProductCard product={products.edges[7].node} size="s" />
 			<MainProductCard product={products.edges[8].node} size="m" />
 		</div>
 
-		<div class="flex gap-x-[16px] mb-[171px]">
+		<div class="flex lg:gap-x-[16px] gap-x-[10px] md:gap-x-[11px]">
 			<MainProductCard product={products.edges[9].node} size="m" />
 			<MainProductCard product={products.edges[10].node} size="s" />
-			<img
-				class="w-[367px] h-[517px]"
-				src="/images/thirstyPerson.png"
-				alt="person drowsed in wine"
-			/>
+			<div class="flex flex-col">
+				<img
+					class="w-[367px] h-[517px]"
+					src="/images/thirstyPerson.png"
+					alt="person drowsed in wine"
+				/>
+				<p class="card__text">
+					<b>@wardetassocies</b> <br>
+					Insert one line caption if you want
+				</p>
+			</div>
 			<MainProductCard product={products.edges[11].node} size="m" />
 		</div>
 
-		<div class="description2 mt-[113px] mb-[180px] text-color1">
+		<div class="description2 lg:mt-[113px] lg:mb-[180px] my-[80px] text-color1">
 			We place human values at the heart of our experience and in the origin of the importLeo justo
 			enim et in. Aliquam at feugiat tortor purus quis eu ultrices quis tincidunt.
 		</div>
 
-		<div class="flex gap-x-[16px] flex-wrap mb-[62px]">
+		<div class="flex lg:gap-x-[16px] gap-x-[10px] md:gap-x-[11px] flex-wrap mb-[62px]">
 			<MainProductCard product={products.edges[12].node} size="l" />
 			<MainProductCard product={products.edges[13].node} size="m" />
 			<MainProductCard product={products.edges[14].node} size="s" />
@@ -68,7 +74,17 @@
 	</div>
 </div>
 
-<style>
+<style lang="scss">
+	.card {
+		&__text {
+			width: 100%;
+			font-size: 12px;
+			line-height: 18px;
+			b {
+				font-weight: 700;
+			}
+		}
+	}
 	.description {
 		font-family: Overpass, sans-serif;
 		font-size: 32px;
@@ -99,5 +115,11 @@
 		font-style: normal;
 		font-weight: 700;
 		line-height: 125%;
+	}
+	@media (max-width: 1119px) {
+		.description2 {
+			font-size: 35px;
+			line-height: 42px;
+		}
 	}
 </style>

@@ -48,9 +48,9 @@
 		</div>
 
 		<div class="md:flex hidden uppercase items-center lg:h-[96px] h-auto flex-1 mt-[22px]">
-			<div class="flex gap-[16px]">
-				<a class="header-links" style="color: var(--dynamic-color);" href="/associes">Associes</a>
-				<a class="header-links" style="color: var(--dynamic-color);" href="/vision">Vision</a>
+			<div class="flex gap-[16px] lg:flex-row flex-col">
+				<a class="header-links" style="color: var(--dynamic-color);" href="/associes" class:active={page === '/associes'}>Associes</a>
+				<a class="header-links" style="color: var(--dynamic-color);" href="/vision" class:active={page === '/vision'}>Vision</a>
 				<a class="header-links" style="color: var(--dynamic-color);" href="/products">Vins</a>
 			</div>
 		</div>
@@ -75,6 +75,17 @@
 		font-size: 24px;
 		font-weight: 400;
 		line-height: 150%;
+	}
+	@media (max-width: 1119px) {
+		.header-links {
+			font-size: 48px;
+			height: auto;
+			width: auto;
+		}
+		.header-links.active {
+			text-decoration: underline;
+			text-underline-position: under;
+		}
 	}
 	.backdrop {
 		width: 100%;

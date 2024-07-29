@@ -53,6 +53,7 @@
 		height: 505px;
 	}
 
+
 	.sw {
 		width: 176px;
 	}
@@ -83,5 +84,37 @@
 
 	.product-name b {
 		font-weight: 700;
+	}
+	@media (max-width: 1119px) {
+		.s {
+			width: 118px;
+			height: 156px;
+		}
+		.m {
+			width: 181px;
+			height: 241px;
+		}
+		.l {
+			width: 245px;
+			height: 328px;
+		}
+		.sw {
+			width: 118px;
+			height: 224px;
+		}
+		.mw {
+			width: 181px;
+			height: 283px;
+		}
+		.lw {
+			width: 245px;
+			height: 370px;
+		}
+		.product-name {
+			font-size: 11px;
+		}
+		.product-price {
+			font-size: 11px;
+		}
 	}
 </style>
