@@ -4,7 +4,7 @@
 <div class="pt-[106px] pb-[48px] flex flex-col justify-center items-center bg-color1 w-full">
 	<img class="h-[102px] w-auto" src="/images/Ward%20&%20Associes.svg" alt="Ward & Associes" />
 
-	<div class="mt-[104px] max-w-[1154px] w-full flex items-start footer">
+	<div class="mt-[104px] max-w-[1154px] w-full flex flex-wrap items-start footer">
 		<a href="/" class="w-[82px] h-[82px] flex justify-center items-center"><img width="70px" src="/logo.svg" alt="logo" /></a>
 		<div class="flex flex-col mt-[11px] ml-[15px]">
 			<p class="text-sm leading-4">As-tu du Ward? <br>Inscris-toi à notre Infolettre!</p>
