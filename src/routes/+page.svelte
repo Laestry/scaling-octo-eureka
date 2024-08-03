@@ -59,7 +59,7 @@
 			<MainProductCard product={products.edges[14].node} size="s" />
 			<MainProductCard product={products.edges[15].node} size="m" />
 		</div>
-<!-- 
+<!--
 		<a href="/products" class="main-page-button self-end">
 			Encore plus <span class="text-color5">+</span>
 		</a> -->
@@ -68,7 +68,7 @@
 		<div class="lg:max-w-[1212px] px-[38px] md:max-w-[836px] max-w-[376px] mx-auto container">
 			<button class="instablock__button">@wardetassocies</button>
 			<p class="instablock__title">
-				Never miss a drop. <br> 
+				Never miss a drop. <br>
 				Follow us and find out about tasting events, parties, drops, team and winemakers.
 			</p>
 		</div>
@@ -118,7 +118,7 @@
 		}
 	}
 	.description {
-		font-family: Overpass, sans-serif;
+		font-family: 'Riposte', sans-serif;
 		font-size: 32px;
 		font-style: normal;
 		font-weight: 400;
@@ -126,7 +126,7 @@
 	}
 
 	.title {
-		font-family: Overpass, sans-serif;
+		font-family: 'Riposte', sans-serif;
 		font-size: 30px;
 		font-style: normal;
 		font-weight: 700;
@@ -134,7 +134,7 @@
 	}
 
 	.description2 {
-		font-family: Overpass, sans-serif;
+		font-family: 'Riposte', sans-serif;
 		font-size: 52px;
 		font-style: normal;
 		font-weight: 500;
@@ -142,7 +142,7 @@
 	}
 
 	.main-page-button {
-		font-family: Overpass, sans-serif;
+		font-family: 'Riposte', sans-serif;
 		font-size: 30px;
 		font-style: normal;
 		font-weight: 700;
@@ -193,11 +193,11 @@
 				:global(.card:nth-child(2)) {
 					order: 1;
 				}
-	
+
 				:global(.card:nth-child(3)) {
 					order: 3;
 				}
-	
+
 				:global(.card:nth-child(4)) {
 					order: 2;
 				}

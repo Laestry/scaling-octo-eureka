@@ -8,7 +8,8 @@
 
 <div>
 	<button
-		class="oai border-t flex justify-between w-full bg-[#fff] px-[6px] py-[3px] text-[#DE6643] cursor-pointer"
+		class="oai accordion flex justify-between w-full bg-[#fff] px-[6px] py-[3px] text-[#DE6643] cursor-pointer"
+    class:active={!closed}
 		on:click={() => {
 			closed = !closed;
 		}}
@@ -33,3 +34,12 @@
 		</div>
 	{/if}
 </div>
+
+<style lang="scss">
+  .accordion {
+    border-top: 1px solid #181C1C;
+    &.active {
+      color: #3777BC;
+    }
+  }
+</style>

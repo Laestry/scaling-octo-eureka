@@ -137,4 +137,14 @@
 	.backdrops:not(:is(.backdrops--1, .backdrops--2, .backdrops--3)) {
 		height: 200px;
 	}
+  @media (max-width: 1119px) and (min-width: 680px) {
+    .backdrops:not(:is(.backdrops--1, .backdrops--2, .backdrops--3)) {
+      height: 430px;
+    }
+  }
+  @media (max-width: 679px) {
+    .backdrops:not(:is(.backdrops--1, .backdrops--2, .backdrops--3)) {
+      height: 130px;
+    }
+  }
 </style>

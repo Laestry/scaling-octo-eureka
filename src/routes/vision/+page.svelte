@@ -145,7 +145,7 @@
 		}
 		&__suptitle {
 			color: var(--WARD-BLACK, #181C1C);
-			font-family: Overpass;
+			font-family: 'Riposte';
 			font-size: 30px;
 			font-style: normal;
 			font-weight: 400;
@@ -156,7 +156,7 @@
 		}
 		&__title {
 			color: var(--WARD-RED, #F15A38);
-			font-family: Overpass;
+			font-family: 'Riposte';
 			font-size: 50px;
 			font-style: normal;
 			font-weight: 400;
@@ -187,7 +187,7 @@
 		}
 		&__text {
 			color: var(--WARD-BLACK, #181C1C);
-			font-family: Overpass;
+			font-family: 'Riposte';
 			font-size: 12px;
 			font-style: normal;
 			font-weight: 400;
@@ -208,7 +208,7 @@
 		}
 		&__title {
 			color: #000;
-			font-family: Overpass;
+			font-family: 'Riposte';
 			font-size: 30px;
 			font-style: normal;
 			font-weight: 400;
@@ -221,7 +221,7 @@
 		}
 		&__text {
 			color: #191C1C;
-			font-family: Overpass;
+			font-family: 'Riposte';
 			font-size: 30px;
 			font-style: normal;
 			font-weight: 400;
@@ -239,7 +239,7 @@
 				max-width: 176px;
 				width: 100%;
 				color: #000;
-				font-family: Overpass;
+				font-family: 'Riposte';
 				font-size: 16px;
 				font-style: normal;
 				font-weight: 400;
@@ -247,7 +247,7 @@
 			}
 			&-text {
 				color: #191C1C;
-				font-family: Overpass;
+				font-family: 'Riposte';
 				font-size: 16px;
 				font-style: normal;
 				width: 368px;
@@ -351,7 +351,7 @@
 		}
 		.vision-list {
 			&__item {
-				
+
 				&-text {
 					font-size: 12px;
 				}

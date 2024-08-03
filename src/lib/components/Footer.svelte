@@ -84,7 +84,7 @@
 		font-weight: 400;
 	}
 	.footer {
-		font-family: Overpass, sans-serif;
+		font-family: 'Riposte', sans-serif;
 		font-size: 8px;
 		font-style: normal;
 		font-weight: 500;

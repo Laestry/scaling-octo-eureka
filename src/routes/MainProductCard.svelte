@@ -75,7 +75,7 @@
 	}
 
 	.product-name {
-		font-family: Overpass, sans-serif;
+		font-family: 'Riposte', sans-serif;
 		font-size: 14px;
 		font-style: normal;
 		font-weight: 400;
@@ -84,7 +84,7 @@
 	}
 
 	.product-price {
-		font-family: Overpass, sans-serif;
+		font-family: 'Riposte', sans-serif;
 		font-size: 14px;
 		font-style: normal;
 		font-weight: 700;
