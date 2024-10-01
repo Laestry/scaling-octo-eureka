@@ -50,7 +50,7 @@
 				<div class="title mt-[58px] mb-[10px]">Our Story</div>
 				<div class="flex">
 					<div class="w-[464px] content2 mr-[15px]">
-						Lorem ipsum dolor sit amet consectetur. Leo justo enim et in. Aliquam at feugiat tortor purus quis eu ultrices quis tincidunt. Tellus integer egestas lectus. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
+						Lorem ipsum dolor sit amet consectetur. Leo justo enim et in. Aliquam at feugiat tortor purus quis eu ultrices quis tincidunt. Tellus integer egestas lectus. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
 					</div>
 
 					<div class="w-[464px] content2">
@@ -102,7 +102,7 @@
 		width: 176px;
 		color: #000;
 		text-align: center;
-		font-family: Overpass, sans-serif;
+		font-family: 'Riposte', sans-serif;
 		font-size: 12px;
 		font-style: normal;
 		font-weight: 500;
@@ -116,7 +116,7 @@
 		width: 176px;
 		color: #000;
 		text-align: center;
-		font-family: Overpass, sans-serif;
+		font-family: 'Riposte', sans-serif;
 		font-size: 12px;
 		font-style: normal;
 		font-weight: 500;
@@ -132,7 +132,7 @@
 	input::placeholder {
 		color: #000;
 		text-align: center;
-		font-family: Overpass, sans-serif;
+		font-family: 'Riposte', sans-serif;
 		font-size: 12px;
 		font-style: normal;
 		font-weight: 500;
@@ -151,7 +151,7 @@
 
 	.title {
 		color: #191c1c;
-		font-family: Overpass, sans-serif;
+		font-family: 'Riposte', sans-serif;
 		font-size: 30px;
 		font-style: normal;
 		font-weight: 400;
@@ -160,7 +160,7 @@
 
 	.content {
 		color: #de6643;
-		font-family: Overpass, sans-serif;
+		font-family: 'Riposte', sans-serif;
 		font-size: 50px;
 		font-style: normal;
 		font-weight: 400;
@@ -169,7 +169,7 @@
 
 	.name {
 		color: #1e1e1e;
-		font-family: Overpass, sans-serif;
+		font-family: 'Riposte', sans-serif;
 		font-size: 12px;
 		font-style: normal;
 		font-weight: 700;
@@ -179,7 +179,7 @@
 
 	.favoriteWine {
 		color: #1e1e1e;
-		font-family: Overpass, sans-serif;
+		font-family: 'Riposte', sans-serif;
 		font-size: 12px;
 		font-style: normal;
 		font-weight: 500;
@@ -193,7 +193,7 @@
 
 	.content2 {
 		color: #191c1c;
-		font-family: Overpass, sans-serif;
+		font-family: 'Riposte', sans-serif;
 		font-size: 30px;
 		font-style: normal;
 		font-weight: 400;
@@ -202,7 +202,7 @@
 
 	.content3 {
 		color: #f6f1f2;
-		font-family: Overpass, sans-serif;
+		font-family: 'Riposte', sans-serif;
 		font-size: 50px;
 		font-style: normal;
 		font-weight: 400;

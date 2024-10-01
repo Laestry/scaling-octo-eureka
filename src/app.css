@@ -3,63 +3,58 @@
 @tailwind utilities;
 
 @font-face {
-    font-family: 'Overpass';
-    src: url('./fonts/Overpass-Regular.eot');
-    src: url('./fonts/Overpass-Regular.woff') format('woff'),
-         url('./fonts/Overpass-Regular.woff2') format('woff2'),
-         url('./fonts/Overpass-Regular.ttf') format('truetype');
+    font-family: 'Riposte';
+    src: url('./fonts/GTFRiposteTRIAL-Regular.otf');
     font-style: normal;
     font-weight: normal;
     font-display: swap;
 }
 @font-face {
-    font-family: 'Overpass';
-    src: url('./fonts/Overpass-Bold.eot');
-    src: url('./fonts/Overpass-Bold.woff') format('woff'),
-         url('./fonts/Overpass-Bold.woff2') format('woff2'),
-         url('./fonts/Overpass-Bold.ttf') format('truetype');
+    font-family: 'Riposte';
+    src: url('./fonts/GTFRiposteTRIAL-Bold.otf');
     font-style: normal;
     font-weight: 700;
     font-display: swap;
 }
 @font-face {
-    font-family: 'Overpass';
-    src: url('./fonts/Overpass-SemiBold.eot');
-    src: url('./fonts/Overpass-SemiBold.woff') format('woff'),
-         url('./fonts/Overpass-SemiBold.woff2') format('woff2'),
-         url('./fonts/Overpass-SemiBold.ttf') format('truetype');
+    font-family: 'Riposte';
+    src: url('./fonts/GTFRiposteTRIAL-SemiBold.otf');
     font-style: normal;
     font-weight: 600;
     font-display: swap;
 }
 @font-face {
-    font-family: 'Overpass';
-    src: url('./fonts/Overpass-SemiBold.eot');
-    src: url('./fonts/Overpass-SemiBold.woff') format('woff'),
-         url('./fonts/Overpass-SemiBold.woff2') format('woff2'),
-         url('./fonts/Overpass-SemiBold.ttf') format('truetype');
+    font-family: 'Riposte';
+    src: url('./fonts/GTFRiposteTRIAL-Medium.otf');
     font-style: normal;
     font-weight: 500;
     font-display: swap;
 }
+@font-face {
+    font-family: 'Riposte';
+    src: url('./fonts/GTFRiposteTRIAL-Light.otf');
+    font-style: normal;
+    font-weight: 300;
+    font-display: swap;
+}
 
 body{
-    font: 20px 'Inter';
+    font: 20px 'Riposte';
     scroll-behavior: smooth;
 }
 
 .header{
     font-size: 20px;
-    font-family: 'Overpass', sans-serif;
+    font-family: 'Riposte', sans-serif;
     font-weight: 400;
     letter-spacing: -0.02em;
     line-height: 150%;
     text-transform: uppercase;
-}   
+}
 
 .button{
     font-size: 16px;
-    font-family: 'Overpass', sans-serif;
+    font-family: 'Riposte', sans-serif;
     font-weight: 600;
     line-height: 150%;
     text-transform: uppercase;
@@ -116,14 +111,14 @@ h4{
 
 .coc{
     font-size: 13px;
-    font-family: 'Overpass', sans-serif;
+    font-family: 'Riposte', sans-serif;
     font-weight: 400;
     line-height: 150%;
 }
 
 .coc2{
     font-size: 13px;
-    font-family: 'Overpass', sans-serif;
+    font-family: 'Riposte', sans-serif;
     font-style: normal;
     font-weight: 500;
     text-transform: uppercase;
@@ -137,21 +132,21 @@ h4{
 
 .t1{
     font-size: 20px;
-    font-family: 'Overpass', sans-serif;
+    font-family: 'Riposte', sans-serif;
     font-weight: 500;
     line-height: 150%;
 }
 
 .t2{
     font-size: 16px;
-    font-family: 'Overpass', sans-serif;
+    font-family: 'Riposte', sans-serif;
     font-weight: 400;
     line-height: 150%;
 }
 
 .ot{
     font-size: 16px;
-    font-family: 'Overpass', sans-serif;
+    font-family: 'Riposte', sans-serif;
     font-weight: 400;
     line-height: 150%;
     text-transform: uppercase;
@@ -194,15 +189,15 @@ h4{
 
 :root{
 /* Color styles */
---primary: #0d99ff; 
+--primary: #0d99ff;
 --secondary: #bde3ff;
---layer: #ededed; 
---interactive-layer: #fffcB2; 
---background--01: #f9f9f9; 
---background--02: #ffffff; 
---content---primary: #000000; 
+--layer: #ededed;
+--interactive-layer: #fffcB2;
+--background--01: #f9f9f9;
+--background--02: #ffffff;
+--content---primary: #000000;
 --content---secondary: #a8a8a8;
---border--01: #000000; 
+--border--01: #000000;
 --border--02: #ebebeb;
 --button-secondary: #DFDFDF;
 --button-primary: #000;

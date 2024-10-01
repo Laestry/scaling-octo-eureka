@@ -21,16 +21,16 @@
 <style>
 .productTag {
 	color: #2D63B0;
-	font-family: Overpass;
+	font-family: 'Riposte';
 	font-size: 12px;
 	font-style: normal;
 	font-weight: 400;
-	line-height: 150%; 
+	line-height: 150%;
 }
 .passport {
 	color: #2D63B0;
 	text-align: right;
-	font-family: Overpass;
+	font-family: 'Riposte';
 	font-size: 12px;
 	font-style: normal;
 	font-weight: 400;

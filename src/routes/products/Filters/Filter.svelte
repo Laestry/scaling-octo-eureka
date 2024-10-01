@@ -6,7 +6,7 @@ type FilterInfo = {
 	list: string[]
 }
 
-export let info: FilterInfo 
+export let info: FilterInfo
 $: open = false
 $: filter = null
 $: selected = []
@@ -27,7 +27,7 @@ const selectItem = (item: number) => {
 		<div class="filter-icon">{open ? '-' : '+'}</div>
 	</button>
 	{#if open}
-		<div class="filter-list" 
+		<div class="filter-list"
 		style="
 			top: {filter.getBoundingClientRect().top + window.scrollY + filter.getBoundingClientRect().height}px;
 			left: {filter.getBoundingClientRect().left}px;
@@ -47,9 +47,23 @@ const selectItem = (item: number) => {
 </div>
 
 <style>
+.filter {
+  max-width: 176px;
+  width: 100%;
+}
+@media screen and (max-width: 767px) {
+  .filter {
+    max-width: 100%;
+  }
+  :global(.filter + .filter),
+  .filter:has(+ .filter) {
+    max-width: calc(50% - 3px ) !important;
+  }
+}
 .filter-header {
-	@apply flex items-center justify-center bg-[#fff] text-[12px] border-t w-[176px] h-[24px];
+	@apply flex items-center justify-center bg-[#fff] text-[12px] border-t h-[24px];
 	cursor: pointer;
+  width: 100%;
 	position: relative;
 	line-height: 150%;
 }
@@ -69,7 +83,7 @@ const selectItem = (item: number) => {
 }
 .filter-item {
 	color: #000;
-	font-family: Overpass;
+	font-family: 'Riposte';
 	font-size: 12px;
 	font-style: normal;
 	font-weight: 400;
@@ -93,14 +107,14 @@ const selectItem = (item: number) => {
 	width: 14px;
 	color: inherit;
 	text-align: center;
-	font-family: Overpass;
+	font-family: 'Riposte';
 	font-size: 12px;
 	font-style: normal;
 	font-weight: 500;
 	line-height: 150%; /* 18px */
 	letter-spacing: -0.132px;
 	text-transform: uppercase;
-	
+
 }
 
 </style>

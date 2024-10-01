@@ -8,6 +8,7 @@
 	import { cartStore } from '$lib/store';
 	import { addToCart } from '$lib/cart';
 	import ProductCard from '../ProductCard.svelte';
+  import ProductGrid from '../ProductGrid.svelte';
 
 	export let data;
 	let product: ProductNode;
@@ -35,6 +36,391 @@
 		}
 	});
 
+  let searchResults = {
+    "url": "/products",
+    "edges": [
+        {
+            "node": {
+                "id": "gid://shopify/Product/8331574313264",
+                "variants": {
+                    "edges": [
+                        {
+                            "node": {
+                                "id": "gid://shopify/ProductVariant/45102004109616",
+                                "title": "Default Title",
+                                "priceV2": {
+                                    "amount": "885.95",
+                                    "currencyCode": "CAD"
+                                }
+                            }
+                        }
+                    ]
+                },
+                "title": "ENDERLE MOLL",
+                "color": {
+                    "value": "White"
+                },
+                "ml": {
+                    "value": "750"
+                },
+                "producer": {
+                    "value": "Müller-Thurgau"
+                },
+                "images": {
+                    "edges": [
+                        {
+                            "node": {
+                                "originalSrc": "https://cdn.shopify.com/s/files/1/0762/7689/1952/files/product-image_c11c0b38-26c7-47ab-97ca-fbdc2d0dc6b5.png?v=1699825330"
+                            }
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "node": {
+                "id": "gid://shopify/Product/8926646960432",
+                "variants": {
+                    "edges": [
+                        {
+                            "node": {
+                                "id": "gid://shopify/ProductVariant/47495439548720",
+                                "title": "Default Title",
+                                "priceV2": {
+                                    "amount": "885.95",
+                                    "currencyCode": "CAD"
+                                }
+                            }
+                        }
+                    ]
+                },
+                "title": "ENDERLE MOLL 2",
+                "color": {
+                    "value": "White"
+                },
+                "ml": {
+                    "value": "750"
+                },
+                "producer": {
+                    "value": "Müller-Thurgau"
+                },
+                "images": {
+                    "edges": [
+                        {
+                            "node": {
+                                "originalSrc": "https://cdn.shopify.com/s/files/1/0762/7689/1952/files/product-image_fb33729a-7f07-4f84-8954-12270343265a.png?v=1706118849"
+                            }
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "node": {
+                "id": "gid://shopify/Product/8926647255344",
+                "variants": {
+                    "edges": [
+                        {
+                            "node": {
+                                "id": "gid://shopify/ProductVariant/47495440859440",
+                                "title": "Default Title",
+                                "priceV2": {
+                                    "amount": "885.95",
+                                    "currencyCode": "CAD"
+                                }
+                            }
+                        }
+                    ]
+                },
+                "title": "ENDERLE MOLL 3",
+                "color": {
+                    "value": "White"
+                },
+                "ml": {
+                    "value": "750"
+                },
+                "producer": {
+                    "value": "Müller-Thurgau"
+                },
+                "images": {
+                    "edges": [
+                        {
+                            "node": {
+                                "originalSrc": "https://cdn.shopify.com/s/files/1/0762/7689/1952/files/product-image_aa68fb16-377b-4efd-b5d0-8062e7d78ea9.png?v=1706118869"
+                            }
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "node": {
+                "id": "gid://shopify/Product/8926647386416",
+                "variants": {
+                    "edges": [
+                        {
+                            "node": {
+                                "id": "gid://shopify/ProductVariant/47495441318192",
+                                "title": "Default Title",
+                                "priceV2": {
+                                    "amount": "885.95",
+                                    "currencyCode": "CAD"
+                                }
+                            }
+                        }
+                    ]
+                },
+                "title": "ENDERLE MOLL 4",
+                "color": {
+                    "value": "White"
+                },
+                "ml": {
+                    "value": "750"
+                },
+                "producer": {
+                    "value": "Müller-Thurgau"
+                },
+                "images": {
+                    "edges": [
+                        {
+                            "node": {
+                                "originalSrc": "https://cdn.shopify.com/s/files/1/0762/7689/1952/files/product-image_82c9deb9-b92a-49c4-be90-06440a701858.png?v=1706118877"
+                            }
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "node": {
+                "id": "gid://shopify/Product/8926647681328",
+                "variants": {
+                    "edges": [
+                        {
+                            "node": {
+                                "id": "gid://shopify/ProductVariant/47495442006320",
+                                "title": "Default Title",
+                                "priceV2": {
+                                    "amount": "885.95",
+                                    "currencyCode": "CAD"
+                                }
+                            }
+                        }
+                    ]
+                },
+                "title": "ENDERLE MOLL 5",
+                "color": {
+                    "value": "White"
+                },
+                "ml": {
+                    "value": "750"
+                },
+                "producer": {
+                    "value": "Müller-Thurgau"
+                },
+                "images": {
+                    "edges": [
+                        {
+                            "node": {
+                                "originalSrc": "https://cdn.shopify.com/s/files/1/0762/7689/1952/files/product-image_20c155bf-60d4-4608-8cb6-509a6724ab6a.png?v=1706118893"
+                            }
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "node": {
+                "id": "gid://shopify/Product/8926647943472",
+                "variants": {
+                    "edges": [
+                        {
+                            "node": {
+                                "id": "gid://shopify/ProductVariant/47495443022128",
+                                "title": "Default Title",
+                                "priceV2": {
+                                    "amount": "885.95",
+                                    "currencyCode": "CAD"
+                                }
+                            }
+                        }
+                    ]
+                },
+                "title": "ENDERLE MOLL 6",
+                "color": {
+                    "value": "White"
+                },
+                "ml": {
+                    "value": "750"
+                },
+                "producer": {
+                    "value": "Müller-Thurgau"
+                },
+                "images": {
+                    "edges": [
+                        {
+                            "node": {
+                                "originalSrc": "https://cdn.shopify.com/s/files/1/0762/7689/1952/files/product-image_518b2069-39ef-43b7-a1c9-bf0e40c73e9d.png?v=1706118905"
+                            }
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "node": {
+                "id": "gid://shopify/Product/8926648238384",
+                "variants": {
+                    "edges": [
+                        {
+                            "node": {
+                                "id": "gid://shopify/ProductVariant/47495443939632",
+                                "title": "Default Title",
+                                "priceV2": {
+                                    "amount": "885.95",
+                                    "currencyCode": "CAD"
+                                }
+                            }
+                        }
+                    ]
+                },
+                "title": "ENDERLE MOLL 7",
+                "color": {
+                    "value": "White"
+                },
+                "ml": {
+                    "value": "750"
+                },
+                "producer": {
+                    "value": "Müller-Thurgau"
+                },
+                "images": {
+                    "edges": [
+                        {
+                            "node": {
+                                "originalSrc": "https://cdn.shopify.com/s/files/1/0762/7689/1952/files/product-image_e3106524-10bd-461b-8886-7397179f282c.png?v=1706118917"
+                            }
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "node": {
+                "id": "gid://shopify/Product/8926648434992",
+                "variants": {
+                    "edges": [
+                        {
+                            "node": {
+                                "id": "gid://shopify/ProductVariant/47495444758832",
+                                "title": "Default Title",
+                                "priceV2": {
+                                    "amount": "885.95",
+                                    "currencyCode": "CAD"
+                                }
+                            }
+                        }
+                    ]
+                },
+                "title": "ENDERLE MOLL 8",
+                "color": {
+                    "value": "White"
+                },
+                "ml": {
+                    "value": "750"
+                },
+                "producer": {
+                    "value": "Müller-Thurgau"
+                },
+                "images": {
+                    "edges": [
+                        {
+                            "node": {
+                                "originalSrc": "https://cdn.shopify.com/s/files/1/0762/7689/1952/files/product-image_6ef8da19-aff8-4fdf-b843-8196bedf77d2.png?v=1706118926"
+                            }
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "node": {
+                "id": "gid://shopify/Product/8926648729904",
+                "variants": {
+                    "edges": [
+                        {
+                            "node": {
+                                "id": "gid://shopify/ProductVariant/47495445676336",
+                                "title": "Default Title",
+                                "priceV2": {
+                                    "amount": "885.95",
+                                    "currencyCode": "CAD"
+                                }
+                            }
+                        }
+                    ]
+                },
+                "title": "ENDERLE MOLL 9",
+                "color": {
+                    "value": "White"
+                },
+                "ml": {
+                    "value": "750"
+                },
+                "producer": {
+                    "value": "Müller-Thurgau"
+                },
+                "images": {
+                    "edges": [
+                        {
+                            "node": {
+                                "originalSrc": "https://cdn.shopify.com/s/files/1/0762/7689/1952/files/product-image_cd175663-62b0-4688-b118-c28b96128f5c.png?v=1706118935"
+                            }
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "node": {
+                "id": "gid://shopify/Product/8926649024816",
+                "variants": {
+                    "edges": [
+                        {
+                            "node": {
+                                "id": "gid://shopify/ProductVariant/47495446626608",
+                                "title": "Default Title",
+                                "priceV2": {
+                                    "amount": "885.95",
+                                    "currencyCode": "CAD"
+                                }
+                            }
+                        }
+                    ]
+                },
+                "title": "ENDERLE MOLL 10",
+                "color": {
+                    "value": "White"
+                },
+                "ml": {
+                    "value": "750"
+                },
+                "producer": {
+                    "value": "Müller-Thurgau"
+                },
+                "images": {
+                    "edges": [
+                        {
+                            "node": {
+                                "originalSrc": "https://cdn.shopify.com/s/files/1/0762/7689/1952/files/product-image_5feb61cf-562c-4aaf-a781-3cc1d5458ff0.png?v=1706118949"
+                            }
+                        }
+                    ]
+                }
+            }
+        }
+    ]
+}
 	console.log(product);
 </script>
 
@@ -43,11 +429,13 @@
 		<!-- <a href="/products">
 			<button><img src="/icons/arrow.svg" alt="back" /></button>
 		</a> -->
-
-		<div class="flex gap-[32px] mt-[16px] items-end">
-			<div class="relative min-w-[462px] w-[462px] h-[639px]">
-				<button 
-					class="absolute z-[1] left-0 bottom-0 w-[271px] h-[375px]"
+    <div class="md:hidden visible">
+      <ProductTags {product} />
+    </div>
+		<div class="md:flex-row flex-col flex gap-[32px] mt-[16px] items-end">
+			<div class="relative lg:min-w-[462px] lg:w-[462px] lg:h-[639px] md:min-w-[308px] md:w-[308px] md:h-[439px] min-w-[280px] w-[280px] h-[262px]">
+				<button
+					class="absolute z-[1] left-0 bottom-0 lg:w-[271px] lg:h-[375px] md:w-[181px] md:h-[241px] w-[94px] h-[125px]"
 					class:z-[4]={activeSlide === 0}
 					on:click={() => (activeSlide = 0)}
 				>
@@ -57,8 +445,8 @@
 						alt="Wine"
 					/>
 				</button>
-				<button 
-					class="absolute z-[2] left-[12px] bottom-0 w-[450px] h-[591px]"
+				<button
+					class="absolute z-[2] md:left-[12px] left-[6px] bottom-0 lg:w-[450px] lg:h-[591px] md:w-[247px] md:h-[439px] w-[196px] h-[262px]"
 					class:z-[4]={activeSlide === 2}
 					on:click={() => (activeSlide = 2)}
 				>
@@ -68,8 +456,8 @@
 						alt="Wine"
 					/>
 				</button>
-				<button 
-					class="absolute z-[3] left-[12px] bottom-0 w-[374px] h-[639px]"
+				<button
+					class="absolute z-[3] md:left-[12px] left-[99px] bottom-0 lg:w-[374px] lg:h-[639px] md:w-[300px] md:h-[401px] w-[181px] h-[240px]"
 					class:z-[4]={activeSlide === 1}
 					on:click={() => (activeSlide = 1)}
 				>
@@ -82,11 +470,13 @@
 			</div>
 
 			<div class="flex flex-col">
-				<ProductTags {product} />
+        <div class="md:visible hidden">
+          <ProductTags {product} />
+        </div>
 				<h1 class="product-title mt-[12px]">{product.title}</h1>
 				<div class="product-description mt-4 h-[125px] max-w-[366px] overflow-auto">
 					{@html allText ? product?.descriptionHtml || '' : product?.descriptionHtml?.slice(0, 168) + '...' || ''}
-					{#if !allText} 
+					{#if !allText}
 						<button on:click={() => (allText = true)}>+</button>
 					{/if}
 					<!-- {product?.descriptionHtml} -->
@@ -114,9 +504,9 @@
 					</button>
 					<FavoriteButton />
 				</div> -->
-				<div class="w-[464px] mt-4">
+				<div class="lg:w-[464px] md:w-[380px] w-[300px] w-full mt-4">
 					<div class="flex product-table " >
-						<div class="flex flex-col min-w-[280px] w-[280px] border-r-[1px] border-r-[#E859EB]">
+						<div class="flex flex-col md:min-w-[280px] md:w-[280px] min-w-[186px] w-[186px] border-r-[1px] border-r-[#E859EB]">
 							<p class="product-table__type">Type de vin</p>
 							<p class="product-table__description">
 								<b class="font-bold">{product.title ?? 'N/A'}</b>
@@ -131,29 +521,29 @@
 						<div class="flex flex-col py-2 w-full">
 							<p class="product-table__price">{parseInt(product?.variants?.edges[0]?.node?.priceV2?.amount / 6) ?? 'N/A'} $ / B</p>
 							<p class="product-table__price">{parseInt(product?.variants?.edges[0]?.node?.priceV2?.amount) ?? 'N/A'} $ / C</p>
+              <p class="product-table__type-region">
+                {product?.region?.value ?? 'N/A'}
+                <br/>
+                {product?.country?.value ?? 'N/A'}
+              <p/>
 						</div>
 					</div>
-					<div class="flex pt-4 pb-8 border-b-[1px] border-b-[#DE6643] relative justify-between">
-						<div class="flex flex-col gap-2">
+					<div class="flex md:flex-row flex-col pt-4 pb-8 border-b-[1px] border-b-[#DE6643] relative justify-between">
+						<div class="flex md:flex-col flex-row gap-2">
 							<p class="product-table__count">Quantité /caisse de 6</p>
 							<div class="product-table-counter">
 								<p class="product-table-counter__value">{count}</p>
-								<div class="flex flex-col">
+								<div class="md:flex flex-col contents">
 									<button class="product-table-counter__button" on:click={() => count++}>+</button>
-									<button class="product-table-counter__button" on:click={() => count > 0 ? count-- : count}>-</button>
+									<button class="product-table-counter__button order-[-1]" on:click={() => count > 0 ? count-- : count}>-</button>
 								</div>
 							</div>
 						</div>
-						<div class="flex flex-col gap-2">
-							<button class="product-table__button">Ajouter à ma liste</button>
+						<div class="flex flex-col gap-2 md:mt-0 mt-6">
+							<button class="product-table__button product-table__button--favorite">Liste d’attente</button>
 							<button class="product-table__button">Ajouter au panier</button>
 						</div>
 						<p class="absolute text-[16px] bg-[#F6F1F2] text-[#DE6643] bottom-[-12px] pr-1">*</p>
-						<button class="product-table__favorite">
-							<svg width="25" height="20" viewBox="0 0 25 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-								<path d="M5.75514 14.4777C4.92965 13.7961 3.91602 12.88 3.06162 11.8219C2.35851 10.9511 0.999901 9.07663 1 6.62155C1.00013 3.51674 3.71008 0.999883 7.05285 1C9.44853 1.00008 11.5191 2.29293 12.5 4.1684C13.481 2.29286 15.5516 1 17.9474 1C21.2901 1 24 3.51695 24 6.62176C24 9.07676 22.6414 10.9512 21.9383 11.8219C21.0839 12.88 20.0703 13.7961 19.2448 14.4777C15.7624 17.3527 15.5953 17.0834 12.5 19C10.1847 17.5664 7.84151 16.2002 5.75514 14.4777Z" fill="white" stroke="#F04F30" stroke-linejoin="round"/>
-							</svg>
-						</button>
 					</div>
 					<p class="product-table__description">
 						Le prix inclut les taxes et le frais d’agent de 16%.
@@ -187,13 +577,16 @@
 				</div>
 			{/if}
 		</Accordion> -->
+		<Accordion title="Vu récemment">
+			<ProductGrid class="mt-[32px]" {searchResults} />
+		</Accordion>
+		<Accordion title="Si vous aimez ceci, vous aimerez aussi...">
+      <ProductGrid class="mt-[32px]" {searchResults} />
+		</Accordion>
 		<Accordion title="Du même producteur">
 			<div>body</div>
 		</Accordion>
 		<Accordion title="De la même région">
-			<div>body</div>
-		</Accordion>
-		<Accordion title="Vu récemment">
 			<div>body</div>
 		</Accordion>
 	</div>
@@ -241,6 +634,17 @@
 	padding: 8px 0px;
 	border-bottom: 1px solid #DE6643;
 }
+.product-table__type-region {
+	color: #1E1E1E;
+	font-size: 16px;
+	font-style: normal;
+	font-weight: 400;
+	line-height: 120%; /* 19.2px */
+	padding: 8px 0px;
+	border-top: 1px solid #DE6643;
+  text-align: right;
+  margin-top: 29px;
+}
 .product-table__description {
 	color: #1E1E1E;
 	padding: 8px 0px;
@@ -251,7 +655,7 @@
 }
 .product-table__description a {
 	color: #4975B8;
-	font-family: Overpass;
+	font-family: 'Riposte';
 	font-size: 16px;
 	font-style: normal;
 	font-weight: 400;
@@ -276,9 +680,12 @@
 .product-table__button:last-child {
 	background: #2D63B0;
 }
+.product-table__button--favorite {
+	background: var(--WARD-RED, #F15A38);
+}
 .product-table__count {
 	color: #1E1E1E;
-	font-family: Overpass;
+	font-family: 'Riposte';
 	font-size: 16px;
 	font-style: normal;
 	font-weight: 400;
@@ -295,13 +702,22 @@
 	gap: 5px;
 	align-items: center;
 }
+@media (max-width: 767px) {
+  .product-table-counter {
+    margin-top: 0;
+    margin-left: auto;
+  }
+  .product-table__button {
+    width: 100%;
+  }
+}
 .product-table-counter__value {
 	color: #F6F1F2;
 	text-align: center;
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	font-family: Overpass;
+	font-family: 'Riposte';
 	font-size: 16px;
 	font-style: normal;
 	font-weight: 400;
@@ -320,7 +736,7 @@
 	flex-shrink: 0;
 	color: #1E1E1E;
 	text-align: center;
-	font-family: Overpass;
+	font-family: 'Riposte';
 	font-size: 16px;
 	font-style: normal;
 	font-weight: 400;
