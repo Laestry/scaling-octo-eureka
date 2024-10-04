@@ -2,10 +2,14 @@
 	import type { Products, ProductData } from '$lib/models/shopifyTypes';
 	import MainProductCard from './MainProductCard.svelte';
 	import Header from '$lib/components/Header.svelte';
+	import type { PageData } from './$types';
+	import type { Product } from '$lib/server/db';
+	import { alcoholFormat, volumeFormat, priceFormat, originFormat } from './product/[slug]/utils';
 
-	export let data: ProductData;
-	let products: Products = data.products;
-	console.log('products', products);
+	export let data: PageData;
+	$: console.log('data', data);
+	$: old_products = data.old_products.products;
+	$: products = data.products;
 </script>
 
 <!-- <Header page="main" color="#DE6643" class="absolute top-0 left-2/4 translate-x-[-50%] z-10" /> -->
@@ -13,11 +17,49 @@
 </div> -->
 
 <div class="flex flex-col items-center">
+	<div class="new">
+		new
+		{#each products as product}
+			<a href={'/product/' + product.slug}>
+				<div class="product">
+					<div>no image</div>
+					{#if product.name}
+						<div>name: {product.name}</div>
+					{/if}
+					<div>alcohol: {alcoholFormat(product)}</div>
+					<div>unit: {product.unit}</div>
+					<div>quantity: {product.quantity}</div>
+					<div>volume: {volumeFormat(product)}</div>
+					<div>price: {priceFormat(product)}</div>
+					{#if product.providerName}
+						<div>
+							provider:
+							<a href={product.providerSite || '#'}>{product.providerName}</a>
+						</div>
+					{/if}
+					{#if product.shortDescription}
+						<div>shortDescription: {product.shortDescription}</div>
+					{/if}
+					{#if product.fullDescription}
+						<div>fullDescription: {@html product.fullDescription}</div>
+					{/if}
+					<div>origin: {originFormat(product)}</div>
+					{#if product.category}
+						<div>category: {product.category}</div>
+					{/if}
+					{#if product.specificCategory}
+						<div>specificCategory: {product.specificCategory}</div>
+					{/if}
+				</div>
+			</a>
+		{/each}
+	</div>
+
 	<div class="flex flex-col min-h-[90vh] w-full lg:max-w-[1212px] px-[38px] md:max-w-[836px] max-w-[376px]">
 		<div class="md:flex-row flex-col-reverse flex md:mt-[134px] gap-[20px] my-[80px] md:mb-[137px]">
 			<div class="h3 description max-w-[844px] text-color1">
-				Lorem ipsum dolor sit amet consectetur. Leo justo enim et in. Aliquam at feugiat tortor purus
-				quis eu ultrices quis tincidunt. Tellus integer egestas lectus ac.
+				Lorem ipsum dolor sit amet consectetur. Leo justo enim et in. Aliquam at feugiat tortor purus quis eu ultrices
+				quis tincidunt. Tellus integer egestas lectus ac.
 			</div>
 			<div class="flex gap-[14px]">
 				<div class=" w-[15px] h-[15px] min-w-[15px] rounded-full bg-color1"></div>
@@ -27,48 +69,54 @@
 		</div>
 
 		<div class="title mb-[19px]">Nos vins</div>
-		<div class="card__row flex lg:gap-x-[16px] gap-x-[10px] md:gap-x-[11px] gap-y-[20px] lg:mb-[39px] mb-[20px] flex-wrap">
-			<MainProductCard product={products.edges[0].node} size="m" />
-			<MainProductCard product={products.edges[1].node} size="s" />
-			<MainProductCard product={products.edges[2].node} size="l" />
-			<MainProductCard product={products.edges[3].node} size="m" />
+		<div
+			class="card__row flex lg:gap-x-[16px] gap-x-[10px] md:gap-x-[11px] gap-y-[20px] lg:mb-[39px] mb-[20px] flex-wrap"
+		>
+			<MainProductCard product={old_products.edges[0].node} size="m" />
+			<MainProductCard product={old_products.edges[1].node} size="s" />
+			<MainProductCard product={old_products.edges[2].node} size="l" />
+			<MainProductCard product={old_products.edges[3].node} size="m" />
 		</div>
 
-		<div class="card__row card__row--reverse flex lg:gap-x-[16px] gap-x-[10px] md:gap-x-[11px] gap-y-[20px] lg:mb-[39px] mb-[20px] flex-wrap">
-			<MainProductCard product={products.edges[5].node} size="l" />
-			<MainProductCard product={products.edges[6].node} size="m" />
-			<MainProductCard product={products.edges[7].node} size="s" />
-			<MainProductCard product={products.edges[8].node} size="m" />
+		<div
+			class="card__row card__row--reverse flex lg:gap-x-[16px] gap-x-[10px] md:gap-x-[11px] gap-y-[20px] lg:mb-[39px] mb-[20px] flex-wrap"
+		>
+			<MainProductCard product={old_products.edges[5].node} size="l" />
+			<MainProductCard product={old_products.edges[6].node} size="m" />
+			<MainProductCard product={old_products.edges[7].node} size="s" />
+			<MainProductCard product={old_products.edges[8].node} size="m" />
 		</div>
 
 		<div class="card__row flex lg:gap-x-[16px] gap-x-[10px] md:gap-x-[11px] gap-y-[20px] flex-wrap">
-			<MainProductCard product={products.edges[9].node} size="m" />
-			<MainProductCard product={products.edges[10].node} size="s" />
+			<MainProductCard product={old_products.edges[9].node} size="m" />
+			<MainProductCard product={old_products.edges[10].node} size="s" />
 			<MainProductCard contacts size="l" />
-			<MainProductCard product={products.edges[11].node} size="m" />
+			<MainProductCard product={old_products.edges[11].node} size="m" />
 		</div>
 
 		<div class="description2 lg:mt-[113px] lg:mb-[180px] my-[80px] text-color1">
-			We place human values at the heart of our experience and in the origin of the importLeo justo
-			enim et in. Aliquam at feugiat tortor purus quis eu ultrices quis tincidunt.
+			We place human values at the heart of our experience and in the origin of the importLeo justo enim et in. Aliquam
+			at feugiat tortor purus quis eu ultrices quis tincidunt.
 		</div>
 
-		<div class="card__row card__row--reverse flex lg:gap-x-[16px] gap-x-[10px] md:gap-x-[11px] gap-y-[20px] flex-wrap mb-[62px]">
-			<MainProductCard product={products.edges[12].node} size="l" />
-			<MainProductCard product={products.edges[13].node} size="m" />
-			<MainProductCard product={products.edges[14].node} size="s" />
-			<MainProductCard product={products.edges[15].node} size="m" />
+		<div
+			class="card__row card__row--reverse flex lg:gap-x-[16px] gap-x-[10px] md:gap-x-[11px] gap-y-[20px] flex-wrap mb-[62px]"
+		>
+			<MainProductCard product={old_products.edges[12].node} size="l" />
+			<MainProductCard product={old_products.edges[13].node} size="m" />
+			<MainProductCard product={old_products.edges[14].node} size="s" />
+			<MainProductCard product={old_products.edges[15].node} size="m" />
 		</div>
-<!--
+		<!--
 		<a href="/products" class="main-page-button self-end">
 			Encore plus <span class="text-color5">+</span>
 		</a> -->
 	</div>
-	<div class="instablock" >
+	<div class="instablock">
 		<div class="lg:max-w-[1212px] px-[38px] md:max-w-[836px] max-w-[376px] mx-auto container">
 			<button class="instablock__button">@wardetassocies</button>
 			<p class="instablock__title">
-				Never miss a drop. <br>
+				Never miss a drop. <br />
 				Follow us and find out about tasting events, parties, drops, team and winemakers.
 			</p>
 		</div>
@@ -76,9 +124,24 @@
 </div>
 
 <style lang="scss">
+	.new {
+		display: flex;
+		flex-direction: column;
+		width: -webkit-fill-available;
+		margin: 5%;
+		gap: 16px;
+
+		.product {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			gap: 4px;
+		}
+	}
 	.instablock {
 		margin-bottom: -53px;
-		background: #DA5899;
+		background: #da5899;
 		width: 100%;
 		padding: 64px 0;
 		&__button {
@@ -100,7 +163,7 @@
 			flex-direction: column-reverse;
 		}
 		&__title {
-			color: #F6F1F2;
+			color: #f6f1f2;
 			font-size: 50px;
 			font-style: normal;
 			font-weight: 400;
@@ -172,26 +235,11 @@
 		}
 		.card {
 			&__row {
-			:global(.card:nth-child(1)) {
-				order: 1;
-			}
-			:global(.card:nth-child(2)) {
-				order: 4;
-			}
-
-			:global(.card:nth-child(3)) {
-				order: 3;
-			}
-
-			:global(.card:nth-child(4)) {
-				order: 2;
-			}
-			&--reverse {
 				:global(.card:nth-child(1)) {
-					order: 4;
+					order: 1;
 				}
 				:global(.card:nth-child(2)) {
-					order: 1;
+					order: 4;
 				}
 
 				:global(.card:nth-child(3)) {
@@ -201,8 +249,23 @@
 				:global(.card:nth-child(4)) {
 					order: 2;
 				}
+				&--reverse {
+					:global(.card:nth-child(1)) {
+						order: 4;
+					}
+					:global(.card:nth-child(2)) {
+						order: 1;
+					}
+
+					:global(.card:nth-child(3)) {
+						order: 3;
+					}
+
+					:global(.card:nth-child(4)) {
+						order: 2;
+					}
+				}
 			}
-		}
 		}
 	}
 </style>
