@@ -36,10 +36,7 @@
 					<td>{product.producer?.value ?? ''}</td>
 					<td>{product.color?.value ?? ''}</td>
 					<td>{product.region?.value ?? ''}</td>
-					<td
-						>{Number.parseFloat(product.variants.edges[0]?.node?.priceV2?.amount).toFixed(0) ??
-							''}$</td
-					>
+					<td>{Number.parseFloat(product.variants.edges[0]?.node?.priceV2?.amount).toFixed(0) ?? ''}$</td>
 					<td class=" lowercase"> {product.ml?.value ?? ''}ml</td>
 					<td class="!p-0 flex items-center justify-center">
 						<FavoriteButton />

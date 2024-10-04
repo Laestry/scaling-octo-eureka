@@ -6,5 +6,5 @@ export async function load({ cookies, url }) {
 	} else {
 		cart = undefined;
 	}
-	return { cart, url: url.pathname,};
+	return { cart, url: url.pathname };
 }

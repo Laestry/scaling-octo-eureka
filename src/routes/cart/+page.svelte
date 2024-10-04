@@ -35,17 +35,13 @@
 			<div class="">
 				<div class="h-[248px] flex flex-wrap justify-between gap-[128px]">
 					<div class="flex gap-[8px] h-[248px]">
-						<img
-							src={item.picture}
-							alt={item.title}
-							class="w-[228px] bg-no-repeat object-cover rounded-[6px]"
-						/>
+						<img src={item.picture} alt={item.title} class="w-[228px] bg-no-repeat object-cover rounded-[6px]" />
 						<div class="rounded-[6px] bg-primary w-[212px] p-[16px]">
 							<div class="t1">{item.title}</div>
 							<div class="mt-[32px] ml-[8px] coc2">
 								<div>{item.color}</div>
 								<div>{item.style}</div>
-								<div>PPC{item.price} & PPB{parseInt(item.price / 6)}</div>
+								<div>PPC{item.price} & PPB{Math.round(parseFloat(item.price) / 6)}</div>
 							</div>
 						</div>
 					</div>
@@ -81,7 +77,7 @@
 						</div>
 
 						<div class="button2">
-							${item.price * item.quantity}
+							${parseFloat(item.price) * item.quantity}
 						</div>
 					</div>
 				</div>

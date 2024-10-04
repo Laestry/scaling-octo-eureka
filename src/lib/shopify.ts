@@ -1,8 +1,4 @@
-import {
-	PUBLIC_SHOPIFY_API_VERSION,
-	PUBLIC_SHOPIFY_BASE_URL,
-	PUBLIC_SHOPIFY_STOREFRONT
-} from '$env/static/public';
+import { PUBLIC_SHOPIFY_API_VERSION, PUBLIC_SHOPIFY_BASE_URL, PUBLIC_SHOPIFY_STOREFRONT } from '$env/static/public';
 import type { GraphQLResponse, ProductData } from '$lib/models/shopifyTypes';
 
 const SHOPIFY_ENDPOINT = `${PUBLIC_SHOPIFY_BASE_URL}api/${PUBLIC_SHOPIFY_API_VERSION}/graphql.json`;
@@ -407,7 +403,7 @@ export async function getCartItems(cartId) {
         query {
             cart(id: "${cartId}") {
                 id
-                lines(first: 10) {  
+                lines(first: 10) {
                     edges {
                         node {
                             id

@@ -6,6 +6,8 @@ export async function POST({ request }) {
 	const { productId } = await request.json();
 
 	const recommendedProducts = await getProductRecommendations(getNumberFromId(productId));
-	console.log(recommendedProducts);
+
+	console.log('recommendedProducts', recommendedProducts);
+
 	return json(recommendedProducts);
 }

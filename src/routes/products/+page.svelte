@@ -16,11 +16,11 @@
 
 <div>
 	<!-- <SearchBar bind:enabledFilters bind:searchResults {defaultResult} /> -->
-	<Filters on:switchView={(e) => (isGrid = e.detail)} bind:isGrid/>
+	<Filters on:switchView={(e) => (isGrid = e.detail)} bind:isGrid />
 	{#if searchResults?.edges?.length}
 		{#if isGrid}
 			<ProductGrid class="mt-[32px]" {searchResults} />
-			{:else}
+		{:else}
 			<ProductList {searchResults} />
 			<!-- <SearchResults {searchResults} /> -->
 		{/if}

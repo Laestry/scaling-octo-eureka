@@ -10,8 +10,7 @@
 <div class="w-full flex justify-center">
 	<div class="w-[1130px] flex flex-col mt-[129px]">
 		<div class="content w-[944px]">
-			We place human values at the heart of our experience and in the origin of the import leo justo
-			enim et in.
+			We place human values at the heart of our experience and in the origin of the import leo justo enim et in.
 		</div>
 		<div class="title mt-[58px] mb-[10px]">Our People</div>
 		<div class="flex gap-[16px]">
@@ -50,11 +49,15 @@
 				<div class="title mt-[58px] mb-[10px]">Our Story</div>
 				<div class="flex">
 					<div class="w-[464px] content2 mr-[15px]">
-						Lorem ipsum dolor sit amet consectetur. Leo justo enim et in. Aliquam at feugiat tortor purus quis eu ultrices quis tincidunt. Tellus integer egestas lectus. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+						Lorem ipsum dolor sit amet consectetur. Leo justo enim et in. Aliquam at feugiat tortor purus quis eu
+						ultrices quis tincidunt. Tellus integer egestas lectus. Lorem ipsum dolor sit amet, consectetur adipiscing
+						elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
 					</div>
 
 					<div class="w-[464px] content2">
-						Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia/
+						Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+						Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+						Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia/
 					</div>
 				</div>
 			</div>
@@ -65,21 +68,22 @@
 
 		<div class="flex mt-[136px] gap-4">
 			<div class="flex flex-col gap-3">
-				<img class='w-[368px] h-[518px]' src="/images/thirstyPerson.png" alt="">
+				<img class="w-[368px] h-[518px]" src="/images/thirstyPerson.png" alt="" />
 				<p class="name">Events</p>
 			</div>
 			<div class="flex flex-col gap-3">
-				<img class='w-[368px] h-[518px]' src="/images/associes-img-01.png" alt="">
+				<img class="w-[368px] h-[518px]" src="/images/associes-img-01.png" alt="" />
 				<p class="name">Wine Makers</p>
 			</div>
 			<div class="flex flex-col gap-3">
-				<img class='w-[368px] h-[518px]' src="/images/associes-img-02.png" alt="">
+				<img class="w-[368px] h-[518px]" src="/images/associes-img-02.png" alt="" />
 				<p class="name">Regions</p>
 			</div>
 		</div>
 
 		<div class="w-[844px] content2 mt-[60px]">
-			Lorem ipsum dolor sit amet consectetur. Leo justo enim et in. Aliquam at feugiat tortor purus quis eu ultrices quis tincidunt. Tellus integer egestas lectus ac.
+			Lorem ipsum dolor sit amet consectetur. Leo justo enim et in. Aliquam at feugiat tortor purus quis eu ultrices
+			quis tincidunt. Tellus integer egestas lectus ac.
 		</div>
 	</div>
 </div>

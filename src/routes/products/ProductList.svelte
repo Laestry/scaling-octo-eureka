@@ -19,31 +19,66 @@
 				<th class="w-[289px]">
 					Nom
 					<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-						<path d="M12.0465 9.61998L7.99979 13.6666L3.95312 9.61998M7.99979 2.33331V13.5533" stroke="black" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+						<path
+							d="M12.0465 9.61998L7.99979 13.6666L3.95312 9.61998M7.99979 2.33331V13.5533"
+							stroke="black"
+							stroke-width="1.5"
+							stroke-miterlimit="10"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+						/>
 					</svg>
 				</th>
 				<th class="w-[193p]">
 					Vigneron
 					<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-						<path d="M12.0465 9.61998L7.99979 13.6666L3.95312 9.61998M7.99979 2.33331V13.5533" stroke="black" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+						<path
+							d="M12.0465 9.61998L7.99979 13.6666L3.95312 9.61998M7.99979 2.33331V13.5533"
+							stroke="black"
+							stroke-width="1.5"
+							stroke-miterlimit="10"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+						/>
 					</svg>
 				</th>
 				<th class="w-[94px]">
 					Mil.
 					<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-						<path d="M12.0465 9.61998L7.99979 13.6666L3.95312 9.61998M7.99979 2.33331V13.5533" stroke="black" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+						<path
+							d="M12.0465 9.61998L7.99979 13.6666L3.95312 9.61998M7.99979 2.33331V13.5533"
+							stroke="black"
+							stroke-width="1.5"
+							stroke-miterlimit="10"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+						/>
 					</svg>
 				</th>
 				<th class="w-[98px]">
 					Type
 					<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-						<path d="M12.0465 9.61998L7.99979 13.6666L3.95312 9.61998M7.99979 2.33331V13.5533" stroke="black" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+						<path
+							d="M12.0465 9.61998L7.99979 13.6666L3.95312 9.61998M7.99979 2.33331V13.5533"
+							stroke="black"
+							stroke-width="1.5"
+							stroke-miterlimit="10"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+						/>
 					</svg>
 				</th>
 				<th class="w-[191px]">
 					Regrion
 					<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-						<path d="M12.0465 9.61998L7.99979 13.6666L3.95312 9.61998M7.99979 2.33331V13.5533" stroke="black" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+						<path
+							d="M12.0465 9.61998L7.99979 13.6666L3.95312 9.61998M7.99979 2.33331V13.5533"
+							stroke="black"
+							stroke-width="1.5"
+							stroke-miterlimit="10"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+						/>
 					</svg>
 				</th>
 				<th class="w-[96px]">Format</th>
@@ -57,13 +92,13 @@
 					<td>{product.color?.value ?? ''}</td>
 					<td>{product.region?.value ?? ''}</td>
 					<td>
-						{product.count ?? ''} x {product.ml?.value ?? ''}ml
+						{('count' in product ? product.count : undefined) || ''} x {product.ml?.value ?? ''}ml
 					</td>
 					<td>
-						{Number.parseFloat(product.variants.edges[0]?.node?.priceV2?.amount).toFixed(0) ??''}$ /C
-						<br>
+						{Number.parseFloat(product.variants.edges[0]?.node?.priceV2?.amount).toFixed(0) ?? ''}$ /C
+						<br />
 						<span class="gray">
-							{Number.parseFloat(product.variants.edges[0]?.node?.priceV2?.amount / 6).toFixed(0) ??''}$ /B
+							{Math.round(parseFloat(product.variants.edges[0]?.node?.priceV2?.amount) / 6) || ''}$ /B
 						</span>
 					</td>
 				</tr>
@@ -105,7 +140,7 @@
 		text-align: right;
 	}
 
-	td>span.gray {
+	td > span.gray {
 		color: #949494;
 	}
 

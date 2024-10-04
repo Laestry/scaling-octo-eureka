@@ -4,12 +4,15 @@
 	import { addToCart } from '$lib/cart';
 
 	export let contacts = false;
-	export let product: ProductNode | any;
+	export let product: ProductNode | undefined = undefined;
 	export let size = 's';
 </script>
 
-<div title={contacts ? '@wardetassocies' : product.title} class="{size}w {$$props.class} card {contacts ? 'card--contacts' : ''}">
-	<a href="{contacts ? '#' : `/products/${getNumberFromId(product.id)}`}">
+<div
+	title={contacts ? '@wardetassocies' : product.title}
+	class="{size}w {$$props.class} card {contacts ? 'card--contacts' : ''}"
+>
+	<a href={contacts ? '#' : `/products/${getNumberFromId(product.id)}`}>
 		<img
 			class="bg-no-repeat object-cover bg-center {size} "
 			src={contacts ? '/images/thirstyPerson.png' : product.images.edges[0].node.originalSrc}
@@ -18,20 +21,20 @@
 		<div class="flex justify-between mt-[7px]">
 			<div class="flex flex-col product-name uppercase w-full" style="width: calc(100% - 80px)">
 				{#if !contacts}
-				<b> {product.title}</b>
-				<div>
-					{product?.producer?.value ?? 'N/A'}, {product?.year?.value ?? 'N/A'}
-				</div>
+					<b> {product.title}</b>
+					<div>
+						{product?.producer?.value ?? 'N/A'}, {product?.year?.value ?? 'N/A'}
+					</div>
 				{:else}
-				<b>@wardetassocies</b>
-				<div>
-					Insert one line caption if you want
-				</div>
+					<b>@wardetassocies</b>
+					<div>Insert one line caption if you want</div>
 				{/if}
 			</div>
 			{#if !contacts}
 				<div class="flex flex-col items-end">
-					<div class="product-price">${parseInt(product.variants.edges[0].node.priceV2.amount)}</div>
+					<div class="product-price">
+						${parseInt(product.variants.edges[0].node.priceV2.amount)}
+					</div>
 					<button
 						class="text-color5 text-sm font-bold cursor-cell whitespace-nowrap"
 						on:click|preventDefault={() => {
@@ -62,7 +65,6 @@
 		width: 368px;
 		height: 505px;
 	}
-
 
 	.sw {
 		width: 176px;
