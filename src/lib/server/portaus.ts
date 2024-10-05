@@ -438,6 +438,7 @@ export const PortausApi = {
 			alcohol,
 			/** volume in ml */
 			volume,
+			vintage: parseInt(obj.currentVintage) || undefined,
 			format,
 			unit,
 			price,

@@ -1,22 +1,22 @@
 import type { Product } from '$lib/server/db';
 
-export function alcoholFormat(product: Product) {
-	return `${(product.alcohol * 100).toFixed(2)}%`;
+export function alcoholFormat({ alcohol }: Product) {
+	return `${(alcohol * 100).toFixed(2)}%`;
 }
 
-export function volumeFormat(product: Product) {
-	const volume = product.format === 'l' ? product.volume * 1000 : product.format === 'ml' ? product.volume : undefined;
-	const format = product.format === 'l' ? 'L' : product.format === 'ml' ? 'ML' : undefined;
-	return `${volume || '-'} ${format || '-'}`;
+export function volumeFormat({ format, volume }: Product) {
+	const _volume = format === 'l' ? volume * 1000 : format === 'ml' ? volume : undefined;
+	const _format = format === 'l' ? 'L' : format === 'ml' ? 'ML' : undefined;
+	return `${_volume || '-'} ${_format || '-'}`;
 }
 
-export function priceFormat(product: Product) {
-	return `${product.price.toFixed(2)} EUR`;
+export function priceFormat({ price }: Product) {
+	return `${price.toFixed(2)} $`;
 }
 
-export function originFormat(product: Product) {
+export function originFormat({ originCity, originRegion, originCountry, originCountryCode }: Product) {
 	return (
-		[product.originCity, product.originRegion, product.originCountry, product.originCountryCode]
+		[originCity, originRegion, originCountry, originCountryCode ? `[${originCountryCode}]` : '']
 			.filter((x) => x)
 			.join(', ') || '-'
 	);

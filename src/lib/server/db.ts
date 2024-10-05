@@ -18,10 +18,15 @@ export type Product = GenericFields & _Product;
 		// console.log('raw_products', raw_products);
 		// const products = raw_products.map((x) => PortausApi.processProduct(x));
 		// console.log('products', products);
-		// const { error } = await supabase.from('products').insert(products);
-		// console.log('error', error);
-		// if (error) {
-		// 	throw error;
+		// const res1 = await supabase.from('products').delete().neq('slug', '');
+		// console.log('res1', res1);
+		// if (res1.error) {
+		// 	throw res1.error;
+		// }
+		// const res2 = await supabase.from('products').insert(products);
+		// console.log('res2', res2);
+		// if (res2.error) {
+		// 	throw res2.error;
 		// }
 	} catch (error) {
 		console.error(error);

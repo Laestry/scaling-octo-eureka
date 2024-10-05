@@ -5,6 +5,7 @@
 	import type { PageData } from './$types';
 	import type { Product } from '$lib/server/db';
 	import { alcoholFormat, volumeFormat, priceFormat, originFormat } from './product/[slug]/utils';
+	import ProductCardNew from '$lib/components/ProductCardNew.svelte';
 
 	export let data: PageData;
 	$: console.log('data', data);
@@ -17,44 +18,6 @@
 </div> -->
 
 <div class="flex flex-col items-center">
-	<div class="new">
-		new
-		{#each products as product}
-			<a href={'/product/' + product.slug}>
-				<div class="product">
-					<div>no image</div>
-					{#if product.name}
-						<div>name: {product.name}</div>
-					{/if}
-					<div>alcohol: {alcoholFormat(product)}</div>
-					<div>unit: {product.unit}</div>
-					<div>quantity: {product.quantity}</div>
-					<div>volume: {volumeFormat(product)}</div>
-					<div>price: {priceFormat(product)}</div>
-					{#if product.providerName}
-						<div>
-							provider:
-							<a href={product.providerSite || '#'}>{product.providerName}</a>
-						</div>
-					{/if}
-					{#if product.shortDescription}
-						<div>shortDescription: {product.shortDescription}</div>
-					{/if}
-					{#if product.fullDescription}
-						<div>fullDescription: {@html product.fullDescription}</div>
-					{/if}
-					<div>origin: {originFormat(product)}</div>
-					{#if product.category}
-						<div>category: {product.category}</div>
-					{/if}
-					{#if product.specificCategory}
-						<div>specificCategory: {product.specificCategory}</div>
-					{/if}
-				</div>
-			</a>
-		{/each}
-	</div>
-
 	<div class="flex flex-col min-h-[90vh] w-full lg:max-w-[1212px] px-[38px] md:max-w-[836px] max-w-[376px]">
 		<div class="md:flex-row flex-col-reverse flex md:mt-[134px] gap-[20px] my-[80px] md:mb-[137px]">
 			<div class="h3 description max-w-[844px] text-color1">
@@ -72,26 +35,11 @@
 		<div
 			class="card__row flex lg:gap-x-[16px] gap-x-[10px] md:gap-x-[11px] gap-y-[20px] lg:mb-[39px] mb-[20px] flex-wrap"
 		>
-			<MainProductCard product={old_products.edges[0].node} size="m" />
-			<MainProductCard product={old_products.edges[1].node} size="s" />
-			<MainProductCard product={old_products.edges[2].node} size="l" />
-			<MainProductCard product={old_products.edges[3].node} size="m" />
-		</div>
-
-		<div
-			class="card__row card__row--reverse flex lg:gap-x-[16px] gap-x-[10px] md:gap-x-[11px] gap-y-[20px] lg:mb-[39px] mb-[20px] flex-wrap"
-		>
-			<MainProductCard product={old_products.edges[5].node} size="l" />
-			<MainProductCard product={old_products.edges[6].node} size="m" />
-			<MainProductCard product={old_products.edges[7].node} size="s" />
-			<MainProductCard product={old_products.edges[8].node} size="m" />
-		</div>
-
-		<div class="card__row flex lg:gap-x-[16px] gap-x-[10px] md:gap-x-[11px] gap-y-[20px] flex-wrap">
-			<MainProductCard product={old_products.edges[9].node} size="m" />
-			<MainProductCard product={old_products.edges[10].node} size="s" />
-			<MainProductCard contacts size="l" />
-			<MainProductCard product={old_products.edges[11].node} size="m" />
+			{#each products as product, i (product.id)}
+				<a href={'/product/' + product.slug}>
+					<ProductCardNew {product} size={i % 3 === 0 ? 's' : i % 3 === 1 ? 'm' : 'l'}></ProductCardNew>
+				</a>
+			{/each}
 		</div>
 
 		<div class="description2 lg:mt-[113px] lg:mb-[180px] my-[80px] text-color1">
@@ -102,10 +50,11 @@
 		<div
 			class="card__row card__row--reverse flex lg:gap-x-[16px] gap-x-[10px] md:gap-x-[11px] gap-y-[20px] flex-wrap mb-[62px]"
 		>
-			<MainProductCard product={old_products.edges[12].node} size="l" />
-			<MainProductCard product={old_products.edges[13].node} size="m" />
-			<MainProductCard product={old_products.edges[14].node} size="s" />
-			<MainProductCard product={old_products.edges[15].node} size="m" />
+			{#each products as product, i (product.id)}
+				<a href={'/product/' + product.slug}>
+					<ProductCardNew {product} size={i % 3 === 0 ? 's' : i % 3 === 1 ? 'm' : 'l'}></ProductCardNew>
+				</a>
+			{/each}
 		</div>
 		<!--
 		<a href="/products" class="main-page-button self-end">
@@ -126,18 +75,12 @@
 <style lang="scss">
 	.new {
 		display: flex;
-		flex-direction: column;
+		flex-direction: row;
+		flex-wrap: wrap;
+		align-items: flex-start;
 		width: -webkit-fill-available;
 		margin: 5%;
 		gap: 16px;
-
-		.product {
-			display: flex;
-			flex-direction: column;
-			align-items: center;
-			justify-content: center;
-			gap: 4px;
-		}
 	}
 	.instablock {
 		margin-bottom: -53px;

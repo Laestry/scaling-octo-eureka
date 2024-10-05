@@ -1,21 +1,20 @@
 <script lang="ts">
-	import type { PageData } from './$types';
-	import { alcoholFormat, volumeFormat, priceFormat, originFormat } from './utils';
+	import type { Product } from '$lib/server/db';
+	import { alcoholFormat, volumeFormat, priceFormat, originFormat } from '../../routes/product/[slug]/utils';
 
-	export let data: PageData;
-	$: console.log('data', data);
-	$: product = data.product;
+	export let product: Product;
+	export let size: 's' | 'm' | 'l' = 's';
 
 	function add() {}
 </script>
 
-<div class="product">
+<div class="product {size}">
 	<img
-		class="bg-no-repeat object-cover bg-center img"
+		class="bg-no-repeat object-cover bg-center img {size}"
 		src={'https://cdn.shopify.com/s/files/1/0762/7689/1952/files/product-image_fb1c9cb7-8ab1-4037-a915-913d2c638b8a.png?v=1706118993'}
 		alt="Wine"
 	/>
-	<div class="flex flex-col justify-between mt-[7px] w-full">
+	<div class="flex justify-between mt-[7px] w-full">
 		<div class="flex flex-col uppercase w-full product-name" style="width: calc(100% - 80px)">
 			<b>{product.name || '-'}</b>
 			<div class="flex">
@@ -40,23 +39,6 @@
 				ADD +
 			</button>
 		</div>
-		{#if product.shortDescription}
-			<div>{product.shortDescription}</div>
-		{/if}
-		<div>origin: {originFormat(product)}</div>
-		<div>alcohol: {alcoholFormat(product)}</div>
-		<div>unit: {product.unit}</div>
-		<div>volume: {volumeFormat(product)}</div>
-		<div>quantity: {product.quantity}</div>
-		{#if product.category}
-			<div>category: {product.category}</div>
-		{/if}
-		{#if product.specificCategory}
-			<div>specific category: {product.specificCategory}</div>
-		{/if}
-		{#if product.fullDescription}
-			<div>{@html product.fullDescription}</div>
-		{/if}
 	</div>
 </div>
 
@@ -67,18 +49,77 @@
 		align-items: center;
 		justify-content: center;
 		gap: 4px;
-		margin: 10%;
 
-		.img {
+		&.s {
+			width: 176px;
+			@media (max-width: 1119px) {
+				width: 118px;
+				height: 224px;
+			}
+			@media (max-width: 767px) {
+				width: 94px;
+				height: auto;
+			}
+		}
+		&.m {
+			width: 272px;
+			@media (max-width: 1119px) {
+				width: 181px;
+				height: 283px;
+			}
+			@media (max-width: 767px) {
+				width: 145px;
+				height: auto;
+			}
+		}
+		&.l {
 			width: 368px;
-			height: 505px;
 			@media (max-width: 1119px) {
 				width: 245px;
-				height: 328px;
+				height: 370px;
 			}
 			@media (max-width: 767px) {
 				width: 196px;
-				height: 262px;
+				height: auto;
+			}
+		}
+
+		.img {
+			&.s {
+				width: 176px;
+				height: 243px;
+				@media (max-width: 1119px) {
+					width: 118px;
+					height: 156px;
+				}
+				@media (max-width: 767px) {
+					width: 94px;
+					height: 125px;
+				}
+			}
+			&.m {
+				width: 272px;
+				height: 376px;
+				@media (max-width: 1119px) {
+					width: 181px;
+					height: 241px;
+				}
+				@media (max-width: 767px) {
+					width: 145px;
+					height: 193px;
+				}
+			}
+			&.l {
+				width: 368px;
+				height: 505px;
+				@media (max-width: 1119px) {
+					width: 245px;
+					height: 328px;
+				}
+				@media (max-width: 767px) {
+					width: 196px;
+					height: 262px;
+				}
 			}
 		}
 
