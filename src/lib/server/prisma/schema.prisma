@@ -1,0 +1,48 @@
+datasource db {
+    provider  = "postgresql"
+    url       = env("POSTGRES_PRISMA_URL")
+    directUrl = env("POSTGRES_DIRECT_URL")
+}
+
+generator client {
+    provider = "prisma-client-js"
+    output   = "../../../../node_modules/@prisma/client-cache"
+}
+
+enum UnitType {
+    bottle
+    box
+}
+
+model Product {
+    id                String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+    created_at        DateTime @default(now()) @db.Timestamptz(6)
+    /// portaus puid
+    external_id       String   @unique @db.Uuid
+    sku               String   @db.Text
+    slug              String   @unique @db.Text
+    name              String   @db.Text
+    shortDescription  String   @db.Text
+    /// html
+    fullDescription   String   @db.Text
+    providerName      String   @db.Text
+    providerSite      String   @db.Text
+    quantity          Int      @db.SmallInt
+    /// alcohol volume in range [0, 1]
+    alcohol           Float    @db.DoublePrecision
+    /// volume in ml
+    volume            Int      @db.SmallInt
+    /// year
+    vintage           Int?     @db.SmallInt
+    price             Float    @db.DoublePrecision
+    // unit              UnitType
+    unit              String?  @db.Text
+    originCity        String   @db.Text
+    originRegion      String   @db.Text
+    originCountry     String   @db.Text
+    originCountryCode String   @db.Text
+    category          String   @db.Text
+    specificCategory  String   @db.Text
+    tags              String[] @db.Text
+    raw               Json     @db.Json
+}

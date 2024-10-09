@@ -1,19 +1,18 @@
 <script lang="ts">
-	import type { Product } from '$lib/server/db';
-	import { alcoholFormat, volumeFormat, priceFormat, originFormat } from '../../routes/product/[slug]/utils';
+	import type { Product } from '$lib/server/prisma';
+	import { priceFormat } from '../../routes/product/[slug]/utils';
 
 	export let product: Product;
 	export let size: 's' | 'm' | 'l' = 's';
 
 	function add() {}
+
+	const img =
+		'https://cdn.shopify.com/s/files/1/0762/7689/1952/files/product-image_fb1c9cb7-8ab1-4037-a915-913d2c638b8a.png?v=1706118993';
 </script>
 
 <div class="product {size}">
-	<img
-		class="bg-no-repeat object-cover bg-center img {size}"
-		src={'https://cdn.shopify.com/s/files/1/0762/7689/1952/files/product-image_fb1c9cb7-8ab1-4037-a915-913d2c638b8a.png?v=1706118993'}
-		alt="Wine"
-	/>
+	<img class="bg-no-repeat object-cover bg-center img {size}" src={img} alt="Wine" />
 	<div class="flex justify-between mt-[7px] w-full">
 		<div class="flex flex-col uppercase w-full product-name" style="width: calc(100% - 80px)">
 			<b>{product.name || '-'}</b>

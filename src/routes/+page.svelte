@@ -1,15 +1,9 @@
 <script lang="ts">
-	import type { Products, ProductData } from '$lib/models/shopifyTypes';
-	import MainProductCard from './MainProductCard.svelte';
-	import Header from '$lib/components/Header.svelte';
 	import type { PageData } from './$types';
-	import type { Product } from '$lib/server/db';
-	import { alcoholFormat, volumeFormat, priceFormat, originFormat } from './product/[slug]/utils';
 	import ProductCardNew from '$lib/components/ProductCardNew.svelte';
 
 	export let data: PageData;
 	$: console.log('data', data);
-	$: old_products = data.old_products.products;
 	$: products = data.products;
 </script>
 

@@ -1,15 +1,15 @@
-import { supabase, type Product } from '$lib/server/db';
+import { prisma } from '$lib/server/prisma';
 import { error } from '@sveltejs/kit';
 
 export async function load(event) {
-	const { data, error: err } = await supabase.from('products').select().eq('slug', event.params.slug).maybeSingle();
-	if (err) {
-		throw err;
-	}
-	if (!data) {
+	const product = await prisma.product.findUnique({
+		where: {
+			slug: event.params.slug
+		}
+	});
+	if (!product) {
 		error(404);
+	} else {
+		return { product };
 	}
-	return {
-		product: data as Product
-	};
 }

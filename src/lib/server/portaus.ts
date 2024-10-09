@@ -1,4 +1,5 @@
 import { PORTAUS_LOGIN, PORTAUS_PASSWORD, PORTAUS_BASE } from '$env/static/private';
+import { prisma, type PrismaTypes } from '$lib/server/prisma';
 
 type Tokens = {
 	accessToken: string;
@@ -350,9 +351,9 @@ async function request<P extends keyof ApiTypes.ResMap>({
 		headers: {
 			accept: 'application/json, text/plain, */*',
 			'accept-language': 'fr-CA',
-			'content-type': method === 'POST' ? 'application/json' : undefined,
-			authorization: tokens ? tokens.accessToken : undefined,
-			'x-portaus-context': tokens ? tokens.contextToken : undefined
+			'content-type': method === 'POST' ? 'application/json' : '',
+			authorization: tokens ? tokens.accessToken : '',
+			'x-portaus-context': tokens ? tokens.contextToken : ''
 		}
 	}).catch(() => {});
 	console.log('request res', res);
@@ -412,44 +413,93 @@ export const PortausApi = {
 		});
 		return res.list;
 	},
-	processProduct(obj: ApiTypes.List) {
-		const alcohol = (parseFloat(obj.item?.extraInfo?.alcohol || '') || 0) / 100 || undefined;
-		const quantity = obj.quantity.inStock;
+	processProduct(obj: ApiTypes.List): PrismaTypes.Prisma.ProductCreateInput {
+		const _alcohol = parseFloat(obj.item?.extraInfo?.alcohol || '') || 0;
+		const alcohol = _alcohol ? _alcohol / 100 : 0;
+		const quantity = Math.max(obj.quantity['inStock'] || 0, 0);
 		const unit = obj.unit === 0 ? 'unit' : obj.unit === 1 ? 'box' : undefined;
+		if (!unit) {
+			console.warn('unit', obj);
+		}
 		const format = obj.format === 1 ? 'ml' : obj.format === 2 ? 'l' : undefined;
-		const volume = Math.round(format === 'l' ? obj.volume / 1000 : format === 'ml' ? obj.volume : obj.volume);
-		const price = obj.pricing.priceTaxIn;
+		if (!format) {
+			console.warn('format', obj);
+		}
+		const volume = Math.max(
+			Math.round(format === 'l' ? obj.volume / 1000 : format === 'ml' ? obj.volume : obj.volume),
+			0
+		);
+		const price = Math.max(obj.pricing.priceTaxIn, 0);
+		const _vintage = parseInt(obj.currentVintage) || 0;
+		const vintage = Math.min(Math.max(_vintage, 0), new Date().getFullYear() + 1) || undefined;
+		const _providerSite = processString(obj.webSite) || processString(obj.webLink) || '';
+		let providerSite = '';
+		try {
+			providerSite = new URL(_providerSite).href;
+		} catch (error) {}
 		return {
 			external_id: obj.puid,
 			sku: obj.sku,
 			slug: obj.slug,
-			name: processString(obj.name) || processString(obj.cmsName) || undefined,
-			shortDescription: processString(obj.shortDescription) || undefined,
-			/** html */
-			fullDescription: processString(obj.description) || processString(obj.content) || undefined,
+			name: processString(obj.name) || processString(obj.cmsName) || '',
+			shortDescription: processString(obj.shortDescription) || '',
+			fullDescription: processString(obj.description) || processString(obj.content) || '',
 			providerName:
 				processString(obj.provider?.displayName) ||
 				processString(obj.provider?.usualName) ||
 				processString(obj.provider?.name) ||
-				undefined,
-			providerSite: processString(obj.webSite) || processString(obj.webLink) || undefined,
-			quantity,
-			/** alcohol volume, float in range [0, 1] */
+				'',
+			providerSite,
 			alcohol,
-			/** volume in ml */
 			volume,
-			vintage: parseInt(obj.currentVintage) || undefined,
-			format,
+			vintage,
 			unit,
+			quantity,
 			price,
-			originCity: processString(obj.originCity) || undefined,
-			originRegion: processString(obj.originRegion) || undefined,
-			originCountry: processString(obj.originCountry) || undefined,
-			originCountryCode: processString(obj.origins?.[0]?.country.code) || undefined,
-			category: processString(obj.category?.name) || undefined,
-			specificCategory: processString(obj.specificCategory?.name) || undefined,
-			// tags: obj.tags.map((x) => processString(x.code)).filter(Boolean),
+			originCity: processString(obj.originCity) || '',
+			originRegion: processString(obj.originRegion) || '',
+			originCountry: processString(obj.originCountry) || '',
+			originCountryCode: processString(obj.origins?.[0]?.country.code) || '',
+			category: processString(obj.category?.name) || '',
+			specificCategory: processString(obj.specificCategory?.name) || '',
+			tags: obj.tags
+				.map((x) => processString(x.code))
+				.filter(Boolean)
+				.map((x) => x!),
 			raw: JSON.stringify(obj)
 		} as const;
 	}
 };
+
+export async function updateAllProducts() {
+	// get new
+	// delete all
+	// add new
+}
+
+export async function addNewProducts() {
+	// get new
+	// get existing
+	// find published and unpublished
+	// add published
+	// mark unpublished as deleted?
+}
+
+async function migrate() {
+	const raw_products = await PortausApi.getProducts();
+	console.log('raw_products', raw_products);
+	const products = raw_products.map((x) => PortausApi.processProduct(x));
+	console.log('products', products);
+	await prisma.product.deleteMany();
+	await prisma.product.createMany({ data: products });
+}
+
+(async () => {
+	console.log('start');
+	try {
+		// await migrate();
+	} catch (error) {
+		console.error(error);
+	}
+	console.log('end');
+})();

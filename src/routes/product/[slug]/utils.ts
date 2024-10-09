@@ -1,13 +1,11 @@
-import type { Product } from '$lib/server/db';
+import type { Product } from '$lib/server/prisma';
 
 export function alcoholFormat({ alcohol }: Product) {
 	return `${(alcohol * 100).toFixed(2)}%`;
 }
 
-export function volumeFormat({ format, volume }: Product) {
-	const _volume = format === 'l' ? volume * 1000 : format === 'ml' ? volume : undefined;
-	const _format = format === 'l' ? 'L' : format === 'ml' ? 'ML' : undefined;
-	return `${_volume || '-'} ${_format || '-'}`;
+export function volumeFormat({ volume }: Product) {
+	return `${volume / 1000} L`;
 }
 
 export function priceFormat({ price }: Product) {
@@ -17,7 +15,7 @@ export function priceFormat({ price }: Product) {
 export function originFormat({ originCity, originRegion, originCountry, originCountryCode }: Product) {
 	return (
 		[originCity, originRegion, originCountry, originCountryCode ? `[${originCountryCode}]` : '']
-			.filter((x) => x)
+			.filter(Boolean)
 			.join(', ') || '-'
 	);
 }
