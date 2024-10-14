@@ -1,14 +1,15 @@
 <script lang="ts">
-	import type { Products } from '$lib/models/shopifyTypes';
-	import ProductCard from './ProductCard.svelte';
+	import ProductCardNew from '$lib/components/ProductCardNew.svelte';
+	import type { Product } from '$lib/server/prisma';
 	import { fade } from 'svelte/transition';
-	export let searchResults: Products | null = null;
+
+	export let products: Product[];
 </script>
 
 <div class={$$props.class}>
 	<div in:fade class="products-grid">
-		{#each searchResults.edges as { node: product }}
-			<ProductCard {product} />
+		{#each products as product (product.id)}
+			<ProductCardNew {product} />
 		{/each}
 	</div>
 </div>

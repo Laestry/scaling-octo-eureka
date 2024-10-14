@@ -7,9 +7,10 @@
 	};
 
 	export let info: FilterInfo;
-	$: open = false;
-	$: filter = null;
-	$: selected = [];
+
+	let filter: HTMLButtonElement;
+	let open = false;
+	let selected = [] as number[];
 
 	const selectItem = (item: number) => {
 		console.log(item, selected);
@@ -54,7 +55,7 @@
 	{/if}
 </div>
 
-<style>
+<style lang="scss">
 	.filter {
 		max-width: 176px;
 		width: 100%;

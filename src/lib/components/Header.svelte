@@ -1,63 +1,78 @@
 <script lang="ts">
 	import { cartStore } from '$lib/store';
 	import Logo from '$lib/components/Logo.svelte';
-	// import { fade, fly } from 'svelte/transition';
+	import { IconCart, IconSearch } from '$lib/icons';
+	import { page } from '$app/stores';
 
 	export let color = '#000';
-	export let page = '';
+	let class_ = '';
+	export { class_ as class };
+	export let backdrop: 'main' | 'associes' | 'vision' | undefined = undefined;
 </script>
 
 <div
 	class="backdrops"
-	class:backdrops--1={page === '/'}
-	class:backdrops--2={page === '/associes'}
-	class:backdrops--3={page === '/vision'}
+	class:backdrops--1={backdrop === 'main'}
+	class:backdrops--2={backdrop === 'associes'}
+	class:backdrops--3={backdrop === 'vision'}
 >
 	<div
-		class="z-10 left-2/4 absolute translate-x-[-50%] flex flex-col lg:h-[176px] items-center lg:w-[1120px] md:w-[680px] w-[358px] {$$props.class}"
+		class="z-10 left-2/4 absolute translate-x-[-50%] flex flex-col lg:h-[176px] items-center lg:w-[1120px] md:w-[680px] w-[358px] {class_}"
 		style="--dynamic-color: {color}; color: var(--dynamic-color);"
 	>
 		<a href="/" class="h-[130px] w-[130px] flex items-center justify-center">
 			<Logo {color} />
 		</a>
 
-		<div class="self-end absolute mt-8 flex gap-1 text-[10px] items-center">
+		<div class="self-end absolute mt-8 flex gap-2 text-[24px] items-center">
 			<a
-				class="h-[24px] w-[24px] flex items-center justify-center rounded-full"
-				style="border: 1px solid white; background-color: white; color: #000"
+				class="flex items-center justify-center rounded gap-1 px-1"
+				style="border: 2px solid white; background-color: white; color: #000000"
 				href="/cart"
 			>
 				{$cartStore?.length ?? 0}
+				<IconCart style="width: 36px"></IconCart>
 			</a>
 			<a
-				class="h-[24px] w-[24px] flex items-center justify-center rounded-full"
-				style="border: 1px solid white; background-color: white; color: #000"
+				class="h-[36px] w-[36px] flex items-center justify-center rounded-full p-[2px]"
+				style="border: 1px solid white; background-color: white; color: #000000"
 				href="/products"
 			>
-				<svg
-					width="15"
-					height="14"
-					viewBox="0 0 15 14"
-					fill="none"
-					xmlns="http://www.w3.org/2000/svg"
-				>
-					<line x1="10.2415" y1="9.80921" x2="14.3413" y2="13.6343" stroke="black" />
-					<circle cx="6" cy="6" r="5.5" stroke="black" />
-				</svg>
+				<IconSearch></IconSearch>
 			</a>
 		</div>
 
 		<div class="md:flex hidden uppercase items-center lg:h-[96px] h-auto flex-1 mt-[22px]">
 			<div class="flex gap-[16px] lg:flex-row flex-col">
-				<a class="header-links" style="color: var(--dynamic-color);" href="/associes" class:active={page === '/associes'}>Associes</a>
-				<a class="header-links" style="color: var(--dynamic-color);" href="/vision" class:active={page === '/vision'}>Vision</a>
-				<a class="header-links" style="color: var(--dynamic-color);" href="/products">Vins</a>
+				<a
+					class="header-links"
+					style="color: var(--dynamic-color);"
+					href="/associes"
+					class:active={backdrop === 'associes'}
+				>
+					Associes
+				</a>
+				<a
+					class="header-links"
+					style="color: var(--dynamic-color);"
+					href="/vision"
+					class:active={backdrop === 'vision'}
+				>
+					Vision
+				</a>
+				<a
+					class="header-links"
+					style="color: var(--dynamic-color);"
+					href="/products"
+					class:active={$page.url.pathname === '/products'}
+				>
+					Vins
+				</a>
 			</div>
 		</div>
 	</div>
-	<!-- <div transition:fade class="w-[100px] h-[100px] bg-color1 absolute z-20"></div> -->
-	<!-- <div transition:fade class="left-[100px] w-[100px] h-[100px] bg-primary absolute z-20"></div> -->
-	{#if page !== ''}
+
+	{#if backdrop}
 		<a href="/" class="backdrop backdrop--1" />
 		<a href="/associes" class="backdrop backdrop--2" />
 		<a href="/vision" class="backdrop backdrop--3" />
@@ -75,17 +90,16 @@
 		font-size: 24px;
 		font-weight: 400;
 		line-height: 150%;
-	}
-	@media (max-width: 1119px) {
-		.header-links {
+
+		@media (max-width: 1119px) {
 			font-size: 48px;
 			height: auto;
 			width: auto;
 		}
-		.header-links.active {
-			text-decoration: underline;
-			text-underline-position: under;
-		}
+	}
+	.header-links.active {
+		text-decoration: underline;
+		text-underline-position: under;
 	}
 	.backdrop {
 		width: 100%;
@@ -137,14 +151,14 @@
 	.backdrops:not(:is(.backdrops--1, .backdrops--2, .backdrops--3)) {
 		height: 200px;
 	}
-  @media (max-width: 1119px) and (min-width: 680px) {
-    .backdrops:not(:is(.backdrops--1, .backdrops--2, .backdrops--3)) {
-      height: 430px;
-    }
-  }
-  @media (max-width: 679px) {
-    .backdrops:not(:is(.backdrops--1, .backdrops--2, .backdrops--3)) {
-      height: 130px;
-    }
-  }
+	@media (max-width: 1119px) and (min-width: 680px) {
+		.backdrops:not(:is(.backdrops--1, .backdrops--2, .backdrops--3)) {
+			height: 430px;
+		}
+	}
+	@media (max-width: 679px) {
+		.backdrops:not(:is(.backdrops--1, .backdrops--2, .backdrops--3)) {
+			height: 130px;
+		}
+	}
 </style>

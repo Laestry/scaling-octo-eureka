@@ -1,10 +1,8 @@
 <script lang="ts">
-	import Carousel from 'svelte-carousel';
 	import { browser } from '$app/environment';
+	import Carousel2 from '$lib/components/Carousel2.svelte';
 	import { onMount } from 'svelte';
 
-	let carousel; // for calling methods of the carousel instance
-	let carouselCommand;
 	let associes = new Array(20).fill({
 		winemaker: 'Nom, Prénom',
 		country: 'France',
@@ -211,36 +209,29 @@
 				<img src="/images/associes-img-12.jpg" alt="" />
 			</div>
 		</div>
-		<div class="command__images command__images--mobile">
-			<div class="command__controlls">
-				<button class="command__button command__button--prev" on:click={() => carouselCommand.goToPrev()}>
-					<svg width="15" height="16" viewBox="0 0 15 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-						<path
-							d="M14.55 15.862L0 9.44203V7.34203L14.55 0.0820312V3.59203L4.53 8.24203L14.55 12.352V15.862Z"
-							fill="#fff"
-						/>
-					</svg>
-				</button>
-				<button class="command__button command__button--next" on:click={() => carouselCommand.goToNext()}>
-					<svg width="15" height="16" viewBox="0 0 15 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-						<path d="M0 12.352L10.02 8.24203L0 3.59203V0.0820312L14.55 7.34203V9.44203L0 15.862V12.352Z" fill="#fff" />
-					</svg>
-				</button>
-			</div>
-			<Carousel dots={false} arrows={false} swiping={false} particlesToShow={4} bind:this={carouselCommand}>
+		<div class="command_carousel command__images--mobile">
+			<Carousel2
+				slides={[
+					{
+						src: '/images/associes-img-09.jpg'
+					},
+					{
+						src: '/images/associes-img-10.jpg'
+					},
+					{
+						src: '/images/associes-img-11.jpg'
+					},
+					{
+						src: '/images/associes-img-12.jpg'
+					}
+				]}
+				options={{ arrows: true }}
+				let:item
+			>
 				<div class="command__image">
-					<img src="/images/associes-img-09.jpg" alt="" />
+					<img src={item.src} alt="" />
 				</div>
-				<div class="command__image">
-					<img src="/images/associes-img-10.jpg" alt="" />
-				</div>
-				<div class="command__image">
-					<img src="/images/associes-img-11.jpg" alt="" />
-				</div>
-				<div class="command__image">
-					<img src="/images/associes-img-12.jpg" alt="" />
-				</div>
-			</Carousel>
+			</Carousel2>
 		</div>
 	</div>
 </div>
@@ -249,62 +240,47 @@
 	<div class="container">
 		<div class="bars__row">
 			<p class="bars__title">Bars à Vins</p>
-			<div class="bars__controlls">
-				<button class="bars__button bars__button--prev" on:click={() => carousel.goToPrev()}>
-					<svg width="15" height="16" viewBox="0 0 15 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-						<path
-							d="M14.55 15.862L0 9.44203V7.34203L14.55 0.0820312V3.59203L4.53 8.24203L14.55 12.352V15.862Z"
-							fill="#DA5899"
-						/>
-					</svg>
-				</button>
-				<button class="bars__button bars__button--next" on:click={() => carousel.goToNext()}>
-					<svg width="15" height="16" viewBox="0 0 15 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-						<path
-							d="M0 12.352L10.02 8.24203L0 3.59203V0.0820312L14.55 7.34203V9.44203L0 15.862V12.352Z"
-							fill="#3777BC"
-						/>
-					</svg>
-				</button>
-			</div>
 		</div>
-		<Carousel dots={false} arrows={false} swiping={false} particlesToShow={countSlidesBars} bind:this={carousel}>
+		<Carousel2
+			slides={[
+				{
+					src: '/images/associes-img-13.jpg',
+					name: 'Vinvinvin',
+					url: '@lienversIG'
+				},
+				{
+					src: '/images/associes-img-14.jpg',
+					name: 'Vinvinvin',
+					url: '@lienversIG'
+				},
+				{
+					src: '/images/associes-img-15.jpg',
+					name: 'Vinvinvin',
+					url: '@lienversIG'
+				},
+				{
+					src: '/images/associes-img-13.jpg',
+					name: 'Vinvinvin',
+					url: '@lienversIG'
+				},
+				{
+					src: '/images/associes-img-14.jpg',
+					name: 'Vinvinvin',
+					url: '@lienversIG'
+				}
+			]}
+			options={{ arrows: true }}
+			let:item
+		>
 			<div class="bars__image">
-				<img src="/images/associes-img-13.jpg" alt="" />
+				<img src={item.src} alt="" />
 				<p class="bars__caption">
-					<b>Vinvinvin</b> <br />
-					<a href="#">@lienversIG</a> <a href="#">@lienversIG</a>
+					<b>{item.name}</b>
+					<br />
+					<a href={item.url}>{item.url}</a>
 				</p>
 			</div>
-			<div class="bars__image">
-				<img src="/images/associes-img-14.jpg" alt="" />
-				<p class="bars__caption">
-					<b>Vinvinvin</b> <br />
-					<a href="#">@lienversIG</a> <a href="#">@lienversIG</a>
-				</p>
-			</div>
-			<div class="bars__image">
-				<img src="/images/associes-img-15.jpg" alt="" />
-				<p class="bars__caption">
-					<b>Vinvinvin</b> <br />
-					<a href="#">@lienversIG</a> <a href="#">@lienversIG</a>
-				</p>
-			</div>
-			<div class="bars__image">
-				<img src="/images/associes-img-13.jpg" alt="" />
-				<p class="bars__caption">
-					<b>Vinvinvin</b> <br />
-					<a href="#">@lienversIG</a> <a href="#">@lienversIG</a>
-				</p>
-			</div>
-			<div class="bars__image">
-				<img src="/images/associes-img-13.jpg" alt="" />
-				<p class="bars__caption">
-					<b>Vinvinvin</b> <br />
-					<a href="#">@lienversIG</a> <a href="#">@lienversIG</a>
-				</p>
-			</div>
-		</Carousel>
+		</Carousel2>
 		<div class="bars__footer">
 			<p class="bars__small-title">Experience our wines around the city.</p>
 			<p class="bars__text">
@@ -424,6 +400,11 @@
 			&--mobile {
 				display: none;
 			}
+		}
+		&_carousel {
+			background: #f15a38;
+			position: relative;
+			margin-top: 32px;
 		}
 	}
 	.agency {
@@ -941,12 +922,6 @@
 				}
 				&--mobile {
 					display: flex;
-				}
-				:global(.sc-carousel__carousel-container) {
-					min-width: calc(196px * 4 + 30px);
-				}
-				:global(.sc-carousel__pages-container) {
-					gap: 10px;
 				}
 			}
 			&__controlls {

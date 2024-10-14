@@ -9,8 +9,9 @@
 	import { addToCart } from '$lib/cart';
 	import ProductCard from '../ProductCard.svelte';
 	import ProductGrid from '../ProductGrid.svelte';
+	import type { PageData } from './$types';
 
-	export let data;
+	export let data: PageData;
 	let product: ProductNode;
 	$: product = data.product;
 	$: activeSlide = 0;

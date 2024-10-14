@@ -3,7 +3,7 @@
 	import Logo from '$lib/components/Logo.svelte';
 </script>
 
-<Header page="associes" color="#fff" class="lg:-mb-[176px]" />
+<Header color="#fff" class="lg:-mb-[176px]" backdrop="associes" />
 
 <!-- <div class="backdrop" /> -->
 

@@ -1,5 +1,6 @@
-import { getProducts } from '$lib/shopify';
+import { prisma } from '$lib/server/prisma';
 
 export async function load() {
-	return await getProducts();
+	const products = await prisma.product.findMany({});
+	return { products };
 }

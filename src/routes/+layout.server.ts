@@ -1,10 +1,14 @@
-export async function load({ cookies, url }) {
+import type { CartItem } from '$lib/cart';
+
+export async function load({ cookies }) {
+	let cart: CartItem[] = [];
 	const cartCookie = cookies.get('cart');
-	let cart;
 	if (cartCookie) {
-		cart = JSON.parse(cookies.get('cart'));
-	} else {
-		cart = undefined;
+		try {
+			cart = JSON.parse(cartCookie);
+		} catch (error) {}
 	}
-	return { cart, url: url.pathname };
+	return {
+		cart
+	};
 }
