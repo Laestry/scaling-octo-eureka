@@ -1,5 +1,8 @@
 <script lang="ts">
-	import { IconList, IconGrid, IconDownload, IconSearch } from '$lib/icons';
+	import IconDownload from '$lib/components/IconDownload.svelte';
+	import IconGrid from '$lib/components/IconGrid.svelte';
+	import IconList from '$lib/components/IconList.svelte';
+	import IconSearch from '$lib/components/IconSearch.svelte';
 	import Filter from './Filter.svelte';
 
 	export let isGrid = true;
@@ -164,7 +167,7 @@
 			background: #3777bc;
 
 			:global {
-				.icon {
+				svg {
 					color: white;
 				}
 			}

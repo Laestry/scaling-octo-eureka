@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { cartStore } from '$lib/store';
 	import Logo from '$lib/components/Logo.svelte';
-	import { IconCart, IconSearch } from '$lib/icons';
 	import { page } from '$app/stores';
+	import IconSearch from './IconSearch.svelte';
 
-	export let color = '#000';
+	export let color = '#000000';
 	let class_ = '';
 	export { class_ as class };
 	export let backdrop: 'main' | 'associes' | 'vision' | undefined = undefined;
@@ -24,18 +24,17 @@
 			<Logo {color} />
 		</a>
 
-		<div class="self-end absolute mt-8 flex gap-2 text-[24px] items-center">
+		<div class="self-end absolute mt-8 flex gap-1 text-[10px] items-center">
 			<a
-				class="flex items-center justify-center rounded gap-1 px-1"
-				style="border: 2px solid white; background-color: white; color: #000000"
+				class="h-[24px] w-[24px] flex items-center justify-center rounded-full"
+				style="border: 1px solid white; background-color: white; color: #000"
 				href="/cart"
 			>
 				{$cartStore?.length ?? 0}
-				<IconCart style="width: 36px"></IconCart>
 			</a>
 			<a
-				class="h-[36px] w-[36px] flex items-center justify-center rounded-full p-[2px]"
-				style="border: 1px solid white; background-color: white; color: #000000"
+				class="h-[24px] w-[24px] flex items-center justify-center rounded-full"
+				style="border: 1px solid white; background-color: white; color: #000"
 				href="/products"
 			>
 				<IconSearch></IconSearch>

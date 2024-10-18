@@ -9,23 +9,22 @@
 		region: 'Champagne',
 		flag: '/images/germany-flag.svg'
 	});
-	let countSlidesBars = 3;
-	if (browser) {
-		if (window.innerWidth <= 679) {
-			countSlidesBars = 2;
-		} else {
-			countSlidesBars = 3;
+	let carouselIndex2 = 0;
+
+	function getCountSlidesBars() {
+		if (browser) {
+			if (window.innerWidth <= 679) {
+				return 2;
+			} else {
+				return 3;
+			}
 		}
+		return 3;
 	}
+	let countSlidesBars = getCountSlidesBars();
 	onMount(() => {
 		window.addEventListener('resize', () => {
-			if (browser) {
-				if (window.innerWidth <= 679) {
-					countSlidesBars = 2;
-				} else {
-					countSlidesBars = 3;
-				}
-			}
+			countSlidesBars = getCountSlidesBars();
 		});
 	});
 </script>
@@ -225,7 +224,6 @@
 						src: '/images/associes-img-12.jpg'
 					}
 				]}
-				options={{ arrows: true }}
 				let:item
 			>
 				<div class="command__image">
@@ -240,6 +238,24 @@
 	<div class="container">
 		<div class="bars__row">
 			<p class="bars__title">Bars à Vins</p>
+			<div class="bars__controlls">
+				<button class="bars__button bars__button--prev" on:click={() => carouselIndex2--}>
+					<svg width="15" height="16" viewBox="0 0 15 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+						<path
+							d="M14.55 15.862L0 9.44203V7.34203L14.55 0.0820312V3.59203L4.53 8.24203L14.55 12.352V15.862Z"
+							fill="#DA5899"
+						/>
+					</svg>
+				</button>
+				<button class="bars__button bars__button--next" on:click={() => carouselIndex2++}>
+					<svg width="15" height="16" viewBox="0 0 15 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+						<path
+							d="M0 12.352L10.02 8.24203L0 3.59203V0.0820312L14.55 7.34203V9.44203L0 15.862V12.352Z"
+							fill="#3777BC"
+						/>
+					</svg>
+				</button>
+			</div>
 		</div>
 		<Carousel2
 			slides={[
@@ -269,7 +285,7 @@
 					url: '@lienversIG'
 				}
 			]}
-			options={{ arrows: true }}
+			bind:current={carouselIndex2}
 			let:item
 		>
 			<div class="bars__image">

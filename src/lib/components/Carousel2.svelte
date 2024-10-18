@@ -23,7 +23,7 @@
 	}
 
 	export let slides: T[] = [];
-	export let options: Partial<SlidyOptions> = {};
+	export let options: Omit<Partial<SlidyOptions>, 'index' | 'slides'> = {};
 	export let current = 0;
 </script>
 
@@ -32,7 +32,8 @@
 		{...default_options}
 		{...options}
 		bind:index={current}
-		counter={true}
+		counter={false}
+		arrows={false}
 		slides={slides.map((x, i) => ({ ...x, id: x.id ?? i }))}
 		let:item
 	>
