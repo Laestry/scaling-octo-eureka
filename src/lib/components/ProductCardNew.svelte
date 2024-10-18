@@ -7,8 +7,13 @@
 
 	function add() {}
 
-	const img =
-		'https://cdn.shopify.com/s/files/1/0762/7689/1952/files/product-image_fb1c9cb7-8ab1-4037-a915-913d2c638b8a.png?v=1706118993';
+	function getRandomImage(): string {
+		const randomNumber = Math.floor(Math.random() * 8) + 1;
+		return `/images/example_wines/${randomNumber}.png`;
+	}
+
+	// Use the random image for the product
+	const img = getRandomImage();
 </script>
 
 <div class="product {size}">
