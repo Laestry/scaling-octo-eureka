@@ -3,208 +3,208 @@
 @tailwind utilities;
 
 @font-face {
-	font-family: 'Riposte';
-	src: url('./fonts/GTFRiposteTRIAL-Regular.otf');
-	font-style: normal;
-	font-weight: normal;
-	font-display: swap;
+    font-family: 'Riposte';
+    src: url('./fonts/GTFRiposteTRIAL-Regular.otf');
+    font-style: normal;
+    font-weight: normal;
+    font-display: swap;
 }
 @font-face {
-	font-family: 'Riposte';
-	src: url('./fonts/GTFRiposteTRIAL-Bold.otf');
-	font-style: normal;
-	font-weight: 700;
-	font-display: swap;
+    font-family: 'Riposte';
+    src: url('./fonts/GTFRiposteTRIAL-Bold.otf');
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
 }
 @font-face {
-	font-family: 'Riposte';
-	src: url('./fonts/GTFRiposteTRIAL-SemiBold.otf');
-	font-style: normal;
-	font-weight: 600;
-	font-display: swap;
+    font-family: 'Riposte';
+    src: url('./fonts/GTFRiposteTRIAL-SemiBold.otf');
+    font-style: normal;
+    font-weight: 600;
+    font-display: swap;
 }
 @font-face {
-	font-family: 'Riposte';
-	src: url('./fonts/GTFRiposteTRIAL-Medium.otf');
-	font-style: normal;
-	font-weight: 500;
-	font-display: swap;
+    font-family: 'Riposte';
+    src: url('./fonts/GTFRiposteTRIAL-Medium.otf');
+    font-style: normal;
+    font-weight: 500;
+    font-display: swap;
 }
 @font-face {
-	font-family: 'Riposte';
-	src: url('./fonts/GTFRiposteTRIAL-Light.otf');
-	font-style: normal;
-	font-weight: 300;
-	font-display: swap;
+    font-family: 'Riposte';
+    src: url('./fonts/GTFRiposteTRIAL-Light.otf');
+    font-style: normal;
+    font-weight: 300;
+    font-display: swap;
 }
 
 body {
-	font: 20px 'Riposte';
-	scroll-behavior: smooth;
+    font: 20px 'Riposte';
+    scroll-behavior: smooth;
 }
 
 .header {
-	font-size: 20px;
-	font-family: 'Riposte', sans-serif;
-	font-weight: 400;
-	letter-spacing: -0.02em;
-	line-height: 150%;
-	text-transform: uppercase;
+    font-size: 20px;
+    font-family: 'Riposte', sans-serif;
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    line-height: 150%;
+    text-transform: uppercase;
 }
 
 .button {
-	font-size: 16px;
-	font-family: 'Riposte', sans-serif;
-	font-weight: 600;
-	line-height: 150%;
-	text-transform: uppercase;
+    font-size: 16px;
+    font-family: 'Riposte', sans-serif;
+    font-weight: 600;
+    line-height: 150%;
+    text-transform: uppercase;
 }
 
 .button2 {
-	font-size: 16px;
-	font-style: normal;
-	font-weight: 700;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 700;
 }
 
 .button3 {
-	font-size: 16px;
-	font-style: normal;
-	font-weight: 500;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
 }
 
 h1 {
-	font-size: 64px;
-	font-weight: 900;
-	text-transform: uppercase;
+    font-size: 64px;
+    font-weight: 900;
+    text-transform: uppercase;
 }
 
 h2 {
-	font-size: 48px;
-	font-weight: 500;
-	line-height: 150%;
+    font-size: 48px;
+    font-weight: 500;
+    line-height: 150%;
 }
 
 h3 {
-	font-size: 36px;
-	font-weight: 500;
-	line-height: 150%;
+    font-size: 36px;
+    font-weight: 500;
+    line-height: 150%;
 }
 
 .h3 {
-	font-size: 36px;
-	font-weight: 500;
-	line-height: 150%;
+    font-size: 36px;
+    font-weight: 500;
+    line-height: 150%;
 }
 
 h4 {
-	font-size: 24px;
-	font-weight: 500;
-	line-height: 150%;
-	text-transform: uppercase;
+    font-size: 24px;
+    font-weight: 500;
+    line-height: 150%;
+    text-transform: uppercase;
 }
 .h4 {
-	font-size: 24px;
-	font-weight: 500;
-	line-height: 150%;
-	text-transform: uppercase;
+    font-size: 24px;
+    font-weight: 500;
+    line-height: 150%;
+    text-transform: uppercase;
 }
 
 .coc {
-	font-size: 13px;
-	font-family: 'Riposte', sans-serif;
-	font-weight: 400;
-	line-height: 150%;
+    font-size: 13px;
+    font-family: 'Riposte', sans-serif;
+    font-weight: 400;
+    line-height: 150%;
 }
 
 .coc2 {
-	font-size: 13px;
-	font-family: 'Riposte', sans-serif;
-	font-style: normal;
-	font-weight: 500;
-	text-transform: uppercase;
+    font-size: 13px;
+    font-family: 'Riposte', sans-serif;
+    font-style: normal;
+    font-weight: 500;
+    text-transform: uppercase;
 }
 
 .cop {
-	font-size: 13px;
-	font-weight: 300;
-	line-height: 100%;
+    font-size: 13px;
+    font-weight: 300;
+    line-height: 100%;
 }
 
 .t1 {
-	font-size: 20px;
-	font-family: 'Riposte', sans-serif;
-	font-weight: 500;
-	line-height: 150%;
+    font-size: 20px;
+    font-family: 'Riposte', sans-serif;
+    font-weight: 500;
+    line-height: 150%;
 }
 
 .t2 {
-	font-size: 16px;
-	font-family: 'Riposte', sans-serif;
-	font-weight: 400;
-	line-height: 150%;
+    font-size: 16px;
+    font-family: 'Riposte', sans-serif;
+    font-weight: 400;
+    line-height: 150%;
 }
 
 .ot {
-	font-size: 16px;
-	font-family: 'Riposte', sans-serif;
-	font-weight: 400;
-	line-height: 150%;
-	text-transform: uppercase;
+    font-size: 16px;
+    font-family: 'Riposte', sans-serif;
+    font-weight: 400;
+    line-height: 150%;
+    text-transform: uppercase;
 }
 
 .od {
-	font-size: 14px;
-	font-weight: 500;
-	line-height: 150%;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 150%;
 }
 
 .oai {
-	font-size: 18px;
-	font-weight: 500;
-	line-height: 32px;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 32px;
 }
 
 .oc {
-	font-size: 12px;
-	font-weight: 300;
-	line-height: 150%;
+    font-size: 12px;
+    font-weight: 300;
+    line-height: 150%;
 }
 
 .tpr {
-	font-size: 16px;
-	font-weight: 300;
-	line-height: 100%;
+    font-size: 16px;
+    font-weight: 300;
+    line-height: 100%;
 }
 .tpb {
-	font-size: 16px;
-	font-weight: 700;
-	line-height: 100%;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 100%;
 }
 
 @media (max-width: 680px) {
-	h1 {
-		font-size: 32px;
-	}
+    h1 {
+        font-size: 32px;
+    }
 }
 
 :root {
-	/* Color styles */
-	--primary: #0d99ff;
-	--secondary: #bde3ff;
-	--layer: #ededed;
-	--interactive-layer: #fffcb2;
-	--background--01: #f9f9f9;
-	--background--02: #ffffff;
-	--content---primary: #000000;
-	--content---secondary: #a8a8a8;
-	--border--01: #000000;
-	--border--02: #ebebeb;
-	--button-secondary: #dfdfdf;
-	--button-primary: #000;
-	--color-05: #2d63b0;
+    /* Color styles */
+    --primary: #0d99ff;
+    --secondary: #bde3ff;
+    --layer: #ededed;
+    --interactive-layer: #fffcb2;
+    --background--01: #f9f9f9;
+    --background--02: #ffffff;
+    --content---primary: #000000;
+    --content---secondary: #a8a8a8;
+    --border--01: #000000;
+    --border--02: #ebebeb;
+    --button-secondary: #dfdfdf;
+    --button-primary: #000;
+    --color-05: #2d63b0;
 }
 
 .icon {
-	width: auto;
-	height: 100%;
+    width: auto;
+    height: 100%;
 }
