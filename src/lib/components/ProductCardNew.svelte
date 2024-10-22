@@ -7,8 +7,25 @@
 
     function add() {}
 
-    const img =
-        'https://cdn.shopify.com/s/files/1/0762/7689/1952/files/product-image_fb1c9cb7-8ab1-4037-a915-913d2c638b8a.png?v=1706118993';
+    const images = new Array(8).fill('').map((_, i) => `/images/example_wines/${i + 1}.png`);
+    function getRandomNumber() {
+        const n1 = parseInt(product.sku);
+        if (!Number.isNaN(n1)) {
+            return n1;
+        }
+        const n2 = product.external_id.split('').find((x) => !Number.isNaN(parseInt(x))) || '0';
+        return parseInt(n2);
+    }
+    function getImage() {
+        const n = getRandomNumber();
+        const i = n % images.length;
+        return images[i]!;
+    }
+    let img = '';
+    $: {
+        product;
+        img = getImage();
+    }
 </script>
 
 <div class="product {size}">
@@ -25,8 +42,7 @@
                     {/if}
                 {/if}
                 {#if product.vintage}
-                    ,
-                    &nbsp;
+                    , &nbsp;
                     <div>{product.vintage}</div>
                 {/if}
             </div>
