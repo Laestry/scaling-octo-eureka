@@ -12,6 +12,9 @@
         "dev": "cross-env-shell NODE_OPTIONS=\"--trace-warnings --trace-uncaught --max-old-space-size=16000 --inspect\" vite dev",
         "build": "cross-env-shell NODE_OPTIONS=\"--trace-warnings --trace-uncaught --max-old-space-size=16000 --inspect\" vite build"
     },
+    "prisma": {
+        "schema": "./src/lib/server/prisma/schema.prisma"
+    },
     "devDependencies": {
         "@dotenvx/dotenvx": "^1.20.0",
         "@iconify/json": "^2.2.262",

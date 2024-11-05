@@ -3,8 +3,8 @@ module.exports = {
     content: ['./src/**/*.{html,js,svelte,ts}'],
     theme: {
         screens: {
-            md: '680px',
-            lg: '1120px'
+            md: '780px',
+            lg: '1162px'
         },
         colors: {
             primary: '#0d99ff',
@@ -25,6 +25,18 @@ module.exports = {
             colorBlue: '#4975B8'
         },
         extend: {
+            colors: {
+                wred: '#F15A38',
+                wblue: '#3777BC',
+                wpink: '#DA5899',
+                wblack: '#181C1C',
+                wwhite: '#F6F1F2',
+                wblue50: 'rgba(55, 119, 188, 0.5)',
+                wblack20: 'rgba(24, 28, 28, 0.2)',
+                wblack50: 'rgba(24, 28, 28, 0.5)',
+                wwhite60: 'rgba(246, 241, 242, 0.6)',
+                wred20: 'rgba(241, 90, 56, 0.2)'
+            },
             borderColor: {
                 DEFAULT: 'rgb(0, 0, 0, 1)'
             }

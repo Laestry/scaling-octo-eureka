@@ -10,7 +10,7 @@
 
     let currentSlide = 0;
     let expand_description = false;
-    let in_cart = 0;
+    let in_cart = 1;
     function add() {
         in_cart = Math.min(in_cart + 1, product.quantity);
     }
@@ -23,7 +23,7 @@
         'https://cdn.shopify.com/s/files/1/0762/7689/1952/files/product-image_fb1c9cb7-8ab1-4037-a915-913d2c638b8a.png?v=1706118993';
 </script>
 
-<div class="mt-[40px]">
+<div class="mt-[40px] lg:max-w-[1162px] md:max-w-[780px] max-w-[320px] mx-auto">
     <div>
         <!-- <a href="/products">
             <button><img src="/icons/arrow.svg" alt="back" /></button>
@@ -129,21 +129,29 @@
                             <p />
                         </div>
                     </div>
-                    <div class="flex md:flex-row flex-col pt-4 pb-8 border-b-[1px] border-b-[#DE6643] relative justify-between">
+                    <div
+                        class="flex md:flex-row flex-col pt-4 pb-8 border-b-[1px] border-b-[#DE6643] relative justify-between"
+                    >
                         {#if data.product.quantity !== 0}
                             <div class="flex md:flex-col flex-row gap-2">
                                 <p class="product-table__count">Quantité /caisse de 6</p>
                                 <div class="product-table-counter">
                                     <p class="product-table-counter__value">{in_cart}</p>
                                     <div class="md:flex flex-col contents">
-                                        <button class="product-table-counter__button" on:click={() => add()}>+</button>
-                                        <button class="product-table-counter__button order-[-1]" on:click={() => remove()}>-</button>
+                                        <button class="product-table-counter__button order-[-1]" on:click={() => add()}>
+                                            +
+                                        </button>
+                                        <button class="product-table-counter__button" on:click={() => remove()}>
+                                            -
+                                        </button>
                                     </div>
                                 </div>
                             </div>
                         {/if}
                         <div class="flex flex-col gap-2 md:mt-0 mt-6">
-                            <button class="product-table__button product-table__button--favorite">Liste d’attente</button>
+                            <button class="product-table__button product-table__button--favorite">
+                                Liste d’attente
+                            </button>
                             <button class="product-table__button">Ajouter au panier</button>
                         </div>
                         <p class="absolute text-[16px] bg-[#F6F1F2] text-[#DE6643] bottom-[-12px] pr-1">*</p>

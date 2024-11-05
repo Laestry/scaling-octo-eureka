@@ -417,6 +417,7 @@ export const PortausApi = {
         const alcohol = (parseFloat(obj.item?.extraInfo?.alcohol || '') || 0) / 100;
         const quantity = Math.max(obj.quantity['inStock'] || 0, 0);
         const unit = obj.unit === 0 ? 'unit' : obj.unit === 1 ? 'box' : undefined;
+        const uvc = obj.uvc;
         if (!unit) {
             console.warn('no unit', obj);
         }
@@ -429,7 +430,8 @@ export const PortausApi = {
             0
         );
         const price = Math.max(obj.pricing.priceTaxIn, 0);
-        const vintage = Math.min(Math.max(parseInt(obj.currentVintage) || 0, 0), new Date().getFullYear() + 1) || undefined;
+        const vintage =
+            Math.min(Math.max(parseInt(obj.currentVintage) || 0, 0), new Date().getFullYear() + 1) || undefined;
         let providerSite = '';
         try {
             providerSite = new URL(processString(obj.webSite) || processString(obj.webLink) || '').href;
@@ -451,6 +453,7 @@ export const PortausApi = {
             volume,
             vintage,
             unit,
+            uvc,
             quantity,
             price,
             originCity: processString(obj.originCity) || '',

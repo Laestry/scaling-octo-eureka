@@ -34,7 +34,7 @@
             list: ['1', '2', '3', '4', '5']
         },
         {
-            name: 'Associes',
+            name: 'Associés',
             list: ['1', '2', '3', '4', '5']
         },
         {
@@ -45,11 +45,11 @@
     let price = '';
 </script>
 
-<div class="mt-15 flex flex-col gap-4">
+<div class="mt-15 flex flex-col gap-3">
     <div class="flex justify-between">
         <div class="flex gap-1 items-center w-full">
-            <button class="all-button">Voir tout</button>
-            <label class="search md:visible">
+            <button class="all-button text-">Voir tout</button>
+            <label class="search md:hidden">
                 <div class="search__button">
                     <IconSearch></IconSearch>
                 </div>
@@ -59,8 +59,8 @@
         <div class="flex gap-1 items-center">
             <label class="checkbox">
                 <input type="checkbox" class="checkbox__input" />
-                <p class="checkbox__text">Prix Resto</p>
-                <div class="checkbox__box"></div>
+                <span class="checkbox__text">Prix Resto</span>
+                <span class="checkbox__box"></span>
             </label>
             <div class="flex gap-1">
                 <button
@@ -68,36 +68,33 @@
                     class:active={price === 'low'}
                     on:click={() => (price = 'low')}
                 >
-                    <IconDollar></IconDollar>
+                    $
                 </button>
                 <button
                     class="rounded-full w-6 h-6 bg-[#fff] price-button"
                     class:active={price === 'mid'}
                     on:click={() => (price = 'mid')}
                 >
-                    <IconDollar></IconDollar>
-                    <IconDollar></IconDollar>
+                    $$
                 </button>
                 <button
                     class="rounded-full w-6 h-6 bg-[#fff] price-button"
                     class:active={price === 'high'}
                     on:click={() => (price = 'high')}
                 >
-                    <IconDollar></IconDollar>
-                    <IconDollar></IconDollar>
-                    <IconDollar></IconDollar>
+                    $$$
                 </button>
             </div>
         </div>
     </div>
-    <div class="md:invisible flex gap-[6px]">
+    <div class="md:hidden flex gap-[6px]">
         <label class="search">
             <button class="search__button">
                 <IconSearch></IconSearch>
             </button>
             <input type="text" class="search__input" />
         </label>
-        <a href="#" class="button-view button-view--link">
+        <a href="#" class="md:rounded-none rounded-full button-view button-view--link">
             <IconDownload></IconDownload>
         </a>
     </div>
@@ -111,11 +108,11 @@
         <Filter info={filters[6]} />
     </div>
     <div class="hidden justify-end gap-2 md:flex">
-        <button class="button-view" class:active={!isGrid} on:click={() => (isGrid = false)}>
-            <IconList></IconList>
-        </button>
         <button class="button-view" class:active={isGrid} on:click={() => (isGrid = true)}>
             <IconGrid></IconGrid>
+        </button>
+        <button class="button-view" class:active={!isGrid} on:click={() => (isGrid = false)}>
+            <IconList></IconList>
         </button>
         <a href="#" class="button-view button-view--link">
             <IconDownload></IconDownload>
@@ -124,6 +121,10 @@
 </div>
 
 <style lang="scss">
+    .icon {
+        width: 24px; /* Set desired width */
+        height: 24px; /* Set desired height */
+    }
     .filters {
         display: flex;
         justify-content: space-between;
@@ -184,10 +185,6 @@
                 width: 100%;
             }
         }
-
-        &--link {
-            border-radius: 50%;
-        }
     }
     .checkbox {
         display: flex;
@@ -243,7 +240,6 @@
         }
     }
     .all-button {
-        color: rgba(0, 0, 0, 0.5);
         white-space: nowrap;
         text-align: center;
         font-size: 12px;

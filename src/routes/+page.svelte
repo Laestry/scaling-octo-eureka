@@ -1,6 +1,6 @@
 <script lang="ts">
     import type { PageData } from './$types';
-    import ProductCardNew from '$lib/components/ProductCardNew.svelte';
+    import ProductCardNew from './products/ProductCardNew.svelte';
 
     export let data: PageData;
     $: console.log('data', data);
@@ -15,8 +15,8 @@
     <div class="flex flex-col min-h-[90vh] w-full lg:max-w-[1212px] px-[38px] md:max-w-[836px] max-w-[376px]">
         <div class="md:flex-row flex-col-reverse flex md:mt-[134px] gap-[20px] my-[80px] md:mb-[137px]">
             <div class="h3 description max-w-[844px] text-color1">
-                Lorem ipsum dolor sit amet consectetur. Leo justo enim et in. Aliquam at feugiat tortor purus quis eu ultrices
-                quis tincidunt. Tellus integer egestas lectus ac.
+                Lorem ipsum dolor sit amet consectetur. Leo justo enim et in. Aliquam at feugiat tortor purus quis eu
+                ultrices quis tincidunt. Tellus integer egestas lectus ac.
             </div>
             <div class="flex gap-[14px]">
                 <div class=" w-[15px] h-[15px] min-w-[15px] rounded-full bg-color1"></div>
@@ -37,8 +37,8 @@
         </div>
 
         <div class="description2 lg:mt-[113px] lg:mb-[180px] my-[80px] text-color1">
-            We place human values at the heart of our experience and in the origin of the importLeo justo enim et in. Aliquam
-            at feugiat tortor purus quis eu ultrices quis tincidunt.
+            We place human values at the heart of our experience and in the origin of the importLeo justo enim et in.
+            Aliquam at feugiat tortor purus quis eu ultrices quis tincidunt.
         </div>
 
         <div

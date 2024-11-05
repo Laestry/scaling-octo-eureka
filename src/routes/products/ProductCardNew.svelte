@@ -1,9 +1,9 @@
 <script lang="ts">
     import type { Product } from '$lib/server/prisma';
-    import { priceFormat } from '../../routes/product/[slug]/utils';
+    import { priceFormat } from '../product/[slug]/utils';
 
     export let product: Product;
-    export let size: 's' | 'm' | 'l' = 's';
+    export let size: 's' | 'm' | 'l' | 'v' = 's';
 
     function add() {}
 
@@ -28,7 +28,7 @@
     }
 </script>
 
-<div class="product {size}">
+<a href="/product/{product.slug}" class="product {size}">
     <img class="bg-no-repeat object-cover bg-center img" src={img} alt="Wine" />
     <div class="flex justify-between mt-[7px] w-full">
         <div class="flex flex-col uppercase w-full product-name" style="width: calc(100% - 80px)">
@@ -56,7 +56,7 @@
             </button>
         </div>
     </div>
-</div>
+</a>
 
 <style lang="scss">
     .product {
@@ -67,7 +67,7 @@
         gap: 4px;
 
         &.s {
-            width: 176px;
+            max-width: 176px;
             @media (max-width: 1119px) {
                 width: 118px;
                 height: 224px;
@@ -133,6 +133,31 @@
                     height: 328px;
                 }
                 @media (max-width: 767px) {
+                    width: 196px;
+                    height: 262px;
+                }
+            }
+        }
+        &.v {
+            width: 272px;
+            height: 486px;
+            @media (max-width: 1136px) {
+                width: 181px;
+                height: 354px;
+            }
+            @media (max-width: 760px) {
+                width: 196px;
+                height: auto;
+            }
+
+            .img {
+                width: 368px;
+                height: 362px;
+                @media (max-width: 1136px) {
+                    width: 245px;
+                    height: 328px;
+                }
+                @media (max-width: 760px) {
                     width: 196px;
                     height: 262px;
                 }

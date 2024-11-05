@@ -33,18 +33,7 @@
 </script>
 
 <div style="overflow: hidden; max-width: 100vw; background-color: #F6F1F2" class="pb-[53px]" id="teleport">
-    {#if currentPath === '/' || currentPath === '/vision' || currentPath === '/associes'}
-        <div
-            in:fly={isRight ? { x: -200, duration: 1000, delay: 300 } : { x: 200, duration: 1000, delay: 300 }}
-            out:fly={isRight ? { x: 200, duration: 1000 } : { x: -200, duration: 1000 }}
-        >
-            <Header
-                color={currentPath === '/' ? '#DE6643' : '#fff'}
-                class="absolute top-0 left-2/4 translate-x-[-50%] z-10"
-                backdrop={currentPath === '/' ? 'main' : currentPath === '/associes' ? 'associes' : 'vision'}
-            />
-        </div>
-    {/if}
+    <Header class="absolute top-0 left-2/4 translate-x-[-50%] z-10" />
 
     {#key currentPath}
         <div

@@ -39,6 +39,8 @@
 }
 
 body {
+    font-family: 'Riposte';
+    color: #181C1C;
     font: 20px 'Riposte';
     scroll-behavior: smooth;
 }

@@ -1,5 +1,5 @@
 <script lang="ts">
-    import ProductCardNew from '$lib/components/ProductCardNew.svelte';
+    import ProductCardNew from './ProductCardNew.svelte';
     import type { Product } from '$lib/server/prisma';
     import { fade } from 'svelte/transition';
 
@@ -9,26 +9,27 @@
 <div class={$$props.class}>
     <div in:fade class="products-grid">
         {#each products as product (product.id)}
-            <ProductCardNew {product} />
+            <ProductCardNew {product} size="v" />
         {/each}
     </div>
 </div>
 
 <style lang="scss">
     .products-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(272px, 1fr));
-        gap: 20px 12px;
+        display: flex;
+        flex-wrap: wrap;
+        row-gap: 16px;
+        justify-content: space-between;
     }
-    @media screen and (max-width: 1199px) {
+    @media screen and (max-width: 1136px) {
         .products-grid {
-            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            //grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
         }
     }
 
     @media screen and (max-width: 767px) {
         .products-grid {
-            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            //grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
         }
     }
 </style>

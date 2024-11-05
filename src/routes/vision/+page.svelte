@@ -1,6 +1,4 @@
 <script lang="ts">
-    import Header from '$lib/components/Header.svelte';
-    import Logo from '$lib/components/Logo.svelte';
 </script>
 
 <!-- <Header color="#fff" page="vision" class="lg:-mb-[176px]" /> -->
