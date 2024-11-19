@@ -12,15 +12,16 @@
     let expand_description = false;
     let in_cart = 1;
     function add() {
-        in_cart = Math.min(in_cart + 1, product.quantity);
+        in_cart = Math.min(in_cart + 1);
     }
     function remove() {
         if (in_cart !== 0) {
             in_cart--;
         }
     }
-    const img =
-        'https://cdn.shopify.com/s/files/1/0762/7689/1952/files/product-image_fb1c9cb7-8ab1-4037-a915-913d2c638b8a.png?v=1706118993';
+    const img = '/images/example_wines/W&_productshot_1200x1600_5.jpg';
+    const img1 = '/images/example_wines/5.png';
+    const img2 = '/images/example_wines/4.png';
 </script>
 
 <div class="mt-[40px] lg:max-w-[1162px] md:max-w-[780px] max-w-[320px] mx-auto">
@@ -40,14 +41,14 @@
                     class:z-[4]={currentSlide === 0}
                     on:click={() => (currentSlide = 0)}
                 >
-                    <img class="object-cover w-full h-full" src={img} alt="Wine" />
+                    <img class="object-cover w-full h-full" src={img1} alt="Wine" />
                 </button>
                 <button
                     class="absolute z-[2] md:left-[12px] left-[6px] bottom-0 lg:w-[450px] lg:h-[591px] md:w-[247px] md:h-[439px] w-[196px] h-[262px]"
                     class:z-[4]={currentSlide === 2}
                     on:click={() => (currentSlide = 2)}
                 >
-                    <img class="object-cover w-full h-full" src={img} alt="Wine" />
+                    <img class="object-cover w-full h-full" src={img2} alt="Wine" />
                 </button>
                 <button
                     class="absolute z-[3] md:left-[12px] left-[99px] bottom-0 lg:w-[374px] lg:h-[639px] md:w-[300px] md:h-[401px] w-[181px] h-[240px]"
@@ -62,7 +63,10 @@
                 <div class="md:visible invisible">
                     <ProductTags {product} />
                 </div>
-                <h1 class="product-title mt-[12px]">{product.name}</h1>
+                <h1 class="product-title mt-[12px]">
+                    Phrase catchy, ce que le sommelier dirait à table pour vendre le produit. Mais nous on dit que ça
+                    prend deux phrases quand même.
+                </h1>
                 <div class="product-description mt-4 h-[125px] max-w-[366px] overflow-auto">
                     {@html product.fullDescription}
                     <!-- <button on:click={() => (expand_description = !expand_description)}>{expand_description ? '-' : '+'}</button> -->
@@ -95,59 +99,45 @@
                         <div
                             class="flex flex-col md:min-w-[280px] md:w-[280px] min-w-[186px] w-[186px] border-r-[1px] border-r-[#E859EB]"
                         >
-                            <p class="product-table__type">Type de vin</p>
+                            <p class="product-table__type">{product.specificCategory}</p>
                             <p class="product-table__description">
-                                <b class="font-bold">{product.name}</b>
+                                <b class="font-bold">{product.providerName}</b>
                                 <br />
-                                {product.category}
-                                {#if product.specificCategory}
-                                    ({product.specificCategory})
-                                {/if}
+                                {product.name ?? ''}
                                 <br />
                                 {product.vintage}
                                 <br />
-                                {product.quantity} x {volumeFormat(product)} ({alcoholFormat(product)})
+                                {product.uvc} x {volumeFormat(product)} ({alcoholFormat(product)})
                             </p>
                         </div>
                         <div class="flex flex-col py-2 w-full">
                             <p class="product-table__price">
-                                {priceFormat(product)}
+                                {priceFormat(product, true)}
                             </p>
                             <p class="product-table__price">
-                                {priceFormat(product)}
+                                {priceFormat(product, false)}
                             </p>
-                            <p class="product-table__type-region">
-                                {originFormat(product)}
-                                (
-                                {#if product.providerSite}
-                                    <a href={product.providerSite}>{product.providerName}</a>
-                                {:else}
-                                    {product.providerName}
-                                {/if}
-                                )
-                            </p>
+                            <p class="product-table__type-region">Acheter avant <br /> JJ mois, 20XX</p>
                             <p />
                         </div>
                     </div>
                     <div
                         class="flex md:flex-row flex-col pt-4 pb-8 border-b-[1px] border-b-[#DE6643] relative justify-between"
                     >
-                        {#if data.product.quantity !== 0}
-                            <div class="flex md:flex-col flex-row gap-2">
-                                <p class="product-table__count">Quantité /caisse de 6</p>
-                                <div class="product-table-counter">
-                                    <p class="product-table-counter__value">{in_cart}</p>
-                                    <div class="md:flex flex-col contents">
-                                        <button class="product-table-counter__button order-[-1]" on:click={() => add()}>
-                                            +
-                                        </button>
-                                        <button class="product-table-counter__button" on:click={() => remove()}>
-                                            -
-                                        </button>
-                                    </div>
+                        <!--{#if data.product.quantity !== 0}-->
+                        <div class="flex md:flex-col flex-row gap-2">
+                            <p class="product-table__count">Quantité /caisse de {product.uvc}</p>
+                            <div class="product-table-counter">
+                                <p class="product-table-counter__value">{in_cart}</p>
+                                <div class="md:flex flex-col contents">
+                                    <button class="product-table-counter__button order-[-1]" on:click={() => add()}>
+                                        +
+                                    </button>
+                                    <button class="product-table-counter__button" on:click={() => remove()}> - </button>
                                 </div>
                             </div>
-                        {/if}
+                        </div>
+                        <!--{/if}-->
                         <div class="flex flex-col gap-2 md:mt-0 mt-6">
                             <button class="product-table__button product-table__button--favorite">
                                 Liste d’attente
@@ -364,7 +354,7 @@
         position: absolute;
     }
     .product-table-counter {
-        margin-top: 14px;
+        //margin-top: 14px;
         display: flex;
         gap: 5px;
         align-items: center;

@@ -5,7 +5,7 @@ export function alcoholFormat({ alcohol }: Product) {
 }
 
 export function volumeFormat({ volume }: Product) {
-    return `${volume / 1000} L`;
+    return `${volume}ml`;
 }
 
 export function priceFormat({ price, uvc }: Product, bottle: boolean = true, options: { none?: boolean } = {}) {
