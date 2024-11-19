@@ -254,7 +254,7 @@
     svg {
         display: block;
         max-width: 100%;
-        object-fit: contain;
+        object-fit: cover;
     }
     .bars {
         margin-top: 110px;
@@ -290,7 +290,7 @@
             display: flex;
             flex-direction: column;
             gap: 8px;
-            padding-right: 16px;
+            //padding-right: 16px;
             img {
                 display: block;
                 width: 100%;
@@ -597,7 +597,7 @@
         width: 100%;
         padding: 0px 32px;
     }
-    @media (max-width: 1119px) {
+    @media (max-width: 1136px) {
         .container {
             max-width: 824px;
         }
