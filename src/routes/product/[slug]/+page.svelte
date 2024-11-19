@@ -19,9 +19,9 @@
             in_cart--;
         }
     }
-    const img = '/images/example_wines/3.jpg';
-    const img1 = '/images/example_wines/5.jpg';
-    const img2 = '/images/example_wines/4.jpg';
+    const img1 = '/images/example_wines/SHOP PAGE/Product Shot - stack.png';
+    const img = '/images/example_wines/SHOP PAGE/9x16 Product Shot - stack.png';
+    const img2 = '/images/example_wines/SHOP PAGE/In-situ Product Shot - stack.png';
 </script>
 
 <div class="mt-[40px] lg:max-w-[1162px] md:max-w-[780px] max-w-[320px] mx-auto">
