@@ -10,7 +10,7 @@
 
 <div>
     <button
-        class="oai accordion flex justify-between w-full bg-[#fff] px-[6px] py-[3px] text-[#DE6643] cursor-pointer"
+        class="accordion flex justify-between w-full bg-[#fff] px-[6px] py-[3px] text-[#DE6643] cursor-pointer"
         class:active={!closed}
         on:click={() => (closed = !closed)}
     >
