@@ -25,8 +25,8 @@
                     Petite phrase cute pour introduire la team ci-bas. And hint at your great work culture too!
                 </p>
                 <p class="about__text">
-                    Lorem ipsum dolor sit amet consectetur. Leo justo enim et in. Aliquam at feugiat tortor purus quis eu ultrices
-                    quis tincidunt.
+                    Lorem ipsum dolor sit amet consectetur. Leo justo enim et in. Aliquam at feugiat tortor purus quis
+                    eu ultrices quis tincidunt.
                 </p>
             </div>
         </div>
@@ -102,8 +102,8 @@
         <div class="agency__row">
             <p class="agency__title">L’agence</p>
             <p class="agency__text">
-                Lorem ipsum dolor sit amet consectetur. Leo justo enim et in. Aliquam at feugiat tortor purus quis eu ultrices
-                quis tincidunt.
+                Lorem ipsum dolor sit amet consectetur. Leo justo enim et in. Aliquam at feugiat tortor purus quis eu
+                ultrices quis tincidunt.
             </p>
         </div>
         <div class="agency__images">
@@ -239,15 +239,23 @@
         <div class="bars__footer">
             <p class="bars__small-title">Experience our wines around the city.</p>
             <p class="bars__text">
-                Who would we be without our effervescent wine bars and mind blowing restaurants? Lorem ipsum dolor sit amet
-                consectetur. Leo justo enim et in. Aliquam at feugiat tortor purus quis eu ultrices quis tincidunt. Tellus
-                integer egestas lectus.Lorem ipsum dolor sit amet consectetur.
+                Who would we be without our effervescent wine bars and mind blowing restaurants? Lorem ipsum dolor sit
+                amet consectetur. Leo justo enim et in. Aliquam at feugiat tortor purus quis eu ultrices quis tincidunt.
+                Tellus integer egestas lectus.Lorem ipsum dolor sit amet consectetur.
             </p>
         </div>
     </div>
 </div>
 
 <style lang="scss">
+    img,
+    picture,
+    video,
+    svg {
+        display: block;
+        max-width: 100%;
+        object-fit: contain;
+    }
     .bars {
         margin-top: 110px;
         padding-bottom: 90px;
