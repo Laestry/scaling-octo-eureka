@@ -9,7 +9,7 @@
 <div class={$$props.class}>
     <div in:fade class="products-grid">
         {#each products as product (product.id)}
-            <ProductCardNew {product} size="v" />
+            <ProductCardNew main={false} {product} size="v" />
         {/each}
     </div>
 </div>

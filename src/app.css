@@ -4,14 +4,14 @@
 
 @font-face {
     font-family: 'Riposte';
-    src: url('./fonts/GTFRiposteTRIAL-Regular.otf');
+    src: url('./fonts/Riposte-Regular.otf');
     font-style: normal;
     font-weight: normal;
     font-display: swap;
 }
 @font-face {
     font-family: 'Riposte';
-    src: url('./fonts/GTFRiposteTRIAL-Bold.otf');
+    src: url('./fonts/Riposte-Bold.otf');
     font-style: normal;
     font-weight: 700;
     font-display: swap;

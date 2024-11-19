@@ -5,6 +5,9 @@
     export let data: PageData;
     $: console.log('data', data);
     $: products = data.products;
+
+    const sizeSequence1 = ['m', 's', 'l', 'm', 'l', 'm', 's', 'm'];
+    const sizeSequence2 = ['l', 'm', 's', 'm'];
 </script>
 
 <!-- <Header color="#DE6643" class="absolute top-0 left-2/4 translate-x-[-50%] z-10" /> -->
@@ -13,7 +16,7 @@
 
 <div class="flex flex-col items-center">
     <div class="flex flex-col min-h-[90vh] w-full lg:max-w-[1212px] px-[38px] md:max-w-[836px] max-w-[376px]">
-        <div class="md:flex-row flex-col-reverse flex md:mt-[134px] gap-[20px] my-[80px] md:mb-[137px]">
+        <div class="justify-between md:flex-row flex-col-reverse flex md:mt-[134px] gap-[20px] my-[80px] md:mb-[137px]">
             <div class="h3 description max-w-[844px] text-color1">
                 Lorem ipsum dolor sit amet consectetur. Leo justo enim et in. Aliquam at feugiat tortor purus quis eu
                 ultrices quis tincidunt. Tellus integer egestas lectus ac.
@@ -31,7 +34,7 @@
         >
             {#each products as product, i (product.id)}
                 <a href={'/product/' + product.slug}>
-                    <ProductCardNew {product} size={i % 3 === 0 ? 's' : i % 3 === 1 ? 'm' : 'l'}></ProductCardNew>
+                    <ProductCardNew {product} size={sizeSequence1[i % sizeSequence1.length]}></ProductCardNew>
                 </a>
             {/each}
         </div>
@@ -45,9 +48,11 @@
             class="card__row card__row--reverse flex lg:gap-x-[16px] gap-x-[10px] md:gap-x-[11px] gap-y-[20px] flex-wrap mb-[62px]"
         >
             {#each products as product, i (product.id)}
-                <a href={'/product/' + product.slug}>
-                    <ProductCardNew {product} size={i % 3 === 0 ? 's' : i % 3 === 1 ? 'm' : 'l'}></ProductCardNew>
-                </a>
+                {#if i < 4}
+                    <a href={'/product/' + product.slug}>
+                        <ProductCardNew {product} size={sizeSequence2[i % sizeSequence2.length]}></ProductCardNew>
+                    </a>
+                {/if}
             {/each}
         </div>
         <!--

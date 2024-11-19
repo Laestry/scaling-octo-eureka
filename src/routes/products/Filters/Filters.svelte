@@ -254,9 +254,8 @@
     .price-button {
         color: #2d63b0;
         text-align: center;
-        font-size: 12px;
+        font-size: 10px;
         font-style: normal;
-        font-weight: 700;
         transition: 0.3s ease;
         display: flex;
         flex-wrap: nowrap;

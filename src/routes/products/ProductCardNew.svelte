@@ -4,6 +4,7 @@
 
     export let product: Product;
     export let size: 's' | 'm' | 'l' | 'v' = 's';
+    export let main = true;
 
     function add() {}
 
@@ -28,35 +29,79 @@
     }
 </script>
 
-<a href="/product/{product.slug}" class="product {size}">
-    <img class="bg-no-repeat object-cover bg-center img" src={img} alt="Wine" />
-    <div class="flex justify-between mt-[7px] w-full">
-        <div class="flex flex-col uppercase w-full product-name" style="width: calc(100% - 80px)">
-            <b>{product.name || '-'}</b>
-            <div class="description">
-                {#if product.providerName}
-                    {#if product.providerSite}
-                        <a href={product.providerSite || '#'}>{product.providerName}</a>
-                    {:else}
-                        <div>{product.providerName}</div>
+{#if main}
+    <a href="/product/{product.slug}" class="product {size}">
+        <img class="bg-no-repeat object-cover bg-center img" src={img} alt="Wine" />
+        <div class="flex justify-between mt-[7px] w-full">
+            <div class="flex flex-col uppercase w-full product-name" style="width: calc(100% - 80px)">
+                <b>{product.name || '-'}</b>
+                <div class="description">
+                    {#if product.providerName}
+                        {#if product.providerSite}
+                            <a href={product.providerSite || '#'}>{product.providerName}</a>
+                        {:else}
+                            <div>{product.providerName}</div>
+                        {/if}
                     {/if}
-                {/if}
-                {#if product.vintage}
-                    , &nbsp;
-                    <div>{product.vintage}</div>
-                {/if}
+                    {#if product.vintage}
+                        , &nbsp;
+                        <div>{product.vintage}</div>
+                    {/if}
+                </div>
+            </div>
+            <div class="flex flex-col items-end">
+                <div class="product-price">
+                    {priceFormat(product, false, { none: true })}
+                </div>
+                <button class="text-color5 text-sm font-bold cursor-cell whitespace-nowrap" on:click={() => add()}>
+                    ADD +
+                </button>
             </div>
         </div>
-        <div class="flex flex-col items-end">
-            <div class="product-price">
-                {priceFormat(product)}
+    </a>
+{:else}
+    <a href="/product/{product.slug}" class="product {size}">
+        <img class="bg-no-repeat object-cover bg-center img mb-[7px]" src={img} alt="Wine" />
+        <div class="flex justify-between w-full">
+            <div class="flex flex-col w-full product-name" style="width: calc(100% - 80px)">
+                <div class="description">
+                    <div>{product.specificCategory ?? ''}</div>
+                </div>
             </div>
-            <button class="text-color5 text-sm font-bold cursor-cell whitespace-nowrap" on:click={() => add()}>
-                ADD +
-            </button>
+            <div class="flex flex-col items-end">
+                <div class="product-price">
+                    {priceFormat(product)}
+                </div>
+                <div class="product-price">
+                    {priceFormat(product, false)}
+                </div>
+            </div>
         </div>
-    </div>
-</a>
+        <div class="flex justify-between w-full">
+            <div class="flex flex-col w-full product-name" style="width: calc(100% - 80px)">
+                <b>{product.name || '-'}</b>
+                <div class="description">
+                    {#if product.providerName}
+                        {#if product.providerSite}
+                            <a href={product.providerSite || '#'}>{product.providerName}</a>
+                        {:else}
+                            <div>{product.providerName}</div>
+                        {/if}
+                    {/if}
+                    {#if product.vintage}
+                        <div>{product.vintage}</div>
+                    {/if}
+                </div>
+                <div>{product.uvc} <span>x</span> {product.volume}ml</div>
+            </div>
+            <div class="flex flex-col items-end justify-end">
+                <button class="text-color5 text-sm font-bold cursor-cell whitespace-nowrap" on:click={() => add()}>
+                    ADD +
+                </button>
+            </div>
+        </div>
+    </a>
+{/if}
 
 <style lang="scss">
     .product {
@@ -166,7 +211,7 @@
 
         .product-name {
             font-family: 'Riposte', sans-serif;
-            font-size: 14px;
+            font-size: 12px;
             font-style: normal;
             font-weight: 400;
             line-height: 150%; /* 18px */
