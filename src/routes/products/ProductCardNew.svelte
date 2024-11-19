@@ -8,7 +8,7 @@
 
     function add() {}
 
-    const images = new Array(8).fill('').map((_, i) => `/images/example_wines/${i + 1}.png`);
+    const images = new Array(8).fill('').map((_, i) => `/images/example_wines/${i + 1}.jpg`);
     function getRandomNumber() {
         const n1 = parseInt(product.sku);
         if (!Number.isNaN(n1)) {
