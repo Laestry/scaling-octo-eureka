@@ -252,6 +252,7 @@
     picture,
     video,
     svg {
+        margin: 1px;
         display: block;
         max-width: 100%;
         object-fit: cover;
