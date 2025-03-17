@@ -18,6 +18,7 @@
     .products-grid {
         display: flex;
         flex-wrap: wrap;
+        align-items: start;
         row-gap: 16px;
         justify-content: space-between;
     }

@@ -33,7 +33,7 @@
     <a href="/product/{product.slug}" class="product {size}">
         <img class="bg-no-repeat object-cover bg-center img" src={img} alt="Wine" />
         <div class="flex justify-between mt-[7px] w-full">
-            <div class="flex flex-col uppercase w-full product-name" style="width: calc(100% - 80px)">
+            <div class="flex flex-col uppercase w-full product-name" style="width: calc(100% - 100px)">
                 <b>{product.name || '-'}</b>
                 <div class="description">
                     {#if product.providerName}
@@ -63,7 +63,7 @@
     <a href="/product/{product.slug}" class="product {size}">
         <img class="bg-no-repeat object-cover bg-center img mb-[7px]" src={img} alt="Wine" />
         <div class="flex justify-between w-full">
-            <div class="flex flex-col w-full product-name" style="width: calc(100% - 80px)">
+            <div class="flex flex-col w-full product-name" style="width: calc(100% - 100px)">
                 <div class="description">
                     <div>{product.specificCategory ?? ''}</div>
                 </div>
@@ -72,28 +72,24 @@
                 <div class="product-price">
                     {priceFormat(product)}
                 </div>
-                <div class="product-price">
+                <div class="product-price {product.uvc > 1 ? '' : 'text-transparent'}">
                     {priceFormat(product, false)}
                 </div>
             </div>
         </div>
-        <div class="flex justify-between w-full">
-            <div class="flex flex-col w-full product-name" style="width: calc(100% - 80px)">
-                <b>{product.name || '-'}</b>
-                <div class="description">
-                    {#if product.providerName}
-                        {#if product.providerSite}
-                            <a href={product.providerSite || '#'}>{product.providerName}</a>
-                        {:else}
-                            <div>{product.providerName}</div>
-                        {/if}
-                    {/if}
-                    {#if product.vintage}
-                        <div>{product.vintage}</div>
-                    {/if}
-                </div>
-                <div>{product.uvc} <span>x</span> {product.volume}ml</div>
+        <div class="flex flex-col items-start justify-start w-full product-name">
+            <b>{product.name || '-'}</b>
+            <div class="truncate w-full {product.vintage ? '' : 'text-transparent'}">
+                {product.providerName ?? ''}
             </div>
+        </div>
+        <div class="flex justify-between items-end w-full">
+            <div class="product-name description">
+                <div class={product.vintage ? '' : 'text-transparent'}>{product.vintage ?? ''}</div>
+                {product.uvc} <span class="lowercase">x</span>
+                {product.lblFormat}
+            </div>
+
             <div class="flex flex-col items-end justify-end">
                 <button class="text-color5 text-sm font-bold cursor-cell whitespace-nowrap" on:click={() => add()}>
                     ADD +
@@ -109,7 +105,6 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        gap: 4px;
 
         &.s {
             max-width: 176px;
@@ -238,12 +233,5 @@
                 font-size: 11px;
             }
         }
-    }
-    .description {
-        display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
-        justify-content: flex-start;
-        align-items: center;
     }
 </style>

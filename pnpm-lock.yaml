@@ -11,6 +11,9 @@ importers:
       cross-env:
         specifier: ^7.0.3
         version: 7.0.3
+      pocketbase:
+        specifier: ^0.25.2
+        version: 0.25.2
     devDependencies:
       '@dotenvx/dotenvx':
         specifier: ^1.20.0
@@ -22,8 +25,8 @@ importers:
         specifier: ^5.21.1
         version: 5.21.1(prisma@5.21.1)
       '@slidy/svelte':
-        specifier: ^3.4.6
-        version: 3.4.6(svelte@4.2.19)
+        specifier: 3.4.4
+        version: 3.4.4(svelte@4.2.19)
       '@supabase/supabase-js':
         specifier: ^2.45.6
         version: 2.45.6
@@ -553,11 +556,11 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@slidy/core@3.7.8':
-    resolution: {integrity: sha512-58cDO7ncuKtq4dZXJ2EThrnPRfKMNYr4xYzahhgYAVJqAgcrMNrQzkxEHaywLkVzB2vtqUi2S39M9MsUnCviYw==}
+  '@slidy/core@3.7.5':
+    resolution: {integrity: sha512-tF3BJQ1L/+nHX2dRddyTj7AhXHd/J6EAvKXcBkKgwdP9RXrM37wukDYzSpNRajMTkD8m269d+LjnQzXDAT9qHw==}
 
-  '@slidy/svelte@3.4.6':
-    resolution: {integrity: sha512-I1oRzsi5UwVeSPZyeUlHiaJ+fhY4+3B5UKPURuvdsIKg5xCzi7HiuaPrjf+Eu45kuhC6rB9KY2aJe0S/hxcqRA==}
+  '@slidy/svelte@3.4.4':
+    resolution: {integrity: sha512-g3cKetij2QXNngZWUAELPgdHiXzR4SJ9HpXFk2Q7WsW6o3wdc7KKQ3tqH6NfR5GM6P6QnxyXeHTAPJNkHWaNvg==}
     peerDependencies:
       svelte: 3 - 4
 
@@ -1359,6 +1362,9 @@ packages:
 
   pkg-types@1.2.1:
     resolution: {integrity: sha512-sQoqa8alT3nHjGuTjuKgOnvjo4cljkufdtLMnO2LBP/wRwuDlo1tkaEdMxCRhyGRPacv/ztlZgDPm2b7FAmEvw==}
+
+  pocketbase@0.25.2:
+    resolution: {integrity: sha512-ONZl1+qHJMnhR2uacBlBJ90lm7njtL/zy0606+1ROfK9hSL4LRBRc8r89rMcNRzPzRqCNyoFTh2Qg/lYXdEC1w==}
 
   postcss-import@15.1.0:
     resolution: {integrity: sha512-hpr+J05B2FVYUAXHeK1YyI267J/dDDhMU6B6civm8hSY1jYJnBXxzKDKDswzJmtLHryrjhnDjqqp/49t8FALew==}
@@ -2170,11 +2176,11 @@ snapshots:
   '@rollup/rollup-win32-x64-msvc@4.24.0':
     optional: true
 
-  '@slidy/core@3.7.8': {}
+  '@slidy/core@3.7.5': {}
 
-  '@slidy/svelte@3.4.6(svelte@4.2.19)':
+  '@slidy/svelte@3.4.4(svelte@4.2.19)':
     dependencies:
-      '@slidy/core': 3.7.8
+      '@slidy/core': 3.7.5
       svelte: 4.2.19
 
   '@supabase/auth-js@2.65.1':
@@ -3007,6 +3013,8 @@ snapshots:
       confbox: 0.1.8
       mlly: 1.7.2
       pathe: 1.1.2
+
+  pocketbase@0.25.2: {}
 
   postcss-import@15.1.0(postcss@8.4.47):
     dependencies:
