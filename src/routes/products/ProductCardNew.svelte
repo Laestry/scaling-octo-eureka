@@ -36,17 +36,10 @@
             <div class="flex flex-col uppercase w-full product-name" style="width: calc(100% - 100px)">
                 <b>{product.name || '-'}</b>
                 <div class="description">
-                    {#if product.providerName}
-                        {#if product.providerSite}
-                            <a href={product.providerSite || '#'}>{product.providerName}</a>
-                        {:else}
-                            <div>{product.providerName}</div>
+                    <div class=" w-full {product.vintage ? '' : 'text-transparent'}">
+                        {product.providerName ?? ''}{#if product.vintage}, &nbsp;{product.vintage}
                         {/if}
-                    {/if}
-                    {#if product.vintage}
-                        , &nbsp;
-                        <div>{product.vintage}</div>
-                    {/if}
+                    </div>
                 </div>
             </div>
             <div class="flex flex-col items-end">
@@ -79,7 +72,7 @@
         </div>
         <div class="flex flex-col items-start justify-start w-full product-name">
             <b>{product.name || '-'}</b>
-            <div class="truncate w-full {product.vintage ? '' : 'text-transparent'}">
+            <div class="truncate w-full {product.providerName ? '' : 'text-transparent'}">
                 {product.providerName ?? ''}
             </div>
         </div>
