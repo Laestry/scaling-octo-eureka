@@ -7,7 +7,7 @@
 
     export let data: PageData;
 
-    $: products = data.products;
+    $: products = data.products.items;
 
     $: console.log('products', products);
 

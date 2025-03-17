@@ -4,7 +4,7 @@
 
     export let data: PageData;
     $: console.log('data', data);
-    $: products = data.products;
+    let products = data.products.items;
 
     const sizeSequence1 = ['m', 's', 'l', 'm', 'l', 'm', 's', 'm'];
     const sizeSequence2 = ['l', 'm', 's', 'm'];

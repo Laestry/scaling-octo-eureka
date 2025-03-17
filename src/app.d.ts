@@ -1,6 +1,4 @@
-/// <reference types="svelte" />
-/// <reference types="vite/client" />
-/// <reference types="unplugin-icons/types/svelte" />
+import PocketBase, { type AuthModel } from 'pocketbase';
 
 declare global {
     namespace App {
@@ -8,6 +6,12 @@ declare global {
         interface Locals {}
         interface PageData {}
         interface Platform {}
+        interface Locals {
+            pb: PocketBase;
+            pbAdmin: PocketBase;
+            isTest: boolean;
+            user: AuthModel | undefined;
+        }
     }
     module '$icons/*' {
         import all from '~icons/*';

@@ -64,36 +64,15 @@
                     <ProductTags {product} />
                 </div>
                 <h1 class="product-title mt-[12px]">
-                    Phrase catchy, ce que le sommelier dirait à table pour vendre le produit. Mais nous on dit que ça
-                    prend deux phrases quand même.
+                    {product.name}
                 </h1>
                 <div class="product-description mt-4 h-[125px] max-w-[366px] overflow-auto">
                     {@html product.fullDescription}
-                    <!-- <button on:click={() => (expand_description = !expand_description)}>{expand_description ? '-' : '+'}</button> -->
+                    <!--                    <button on:click={() => (expand_description = !expand_description)}-->
+                    <!--                        >{expand_description ? '-' : '+'}</button-->
+                    <!--                    >-->
                 </div>
-                <!-- <div class="od my-[16px] h-[304px] w-[448px] overflow-hidden">
-                </div> -->
-                <!-- <div class="flex gap-[42px] items-center">
-                    <div class="tpr p-[8px] w-fit" style="border-bottom: 1px solid var(--border--02);">
-                        <div>
-                            <span class="tpb">R</span>
-                            {parseInt(product?.variants?.edges[0]?.node?.priceV2?.amount / 6) ?? 'N/A'}$/btl
-                        </div>
-                        <div class="text-contents">
-                            <span class="tpb">P</span>
-                            {parseInt(product?.variants?.edges[0]?.node?.priceV2?.amount) ?? 'N/A'}$/btl
-                        </div>
-                    </div>
-                    <button
-                        on:click={() => {
-                            addToCart(product, 1);
-                        }}
-                        class="button px-[9px] py-[12px] rounded-[4px] border"
-                    >
-                        add to cart
-                    </button>
-                    <FavoriteButton />
-                </div> -->
+
                 <div class="lg:w-[464px] md:w-[380px] w-[300px] w-full mt-4">
                     <div class="flex product-table">
                         <div
@@ -107,7 +86,7 @@
                                 <br />
                                 {product.vintage}
                                 <br />
-                                {product.uvc} x {volumeFormat(product)} ({alcoholFormat(product)})
+                                {product.uvc} x {product.lblFormat} ({alcoholFormat(product)})
                             </p>
                         </div>
                         <div class="flex flex-col py-2 w-full">

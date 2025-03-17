@@ -184,7 +184,7 @@ namespace ApiTypes {
         origins: Origin[];
         items: Item[];
         item?: Item;
-        pricing: Pric;
+        pricing: Price;
         extendedName: string;
         currentVintage: string;
         purchaseAccount?: Account;
@@ -262,7 +262,7 @@ namespace ApiTypes {
         indCmsOnline: boolean;
         indExternalOnline: boolean;
         puid: string;
-        prices: Pric;
+        prices: Price;
         nbDays: number;
         quantity: Quantity;
         vintage?: null | string;
@@ -276,7 +276,7 @@ namespace ApiTypes {
         alcohol?: null | string;
         vintage: null | string;
     };
-    export type Pric = {
+    export type Price = {
         price: number;
         agencyFee: number;
         priceTaxIn: number;
@@ -401,21 +401,26 @@ export const PortausApi = {
             contextToken: res.portausContextToken
         } satisfies Tokens;
     },
-    async getProducts() {
-        const tokens = await PortausApi.getTokens();
+
+    async getProducts(page = 1, tokens: Tokens) {
         const res = await request({
             tokens,
             path: '/API/latest/admin/inventories/1/products',
             body: {
-                webPublished: 'true',
-                limit: '999999'
+                // webPublished: 'true',
+                limit: '50',
+                page: page
+                // orderBy: 'age',
+                // direction: 'DSC'
             }
         });
-        return res.list;
+        console.log('res', res);
+        return res;
     },
-    processProduct(obj: ApiTypes.List): PrismaTypes.Prisma.ProductCreateInput {
+
+    processProduct(obj: ApiTypes.List) {
         const alcohol = (parseFloat(obj.item?.extraInfo?.alcohol || '') || 0) / 100;
-        const quantity = Math.max(obj.quantity['inStock'] || 0, 0);
+        const quantity = Math.max(obj.quantity['packaged'] || 0, 0);
         const unit = obj.unit === 0 ? 'unit' : obj.unit === 1 ? 'box' : undefined;
         const uvc = obj.uvc;
         if (!unit) {
@@ -425,19 +430,12 @@ export const PortausApi = {
         if (!format) {
             console.warn('no format', obj);
         }
-        const volume = Math.max(
-            Math.round(format === 'l' ? obj.volume / 1000 : format === 'ml' ? obj.volume : obj.volume),
-            0
-        );
         const price = Math.max(obj.pricing.priceTaxIn, 0);
         const vintage =
             Math.min(Math.max(parseInt(obj.currentVintage) || 0, 0), new Date().getFullYear() + 1) || undefined;
-        let providerSite = '';
-        try {
-            providerSite = new URL(processString(obj.webSite) || processString(obj.webLink) || '').href;
-        } catch (error) {}
+
         return {
-            external_id: obj.puid,
+            id: obj.puid,
             sku: obj.sku,
             slug: obj.slug,
             name: processString(obj.name) || processString(obj.cmsName) || '',
@@ -448,11 +446,9 @@ export const PortausApi = {
                 processString(obj.provider?.usualName) ||
                 processString(obj.provider?.name) ||
                 '',
-            providerSite,
             alcohol,
-            volume,
+            lblFormat: obj.lblFormat,
             vintage,
-            unit,
             uvc,
             quantity,
             price,
@@ -465,34 +461,10 @@ export const PortausApi = {
             tags: obj.tags
                 .map((x) => processString(x.code))
                 .filter(Boolean)
-                .map((x) => x!),
-            raw: JSON.stringify(obj)
+                .map((x) => x!)
         } as const;
     }
 };
-
-export async function updateAllProducts() {
-    // get new
-    // delete old
-    // add new
-}
-
-export async function addNewProducts() {
-    // get new
-    // get existing
-    // find published and unpublished
-    // add published
-    // mark unpublished as deleted?
-}
-
-async function migrate() {
-    const raw_products = await PortausApi.getProducts();
-    console.log('raw_products', raw_products);
-    const products = raw_products.map((x) => PortausApi.processProduct(x));
-    console.log('products', products);
-    await prisma.product.deleteMany();
-    await prisma.product.createMany({ data: products });
-}
 
 (async () => {
     console.log('start');

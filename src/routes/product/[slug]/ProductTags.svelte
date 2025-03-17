@@ -10,7 +10,7 @@
             no tags
         {:else}
             {#each product.tags as tag}
-                <a href="/products/tag/{tag}">{tag}</a>
+                <a href="/products?{tag}">{tag}</a>
             {/each}
         {/if}
     </p>

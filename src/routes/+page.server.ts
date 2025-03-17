@@ -1,8 +1,5 @@
-import { prisma } from '$lib/server/prisma';
+export async function load({ locals }) {
+    let products = await locals.pb.collection('alcohol_products').getList(1, 20);
 
-export async function load(event) {
-    const products = await prisma.product.findMany({});
-    return {
-        products
-    };
+    return { products };
 }
