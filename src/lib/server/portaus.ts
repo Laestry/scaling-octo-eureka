@@ -1,5 +1,4 @@
 import { PORTAUS_LOGIN, PORTAUS_PASSWORD, PORTAUS_BASE } from '$env/static/private';
-import { prisma, type PrismaTypes } from '$lib/server/prisma';
 
 type Tokens = {
     accessToken: string;
