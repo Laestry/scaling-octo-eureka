@@ -2,6 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
+div::-webkit-scrollbar {
+    background: none;
+    width: 4px;
+}
+
+div::-webkit-scrollbar-thumb {
+    background: #fff;
+    border-radius: 10px;
+}
+
 @font-face {
     font-family: 'Riposte';
     src: url('/fonts/Riposte-Regular.otf');
