@@ -1,15 +1,14 @@
 <script lang="ts">
     import '../app.css';
-    import { cartStore } from '$lib/store';
     import { navigating, page } from '$app/stores';
     import { fly } from 'svelte/transition';
     import Footer from '$lib/components/Footer.svelte';
     import Header from '$lib/components/Header.svelte';
     import type { PageData } from './$types';
+    import { IconSearch } from '$lib/icons';
+    import { totalItems } from '$lib/cart';
 
     export let data: PageData;
-
-    $: $cartStore = data.cart;
 
     let prevPath = '';
     let currentPath = $page.url.pathname;
@@ -32,8 +31,8 @@
     });
 </script>
 
-<div style="overflow: hidden; max-width: 100vw; background-color: #F6F1F2" class="pb-[53px]" id="teleport">
-    <Header class="absolute top-0 left-2/4 translate-x-[-50%] z-10" />
+<div style="max-width: 100vw; background-color: #F6F1F2" class="pb-[53px]">
+    <Header />
 
     {#key currentPath}
         <div
@@ -45,9 +44,3 @@
     {/key}
 </div>
 <Footer />
-
-<style lang="scss">
-    #teleport {
-        position: relative;
-    }
-</style>

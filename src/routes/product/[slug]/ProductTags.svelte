@@ -10,8 +10,11 @@
             no tags
         {:else}
             {#each product.tags as tag}
-                <a href="/products?{tag}">{tag}</a>
+                <a href="/products?tag={tag}">{tag}</a>
             {/each}
+        {/if}
+        {#if product.originRegion}
+            <a href="/products?region={product.originRegion}">{product.originRegion}</a>
         {/if}
     </p>
     <a href="#" class="passport">Fiche technique complète</a>

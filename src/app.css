@@ -4,38 +4,42 @@
 
 @font-face {
     font-family: 'Riposte';
-    src: url('./fonts/Riposte-Regular.otf');
+    src: url('/fonts/Riposte-Regular.otf');
     font-style: normal;
     font-weight: normal;
     font-display: swap;
 }
 @font-face {
     font-family: 'Riposte';
-    src: url('./fonts/Riposte-Bold.otf');
+    src: url('/fonts/Riposte-Bold.otf');
     font-style: normal;
     font-weight: 700;
     font-display: swap;
 }
 @font-face {
     font-family: 'Riposte';
-    src: url('./fonts/GTFRiposteTRIAL-SemiBold.otf');
+    src: url('/fonts/GTFRiposteTRIAL-SemiBold.otf');
     font-style: normal;
     font-weight: 600;
     font-display: swap;
 }
 @font-face {
     font-family: 'Riposte';
-    src: url('./fonts/GTFRiposteTRIAL-Medium.otf');
+    src: url('/fonts/GTFRiposteTRIAL-Medium.otf');
     font-style: normal;
     font-weight: 500;
     font-display: swap;
 }
 @font-face {
     font-family: 'Riposte';
-    src: url('./fonts/GTFRiposteTRIAL-Light.otf');
+    src: url('/fonts/GTFRiposteTRIAL-Light.otf');
     font-style: normal;
     font-weight: 300;
     font-display: swap;
+}
+
+html {
+    scroll-behavior: smooth;
 }
 
 body {

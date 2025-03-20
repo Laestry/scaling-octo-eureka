@@ -1,12 +1,11 @@
 <script lang="ts">
     import type { Product } from '$lib/server/prisma';
     import { priceFormat } from '../product/[slug]/utils';
-
+    import { cart, getItemQuantityStore } from '$lib/cart';
+    import { fly } from 'svelte/transition';
     export let product: Product;
     export let size: 's' | 'm' | 'l' | 'v' = 's';
     export let main = true;
-
-    function add() {}
 
     const images = new Array(8).fill('').map((_, i) => `/images/example_wines/${i + 1}.jpg`);
     function getRandomNumber() {
@@ -27,13 +26,36 @@
         product;
         img = getImage();
     }
+
+    const itemQuantity = getItemQuantityStore(product.id);
+
+    let animations: { id: number }[] = [];
+
+    function handleAdd() {
+        // Add the product to the cart
+        cart.add(product);
+        // Create a new animation instance with a unique id (using timestamp)
+        const id = Date.now();
+        animations = [...animations, { id }];
+        // Remove the animation after the duration of the transition (e.g., 600ms)
+        setTimeout(() => {
+            animations = animations.filter((anim) => anim.id !== id);
+        }, 600);
+    }
 </script>
 
-{#if main}
-    <a href="/product/{product.slug}" class="product {size}">
-        <img class="bg-no-repeat object-cover bg-center img" src={img} alt="Wine" />
+<div class="product {size}">
+    {#if main}
+        <a href="/product/{product.slug}">
+            <img class="bg-no-repeat object-cover bg-center img" src={img} alt="Wine" />
+        </a>
+
         <div class="flex justify-between mt-[7px] w-full">
-            <div class="flex flex-col uppercase w-full product-name" style="width: calc(100% - 100px)">
+            <a
+                href="/product/{product.slug}"
+                class="flex flex-col uppercase w-full product-name"
+                style="width: calc(100% - 100px)"
+            >
                 <b>{product.name || '-'}</b>
                 <div class="description">
                     <div class=" w-full {product.vintage ? '' : 'text-transparent'}">
@@ -41,21 +63,35 @@
                         {/if}
                     </div>
                 </div>
-            </div>
-            <div class="flex flex-col items-end">
+            </a>
+
+            <div class="flex flex-col items-end" style="position: relative; overflow: visible;">
                 <div class="product-price">
                     {priceFormat(product, false, { none: true })}
                 </div>
-                <button class="text-color5 text-sm font-bold cursor-cell whitespace-nowrap" on:click={() => add()}>
+                <button
+                    class="text-color5 text-sm font-bold cursor-cell whitespace-nowrap"
+                    on:click|preventDefault|stopPropagation={handleAdd}
+                >
                     ADD +
                 </button>
+                {#each animations as anim (anim.id)}
+                    <div
+                        class="fly-animation"
+                        in:fly={{ y: 25, duration: 600 }}
+                        out:fly={{ y: -30, duration: 600 }}
+                        style="position: absolute; left: 50%; top: -20px; transform: translateX(-50%); pointer-events: none; z-index: 10;"
+                    >
+                        {$itemQuantity > 0 ? $itemQuantity : ''}
+                    </div>
+                {/each}
             </div>
         </div>
-    </a>
-{:else}
-    <a href="/product/{product.slug}" class="product {size}">
-        <img class="bg-no-repeat object-cover bg-center img mb-[7px]" src={img} alt="Wine" />
-        <div class="flex justify-between w-full">
+    {:else}
+        <a href="/product/{product.slug}">
+            <img class="bg-no-repeat object-cover bg-center img mb-[7px]" src={img} alt="Wine" />
+        </a>
+        <a href="/product/{product.slug}" class="flex justify-between w-full">
             <div class="flex flex-col w-full product-name" style="width: calc(100% - 100px)">
                 <div class="description">
                     <div>{product.specificCategory ?? ''}</div>
@@ -69,28 +105,46 @@
                     {priceFormat(product, false)}
                 </div>
             </div>
-        </div>
-        <div class="flex flex-col items-start justify-start w-full product-name">
+        </a>
+        <a href="/product/{product.slug}" class="flex flex-col items-start justify-start w-full product-name">
             <b>{product.name || '-'}</b>
-            <div class="truncate w-full {product.providerName ? '' : 'text-transparent'}">
-                {product.providerName ?? ''}
+            <div class="w-full flex">
+                <div class="truncate" style="max-width: calc(100% - 37px)">{product.providerName ?? ''}</div>
+                <span>
+                    {#if product.providerName && product.vintage},
+                    {/if}
+                    {product.vintage ?? ''}
+                </span>
             </div>
-        </div>
+        </a>
+
         <div class="flex justify-between items-end w-full">
-            <div class="product-name description">
-                <div class={product.vintage ? '' : 'text-transparent'}>{product.vintage ?? ''}</div>
+            <a href="/product/{product.slug}" class="product-name description">
                 {product.uvc} <span class="lowercase">x</span>
                 {product.lblFormat}
-            </div>
+            </a>
 
-            <div class="flex flex-col items-end justify-end">
-                <button class="text-color5 text-sm font-bold cursor-cell whitespace-nowrap" on:click={() => add()}>
+            <div class="flex flex-col items-end" style="position: relative; overflow: visible;">
+                <button
+                    class="text-color5 text-sm font-bold cursor-cell whitespace-nowrap"
+                    on:click|preventDefault|stopPropagation={handleAdd}
+                >
                     ADD +
                 </button>
+                {#each animations as anim (anim.id)}
+                    <div
+                        class="fly-animation"
+                        in:fly={{ y: 25, duration: 600 }}
+                        out:fly={{ y: -30, duration: 600 }}
+                        style="position: absolute; left: 50%; top: -20px; transform: translateX(-50%); pointer-events: none; z-index: 10;"
+                    >
+                        {$itemQuantity > 0 ? $itemQuantity : ''}
+                    </div>
+                {/each}
             </div>
         </div>
-    </a>
-{/if}
+    {/if}
+</div>
 
 <style lang="scss">
     .product {

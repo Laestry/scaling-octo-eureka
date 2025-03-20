@@ -3,6 +3,7 @@
     import { alcoholFormat, volumeFormat, priceFormat, originFormat } from './utils';
     import Accordion from '$lib/components/Accordion.svelte';
     import ProductTags from './ProductTags.svelte';
+    import { cart } from '$lib/cart';
 
     export let data: PageData;
     $: console.log('data', data);
@@ -107,7 +108,7 @@
                         <div class="flex md:flex-col flex-row gap-2">
                             <p class="product-table__count">Quantité /caisse de {product.uvc}</p>
                             <div class="product-table-counter">
-                                <p class="product-table-counter__value">{in_cart}</p>
+                                <p class="product-table-counter__value">{in_cart * product.uvc}</p>
                                 <div class="md:flex flex-col contents">
                                     <button class="product-table-counter__button order-[-1]" on:click={() => add()}>
                                         +
@@ -121,7 +122,9 @@
                             <button class="product-table__button product-table__button--favorite">
                                 Liste d’attente
                             </button>
-                            <button class="product-table__button">Ajouter au panier</button>
+                            <button class="product-table__button" on:click={() => cart.add(product, in_cart)}
+                                >Ajouter au panier</button
+                            >
                         </div>
                         <p class="absolute text-[16px] bg-[#F6F1F2] text-[#DE6643] bottom-[-12px] pr-1">*</p>
                     </div>
@@ -224,6 +227,20 @@
 </div> -->
 
 <style lang="scss">
+    .product-table__button {
+        transition: all 0.2s ease;
+    }
+
+    .product-table__button:hover {
+        filter: brightness(1.1);
+        transform: translateY(-2px);
+    }
+
+    .product-table__button:active {
+        filter: brightness(0.9);
+        transform: translateY(1px);
+    }
+
     .product-title {
         color: #191c1c;
         font-size: 32px;

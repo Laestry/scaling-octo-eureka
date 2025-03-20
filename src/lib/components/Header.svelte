@@ -1,19 +1,15 @@
 <script lang="ts">
-    import { cartStore } from '$lib/store';
     import Logo from '$lib/components/Logo.svelte';
     import { page, navigating } from '$app/stores';
     import { IconSearch } from '$lib/icons';
-    import { fly } from 'svelte/transition';
+    import { fly, fade } from 'svelte/transition';
+    import { totalItems } from '$lib/cart';
+    import { onMount } from 'svelte';
 
-    export let class_ = '';
-    export { class_ as class };
-
-    // Reactive variables to track the current and previous paths
     $: currentPath = $page.url.pathname;
     let prevPath = '';
     let isRight = true;
 
-    // Subscribe to navigating store to track route changes
     navigating.subscribe((nav) => {
         if (nav) {
             prevPath = nav.from?.url.pathname || '';
@@ -22,11 +18,9 @@
         }
     });
 
-    // Variables for backdrop and computed color
     let backdrop: 'main' | 'associes' | 'vision' | undefined = undefined;
     let computedColor = '#000000';
 
-    // Function to determine the animation direction
     function determineDirection(prev: string, current: string): boolean {
         const routes = ['/', '/associes', '/vision'];
         const prevIndex = routes.indexOf(prev);
@@ -35,7 +29,6 @@
         return currentIndex <= prevIndex;
     }
 
-    // Update backdrop and computedColor based on currentPath
     $: {
         if (currentPath) {
             switch (currentPath) {
@@ -57,81 +50,127 @@
             }
         }
     }
+
+    let showGoBack = false;
+    const threshold = 180;
+    onMount(() => {
+        const handleScroll = () => {
+            showGoBack = window.scrollY > threshold;
+        };
+
+        window.addEventListener('scroll', handleScroll);
+        // run once in case the page is already scrolled
+        handleScroll();
+
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        };
+    });
 </script>
 
-<!--{#if currentPath === '/' || currentPath === '/vision' || currentPath === '/associes'}-->
+<div class="w-full flex justify-center">
     <div
-      class="backdrops"
-      class:backdrops--1={backdrop === 'main'}
-      class:backdrops--2={backdrop === 'associes'}
-      class:backdrops--3={backdrop === 'vision'}
+        class="mt-8 lg:w-[1136px] md:w-[680px] w-[358px] fixed flex justify-end gap-1 items-center"
+        style="z-index: 10000"
     >
-        <div
-          class="z-10 left-2/4 absolute translate-x-[-50%]
-      flex flex-col lg:h-[176px] items-center lg:w-[1136px] md:w-[680px] w-[358px] {class_}"
-          style="--dynamic-color: {computedColor}; color: var(--dynamic-color);"
-          in:fly={isRight ? { x: -200, duration: 1000, delay: 300 } : { x: 200, duration: 1000, delay: 300 }}
-          out:fly={isRight ? { x: 200, duration: 1000 } : { x: -200, duration: 1000 }}
-        >
-            <a href="/" class="h-[130px] w-[130px] flex items-center justify-center">
-                <Logo color={computedColor} />
+        {#if showGoBack}
+            <a
+                transition:fade
+                class="p-1 h-[24px] w-[24px] text-[0px] flex items-center justify-center rounded-full circle"
+                href="#logo"
+            >
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    xmlns:xlink="http://www.w3.org/1999/xlink"
+                    fill="#000000"
+                    height="800px"
+                    width="800px"
+                    version="1.1"
+                    id="Layer_1"
+                    viewBox="0 0 330 330"
+                    xml:space="preserve"
+                >
+                    <path
+                        id="XMLID_224_"
+                        d="M325.606,229.393l-150.004-150C172.79,76.58,168.974,75,164.996,75c-3.979,0-7.794,1.581-10.607,4.394  l-149.996,150c-5.858,5.858-5.858,15.355,0,21.213c5.857,5.857,15.355,5.858,21.213,0l139.39-139.393l139.397,139.393  C307.322,253.536,311.161,255,315,255c3.839,0,7.678-1.464,10.607-4.394C331.464,244.748,331.464,235.251,325.606,229.393z"
+                    />
+                </svg>
             </a>
+        {/if}
 
-            <div class="self-end absolute mt-8 flex gap-1 text-[10px] items-center">
+        <a class="h-[24px] w-[24px] text-[10px] flex items-center justify-center rounded-full circle" href="/cart">
+            {$totalItems}
+        </a>
+        <a class="h-[24px] w-[24px] flex items-center justify-center rounded-full p-1 circle" href="/products">
+            <IconSearch />
+        </a>
+    </div>
+</div>
+
+<div
+    class="backdrops"
+    class:backdrops--1={backdrop === 'main'}
+    class:backdrops--2={backdrop === 'associes'}
+    class:backdrops--3={backdrop === 'vision'}
+>
+    <div
+        class="absolute top-0 left-2/4 translate-x-[-50%] z-10
+
+      flex flex-col lg:h-[176px] items-center lg:w-[1136px] md:w-[680px] w-[358px]"
+        style="--dynamic-color: {computedColor}; color: var(--dynamic-color);"
+        in:fly={isRight ? { x: -200, duration: 1000, delay: 300 } : { x: 200, duration: 1000, delay: 300 }}
+        out:fly={isRight ? { x: 200, duration: 1000 } : { x: -200, duration: 1000 }}
+    >
+        <a id="logo" href="/" class="h-[130px] w-[130px] flex items-center justify-center">
+            <Logo color={computedColor} />
+        </a>
+        <div
+            class="sticky top-16 md:flex hidden uppercase items-center lg:h-[96px] h-auto flex-1 mt-[22px]"
+            style="--dynamic-color: {computedColor}; color: var(--dynamic-color);"
+        >
+            <div class="flex gap-[16px] lg:flex-row flex-col">
                 <a
-                  class="h-[24px] w-[24px] flex items-center justify-center rounded-full"
-                  style="border: 1px solid white; background-color: white; color: #000"
-                  href="/cart"
+                    class="header-links"
+                    style="color: var(--dynamic-color);"
+                    href="/associes"
+                    class:active={backdrop === 'associes'}
                 >
-                    {$cartStore?.length ?? 1}
+                    Associes
                 </a>
                 <a
-                  class="h-[24px] w-[24px] flex items-center justify-center rounded-full p-1"
-                  style="border: 1px solid white; background-color: white; color: #000"
-                  href="/products"
+                    class="header-links"
+                    style="color: var(--dynamic-color);"
+                    href="/vision"
+                    class:active={backdrop === 'vision'}
                 >
-                    <IconSearch />
+                    Vision
                 </a>
-            </div>
-
-            <div class="md:flex hidden uppercase items-center lg:h-[96px] h-auto flex-1 mt-[22px]">
-                <div class="flex gap-[16px] lg:flex-row flex-col">
-                    <a
-                      class="header-links"
-                      style="color: var(--dynamic-color);"
-                      href="/associes"
-                      class:active={backdrop === 'associes'}
-                    >
-                        Associes
-                    </a>
-                    <a
-                      class="header-links"
-                      style="color: var(--dynamic-color);"
-                      href="/vision"
-                      class:active={backdrop === 'vision'}
-                    >
-                        Vision
-                    </a>
-                    <a
-                      class="header-links"
-                      style="color: var(--dynamic-color);"
-                      href="/products"
-                      class:active={$page.url.pathname === '/products'}
-                    >
-                        Vins
-                    </a>
-                </div>
+                <a
+                    class="header-links"
+                    style="color: var(--dynamic-color);"
+                    href="/products"
+                    class:active={$page.url.pathname === '/products'}
+                >
+                    Vins
+                </a>
             </div>
         </div>
-
-        {#if backdrop }
-            <a href="/" class="backdrop backdrop--1" />
-            <a href="/associes" class="backdrop backdrop--2" />
-            <a href="/vision" class="backdrop backdrop--3" />
-        {/if}
     </div>
 
+    {#if backdrop}
+        <a href="/" class="backdrop backdrop--1" />
+        <a href="/associes" class="backdrop backdrop--2" />
+        <a href="/vision" class="backdrop backdrop--3" />
+    {/if}
+</div>
+
 <style lang="scss">
+    .circle {
+        border: 1px solid white;
+        background-color: white;
+        color: #000;
+    }
+
     .header-links {
         text-transform: capitalize;
         width: 176px;

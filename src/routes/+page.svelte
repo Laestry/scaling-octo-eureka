@@ -16,7 +16,9 @@
 
 <div class="flex flex-col items-center">
     <div class="flex flex-col min-h-[90vh] w-full lg:max-w-[1212px] px-[38px] md:max-w-[836px] max-w-[376px]">
-        <div class="justify-between md:flex-row flex-col-reverse flex md:mt-[134px] gap-[20px] my-[80px] md:mb-[137px]">
+        <div
+            class=" justify-between md:flex-row flex-col-reverse flex md:mt-[134px] gap-[20px] my-[80px] md:mb-[137px]"
+        >
             <div class="h3 description max-w-[844px] text-color1">
                 Lorem ipsum dolor sit amet consectetur. Leo justo enim et in. Aliquam at feugiat tortor purus quis eu
                 ultrices quis tincidunt. Tellus integer egestas lectus ac.
@@ -30,12 +32,10 @@
 
         <div class="title mb-[19px]">Nos vins</div>
         <div
-            class="card__row flex lg:gap-x-[16px] gap-x-[10px] md:gap-x-[11px] gap-y-[20px] lg:mb-[39px] mb-[20px] flex-wrap"
+            class="card__row items-start flex lg:gap-x-[16px] gap-x-[10px] md:gap-x-[11px] gap-y-[20px] lg:mb-[39px] mb-[20px] flex-wrap"
         >
             {#each products as product, i (product.id)}
-                <a href={'/product/' + product.slug}>
-                    <ProductCardNew {product} size={sizeSequence1[i % sizeSequence1.length]}></ProductCardNew>
-                </a>
+                <ProductCardNew {product} size={sizeSequence1[i % sizeSequence1.length]}></ProductCardNew>
             {/each}
         </div>
 
@@ -45,13 +45,11 @@
         </div>
 
         <div
-            class="card__row card__row--reverse flex lg:gap-x-[16px] gap-x-[10px] md:gap-x-[11px] gap-y-[20px] flex-wrap mb-[62px]"
+            class="card__row card__row--reverse items-start flex lg:gap-x-[16px] gap-x-[10px] md:gap-x-[11px] gap-y-[20px] flex-wrap mb-[62px]"
         >
             {#each products as product, i (product.id)}
                 {#if i < 4}
-                    <a href={'/product/' + product.slug}>
-                        <ProductCardNew {product} size={sizeSequence2[i % sizeSequence2.length]}></ProductCardNew>
-                    </a>
+                    <ProductCardNew {product} size={sizeSequence2[i % sizeSequence2.length]}></ProductCardNew>
                 {/if}
             {/each}
         </div>

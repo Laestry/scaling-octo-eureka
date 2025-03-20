@@ -1,3 +1,5 @@
+//we went away from shopify
+
 export interface PriceV2 {
     amount: string;
     currencyCode: string;
