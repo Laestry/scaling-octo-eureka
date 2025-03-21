@@ -47,8 +47,8 @@
     export let cartQuantity = 0;
 </script>
 
-<div class="product {size}">
-    {#if isMain}
+{#if isMain}
+    <div class="product {size}">
         <a href="/product/{product.slug}">
             <img class="bg-no-repeat object-cover bg-center img" src={img} alt="Wine" />
         </a>
@@ -89,75 +89,79 @@
                 {/each}
             </div>
         </div>
-    {:else if isCart}
-        <div transition:fade|global>
-            <button
-                class="flex justify-end"
-                on:click={() => {
-                    goto(`/product/${product.slug}`);
-                }}
-            >
-                <div class="absolute">
-                    <button
-                        class="rotate-45 text-5xl"
-                        style="line-height: 24px"
-                        on:click|preventDefault|stopPropagation={() => cart.removeCompletely(product.id)}
-                        >+
-                    </button>
+    </div>
+{:else if isCart}
+    <div class="cartProduct" transition:fade|global>
+        <button
+            class="flex justify-end"
+            on:click={() => {
+                goto(`/product/${product.slug}`);
+            }}
+        >
+            <div class="absolute">
+                <button
+                    class="rotate-45 text-5xl"
+                    style="line-height: 24px"
+                    on:click|preventDefault|stopPropagation={() => cart.removeCompletely(product.id)}
+                    >+
+                </button>
+            </div>
+            <img class="bg-no-repeat object-cover bg-center img mb-[7px]" src={img} alt="Wine" />
+        </button>
+        <a href="/product/{product.slug}" class="flex justify-between w-full">
+            <div class="flex flex-col w-full product-name" style="width: calc(100% - 100px)">
+                <div class="description">
+                    <div>{product.specificCategory ?? ''}</div>
                 </div>
-                <img class="bg-no-repeat object-cover bg-center img mb-[7px]" src={img} alt="Wine" />
-            </button>
-            <a href="/product/{product.slug}" class="flex justify-between w-full">
-                <div class="flex flex-col w-full product-name" style="width: calc(100% - 100px)">
-                    <div class="description">
-                        <div>{product.specificCategory ?? ''}</div>
-                    </div>
+            </div>
+            <div class="flex flex-col items-end">
+                <div class="product-price">
+                    {priceFormat(product)}
                 </div>
-                <div class="flex flex-col items-end">
-                    <div class="product-price">
-                        {priceFormat(product)}
-                    </div>
-                    <div class="product-price {product.uvc > 1 ? '' : 'text-transparent'}">
-                        {priceFormat(product, false)}
-                    </div>
+                <div class="product-price {product.uvc > 1 ? '' : 'text-transparent'}">
+                    {priceFormat(product, false)}
                 </div>
-            </a>
-            <a href="/product/{product.slug}" class="product-name text-start w-full" title="product.name">
-                <b>{product.name || '-'}</b>
-            </a>
+            </div>
+        </a>
+        <a href="/product/{product.slug}" class="product-name text-start w-full" title="product.name">
+            <b>{product.name || '-'}</b>
+        </a>
 
-            <div class="flex w-full justify-between">
-                <a href="/product/{product.slug}" class="w-full product-name">
-                    <div class="w-full flex">
-                        <div class="truncate" style="max-width: 170px">{product.providerName ?? ''}</div>
-                        <span>
-                            {#if product.providerName && product.vintage},
-                            {/if}
-                            {product.vintage ?? ''}
-                        </span>
+        <div class="flex w-full justify-between">
+            <a href="/product/{product.slug}" class="w-full product-name">
+                <div class="w-full flex">
+                    <div class="truncate lg:max-w-[170px] md:max-w-[89px] max-w-[59px]">
+                        {product.providerName ?? ''}
                     </div>
-                    <div class="product-name description">
-                        {product.uvc} <span class="lowercase">x</span>
-                        {product.lblFormat}
-                    </div>
-                </a>
-                <div class="flex items-center w-fit h-fit self-end">
-                    <p class="product-table-counter__value">{$itemQuantity * product.uvc}</p>
-                    <div class="flex flex-col justify-center items-center">
-                        <button class="" style="line-height: 16px" on:click={() => cart.add(product)}>+</button>
-                        <button
-                            class={$itemQuantity > 1 ? '' : 'text-gray-300'}
-                            style="line-height: 16px"
-                            on:click={() => {
-                                if ($itemQuantity > 1) cart.remove(product.id);
-                            }}
-                            >-
-                        </button>
-                    </div>
+                    <span>
+                        {#if product.providerName && product.vintage},
+                        {/if}
+                        {product.vintage ?? ''}
+                    </span>
+                </div>
+                <div class="product-name description">
+                    {product.uvc} <span class="lowercase">x</span>
+                    {product.lblFormat}
+                </div>
+            </a>
+            <div class="flex items-center w-fit h-fit self-end">
+                <p class="product-table-counter__value">{$itemQuantity * product.uvc}</p>
+                <div class="flex flex-col justify-center items-center">
+                    <button class="" style="line-height: 16px" on:click={() => cart.add(product)}>+</button>
+                    <button
+                        class={$itemQuantity > 1 ? '' : 'text-gray-300'}
+                        style="line-height: 16px"
+                        on:click={() => {
+                            if ($itemQuantity > 1) cart.remove(product.id);
+                        }}
+                        >-
+                    </button>
                 </div>
             </div>
         </div>
-    {:else}
+    </div>
+{:else}
+    <div class="product {size}">
         <a href="/product/{product.slug}">
             <img class="bg-no-repeat object-cover bg-center img mb-[7px]" src={img} alt="Wine" />
         </a>
@@ -212,8 +216,8 @@
                 {/each}
             </div>
         </div>
-    {/if}
-</div>
+    </div>
+{/if}
 
 <style lang="scss">
     .product-table__count {
@@ -245,6 +249,17 @@
         background: #2d63b0;
         width: 46px;
         height: 24px;
+
+        @media (max-width: 1119px) {
+            font-size: 14px;
+            width: 40px;
+            height: 18px;
+        }
+        @media (max-width: 767px) {
+            font-size: 12px;
+            width: 38px;
+            height: 16px;
+        }
     }
 
     .product {
@@ -348,6 +363,66 @@
                     width: 196px;
                     height: 262px;
                 }
+            }
+        }
+
+        .product-name {
+            font-family: 'Riposte', sans-serif;
+            font-size: 12px;
+            font-style: normal;
+            font-weight: 400;
+            line-height: 150%; /* 18px */
+            text-transform: capitalize;
+
+            b {
+                font-weight: 700;
+            }
+
+            @media (max-width: 1119px) {
+                font-size: 11px;
+            }
+        }
+
+        .product-price {
+            font-family: 'Riposte', sans-serif;
+            font-size: 14px;
+            font-style: normal;
+            font-weight: 700;
+            line-height: 150%; /* 18px */
+            text-transform: capitalize;
+
+            @media (max-width: 1119px) {
+                font-size: 11px;
+            }
+        }
+    }
+
+    .cartProduct {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+        width: 272px;
+        @media (max-width: 1119px) {
+            width: 181px;
+            height: 350px;
+        }
+        @media (max-width: 767px) {
+            width: 145px;
+            height: auto;
+        }
+
+        .img {
+            width: 272px;
+            height: 376px;
+            @media (max-width: 1119px) {
+                width: 181px;
+                height: 241px;
+            }
+            @media (max-width: 767px) {
+                width: 145px;
+                height: 193px;
             }
         }
 

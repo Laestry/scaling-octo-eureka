@@ -5,11 +5,8 @@
     async function createCheckout() {
         // Build checkout items from the cart store
         const items = $cart.map((item) => ({
-            variantId: item.variantId,
             quantity: item.quantity
         }));
-
-        console.log('items', items);
 
         const response = await fetch('/api/createCart', {
             method: 'POST',
@@ -29,11 +26,9 @@
 
 <div class="mt-[40px] flex flex-col">
     <div class="px-[98px] pt-[48px] flex flex-wrap gap-3">
-        {#each $cart as item, i}
+        {#each $cart as item (item.id)}
             <div transition:fade>
-                {#if i + 1 < $cart.length}
-                    <ProductCard product={item} isCart size="m" />
-                {/if}
+                <ProductCard product={item} isCart size="m" />
             </div>
         {/each}
     </div>
