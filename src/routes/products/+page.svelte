@@ -3,7 +3,6 @@
     import ProductList from './ProductList.svelte';
     import Filters from './Filters/Filters.svelte';
     import type { PageData } from './$types';
-    import FavoriteButton from '$lib/components/FavoriteButton.svelte';
 
     export let data: PageData;
 

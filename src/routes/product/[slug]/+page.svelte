@@ -122,9 +122,9 @@
                             <button class="product-table__button product-table__button--favorite">
                                 Liste d’attente
                             </button>
-                            <button class="product-table__button" on:click={() => cart.add(product, in_cart)}
-                                >Ajouter au panier</button
-                            >
+                            <button class="product-table__button" on:click={() => cart.add(product, in_cart)}>
+                                Ajouter au panier
+                            </button>
                         </div>
                         <p class="absolute text-[16px] bg-[#F6F1F2] text-[#DE6643] bottom-[-12px] pr-1">*</p>
                     </div>

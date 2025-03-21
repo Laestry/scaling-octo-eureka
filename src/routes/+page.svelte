@@ -1,6 +1,6 @@
 <script lang="ts">
     import type { PageData } from './$types';
-    import ProductCardNew from './products/ProductCardNew.svelte';
+    import ProductCard from './products/ProductCard.svelte';
 
     export let data: PageData;
     $: console.log('data', data);
@@ -35,7 +35,7 @@
             class="card__row items-start flex lg:gap-x-[16px] gap-x-[10px] md:gap-x-[11px] gap-y-[20px] lg:mb-[39px] mb-[20px] flex-wrap"
         >
             {#each products as product, i (product.id)}
-                <ProductCardNew {product} size={sizeSequence1[i % sizeSequence1.length]}></ProductCardNew>
+                <ProductCard {product} size={sizeSequence1[i % sizeSequence1.length]} main={true} />
             {/each}
         </div>
 
@@ -49,12 +49,12 @@
         >
             {#each products as product, i (product.id)}
                 {#if i < 4}
-                    <ProductCardNew {product} size={sizeSequence2[i % sizeSequence2.length]}></ProductCardNew>
+                    <ProductCard {product} size={sizeSequence2[i % sizeSequence2.length]} main={true} />
                 {/if}
             {/each}
         </div>
         <!--
-        <a href="/products" class="main-page-button self-end">
+        <a href="/products" class="isMain-page-button self-end">
             Encore plus <span class="text-color5">+</span>
         </a> -->
     </div>

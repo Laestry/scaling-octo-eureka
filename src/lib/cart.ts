@@ -10,6 +10,7 @@ type Cart = CartProduct[];
 type CartStore = Writable<Cart> & {
     add: (item: AlcoholProduct, amount?: number) => void;
     remove: (itemId: string) => void;
+    removeCompletely: (itemId: string) => void;
     clear: () => void;
 };
 
@@ -69,6 +70,10 @@ export function createCart(): CartStore {
                     return cart.filter((_, i) => i !== index);
                 }
             });
+        },
+        // New function to remove a product completely regardless of quantity
+        removeCompletely: (itemId: string) => {
+            cartStore.update((cart) => cart.filter((item) => item.id !== itemId));
         },
         clear: () => {
             cartStore.set([]);

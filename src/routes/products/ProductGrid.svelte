@@ -1,15 +1,14 @@
 <script lang="ts">
-    import ProductCardNew from './ProductCardNew.svelte';
-    import type { Product } from '$lib/server/prisma';
+    import ProductCard from './ProductCard.svelte';
     import { fade } from 'svelte/transition';
 
-    export let products: Product[];
+    export let products: any[];
 </script>
 
 <div class={$$props.class}>
     <div in:fade class="products-grid">
         {#each products as product (product.id)}
-            <ProductCardNew main={false} {product} size="v" />
+            <ProductCard {product} size="v" />
         {/each}
     </div>
 </div>

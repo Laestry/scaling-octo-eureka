@@ -1,83 +1,384 @@
 <script lang="ts">
-    import Tag from './Tag.svelte';
-    import type { ProductNode, VariantNode } from '$lib/models/shopifyTypes';
-    import { getNumberFromId } from '$lib/utils.js';
+    import { priceFormat } from '../product/[slug]/utils';
+    import { cart, getItemQuantityStore } from '$lib/cart';
+    import { fly } from 'svelte/transition';
+    import { goto } from '$app/navigation';
+    import { fade } from 'svelte/transition';
+    export let product;
+    export let size: 's' | 'm' | 'l' | 'v' = 's';
+    export let isMain = false;
+    export let isCart = false;
 
-    export let product: ProductNode;
+    const images = new Array(8).fill('').map((_, i) => `/images/example_wines/${i + 1}.jpg`);
+    function getRandomNumber() {
+        const n1 = parseInt(product.sku);
+        if (!Number.isNaN(n1)) {
+            return n1;
+        }
+        const n2 = product.external_id.split('').find((x) => !Number.isNaN(parseInt(x))) || '0';
+        return parseInt(n2);
+    }
+    function getImage() {
+        const n = getRandomNumber();
+        const i = n % images.length;
+        return images[i]!;
+    }
+    let img = '';
+    $: {
+        product;
+        img = getImage();
+    }
 
-    // Assuming the first variant is the bottle and the second variant is the case
-    const bottleVariant: VariantNode | undefined = product.variants.edges[0]?.node;
-    const caseVariant: VariantNode | undefined = product.variants.edges[1]?.node;
+    const itemQuantity = getItemQuantityStore(product.id);
+    let animations: { id: number }[] = [];
 
-    const bottlePrice: number = bottleVariant ? bottleVariant.priceV2.amount : 'N/A';
+    function handleAdd() {
+        // Add the product to the cart
+        cart.add(product);
+        // Create a new animation instance with a unique id (using timestamp)
+        const id = Date.now();
+        animations = [...animations, { id }];
+        // Remove the animation after the duration of the transition (e.g., 600ms)
+        setTimeout(() => {
+            animations = animations.filter((anim) => anim.id !== id);
+        }, 600);
+    }
 
-    console.log(product);
+    export let cartQuantity = 0;
 </script>
 
-<a href="/products/{getNumberFromId(product.id)}">
-    <div class="w-full">
-        <img
-            src={product.images.edges[0]?.node.originalSrc || '/defaultImages/product-image.png'}
-            alt="product"
-            class="lg:h-[376px] md:h-[240px] h-[193px] mb-[4px] w-full bg-no-repeat object-cover"
-            style="object-fit: cover;"
-        />
-        <div class="flex flex-col pt-3 gap-3">
-            <div class="flex md:flex-row md:gap-0 gap-3 flex-col justify-between">
-                <p class="type">Type de vin</p>
-                <div class="flex flex-col">
-                    <p class="price md:text-right">{parseInt(bottlePrice / 6) ?? 'N/A'} $ / B</p>
-                    <p class="price md:text-right">{parseInt(bottlePrice) ?? 'N/A'} $ / C</p>
+<div class="product {size}">
+    {#if isMain}
+        <a href="/product/{product.slug}">
+            <img class="bg-no-repeat object-cover bg-center img" src={img} alt="Wine" />
+        </a>
+        <div class="flex justify-between mt-[7px] w-full">
+            <a
+                href="/product/{product.slug}"
+                class="flex flex-col uppercase w-full product-name"
+                style="width: calc(100% - 100px)"
+            >
+                <b>{product.name || '-'}</b>
+                <div class="description">
+                    <div class=" w-full {product.vintage ? '' : 'text-transparent'}">
+                        {product.providerName ?? ''}{#if product.vintage}, &nbsp;{product.vintage}
+                        {/if}
+                    </div>
                 </div>
+            </a>
+
+            <div class="flex flex-col items-end" style="position: relative; overflow: visible;">
+                <div class="product-price">
+                    {priceFormat(product, false, { none: true })}
+                </div>
+                <button
+                    class="text-color5 text-sm font-bold cursor-cell whitespace-nowrap"
+                    on:click|preventDefault|stopPropagation={handleAdd}
+                >
+                    ADD +
+                </button>
+                {#each animations as anim (anim.id)}
+                    <div
+                        class="fly-animation"
+                        in:fly={{ y: 25, duration: 600 }}
+                        out:fly={{ y: -30, duration: 600 }}
+                        style="position: absolute; left: 50%; top: -20px; transform: translateX(-50%); pointer-events: none; z-index: 10;"
+                    >
+                        {$itemQuantity > 0 ? $itemQuantity : ''}
+                    </div>
+                {/each}
             </div>
-            <div class="flex flex-col">
-                <p class="type">
-                    <b class="font-bold">{product.title ?? 'N/A'}</b>
-                    <br />
-                    {product?.varietal?.value ?? 'N/A'}, {product?.region?.value ?? 'N/A'},
-                    <br />
-                </p>
-                <div class="flex justify-between">
-                    <p class="type">6 x {product?.ml?.value ?? 'N/A'}</p>
-                    <button class="add-cart"> ADD + </button>
+        </div>
+    {:else if isCart}
+        <div transition:fade|global>
+            <button
+                class="flex justify-end"
+                on:click={() => {
+                    goto(`/product/${product.slug}`);
+                }}
+            >
+                <div class="absolute">
+                    <button
+                        class="rotate-45 text-5xl"
+                        style="line-height: 24px"
+                        on:click|preventDefault|stopPropagation={() => cart.removeCompletely(product.id)}
+                        >+
+                    </button>
+                </div>
+                <img class="bg-no-repeat object-cover bg-center img mb-[7px]" src={img} alt="Wine" />
+            </button>
+            <a href="/product/{product.slug}" class="flex justify-between w-full">
+                <div class="flex flex-col w-full product-name" style="width: calc(100% - 100px)">
+                    <div class="description">
+                        <div>{product.specificCategory ?? ''}</div>
+                    </div>
+                </div>
+                <div class="flex flex-col items-end">
+                    <div class="product-price">
+                        {priceFormat(product)}
+                    </div>
+                    <div class="product-price {product.uvc > 1 ? '' : 'text-transparent'}">
+                        {priceFormat(product, false)}
+                    </div>
+                </div>
+            </a>
+            <a href="/product/{product.slug}" class="product-name text-start w-full" title="product.name">
+                <b>{product.name || '-'}</b>
+            </a>
+
+            <div class="flex w-full justify-between">
+                <a href="/product/{product.slug}" class="w-full product-name">
+                    <div class="w-full flex">
+                        <div class="truncate" style="max-width: 170px">{product.providerName ?? ''}</div>
+                        <span>
+                            {#if product.providerName && product.vintage},
+                            {/if}
+                            {product.vintage ?? ''}
+                        </span>
+                    </div>
+                    <div class="product-name description">
+                        {product.uvc} <span class="lowercase">x</span>
+                        {product.lblFormat}
+                    </div>
+                </a>
+                <div class="flex items-center w-fit h-fit self-end">
+                    <p class="product-table-counter__value">{$itemQuantity * product.uvc}</p>
+                    <div class="flex flex-col justify-center items-center">
+                        <button class="" style="line-height: 16px" on:click={() => cart.add(product)}>+</button>
+                        <button
+                            class={$itemQuantity > 1 ? '' : 'text-gray-300'}
+                            style="line-height: 16px"
+                            on:click={() => {
+                                if ($itemQuantity > 1) cart.remove(product.id);
+                            }}
+                            >-
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
-        <!-- <div class="border-y-2 px-[16px] py-[8px]">
-            <div class="t1">{product.title}</div>
-            <div class="flex flex-wrap justify-between gap-y-[14px] mt-[12px]">
-                <Tag>{product?.producer?.value ?? 'N/A'}</Tag>
-                <Tag>{product?.color?.value ?? 'N/A'}</Tag>
-                <Tag>{product?.ml?.value ?? 'N/A'}ml</Tag>
-                <div class="flex justify-between w-full">
-                    <Tag>{Math.trunc(bottlePrice)} CAD/Btl.</Tag>
-                    <Tag>{Math.trunc(bottlePrice * 6)} CAD/Caisse</Tag>
+    {:else}
+        <a href="/product/{product.slug}">
+            <img class="bg-no-repeat object-cover bg-center img mb-[7px]" src={img} alt="Wine" />
+        </a>
+        <a href="/product/{product.slug}" class="flex justify-between w-full">
+            <div class="flex flex-col w-full product-name" style="width: calc(100% - 100px)">
+                <div class="description">
+                    <div>{product.specificCategory ?? ''}</div>
                 </div>
             </div>
-        </div> -->
-    </div>
-</a>
+            <div class="flex flex-col items-end">
+                <div class="product-price">
+                    {priceFormat(product)}
+                </div>
+                <div class="product-price {product.uvc > 1 ? '' : 'text-transparent'}">
+                    {priceFormat(product, false)}
+                </div>
+            </div>
+        </a>
+        <a href="/product/{product.slug}" class="flex flex-col items-start justify-start w-full product-name">
+            <b>{product.name || '-'}</b>
+            <div class="w-full flex">
+                <div class="truncate" style="max-width: calc(100% - 37px)">{product.providerName ?? ''}</div>
+                <span>
+                    {#if product.providerName && product.vintage},
+                    {/if}
+                    {product.vintage ?? ''}
+                </span>
+            </div>
+        </a>
+        <div class="flex justify-between items-end w-full">
+            <a href="/product/{product.slug}" class="product-name description">
+                {product.uvc} <span class="lowercase">x</span>
+                {product.lblFormat}
+            </a>
 
-<style land="scss">
-    .add-cart {
-        font-size: 11px;
-        color: #3777bc;
-        text-align: right;
-        font-weight: 700;
-    }
-    .price {
-        color: #1e1e1e;
-        font-size: 12px;
-        font-style: normal;
-        font-weight: 700;
-        line-height: 150%; /* 18px */
-        text-transform: capitalize;
-    }
-    .type {
+            <div class="flex flex-col items-end" style="position: relative; overflow: visible;">
+                <button
+                    class="text-color5 text-sm font-bold cursor-cell whitespace-nowrap"
+                    on:click|preventDefault|stopPropagation={handleAdd}
+                >
+                    ADD +
+                </button>
+                {#each animations as anim (anim.id)}
+                    <div
+                        class="fly-animation"
+                        in:fly={{ y: 25, duration: 600 }}
+                        out:fly={{ y: -30, duration: 600 }}
+                        style="position: absolute; left: 50%; top: -20px; transform: translateX(-50%); pointer-events: none; z-index: 10;"
+                    >
+                        {$itemQuantity > 0 ? $itemQuantity : ''}
+                    </div>
+                {/each}
+            </div>
+        </div>
+    {/if}
+</div>
+
+<style lang="scss">
+    .product-table__count {
         color: #1e1e1e;
         font-family: 'Riposte';
-        font-size: 12px;
+        font-size: 16px;
         font-style: normal;
-        line-height: 150%; /* 18px */
+        font-weight: 400;
+        line-height: 120%; /* 19.2px */
+    }
+    .product-table-counter {
+        //margin-top: 14px;
+        display: flex;
+        gap: 5px;
+        align-items: center;
+    }
+    .product-table-counter__value {
+        color: #f6f1f2;
+        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: 'Riposte';
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 120%; /* 19.2px */
+        border-radius: 12px;
+        background: #2d63b0;
+        width: 46px;
+        height: 24px;
+    }
+
+    .product {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+        &.s {
+            max-width: 176px;
+            @media (max-width: 1119px) {
+                width: 118px;
+                height: 224px;
+            }
+            @media (max-width: 767px) {
+                width: 94px;
+                height: auto;
+            }
+
+            .img {
+                width: 176px;
+                height: 243px;
+                @media (max-width: 1119px) {
+                    width: 118px;
+                    height: 156px;
+                }
+                @media (max-width: 767px) {
+                    width: 94px;
+                    height: 125px;
+                }
+            }
+        }
+        &.m {
+            width: 272px;
+            @media (max-width: 1119px) {
+                width: 181px;
+                height: 283px;
+            }
+            @media (max-width: 767px) {
+                width: 145px;
+                height: auto;
+            }
+
+            .img {
+                width: 272px;
+                height: 376px;
+                @media (max-width: 1119px) {
+                    width: 181px;
+                    height: 241px;
+                }
+                @media (max-width: 767px) {
+                    width: 145px;
+                    height: 193px;
+                }
+            }
+        }
+        &.l {
+            width: 368px;
+            @media (max-width: 1119px) {
+                width: 245px;
+                height: 370px;
+            }
+            @media (max-width: 767px) {
+                width: 196px;
+                height: auto;
+            }
+
+            .img {
+                width: 368px;
+                height: 505px;
+                @media (max-width: 1119px) {
+                    width: 245px;
+                    height: 328px;
+                }
+                @media (max-width: 767px) {
+                    width: 196px;
+                    height: 262px;
+                }
+            }
+        }
+        &.v {
+            width: 272px;
+            height: 486px;
+            @media (max-width: 1136px) {
+                width: 181px;
+                height: 354px;
+            }
+            @media (max-width: 760px) {
+                width: 196px;
+                height: auto;
+            }
+
+            .img {
+                width: 368px;
+                height: 362px;
+                @media (max-width: 1136px) {
+                    width: 245px;
+                    height: 328px;
+                }
+                @media (max-width: 760px) {
+                    width: 196px;
+                    height: 262px;
+                }
+            }
+        }
+
+        .product-name {
+            font-family: 'Riposte', sans-serif;
+            font-size: 12px;
+            font-style: normal;
+            font-weight: 400;
+            line-height: 150%; /* 18px */
+            text-transform: capitalize;
+
+            b {
+                font-weight: 700;
+            }
+
+            @media (max-width: 1119px) {
+                font-size: 11px;
+            }
+        }
+
+        .product-price {
+            font-family: 'Riposte', sans-serif;
+            font-size: 14px;
+            font-style: normal;
+            font-weight: 700;
+            line-height: 150%; /* 18px */
+            text-transform: capitalize;
+
+            @media (max-width: 1119px) {
+                font-size: 11px;
+            }
+        }
     }
 </style>
