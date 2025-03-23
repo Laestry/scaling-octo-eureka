@@ -1,0 +1,1401 @@
+[
+  {
+    "id": "vs2__option-0",
+    "role": "option",
+    "ariaSelected": "true",
+    "class": "vs__dropdown-option vs__dropdown-option--highlight",
+    "text": "Acton Vale - 1530, rue d'Acton"
+  },
+  {
+    "id": "vs2__option-1",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Alma - 455, rue Sacré-Cœur Ouest"
+  },
+  {
+    "id": "vs2__option-2",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Alma - 555, avenue du Pont Nord"
+  },
+  {
+    "id": "vs2__option-3",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Amos - 284, 1ère avenue"
+  },
+  {
+    "id": "vs2__option-4",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Amqui - 30, boulevard St-Benoît Est"
+  },
+  {
+    "id": "vs2__option-5",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Asbestos - 566, 1ère avenue"
+  },
+  {
+    "id": "vs2__option-6",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Baie Comeau - 300, boul. Lasalle"
+  },
+  {
+    "id": "vs2__option-7",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Baie D'urfé - 90, boul. Morgan"
+  },
+  {
+    "id": "vs2__option-8",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Baie St-Paul - 1020, boul. Mgr-De-Laval, local 11"
+  },
+  {
+    "id": "vs2__option-9",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Baie-Comeau - 1490, rue de Bretagne"
+  },
+  {
+    "id": "vs2__option-10",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Beaconsfield - 110, Beaurepaire Dr"
+  },
+  {
+    "id": "vs2__option-11",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Beauceville - 630C, boulevard Renault"
+  },
+  {
+    "id": "vs2__option-12",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Bécancour - 3687, boulevard Bécancour"
+  },
+  {
+    "id": "vs2__option-13",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Beloeil - 560, boulevard Sir-Wilfrid-Laurier"
+  },
+  {
+    "id": "vs2__option-14",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Berthierville - 786, avenue Gilles-Villeneuve"
+  },
+  {
+    "id": "vs2__option-15",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Blainville - 259, boul. de la Seigneurie Ouest"
+  },
+  {
+    "id": "vs2__option-16",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Boisbriand - 2735, rue d'Annemasse"
+  },
+  {
+    "id": "vs2__option-17",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Bonaventure - 101, avenue Port-Royal"
+  },
+  {
+    "id": "vs2__option-18",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Boucherville - 525, rue d'Avaugour"
+  },
+  {
+    "id": "vs2__option-19",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Bromont - 89, boul. de Bromont"
+  },
+  {
+    "id": "vs2__option-20",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Brossard - 5700, boul. Taschereau"
+  },
+  {
+    "id": "vs2__option-21",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Brossard - 8300, boul. Taschereau"
+  },
+  {
+    "id": "vs2__option-22",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Candiac - 220, rue de Strasbourg"
+  },
+  {
+    "id": "vs2__option-23",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Carleton - 561-B, boul. Perron"
+  },
+  {
+    "id": "vs2__option-24",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Chambly - 1285, boul. de Périgny"
+  },
+  {
+    "id": "vs2__option-25",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Chandler - 500, avenue Daigneau"
+  },
+  {
+    "id": "vs2__option-26",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Châteauguay - 88, boul. d'Anjou"
+  },
+  {
+    "id": "vs2__option-27",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Chelsea - 1707, route 105"
+  },
+  {
+    "id": "vs2__option-28",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Chibougamau - 466, 3ème rue"
+  },
+  {
+    "id": "vs2__option-29",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Chicoutimi - 1075, boul. Talbot"
+  },
+  {
+    "id": "vs2__option-30",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Chicoutimi - 2183, rue Roussel"
+  },
+  {
+    "id": "vs2__option-31",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Chicoutimi - 436 boulevard du Royaume Ouest - L'Axe"
+  },
+  {
+    "id": "vs2__option-32",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Coaticook - 235, rue Child"
+  },
+  {
+    "id": "vs2__option-33",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Cowansville - 1787, rue du Sud"
+  },
+  {
+    "id": "vs2__option-34",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Dégelis - 607, avenue Principale"
+  },
+  {
+    "id": "vs2__option-35",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Delson - 41, boul. Georges-Gagné Sud, suite 101"
+  },
+  {
+    "id": "vs2__option-36",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Disraeli - 923, avenue Champlain - C.P. 5005"
+  },
+  {
+    "id": "vs2__option-37",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Dolbeau-Mistassini - 1720, boul. Wallberg"
+  },
+  {
+    "id": "vs2__option-38",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Dollard-des-Ormeaux - 42, boulevard Brunswick"
+  },
+  {
+    "id": "vs2__option-39",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Donnacona - 483, route 138"
+  },
+  {
+    "id": "vs2__option-40",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Dorval - 875, avenue Carson"
+  },
+  {
+    "id": "vs2__option-41",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Drummondville - 500, rue des Forges"
+  },
+  {
+    "id": "vs2__option-42",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Drummondville - 695, boulevard Saint-Joseph"
+  },
+  {
+    "id": "vs2__option-43",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Farnham - 201, rue Principale Est, local 101"
+  },
+  {
+    "id": "vs2__option-44",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Fermont - 299, rue Le Carrefour, local 6A"
+  },
+  {
+    "id": "vs2__option-45",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Forestville - 25, route 138 Est"
+  },
+  {
+    "id": "vs2__option-46",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Gaspé - 184, montée de Wakeham"
+  },
+  {
+    "id": "vs2__option-47",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Gaspé - 50, rue Blouin"
+  },
+  {
+    "id": "vs2__option-48",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Gatineau - 948, boul. Maloney Ouest"
+  },
+  {
+    "id": "vs2__option-49",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Gatineau - 31, boul. du Plateau"
+  },
+  {
+    "id": "vs2__option-50",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Gatineau - 186, avenue Lépine"
+  },
+  {
+    "id": "vs2__option-51",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Gatineau - 141, promenade du Portage"
+  },
+  {
+    "id": "vs2__option-52",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Gatineau - 381, boulevard Maloney"
+  },
+  {
+    "id": "vs2__option-53",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Gatineau - 25, chemin de la Savane"
+  },
+  {
+    "id": "vs2__option-54",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Gracefield - 25, rue Principale"
+  },
+  {
+    "id": "vs2__option-55",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Granby - 74, rue St-Jude Nord"
+  },
+  {
+    "id": "vs2__option-56",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Grande-Vallée - 5, rue St-François-Xavier Ouest"
+  },
+  {
+    "id": "vs2__option-57",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Grenville - 26, rue Maple"
+  },
+  {
+    "id": "vs2__option-58",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Havre-Saint-Pierre - 1327, rue de la Digue"
+  },
+  {
+    "id": "vs2__option-59",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Hemmingford - 501, avenue Champlain"
+  },
+  {
+    "id": "vs2__option-60",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Hull - 705, boul. de la Carrière"
+  },
+  {
+    "id": "vs2__option-61",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Huntingdon - 2195, chemin Ridge"
+  },
+  {
+    "id": "vs2__option-62",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Ile des Sœurs - 44, place du Commerce"
+  },
+  {
+    "id": "vs2__option-63",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Iles de la Madeleine - 525, chemin Principal, Cap-Aux-Meules"
+  },
+  {
+    "id": "vs2__option-64",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Joliette - 975, boul. Firestone"
+  },
+  {
+    "id": "vs2__option-65",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Joliette - 598, Rue Notre-Dame"
+  },
+  {
+    "id": "vs2__option-66",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Jonquière - 2311, rue Saint-Hubert"
+  },
+  {
+    "id": "vs2__option-67",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Kirkland - 2955, boul. St-Charles"
+  },
+  {
+    "id": "vs2__option-68",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "L'Assomption - 800, montée Saint-Sulpice"
+  },
+  {
+    "id": "vs2__option-69",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "La Baie - 2100, rue Bagot"
+  },
+  {
+    "id": "vs2__option-70",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "La Guadeloupe - 394, 14ème rue"
+  },
+  {
+    "id": "vs2__option-71",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "La Malbaie - 375, boul. de Comporté, local 142"
+  },
+  {
+    "id": "vs2__option-72",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "La Sarre - 77, 2ème rue Est"
+  },
+  {
+    "id": "vs2__option-73",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "La Tuque - 1200, boul. Ducharme"
+  },
+  {
+    "id": "vs2__option-74",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Lac-Brome - 460, chemin de Knowlton"
+  },
+  {
+    "id": "vs2__option-75",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Lac-Etchemin - 1556, route 277"
+  },
+  {
+    "id": "vs2__option-76",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Lac-Mégantic - 5950 rue Papineau"
+  },
+  {
+    "id": "vs2__option-77",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Lachute - 503, chemin Béthany"
+  },
+  {
+    "id": "vs2__option-78",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Lacolle - 60, route 202"
+  },
+  {
+    "id": "vs2__option-79",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "LaSalle - 2500, boul. Angrignon"
+  },
+  {
+    "id": "vs2__option-80",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Laurier-Station - 120, boulevard Laurier"
+  },
+  {
+    "id": "vs2__option-81",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Laval - 250, promenade du Centropolis"
+  },
+  {
+    "id": "vs2__option-82",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Laval - 1096, Autoroute Chomedey"
+  },
+  {
+    "id": "vs2__option-83",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Lavaltrie - 89-B chemin de Lavaltrie"
+  },
+  {
+    "id": "vs2__option-84",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Lévis - 1345, route des Rivières"
+  },
+  {
+    "id": "vs2__option-85",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Lévis - 50, route du Président Kennedy"
+  },
+  {
+    "id": "vs2__option-86",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Lévis - 1056, Guillaume-Couture"
+  },
+  {
+    "id": "vs2__option-87",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Lévis - 3011, route Lagueux"
+  },
+  {
+    "id": "vs2__option-88",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Longueuil - 2915, chemin de Chambly"
+  },
+  {
+    "id": "vs2__option-89",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Magog - 987, rue Principale Ouest"
+  },
+  {
+    "id": "vs2__option-90",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Maniwaki - 100, rue Principale Sud"
+  },
+  {
+    "id": "vs2__option-91",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Marieville - 124, rue Ouellette"
+  },
+  {
+    "id": "vs2__option-92",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Mascouche - 845, Montée Masson"
+  },
+  {
+    "id": "vs2__option-93",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Matane - 750, avenue du Phare Ouest"
+  },
+  {
+    "id": "vs2__option-94",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Métabetchouan - 13A, avenue Villeneuve"
+  },
+  {
+    "id": "vs2__option-95",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Mont-Joli - 1760, boul. Gaboury"
+  },
+  {
+    "id": "vs2__option-96",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Mont-Laurier - 1015, boul. Albiny-Paquette"
+  },
+  {
+    "id": "vs2__option-97",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Mont-Tremblant - 1122, rue de Saint-Jovite"
+  },
+  {
+    "id": "vs2__option-98",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Montmagny - 84, boul. Taché Ouest"
+  },
+  {
+    "id": "vs2__option-99",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Montréal - 4008, rue Saint-Denis"
+  },
+  {
+    "id": "vs2__option-100",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Montréal - 7999, boul. des Galeries d'Anjou"
+  },
+  {
+    "id": "vs2__option-101",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Montréal - 7077, Casgrain"
+  },
+  {
+    "id": "vs2__option-102",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Montréal - 390, avenue Laurier"
+  },
+  {
+    "id": "vs2__option-103",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Montréal - 900, rue Beaubien"
+  },
+  {
+    "id": "vs2__option-104",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Montréal - 4833, rue Sherbrooke Ouest"
+  },
+  {
+    "id": "vs2__option-105",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Montréal - 12653, rue Sherbrooke Est"
+  },
+  {
+    "id": "vs2__option-106",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Montréal - 440, boul. de Maisonneuve Ouest"
+  },
+  {
+    "id": "vs2__option-107",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Montréal - 7550, rue Sherbrooke Est"
+  },
+  {
+    "id": "vs2__option-108",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Montréal - 4125, rue André-Laurendeau"
+  },
+  {
+    "id": "vs2__option-109",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Montréal - 8405, rue Papineau"
+  },
+  {
+    "id": "vs2__option-110",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Montréal - 6630, rue Saint-Jacques"
+  },
+  {
+    "id": "vs2__option-111",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Montréal - 4355, rue Jean-Talon Est"
+  },
+  {
+    "id": "vs2__option-112",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Montréal - 1947, des Futailles"
+  },
+  {
+    "id": "vs2__option-113",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Montréal - 450, boulevard Henri-Bourassa Ouest"
+  },
+  {
+    "id": "vs2__option-114",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Montréal - 1450, de la Montagne"
+  },
+  {
+    "id": "vs2__option-115",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Montréal - 5252, chemin de la Côte-des-Neiges"
+  },
+  {
+    "id": "vs2__option-116",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Montréal - 7205, boulevard Viau"
+  },
+  {
+    "id": "vs2__option-117",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Montréal - 6265, avenue Somerled"
+  },
+  {
+    "id": "vs2__option-118",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Montréal - 55, Mont-Royal Ouest"
+  },
+  {
+    "id": "vs2__option-119",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Montréal - 231, rue Peel"
+  },
+  {
+    "id": "vs2__option-120",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Montréal - 4355, rue Jean-Talon Est"
+  },
+  {
+    "id": "vs2__option-121",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Montréal-Nord - 6186, boul. Henri-Bourassa Est"
+  },
+  {
+    "id": "vs2__option-122",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "n Hudson - 352, rue Mai"
+  },
+  {
+    "id": "vs2__option-123",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "New Richmond - 124, boulevard Perron Ouest"
+  },
+  {
+    "id": "vs2__option-124",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Nicolet - 2000 boul. Louis Fréchette, Local 220"
+  },
+  {
+    "id": "vs2__option-125",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Ormstown - 4, rue Bridge"
+  },
+  {
+    "id": "vs2__option-126",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Papineauville - 146-A, rue Papineau"
+  },
+  {
+    "id": "vs2__option-127",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Paspébiac - 113, boulevard Gérard-D. Lévesque Ouest"
+  },
+  {
+    "id": "vs2__option-128",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Percé - 155, Route 132 Ouest"
+  },
+  {
+    "id": "vs2__option-129",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Pierrefonds - 4777, boul. Saint-Jean"
+  },
+  {
+    "id": "vs2__option-130",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Plessisville - 1971, rue Bilodeau"
+  },
+  {
+    "id": "vs2__option-131",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Pointe-à-la-croix - 22, rue Sarto"
+  },
+  {
+    "id": "vs2__option-132",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Pont-Rouge - 2, rue du Collège"
+  },
+  {
+    "id": "vs2__option-133",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Port-Cartier - 8, boulevard des Îles"
+  },
+  {
+    "id": "vs2__option-134",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Québec - 1059, avenue Cartier"
+  },
+  {
+    "id": "vs2__option-135",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Québec - 400, boul. Jean Lesage, bureau 057"
+  },
+  {
+    "id": "vs2__option-136",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Québec - 2060, rue Blanche Lamontagne"
+  },
+  {
+    "id": "vs2__option-137",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Québec - 2828, boulevard Laurier"
+  },
+  {
+    "id": "vs2__option-138",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Québec - 1065, boulevard Pie XI Nord"
+  },
+  {
+    "id": "vs2__option-139",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Québec - 853, rue St-Jean"
+  },
+  {
+    "id": "vs2__option-140",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Québec - 1103, boulevard de la Chaudière"
+  },
+  {
+    "id": "vs2__option-141",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Québec - 5751, boulevard des Galeries"
+  },
+  {
+    "id": "vs2__option-142",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Québec - 3400, chemin des Quatre-Bourgeois"
+  },
+  {
+    "id": "vs2__option-143",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Québec - 5015, boulevard de l'Ormière"
+  },
+  {
+    "id": "vs2__option-144",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Québec - 8500, boulevard Henri-Bourassa"
+  },
+  {
+    "id": "vs2__option-145",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Québec - 891, rue Jacques-Bédard"
+  },
+  {
+    "id": "vs2__option-146",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Québec - 2750, chemin Ste-Foy - Plaza-Laval"
+  },
+  {
+    "id": "vs2__option-147",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Rawdon - 3240, 1ère avenue, local 103"
+  },
+  {
+    "id": "vs2__option-148",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Repentigny - 86, boul. Brien"
+  },
+  {
+    "id": "vs2__option-149",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Richmond - 35, rue du collège"
+  },
+  {
+    "id": "vs2__option-150",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Rimouski - 391, Montée Industrielle et Commerciale"
+  },
+  {
+    "id": "vs2__option-151",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Rivière-Bleue - 21, rue St-Joseph Nord"
+  },
+  {
+    "id": "vs2__option-152",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Rivière-du-Loup - 252-A, boul. de l'Hôtel-de-Ville"
+  },
+  {
+    "id": "vs2__option-153",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Rivière-Rouge - 1721, rue L'Annonciation Sud"
+  },
+  {
+    "id": "vs2__option-154",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Roberval - 1221, boulevard Marcotte"
+  },
+  {
+    "id": "vs2__option-155",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Rosemère - 309, boul. Labelle"
+  },
+  {
+    "id": "vs2__option-156",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Rouyn-Noranda - 200, boul. Rideau"
+  },
+  {
+    "id": "vs2__option-157",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Saint-Bruno - 1380, rue Roberval"
+  },
+  {
+    "id": "vs2__option-158",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Saint-Constant - 284, voie de la Desserte, route 132"
+  },
+  {
+    "id": "vs2__option-159",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Saint-Donat - 867, rue Principale Local A"
+  },
+  {
+    "id": "vs2__option-160",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Saint-Eustache - 460, boul. Arthur-Sauvé"
+  },
+  {
+    "id": "vs2__option-161",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Saint-Félicien - 1195, boulevard Saint-Félicien"
+  },
+  {
+    "id": "vs2__option-162",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Saint-Félix-de-Valois - 351, chemin de Joliette"
+  },
+  {
+    "id": "vs2__option-163",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Saint-Gabriel-de-Bradon - 115, rue Saint-Gabriel"
+  },
+  {
+    "id": "vs2__option-164",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Saint-Georges - 8984, boul. Lacroix"
+  },
+  {
+    "id": "vs2__option-165",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Saint-Hyacinthe - 1590, rue des Cascades Ouest"
+  },
+  {
+    "id": "vs2__option-166",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Saint-Hyacinthe - 3180, boul. Laframboise"
+  },
+  {
+    "id": "vs2__option-167",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Saint-Jean-Port-Joli - 26, avenue de Gaspé Ouest"
+  },
+  {
+    "id": "vs2__option-168",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Saint-Jean-sur-Richelieu - 1095, boul. du Séminaire Nord"
+  },
+  {
+    "id": "vs2__option-169",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Saint-Jérôme - 800, boul. Grignon"
+  },
+  {
+    "id": "vs2__option-170",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Saint-Lambert - 1451, rue Victoria"
+  },
+  {
+    "id": "vs2__option-171",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Saint-Laurent - 1919, boul. Marcel-Laurin"
+  },
+  {
+    "id": "vs2__option-172",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Saint-Lazare - 1811-A, chemin Sainte-Angéline"
+  },
+  {
+    "id": "vs2__option-173",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Saint-Lin-des-Laurentides - 997, rue Saint-Isidore"
+  },
+  {
+    "id": "vs2__option-174",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Saint-Luc - 280, boul. St-Luc"
+  },
+  {
+    "id": "vs2__option-175",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Saint-Marc-des-Carrières - 770, Bona-Dussault"
+  },
+  {
+    "id": "vs2__option-176",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Saint-Michel-des-Saints - 180, rue Brassard"
+  },
+  {
+    "id": "vs2__option-177",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Saint-Pascal - 505, avenue Patry"
+  },
+  {
+    "id": "vs2__option-178",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Saint-Raymond - 333, Côte Joyeuse, local 800"
+  },
+  {
+    "id": "vs2__option-179",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Saint-Rémi - 780, rue St-Paul"
+  },
+  {
+    "id": "vs2__option-180",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Saint-Sauveur - 226, chemin du Lac Millette"
+  },
+  {
+    "id": "vs2__option-181",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Saint-Tite - 512, rue du Moulin"
+  },
+  {
+    "id": "vs2__option-182",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Sainte-Adèle - 423, boul. Ste-Adèle"
+  },
+  {
+    "id": "vs2__option-183",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Sainte-Agathe-des-Monts - 701, rue Principale, route 117"
+  },
+  {
+    "id": "vs2__option-184",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Sainte-Anne-de-Beaupré - 10410, boulevard Ste-Anne"
+  },
+  {
+    "id": "vs2__option-185",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Sainte-Anne-de-la-Pérade - 175, rue Principale"
+  },
+  {
+    "id": "vs2__option-186",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Sainte-Anne-des-Plaines - 155, boulevard Sainte-Anne"
+  },
+  {
+    "id": "vs2__option-187",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Sainte-Catherine-de-laJacques-Cartier - 4530, route Fossambault"
+  },
+  {
+    "id": "vs2__option-188",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Sainte-Julie - 1700, chemin du Fer à Cheval"
+  },
+  {
+    "id": "vs2__option-189",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Sainte-Marie-de-Beauce - 1024, boul. Vachon Nord"
+  },
+  {
+    "id": "vs2__option-190",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Sainte-Marthe-sur-le-Lac - 2851, boul. des Promenades"
+  },
+  {
+    "id": "vs2__option-191",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Salaberry de Valleyfield - 2150, boul. Mgr.Langlois"
+  },
+  {
+    "id": "vs2__option-192",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Sept-Iles - 649, boul. Laure"
+  },
+  {
+    "id": "vs2__option-193",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Shawinigan - 1440, rue Trudel"
+  },
+  {
+    "id": "vs2__option-194",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Sherbrooke - 30, rue King Ouest"
+  },
+  {
+    "id": "vs2__option-195",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Sherbrooke - 540, rue Jean-Paul Perrault"
+  },
+  {
+    "id": "vs2__option-196",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Sherbrooke - 175, rue Queen"
+  },
+  {
+    "id": "vs2__option-197",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Sherbrooke - 1900, rue King Ouest"
+  },
+  {
+    "id": "vs2__option-198",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Sherbrooke - 1135, rue King Est"
+  },
+  {
+    "id": "vs2__option-199",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Sorel - 340, boul. Poliquin"
+  },
+  {
+    "id": "vs2__option-200",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "St-Apollinaire - 141, rue Principale"
+  },
+  {
+    "id": "vs2__option-201",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "St-Augustin-de-Desmaures - 286, route 138"
+  },
+  {
+    "id": "vs2__option-202",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "St-Césaire - 2010, route 112"
+  },
+  {
+    "id": "vs2__option-203",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "St-Joseph-de-Beauce - 1021, avenue du Palais"
+  },
+  {
+    "id": "vs2__option-204",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Ste-Anne-des-Monts - 51, boulevard Ste-Anne Ouest"
+  },
+  {
+    "id": "vs2__option-205",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Ste-Brigitte-de-Laval - 339, avenue Sainte-Brigitte"
+  },
+  {
+    "id": "vs2__option-206",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Ste-Claire - 115, boulevard Bégin"
+  },
+  {
+    "id": "vs2__option-207",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Ste-Julienne - 1545, route 125"
+  },
+  {
+    "id": "vs2__option-208",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Ste-Perpétue de l'Islet - 429, rue Principale"
+  },
+  {
+    "id": "vs2__option-209",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Sutton - 35-2, rue Principale"
+  },
+  {
+    "id": "vs2__option-210",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Témiscaming - 534, chemin Kipawa"
+  },
+  {
+    "id": "vs2__option-211",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Témiscouata-sur-le-Lac - 633, rue Commerciale Nord"
+  },
+  {
+    "id": "vs2__option-212",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Terrebonne - 1035, boul. des Seigneurs"
+  },
+  {
+    "id": "vs2__option-213",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Terrebonne - 302, montée des Pionniers- Carrefour Lachenaie"
+  },
+  {
+    "id": "vs2__option-214",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Terrebonne - 5751, boulevard Laurier"
+  },
+  {
+    "id": "vs2__option-215",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Thetford-Mines - 350, boul. Frontenac Ouest"
+  },
+  {
+    "id": "vs2__option-216",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Tracy - 6800, avenue de la Plaza"
+  },
+  {
+    "id": "vs2__option-217",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Trois-Pistoles - 634, rue Richard"
+  },
+  {
+    "id": "vs2__option-218",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Trois-Rivières - 4675, boul. des Forges"
+  },
+  {
+    "id": "vs2__option-219",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Trois-Rivières - 501, boulevard St-Maurice"
+  },
+  {
+    "id": "vs2__option-220",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Trois-Rivières - 3305, boulevard des Récollets"
+  },
+  {
+    "id": "vs2__option-221",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Trois-Rivières - 180, rue des Forges"
+  },
+  {
+    "id": "vs2__option-222",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Trois-Rivières - 6285, rue Corbeil"
+  },
+  {
+    "id": "vs2__option-223",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Val D'Or - 1801, 3ème avenue"
+  },
+  {
+    "id": "vs2__option-224",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Vanier - 405, rue Soumande"
+  },
+  {
+    "id": "vs2__option-225",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Varennes - 1797, route 132"
+  },
+  {
+    "id": "vs2__option-226",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Vaudreuil - 585, avenue Saint-Charles"
+  },
+  {
+    "id": "vs2__option-227",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Victoriaville - 244, rue Notre-Dame Est"
+  },
+  {
+    "id": "vs2__option-228",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Victoriaville - 1081, boul. Jutras Est"
+  },
+  {
+    "id": "vs2__option-229",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Ville Mont-Royal - 2305, chemin Rockland, suite 502.1"
+  },
+  {
+    "id": "vs2__option-230",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Ville-Marie - 37, rue des Oblats"
+  },
+  {
+    "id": "vs2__option-231",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Waterloo - 4910, rue Foster"
+  },
+  {
+    "id": "vs2__option-232",
+    "role": "option",
+    "class": "vs__dropdown-option",
+    "text": "Windsor - 201, rue St-Georges"
+  }
+]

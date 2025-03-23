@@ -2,11 +2,9 @@
     import '../app.css';
     import { navigating, page } from '$app/stores';
     import { fly } from 'svelte/transition';
-    import Footer from '$lib/components/Footer.svelte';
-    import Header from '$lib/components/Header.svelte';
+    import Footer from './Footer.svelte';
+    import Header from './Header.svelte';
     import type { PageData } from './$types';
-    import { IconSearch } from '$lib/icons';
-    import { totalItems } from '$lib/cart';
 
     export let data: PageData;
 

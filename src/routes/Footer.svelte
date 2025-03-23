@@ -5,7 +5,7 @@
     <img class="h-[102px] w-auto" src="/images/Ward%20&%20Associes.svg" alt="Ward & Associes" />
 
     <div class="mt-[104px] max-w-[1154px] w-full flex flex-wrap items-start footer">
-        <a href="/" class="w-[82px] h-[82px] flex justify-center items-center">
+        <a href="/static" class="w-[82px] h-[82px] flex justify-center items-center">
             <img width="70px" src="/logo.svg" alt="logo" />
         </a>
         <div class="flex flex-col mt-[11px] ml-[15px]">
@@ -15,22 +15,22 @@
                 Inscris-toi à notre Infolettre!
             </p>
             <div class="flex flex-wrap mt-[26px] w-[272px] gap-1">
-                <a href="/" class="footer__link w-[92px]">Prénom</a>
-                <a href="/" class="footer__link w-[92px]">Nom</a>
-                <a href="/" class="footer__link w-[80px]">Profil de soif</a>
-                <a href="/" class="footer__link w-[201px]">Ton courriel ici</a>
-                <a href="/" class="footer__link bg-background2 !text-contentp w-[67px]">Cheeeers!</a>
+                <a href="/static" class="footer__link w-[92px]">Prénom</a>
+                <a href="/static" class="footer__link w-[92px]">Nom</a>
+                <a href="/static" class="footer__link w-[80px]">Profil de soif</a>
+                <a href="/static" class="footer__link w-[201px]">Ton courriel ici</a>
+                <a href="/static" class="footer__link bg-background2 !text-contentp w-[67px]">Cheeeers!</a>
             </div>
         </div>
         <div class="flex flex-col mt-[11px] ml-auto w-[176px] gap-1">
-            <a href="/" class="text-sm leading-[28px]">Vignerons</a>
-            <a href="/" class="text-sm leading-[28px]">Merch</a>
-            <a href="/" class="text-sm leading-[28px]">Questions</a>
-            <a href="/" class="text-sm leading-[28px]">Rendez-vous</a>
-            <a href="/" class="text-sm leading-[28px]">Ward à la SAQ</a>
+            <a href="/static" class="text-sm leading-[28px]">Vignerons</a>
+            <a href="/static" class="text-sm leading-[28px]">Merch</a>
+            <a href="/static" class="text-sm leading-[28px]">Questions</a>
+            <a href="/static" class="text-sm leading-[28px]">Rendez-vous</a>
+            <a href="/static" class="text-sm leading-[28px]">Ward à la SAQ</a>
         </div>
         <div class="flex flex-col mt-[11px] ml-4 w-[176px] gap-1">
-            <a href="/" class="text-sm text-background2 leading-[28px]">English</a>
+            <a href="/static" class="text-sm text-background2 leading-[28px]">English</a>
             <p class="text-sm leading-[16px] mt-[15px]">1217 Saint-Zotique Est, Montréal, Qc. H2S 1N6</p>
             <p class="text-sm leading-[28px]">
                 info@wardetassocies.com
@@ -39,10 +39,10 @@
             </p>
         </div>
         <div class="flex flex-col gap-[10px] mt-[11px] ml-[73px] mr-[15px]">
-            <a href="/">
+            <a href="/static">
                 <img class="h-[16px]" src="/icons/socials/Facebook.svg" alt="Facebook" />
             </a>
-            <a href="/">
+            <a href="/static">
                 <img class="h-[16px]" src="/icons/socials/Instagram.svg" alt="Instagram" />
             </a>
         </div>

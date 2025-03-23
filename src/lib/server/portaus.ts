@@ -9,7 +9,8 @@ type Tokens = {
 const methods: Record<keyof ApiTypes.ResMap, 'GET' | 'POST'> = {
     '/auth/login': 'POST',
     '/API/latest/admin/inventories/1/products': 'GET',
-    '/api/v1/payments/intents': 'POST'
+    '/api/v1/payments/intents': 'POST',
+    '/api/v1/saq-branches': 'GET' // new endpoint added here
 };
 
 async function request<P extends keyof ApiTypes.ResMap>({
@@ -22,7 +23,7 @@ async function request<P extends keyof ApiTypes.ResMap>({
     tokens?: Tokens;
 }) {
     const method = methods[path];
-    const query = method === 'GET' ? '?' + new URLSearchParams(body) : '';
+    const query = method === 'GET' && body ? '?' + new URLSearchParams(body as Record<string, string>) : '';
     console.log('request', { path, body });
 
     // Build headers without token values initially
@@ -39,7 +40,7 @@ async function request<P extends keyof ApiTypes.ResMap>({
     }
 
     // For the payment intents endpoint, convert the API key to a JWT token before sending
-    if (path === '/api/v1/payments/intents') {
+    if (path === '/api/v1/payments/intents' || path === '/api/v1/saq-branches') {
         headers['apikey'] = PORTAUS_API_KEY;
     }
 
@@ -100,7 +101,7 @@ export const PortausApi = {
             path: '/API/latest/admin/inventories/1/products',
             body: {
                 limit: '50',
-                page: page
+                page: String(page)
             }
         });
         console.log('res', res);
@@ -111,10 +112,10 @@ export const PortausApi = {
         const alcohol = (parseFloat(obj.item?.extraInfo?.alcohol || '') || 0) / 100;
         const quantity = Math.max(obj.quantity['packaged'] || 0, 0);
         const unit = obj.unit === 0 ? 'unit' : obj.unit === 1 ? 'box' : undefined;
-        const uvc = obj.uvc;
         if (!unit) {
             console.warn('no unit', obj);
         }
+        const uvc = obj.uvc;
         const format = obj.format === 1 ? 'ml' : obj.format === 2 ? 'l' : undefined;
         if (!format) {
             console.warn('no format', obj);
@@ -154,8 +155,6 @@ export const PortausApi = {
         } as const;
     },
 
-    // New function for creating a payment intent using an API key.
-    // Note: Tokens are ignored for this endpoint.
     async createPaymentIntent(payload: ApiTypes.PaymentIntentPayload, tokens?: Tokens) {
         const res = await request({
             tokens,
@@ -164,6 +163,16 @@ export const PortausApi = {
         });
         console.log('createPaymentIntent response', res);
         return res as ApiTypes.PaymentIntentResponse;
+    },
+
+    // New function for retrieving SAQ branches.
+    async getSaqBranches(tokens?: Tokens) {
+        const res = await request({
+            tokens,
+            path: '/API/latest/admin/saq-branches'
+        });
+        console.log('getSaqBranches response', res);
+        return res;
     }
 };
 

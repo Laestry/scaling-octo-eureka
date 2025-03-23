@@ -129,36 +129,40 @@
             style="--dynamic-color: {computedColor}; color: var(--dynamic-color);"
         >
             <div class="flex gap-[16px] lg:flex-row flex-col">
-                <a
-                    class="header-links"
-                    style="color: var(--dynamic-color);"
-                    href="/associes"
-                    class:active={backdrop === 'associes'}
-                >
-                    Associes
-                </a>
-                <a
-                    class="header-links"
-                    style="color: var(--dynamic-color);"
-                    href="/vision"
-                    class:active={backdrop === 'vision'}
-                >
-                    Vision
-                </a>
-                <a
-                    class="header-links"
-                    style="color: var(--dynamic-color);"
-                    href="/products"
-                    class:active={$page.url.pathname === '/products'}
-                >
-                    Vins
-                </a>
+                {#if $page.url.pathname === '/cart'}
+                    <div class="header-links !text-black">Panier d’achat</div>
+                {:else}
+                    <a
+                        class="header-links"
+                        style="color: var(--dynamic-color);"
+                        href="/associes"
+                        class:active={backdrop === 'associes'}
+                    >
+                        Associes
+                    </a>
+                    <a
+                        class="header-links"
+                        style="color: var(--dynamic-color);"
+                        href="/vision"
+                        class:active={backdrop === 'vision'}
+                    >
+                        Vision
+                    </a>
+                    <a
+                        class="header-links"
+                        style="color: var(--dynamic-color);"
+                        href="/products"
+                        class:active={$page.url.pathname === '/products'}
+                    >
+                        Vins
+                    </a>
+                {/if}
             </div>
         </div>
     </div>
 
     {#if backdrop}
-        <a href="/" class="backdrop backdrop--1" />
+        <a href="/static" class="backdrop backdrop--1" />
         <a href="/associes" class="backdrop backdrop--2" />
         <a href="/vision" class="backdrop backdrop--3" />
     {/if}
