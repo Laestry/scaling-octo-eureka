@@ -23,8 +23,6 @@ export function getNumberFromId(gid: string) {
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 export function clickOutside(node) {
-    console.log('clickOutside', node);
-
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     const handleClick = (event) => {
@@ -43,7 +41,6 @@ export function clickOutside(node) {
 }
 
 export function teleport(node, name) {
-    console.log('teleport', node);
     let teleportContainer = document.querySelector(name);
     teleportContainer.appendChild(node);
 

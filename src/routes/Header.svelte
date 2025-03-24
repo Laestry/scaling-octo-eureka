@@ -98,7 +98,12 @@
             </a>
         {/if}
 
-        <a class="h-[24px] w-[24px] text-[10px] flex items-center justify-center rounded-full circle" href="/cart">
+        <a
+            class="h-[24px] w-[24px] text-[10px] flex items-center justify-center rounded-full circle {$totalItems > 0
+                ? '!bg-wred !text-white'
+                : ''}"
+            href="/cart"
+        >
             {$totalItems}
         </a>
         <a class="h-[24px] w-[24px] flex items-center justify-center rounded-full p-1 circle" href="/products">
@@ -170,7 +175,6 @@
 
 <style lang="scss">
     .circle {
-        border: 1px solid white;
         background-color: white;
         color: #000;
     }

@@ -4,6 +4,8 @@
     import Accordion from '$lib/components/Accordion.svelte';
     import ProductTags from './ProductTags.svelte';
     import { cart } from '$lib/cart';
+    import Plus from '$lib/icons/Plus.svelte';
+    import Minus from '$lib/icons/Minus.svelte';
 
     export let data: PageData;
     $: console.log('data', data);
@@ -111,9 +113,11 @@
                                 <p class="product-table-counter__value">{in_cart * product.uvc}</p>
                                 <div class="md:flex flex-col contents">
                                     <button class="product-table-counter__button order-[-1]" on:click={() => add()}>
-                                        +
+                                        <Plus />
                                     </button>
-                                    <button class="product-table-counter__button" on:click={() => remove()}> - </button>
+                                    <button class="product-table-counter__button" on:click={() => remove()}>
+                                        <Minus />
+                                    </button>
                                 </div>
                             </div>
                         </div>

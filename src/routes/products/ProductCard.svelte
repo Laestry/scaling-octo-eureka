@@ -2,12 +2,9 @@
     import { priceFormat } from '../product/[slug]/utils';
     import { cart, getItemQuantityStore } from '$lib/cart';
     import { fly } from 'svelte/transition';
-    import { goto } from '$app/navigation';
-    import { fade } from 'svelte/transition';
     export let product;
     export let size: 's' | 'm' | 'l' | 'v' = 's';
     export let isMain = false;
-    export let isCart = false;
 
     const images = new Array(8).fill('').map((_, i) => `/images/example_wines/${i + 1}.jpg`);
     function getRandomNumber() {
@@ -87,76 +84,6 @@
                         {$itemQuantity > 0 ? $itemQuantity : ''}
                     </div>
                 {/each}
-            </div>
-        </div>
-    </div>
-{:else if isCart}
-    <div class="cartProduct" transition:fade|global>
-        <button
-            class="flex justify-end"
-            on:click={() => {
-                goto(`/product/${product.slug}`);
-            }}
-        >
-            <div class="absolute">
-                <button
-                    class="rotate-45 text-5xl"
-                    style="line-height: 24px"
-                    on:click|preventDefault|stopPropagation={() => cart.removeCompletely(product.id)}
-                    >+
-                </button>
-            </div>
-            <img class="bg-no-repeat object-cover bg-center img mb-[7px]" src={img} alt="Wine" />
-        </button>
-        <a href="/product/{product.slug}" class="flex justify-between w-full">
-            <div class="flex flex-col w-full product-name" style="width: calc(100% - 100px)">
-                <div class="description">
-                    <div>{product.specificCategory ?? ''}</div>
-                </div>
-            </div>
-            <div class="flex flex-col items-end">
-                <div class="product-price">
-                    {priceFormat(product)}
-                </div>
-                <div class="product-price {product.uvc > 1 ? '' : 'text-transparent'}">
-                    {priceFormat(product, false)}
-                </div>
-            </div>
-        </a>
-        <a href="/product/{product.slug}" class="product-name text-start w-full" title="product.name">
-            <b>{product.name || '-'}</b>
-        </a>
-
-        <div class="flex w-full justify-between">
-            <a href="/product/{product.slug}" class="w-full product-name">
-                <div class="w-full flex">
-                    <div class="truncate lg:max-w-[170px] md:max-w-[89px] max-w-[59px]">
-                        {product.providerName ?? ''}
-                    </div>
-                    <span>
-                        {#if product.providerName && product.vintage},
-                        {/if}
-                        {product.vintage ?? ''}
-                    </span>
-                </div>
-                <div class="product-name description">
-                    {product.uvc} <span class="lowercase">x</span>
-                    {product.lblFormat}
-                </div>
-            </a>
-            <div class="flex items-center w-fit h-fit self-end">
-                <p class="product-table-counter__value">{$itemQuantity * product.uvc}</p>
-                <div class="flex flex-col justify-center items-center">
-                    <button class="" style="line-height: 16px" on:click={() => cart.add(product)}>+</button>
-                    <button
-                        class={$itemQuantity > 1 ? '' : 'text-gray-300'}
-                        style="line-height: 16px"
-                        on:click={() => {
-                            if ($itemQuantity > 1) cart.remove(product.id);
-                        }}
-                        >-
-                    </button>
-                </div>
             </div>
         </div>
     </div>

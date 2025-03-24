@@ -1,11 +1,12 @@
 <script lang="ts">
     import { Svroller } from 'svrollbar';
     import { teleport, clickOutside } from '$lib/utils';
+    import { onMount } from 'svelte';
 
     export let placeholder: string = '';
-    export let value: any = '';
+    export let inputValue: any = '';
     export let disabled = false;
-    export let selected: Option;
+    export let selected: Option | undefined = undefined;
     export let status:
         | 'enabled'
         | 'invalid'
@@ -26,18 +27,16 @@
     let optionsFiltered: Option[] = [...options];
 
     function handleOpen() {
-        console.log('handleOpen');
         isOpen = true;
         optionsFiltered = [...options];
-        console.log('end handleOpen');
     }
 
     function handleInput(e: Event) {
-        console.log(userInput, value, 'sd');
+        console.log(userInput, inputValue, 'sd');
 
         const target = e.target as HTMLInputElement;
         userInput = target.value;
-        value = userInput;
+        inputValue = userInput;
         if (!userInput) {
             optionsFiltered = [...options];
         } else {
@@ -48,9 +47,9 @@
     }
 
     function selectOption(opt: Option) {
-        value = opt.label;
+        inputValue = opt.label;
         selected = opt;
-
+        handleValidate();
         isOpen = false;
         userInput = '';
     }
@@ -68,29 +67,37 @@
       max-height: ${MAX_HEIGHT_OPTIONS}px;
     `;
     }
+
+    let error = false;
+    export function handleValidate() {
+        error = selected === null || selected === undefined;
+        console.log('handleValidate', error, selected);
+    }
 </script>
 
-<div bind:this={wrapperElement} class=" bg-white flex" style="border-top: solid 1px var(--blue);">
-    <input
-        class="text"
-        bind:value
-        {placeholder}
-        {disabled}
-        on:input={handleInput}
-        on:focus={handleOpen}
-        on:click={handleOpen}
-    />
-    <svg class="m-[6px]" width="9" height="9" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-        <line class:rotate={isOpen} class="line" x1="50" y1="10" x2="50" y2="90" stroke-width="10" />
-        <line class="line" x1="90" y1="50" x2="10" y2="50" stroke-width="10" />
-    </svg>
+<div class={$$props.class}>
+    <div bind:this={wrapperElement} class=" bg-white flex {$$props.class}" style="border-top: solid 1px var(--blue);">
+        <input
+            class="text {$$props.class}"
+            bind:value={inputValue}
+            {placeholder}
+            {disabled}
+            on:input={handleInput}
+            on:focus={handleOpen}
+            on:click={handleOpen}
+            on:blur={handleValidate}
+        />
+        <svg class="m-[6px]" width="9" height="9" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <line class:rotate={isOpen} class="line" x1="50" y1="10" x2="50" y2="90" stroke-width="10" />
+            <line class="line" x1="90" y1="50" x2="10" y2="50" stroke-width="10" />
+        </svg>
+    </div>
+    {#if error}
+        <div class="error">
+            {hint}
+        </div>
+    {/if}
 </div>
-<!--{#if status === 'invalid'}-->
-<!--    <div>-->
-<!--        {hint}-->
-<!--    </div>-->
-<!--{/if}-->
-
 {#if isOpen && optionsFiltered.length > 0}
     <div
         use:teleport={'body'}
@@ -113,6 +120,11 @@
 {/if}
 
 <style lang="scss">
+    .error {
+        color: red;
+        font-size: 12px;
+    }
+
     .line {
         transform: rotate(0deg);
         transform-origin: center;
