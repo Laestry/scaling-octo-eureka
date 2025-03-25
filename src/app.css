@@ -38,6 +38,20 @@
     font-display: swap;
 }
 
+.abutton {
+    transition: all 0.2s ease;
+}
+
+.abutton:hover {
+    filter: brightness(1.1);
+    transform: translateY(-2px);
+}
+
+.abutton:active {
+    filter: brightness(0.9);
+    transform: translateY(1px);
+}
+
 html {
     scroll-behavior: smooth;
 }
@@ -62,7 +76,6 @@ body {
     font-family: 'Riposte', sans-serif;
     font-weight: 600;
     line-height: 150%;
-    text-transform: uppercase;
 }
 
 .button2 {

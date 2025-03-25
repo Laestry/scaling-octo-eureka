@@ -1,18 +1,24 @@
 <script lang="ts">
     import type { PageData } from './$types';
-    import { alcoholFormat, volumeFormat, priceFormat, originFormat } from './utils';
+    import { priceFormat } from './utils';
     import Accordion from '$lib/components/Accordion.svelte';
     import ProductTags from './ProductTags.svelte';
     import { cart } from '$lib/cart';
     import Plus from '$lib/icons/Plus.svelte';
     import Minus from '$lib/icons/Minus.svelte';
+    import type { AlcoholProduct } from '$lib/models/pocketbase';
+    import { Svroller } from 'svrollbar';
+    import { fly, slide, fade } from 'svelte/transition';
 
     export let data: PageData;
     $: console.log('data', data);
+    let product: AlcoholProduct;
     $: product = data.product;
 
     let currentSlide = 0;
     let expand_description = false;
+    let expand_question = false;
+
     let in_cart = 1;
     function add() {
         in_cart = Math.min(in_cart + 1);
@@ -29,15 +35,18 @@
 
 <div class="mt-[40px] lg:max-w-[1162px] md:max-w-[780px] max-w-[320px] mx-auto">
     <div>
-        <!-- <a href="/products">
-            <button><img src="/icons/arrow.svg" alt="back" /></button>
-        </a> -->
-        <div class="md:invisible visible">
-            <ProductTags {product} />
-        </div>
-        <div class="md:flex-row flex-col flex gap-[32px] mt-[16px] items-end">
+        <ProductTags
+            {product}
+            class="lg:w-[560px] md:w-[442px]
+                   lg:ml-[472px] md:ml-[318px]"
+        />
+        <div class="md:flex-row flex-col flex gap-x-[10px] mt-[10px] items-start">
+            <!--images-->
             <div
-                class="relative lg:min-w-[462px] lg:w-[462px] lg:h-[639px] md:min-w-[308px] md:w-[308px] md:h-[439px] min-w-[280px] w-[280px] h-[262px]"
+                class="relative
+                lg:w-[462px] md:w-[308px] w-[280px]
+                lg:h-[639px] md:h-[439px] h-[262px]
+                "
             >
                 <button
                     class="absolute z-[1] left-0 bottom-0 lg:w-[271px] lg:h-[375px] md:w-[181px] md:h-[241px] w-[94px] h-[125px]"
@@ -62,114 +71,122 @@
                 </button>
             </div>
 
-            <div class="flex flex-col">
-                <div class="md:visible invisible">
-                    <ProductTags {product} />
+            <!--description-->
+            <div>
+                <div
+                    class="mt-[12px] flex items-end
+                        lg:w-[560px] md:w-[394px] h-full"
+                >
+                    <h1 class="product-title">{product.name}</h1>
                 </div>
-                <h1 class="product-title mt-[12px]">
-                    {product.name}
-                </h1>
-                <div class="product-description mt-4 h-[125px] max-w-[366px] overflow-auto">
-                    {@html product.fullDescription}
-                    <!--                    <button on:click={() => (expand_description = !expand_description)}-->
-                    <!--                        >{expand_description ? '-' : '+'}</button-->
-                    <!--                    >-->
-                </div>
-
-                <div class="lg:w-[464px] md:w-[380px] w-[300px] w-full mt-4">
-                    <div class="flex product-table">
-                        <div
-                            class="flex flex-col md:min-w-[280px] md:w-[280px] min-w-[186px] w-[186px] border-r-[1px] border-r-[#E859EB]"
-                        >
-                            <p class="product-table__type">{product.specificCategory}</p>
-                            <p class="product-table__description">
-                                <b class="font-bold">{product.providerName}</b>
-                                <br />
-                                {product.name ?? ''}
-                                <br />
-                                {product.vintage}
-                                <br />
-                                {product.uvc} x {product.lblFormat} ({alcoholFormat(product)})
-                            </p>
-                        </div>
-                        <div class="flex flex-col py-2 w-full">
-                            <p class="product-table__price">
-                                {priceFormat(product, true)}
-                            </p>
-                            <p class="product-table__price">
-                                {priceFormat(product, false)}
-                            </p>
-                            <p class="product-table__type-region">Acheter avant <br /> JJ mois, 20XX</p>
-                            <p />
-                        </div>
+                <div class="flex flex-col lg:w-[464px] md:w-[380px] h-full">
+                    <div class="product-description mt-4 h-[141px] w-full px-[15px]">
+                        <Svroller width="100%" height="100%" margin={{ right: -15 }} alwaysVisible>
+                            {@html product.fullDescription}
+                            <!--                    <button on:click={() => (expand_description = !expand_description)}-->
+                            <!--                        >{expand_description ? '-' : '+'}</button-->
+                            <!--                    >-->
+                        </Svroller>
                     </div>
-                    <div
-                        class="flex md:flex-row flex-col pt-4 pb-8 border-b-[1px] border-b-[#DE6643] relative justify-between"
-                    >
-                        <!--{#if data.product.quantity !== 0}-->
-                        <div class="flex md:flex-col flex-row gap-2">
-                            <p class="product-table__count">Quantité /caisse de {product.uvc}</p>
-                            <div class="product-table-counter">
-                                <p class="product-table-counter__value">{in_cart * product.uvc}</p>
-                                <div class="md:flex flex-col contents">
-                                    <button class="product-table-counter__button order-[-1]" on:click={() => add()}>
-                                        <Plus />
-                                    </button>
-                                    <button class="product-table-counter__button" on:click={() => remove()}>
-                                        <Minus />
-                                    </button>
-                                </div>
+
+                    <div class=" w-full mt-4">
+                        <div class="flex product-table">
+                            <div
+                                class="flex flex-col md:min-w-[280px] md:w-[280px] min-w-[186px] w-[186px] border-r-[1px] border-r-[#E859EB]"
+                            >
+                                <p class="product-table__type capitalize">{product.specificCategory}</p>
+                                <p class="product-table__description">
+                                    <b class="font-bold">{product.providerName}</b>
+                                    <br />
+                                    {product.name ?? ''}
+                                    <br />
+                                    {product.vintage}
+                                    <br />
+                                    {product.uvc} x {product.lblFormat}
+                                </p>
+                            </div>
+                            <div class="flex flex-col py-2 w-full">
+                                <p class="product-table__price">
+                                    {priceFormat(product, true)}
+                                </p>
+                                <p class="product-table__price">
+                                    {priceFormat(product, false)}
+                                </p>
+                                <p class="product-table__type-region">Acheter avant <br /> JJ mois, 20XX</p>
+                                <p />
                             </div>
                         </div>
-                        <!--{/if}-->
-                        <div class="flex flex-col gap-2 md:mt-0 mt-6">
-                            <button class="product-table__button product-table__button--favorite">
-                                Liste d’attente
-                            </button>
-                            <button class="product-table__button" on:click={() => cart.add(product, in_cart)}>
-                                Ajouter au panier
-                            </button>
+                        <div
+                            class="flex md:flex-row flex-col pt-4 pb-8 border-b-[1px] border-b-[#DE6643] relative justify-between"
+                        >
+                            <div class="flex md:flex-col flex-row gap-2">
+                                <p class="product-table__count">Bouteilles ({product.uvc}/caisse)</p>
+                                <div class="product-table-counter">
+                                    <p class="product-table-counter__value">{in_cart * product.uvc}</p>
+                                    <div class="md:flex flex-col contents">
+                                        <button
+                                            class="abutton product-table-counter__button order-[-1]"
+                                            on:click={() => add()}
+                                        >
+                                            <Plus />
+                                        </button>
+                                        <button class="abutton product-table-counter__button" on:click={() => remove()}>
+                                            <Minus />
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex flex-col gap-2 md:mt-0 mt-6">
+                                <button class="product-table__button product-table__button--favorite abutton">
+                                    Liste d’attente
+                                </button>
+                                <button
+                                    class="product-table__button abutton"
+                                    on:click={() => cart.add(product, in_cart)}
+                                >
+                                    Ajouter au panier
+                                </button>
+                            </div>
+                            <p class="absolute text-[16px] bg-[#F6F1F2] text-[#DE6643] bottom-[-12px] pr-1">*</p>
                         </div>
-                        <p class="absolute text-[16px] bg-[#F6F1F2] text-[#DE6643] bottom-[-12px] pr-1">*</p>
+                        <button
+                            on:click={() => (expand_description = !expand_description)}
+                            class="abutton product-table__description flex justify-between w-full"
+                        >
+                            <span
+                                >Le prix inclut les taxes et <span class="text-wblue underline"
+                                    >le frais d’agent de 16%.</span
+                                ></span
+                            >
+
+                            <span class="text-wred">
+                                {expand_description ? '-' : '+'}
+                            </span>
+                        </button>
+                        {#if expand_description}
+                            <div transition:fade>
+                                <ol class="list-decimal ml-[17px] text-base">
+                                    <li>
+                                        Au moment de finaliser votre commande, vous serez chargé pour les frais d’agence
+                                        (soit 16%) sur ce site.
+                                    </li>
+                                    <li>
+                                        Rendez-vous à la SAQ de votre choix, pour récupérer votre commande, et payer le
+                                        reste de votre facture.
+                                    </li>
+                                    <li>Cheeeeers!</li>
+                                </ol>
+                                <br />
+                                Questions? <a href="">Ecrivez-nous</a>.
+                            </div>
+                        {/if}
                     </div>
-                    <p class="product-table__description">
-                        Le prix inclut les taxes et le frais d’agent de 16%.
-                        <br />
-                        <a href="#">C’est quoi le 16%?</a>
-                        <br />
-                        <a href="#">Je paie combien, à qui, quand?</a>
-                    </p>
                 </div>
             </div>
         </div>
     </div>
 
     <div class="mt-[20px] flex flex-col gap-[13px]">
-        <!-- {#if recommendedProducts}
-            <div class="flex flex-col pt-[13px] px-[13px] border-t-[1px] border-t-[#000]">
-                <p class="recommended__title">Si vous aimez ceci, vous aimerez aussi...</p>
-                <div class="flex gap-4">
-                    {#each recommendedProducts?.slice(0, 4) as p}
-                        <ProductCard product={p} />
-                    {/each}
-                </div>
-            </div>
-        {/if} -->
-        <!-- <Accordion title="You might also like">
-            {#if recommendedProducts}
-                <div class="flex gap-[32px] mt-[16px]">
-                    {#each recommendedProducts.slice(0, 4) as p}
-                        <MiniProductCard title={p.handle} image={p.featured_image} id={p.id} />
-                    {/each}
-                </div>
-            {/if}
-        </Accordion> -->
-        <!-- <Accordion title="Vu récemment">
-            <ProductGrid class="mt-[32px]" {searchResults} />
-        </Accordion>
-        <Accordion title="Si vous aimez ceci, vous aimerez aussi...">
-            <ProductGrid class="mt-[32px]" {searchResults} />
-        </Accordion> -->
         <Accordion title="Du même producteur">
             <div>body</div>
         </Accordion>
@@ -179,72 +196,7 @@
     </div>
 </div>
 
-<!-- <div class="product">
-    <img
-        class="bg-no-repeat object-cover bg-center img"
-        src={'https://cdn.shopify.com/s/files/1/0762/7689/1952/files/product-image_fb1c9cb7-8ab1-4037-a915-913d2c638b8a.png?v=1706118993'}
-        alt="Wine"
-    />
-    <div class="flex flex-col justify-between mt-[7px] w-full">
-        <div class="flex flex-col uppercase w-full product-name" style="width: calc(100% - 80px)">
-            <b>{product.name || '-'}</b>
-            <div class="flex">
-                {#if product.providerName}
-                    {#if product.providerSite}
-                        <a href={product.providerSite || '#'}>{product.providerName}</a>
-                    {:else}
-                        <div>{product.providerName}</div>
-                    {/if}
-                {/if}
-                {#if product.vintage}
-                    ,
-                    <span>{product.vintage}</span>
-                {/if}
-            </div>
-        </div>
-        <div class="flex flex-col items-end">
-            <div class="product-price">
-                {priceFormat(product)}
-            </div>
-            <button class="text-color5 text-sm font-bold cursor-cell whitespace-nowrap" on:click={() => add()}>
-                ADD +
-            </button>
-        </div>
-        {#if product.shortDescription}
-            <div>{product.shortDescription}</div>
-        {/if}
-        <div>origin: {originFormat(product)}</div>
-        <div>alcohol: {alcoholFormat(product)}</div>
-        <div>unit: {product.unit}</div>
-        <div>volume: {volumeFormat(product)}</div>
-        <div>quantity: {product.quantity}</div>
-        {#if product.category}
-            <div>category: {product.category}</div>
-        {/if}
-        {#if product.specificCategory}
-            <div>specific category: {product.specificCategory}</div>
-        {/if}
-        {#if product.fullDescription}
-            <div>{@html product.fullDescription}</div>
-        {/if}
-    </div>
-</div> -->
-
 <style lang="scss">
-    .product-table__button {
-        transition: all 0.2s ease;
-    }
-
-    .product-table__button:hover {
-        filter: brightness(1.1);
-        transform: translateY(-2px);
-    }
-
-    .product-table__button:active {
-        filter: brightness(0.9);
-        transform: translateY(1px);
-    }
-
     .product-title {
         color: #191c1c;
         font-size: 32px;
@@ -262,7 +214,16 @@
         flex-direction: column;
         align-items: flex-start;
         justify-content: flex-start;
+
+        --svrollbar-track-width: 9px;
+        --svrollbar-track-background: white;
+        --svrollbar-track-opacity: 1;
+
+        --svrollbar-thumb-width: 9px;
+        --svrollbar-thumb-background: var(--blue);
+        --svrollbar-thumb-opacity: 0.5;
     }
+
     .product-description button {
         color: #de6643;
     }
@@ -310,7 +271,7 @@
         font-weight: 400;
         line-height: 120%;
     }
-    .product-table__description a {
+    a {
         color: #4975b8;
         font-family: 'Riposte';
         font-size: 16px;

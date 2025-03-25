@@ -67,7 +67,7 @@
 
     <div class="max-w-[290px] flex-1 my-4 flex justify-end pr-[79px] border-r border-wpink">
         <div class="mt-[9px] flex flex-col items-end">
-            <div class="text-xs mb-[12px]">Quantité /caisse de X</div>
+            <div class="text-xs mb-[12px]">Bouteilles ({product.uvc}/caisse)</div>
             <div class="flex items-center w-fit h-fit mr-[2px]">
                 <p class="product-table-counter__value ml-[2px]">{$itemQuantity * product.uvc}</p>
                 <div class="flex flex-col justify-center items-center">

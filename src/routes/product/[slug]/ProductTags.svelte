@@ -1,10 +1,10 @@
 <script lang="ts">
-    import type { Product } from '$lib/server/prisma';
+    import type { AlcoholProduct } from '$lib/models/pocketbase';
 
-    export let product: Product;
+    export let product: AlcoholProduct;
 </script>
 
-<div class="flex justify-between">
+<div class="flex justify-between {$$props.class}">
     <p class="flex flex-wrap max-w-[368px] gap-1 productTag">
         {#if product.tags.length === 0}
             no tags

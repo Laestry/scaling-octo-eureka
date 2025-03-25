@@ -76,7 +76,7 @@
         {#if showGoBack}
             <a
                 transition:fade
-                class="p-1 h-[24px] w-[24px] text-[0px] flex items-center justify-center rounded-full circle"
+                class="abutton p-1 h-[24px] w-[24px] text-[0px] flex items-center justify-center rounded-full circle"
                 href="#logo"
             >
                 <svg
@@ -99,14 +99,15 @@
         {/if}
 
         <a
-            class="h-[24px] w-[24px] text-[10px] flex items-center justify-center rounded-full circle {$totalItems > 0
+            class="abutton px-0.5 h-[24px] w-fit min-w-[24px] text-center !text-[14px] flex items-center justify-center rounded-full circle {$totalItems >
+            0
                 ? '!bg-wred !text-white'
                 : ''}"
             href="/cart"
         >
             {$totalItems}
         </a>
-        <a class="h-[24px] w-[24px] flex items-center justify-center rounded-full p-1 circle" href="/products">
+        <a class="abutton h-[24px] w-[24px] flex items-center justify-center rounded-full p-1 circle" href="/products">
             <IconSearch />
         </a>
     </div>
@@ -126,7 +127,7 @@
         in:fly={isRight ? { x: -200, duration: 1000, delay: 300 } : { x: 200, duration: 1000, delay: 300 }}
         out:fly={isRight ? { x: 200, duration: 1000 } : { x: -200, duration: 1000 }}
     >
-        <a id="logo" href="/" class="h-[130px] w-[130px] flex items-center justify-center">
+        <a id="logo" href="/" class="abutton h-[130px] w-[130px] flex items-center justify-center">
             <Logo color={computedColor} />
         </a>
         <div
@@ -138,7 +139,7 @@
                     <div class="header-links !text-black">Panier d’achat</div>
                 {:else}
                     <a
-                        class="header-links"
+                        class="abutton header-links"
                         style="color: var(--dynamic-color);"
                         href="/associes"
                         class:active={backdrop === 'associes'}
@@ -146,7 +147,7 @@
                         Associes
                     </a>
                     <a
-                        class="header-links"
+                        class="abutton header-links"
                         style="color: var(--dynamic-color);"
                         href="/vision"
                         class:active={backdrop === 'vision'}
@@ -154,7 +155,7 @@
                         Vision
                     </a>
                     <a
-                        class="header-links"
+                        class="abutton header-links"
                         style="color: var(--dynamic-color);"
                         href="/products"
                         class:active={$page.url.pathname === '/products'}
@@ -167,7 +168,7 @@
     </div>
 
     {#if backdrop}
-        <a href="/static" class="backdrop backdrop--1" />
+        <a href="/" class="backdrop backdrop--1" />
         <a href="/associes" class="backdrop backdrop--2" />
         <a href="/vision" class="backdrop backdrop--3" />
     {/if}
