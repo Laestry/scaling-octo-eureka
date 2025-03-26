@@ -1,12 +1,19 @@
 <script lang="ts">
-    import { Svroller } from 'svrollbar';
     import { teleport, clickOutside } from '$lib/utils';
-    import { onMount } from 'svelte';
+    import SimpleBar from '@woden/svelte-simplebar';
 
+    // Option type for object options
+    type Option = { value: number | string; label: number | string };
+
+    export let defaultOption = 'All';
+    // Accept either an array of Option objects or an array of strings or numbers.
+    export let options: Option[] | (string | number)[] = [];
     export let placeholder: string = '';
     export let inputValue: any = '';
     export let disabled = false;
-    export let selected: Option | undefined = undefined;
+    // When options are objects, selected will be an Option.
+    // When options are simple (string or number), selected will be that type.
+    export let selected: Option | string | number | undefined = undefined;
     export let status:
         | 'enabled'
         | 'invalid'
@@ -18,37 +25,51 @@
         | 'disabled' = 'enabled';
     export let hint: string = '';
 
-    type Option = { value: number | string; label: number | string };
-    export let options: Option[] = [];
-
     let isOpen = false;
     let userInput = '';
     let wrapperElement: HTMLElement;
-    let optionsFiltered: Option[] = [...options];
+
+    // Convert passed options to a unified Option[] array.
+    // If the options are strings or numbers, map them to Option objects.
+    const parsedOptions: Option[] =
+        Array.isArray(options) &&
+        options.length > 0 &&
+        (typeof options[0] === 'string' || typeof options[0] === 'number')
+            ? (options as (string | number)[]).map((opt) => ({ value: opt, label: opt }))
+            : (options as Option[]);
+
+    // Flag to indicate if the passed options were simple (string or number).
+    const isSimpleOptions =
+        parsedOptions.length > 0 &&
+        (typeof parsedOptions[0].label === 'string' || typeof parsedOptions[0].label === 'number') &&
+        parsedOptions.every((opt) => typeof opt.label === 'string' || typeof opt.label === 'number');
+
+    // Start with all options visible.
+    let optionsFiltered: Option[] = [...parsedOptions];
 
     function handleOpen() {
         isOpen = true;
-        optionsFiltered = [...options];
+        optionsFiltered = [...parsedOptions];
     }
 
     function handleInput(e: Event) {
-        console.log(userInput, inputValue, 'sd');
-
         const target = e.target as HTMLInputElement;
         userInput = target.value;
         inputValue = userInput;
         if (!userInput) {
-            optionsFiltered = [...options];
+            optionsFiltered = [...parsedOptions];
         } else {
-            optionsFiltered = options.filter((opt) =>
+            optionsFiltered = parsedOptions.filter((opt) =>
                 String(opt.label).toLowerCase().includes(userInput.toLowerCase())
             );
         }
     }
 
     function selectOption(opt: Option) {
-        inputValue = opt.label;
-        selected = opt;
+        // Display the label as a string in the input field.
+        inputValue = String(opt.label);
+        // Return the original type for simple options.
+        selected = isSimpleOptions ? opt.label : opt;
         handleValidate();
         isOpen = false;
         userInput = '';
@@ -73,12 +94,20 @@
         error = selected === null || selected === undefined;
         console.log('handleValidate', error, selected);
     }
+
+    function selectDefault() {
+        inputValue = '';
+        selected = undefined;
+        isOpen = false;
+        userInput = '';
+    }
 </script>
 
-<div class={$$props.class}>
-    <div bind:this={wrapperElement} class=" bg-white flex {$$props.class}" style="border-top: solid 1px var(--blue);">
+<div class="bg-white flex border-t {$$props.class}">
+    <div bind:this={wrapperElement} class="flex w-full">
         <input
-            class="text {$$props.class}"
+            class="text {selected ? 'text-wblue' : 'text-wblack'}"
+            style="width: calc(100% - 21px);"
             bind:value={inputValue}
             {placeholder}
             {disabled}
@@ -87,10 +116,12 @@
             on:click={handleOpen}
             on:blur={handleValidate}
         />
-        <svg class="m-[6px]" width="9" height="9" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-            <line class:rotate={isOpen} class="line" x1="50" y1="10" x2="50" y2="90" stroke-width="10" />
-            <line class="line" x1="90" y1="50" x2="10" y2="50" stroke-width="10" />
-        </svg>
+        <div class="m-[6px] w-[9px] h-[9px]">
+            <svg width="9" height="9" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <line class:rotate={isOpen} class="line" x1="50" y1="10" x2="50" y2="90" stroke-width="10" />
+                <line class="line" x1="90" y1="50" x2="10" y2="50" stroke-width="10" />
+            </svg>
+        </div>
     </div>
     {#if error}
         <div class="error">
@@ -107,41 +138,45 @@
         style={getStyle()}
     >
         <div class="select-options__wrapper svrollbar">
-            <Svroller width="100%" height="10rem" alwaysVisible>
+            <SimpleBar style="width:100%; height: fit-content; max-height: 210px" forceVisible={true} autoHide={false}>
+                <button class="select-options__item text" type="button" on:click={selectDefault}>
+                    {defaultOption}
+                </button>
                 {#each optionsFiltered as opt}
                     <button class="select-options__item text" type="button" on:click={() => selectOption(opt)}>
                         {opt.label}
                         <span> C </span>
                     </button>
                 {/each}
-            </Svroller>
+            </SimpleBar>
         </div>
     </div>
 {/if}
 
 <style lang="scss">
+    :global(.simplebar-scrollbar::before) {
+        min-height: 50px !important;
+        background-color: var(--blue); /* Change to your desired color */
+    }
+
     .error {
         color: red;
         font-size: 12px;
     }
-
     .line {
         transform: rotate(0deg);
         transform-origin: center;
         transition: transform 0.2s ease-in-out;
-        stroke: var(--blue);
+        stroke: var(--black);
     }
-
     .line.rotate {
         transform: rotate(90deg);
     }
-
     input {
         padding: 3px 8px 9px 8px;
     }
-
     input::placeholder {
-        color: var(--blue);
+        color: var(--black);
     }
 
     .select-options {
@@ -149,27 +184,16 @@
         background: var(--Layer-01, #fff);
         box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.12);
         z-index: 1000;
-        padding: 5px 0;
+        margin: 5px 0;
         transition: var(--transition-duration) var(--transition-timing-function);
-
-        /* Customize scrollbar track */
-        --svrollbar-track-background: white;
-        --svrollbar-track-width: 20px;
-        --svrollbar-track-opacity: 1;
-
-        /* Customize scrollbar thumb */
-        --svrollbar-thumb-background: var(--blue);
-        --svrollbar-thumb-width: 10px;
-        --svrollbar-thumb-opacity: 1;
-
         &__wrapper {
+            height: fit-content;
             max-height: 210px;
             overflow: auto;
         }
         &__item {
             width: 100%;
             padding: 10px 16px;
-
             background: var(--Layer-01);
             border: none;
             cursor: pointer;
@@ -190,15 +214,12 @@
             }
         }
     }
-
     .input__chevron {
         transition: transform 0.2s;
     }
-    /* Optionally, add a class to rotate the chevron when open */
     .open .input__chevron {
         transform: rotate(-180deg);
     }
-
     .text {
         font-size: 14px;
         text-align: left;

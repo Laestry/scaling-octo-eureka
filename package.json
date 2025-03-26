@@ -44,9 +44,13 @@
         "vite": "^5.4.9"
     },
     "dependencies": {
+        "@jbfulgencio/svelte-simplebar": "^1.0.0",
+        "@woden/svelte-simplebar": "^1.0.0",
         "cross-env": "^7.0.3",
         "jsonwebtoken": "^9.0.2",
+        "perfect-scrollbar": "^1.5.6",
         "pocketbase": "^0.25.2",
+        "simplebar": "^6.3.0",
         "svrollbar": "^0.12.0"
     }
 }

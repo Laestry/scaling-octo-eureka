@@ -249,13 +249,12 @@
     <div class="flex justify-between mt-[58px]">
         <button
             on:click={() => goto('/products')}
-            class="bg-wblue text-white text-base w-full max-w-[271px] rounded-3xl"
-            on:click={handleSubmit}
+            class="abutton bg-wblue text-white text-base w-full max-w-[271px] rounded-3xl"
         >
             Continuer mes achats
         </button>
         <button
-            class="bg-wred text-white text-base w-full max-w-[271px] rounded-3xl"
+            class="abutton bg-wred text-white text-base w-full max-w-[271px] rounded-3xl"
             on:click={() => {
                 if (isFinalize) handleSubmit();
                 else {

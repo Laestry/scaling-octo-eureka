@@ -1,86 +1,170 @@
 <script lang="ts">
-    import { IconSearch, IconDownload, IconList, IconGrid, IconDollar } from '$lib/icons';
-    import Filter from './Filter.svelte';
+    import { IconSearch, IconDownload, IconList, IconGrid } from '$lib/icons';
+    import Select from '$lib/components/Select.svelte';
+    import type { TFilters } from '$lib/models/general';
 
     export let isGrid = true;
+    export let isRestaurantPrice = true;
 
-    const filters = [
-        {
-            name: 'Producteur',
-            list: [
-                'Nom Nomnom',
-                'Nom Von der Nommz',
-                'Nom Du Nomnom',
-                'Nomm Di Nomomo',
-                'Nom Nomnom',
-                'Nom Von der Nommz',
-                'Nom Du Nomnom'
-            ]
-        },
-        {
-            name: 'Region',
-            list: ['1', '2', '3', '4', '5']
-        },
-        {
-            name: 'Type',
-            list: ['1', '2', '3', '4', '5']
-        },
-        {
-            name: 'Couleur',
-            list: ['1', '2', '3', '4', '5']
-        },
-        {
-            name: 'Format',
-            list: ['1', '2', '3', '4', '5']
-        },
-        {
-            name: 'Associés',
-            list: ['1', '2', '3', '4', '5']
-        },
-        {
-            name: 'Trier',
-            list: ['1', '2', '3', '4', '5']
+    export let categories = [];
+
+    type Category = {
+        name: string;
+        list: string[];
+        order: number;
+    };
+
+    function parseCategoryValue(val: string | number): number {
+        // If it's already a number, return it.
+        if (typeof val === 'number') return val;
+
+        // Attempt to match numbers with an optional unit (ml or L)
+        const match = val.match(/^([\d.]+)\s*(ml|l)?$/i);
+        if (match) {
+            let numberPart = parseFloat(match[1]);
+            const unit = match[2]?.toLowerCase();
+            // Convert liters to milliliters if needed.
+            if (unit === 'l') {
+                numberPart *= 1000;
+            }
+            return numberPart;
         }
-    ];
-    let price = '';
+        // Fallback: try converting the string directly to a number.
+        return Number(val) || 0;
+    }
+
+    function formatCategories(categories: any[] = []): Category[] {
+        // Group by the original type.
+        const grouped = categories.reduce(
+            (acc, cat) => {
+                // Only process if cat.value exists and is not "0".
+                if (cat.value && cat.value !== '0') {
+                    if (!acc[cat.type]) {
+                        acc[cat.type] = [];
+                    }
+                    if (!acc[cat.type].includes(cat.value)) {
+                        acc[cat.type].push(cat.value);
+                    }
+                }
+                return acc;
+            },
+            {} as Record<string, (string | number)[]>
+        );
+
+        // Sort each group using the custom numeric parser.
+        for (const key in grouped) {
+            grouped[key].sort((a, b) => parseCategoryValue(a) - parseCategoryValue(b));
+        }
+
+        // Convert the grouped object to an array.
+        let result = Object.entries(grouped).map(([name, list]) => ({ name, list }));
+
+        // Custom mapping for renaming and ordering.
+        // key: original type, value: { customName: string, order: number }
+        const orderMap: Record<string, { customName: string; order: number }> = {
+            providerName: { customName: 'Producteurs', order: 1 },
+            originRegion: { customName: 'Regions', order: 2 },
+            specificCategory: { customName: 'Couleur', order: 3 },
+            uvc: { customName: 'Bouteilles (X/caisse)', order: 4 },
+            lblFormat: { customName: 'Format', order: 5 },
+            vintage: { customName: 'Vintage', order: 6 }
+        };
+
+        // Replace names with custom ones and add an order property for sorting.
+        result = result.map((item) => {
+            const mapping = orderMap[item.name];
+            return {
+                name: mapping ? mapping.customName : item.name,
+                list: item.list,
+                order: mapping ? mapping.order : Infinity // items not in the mapping come last.
+            };
+        });
+
+        // Sort the categories by the custom order.
+        result.sort((a, b) => a.order - b.order);
+
+        // Remove the temporary "order" property before returning.
+        const res = result.map(({ order, ...rest }) => rest);
+        console.log('formatCategories', res);
+        return res;
+    }
+
+    // Format the flat categories array into grouped filters
+    const filters = formatCategories(categories);
+
+    export let selectedFilters: TFilters = {
+        producer: undefined,
+        region: undefined,
+        color: undefined,
+        uvc: undefined,
+        format: undefined,
+        vintage: undefined,
+        priceRange: undefined,
+        sorting: undefined,
+        nameSearch: undefined
+    };
+
+    function clearAllFilters() {
+        selectedFilters = {
+            producer: undefined,
+            region: undefined,
+            color: undefined,
+            uvc: undefined,
+            format: undefined,
+            vintage: undefined,
+            priceRange: undefined,
+            sorting: undefined,
+            nameSearch: undefined
+        };
+    }
+
+    $: console.log(selectedFilters);
+
+    function togglePrice(range: 'low' | 'mid' | 'high') {
+        if (selectedFilters.priceRange === range) {
+            selectedFilters.priceRange = undefined;
+        } else {
+            selectedFilters.priceRange = range;
+        }
+    }
 </script>
 
 <div class="mt-15 flex flex-col gap-3">
     <div class="flex justify-between">
         <div class="flex gap-1 items-center w-full">
-            <button class="all-button text-">Voir tout</button>
+            <button class="all-button abutton text-" on:click={clearAllFilters}>Voir tout</button>
             <label class="search md:hidden">
                 <div class="search__button">
-                    <IconSearch></IconSearch>
+                    <IconSearch />
                 </div>
-                <input type="text" class="search__input" />
+                <input type="text" class="search__input" bind:value={selectedFilters.nameSearch} />
             </label>
         </div>
         <div class="flex gap-1 items-center">
             <label class="checkbox">
-                <input type="checkbox" class="checkbox__input" />
-                <span class="checkbox__text">Prix Resto</span>
+                <input type="checkbox" class="checkbox__input" bind:checked={isRestaurantPrice} />
+                <span class="checkbox__text {isRestaurantPrice ? '' : 'line-through'}">Prix Resto</span>
                 <span class="checkbox__box"></span>
             </label>
             <div class="flex gap-1">
                 <button
                     class="rounded-full w-6 h-6 bg-[#fff] price-button"
-                    class:active={price === 'low'}
-                    on:click={() => (price = 'low')}
+                    class:active={selectedFilters.priceRange === 'low'}
+                    on:click={() => togglePrice('low')}
                 >
                     $
                 </button>
                 <button
                     class="rounded-full w-6 h-6 bg-[#fff] price-button"
-                    class:active={price === 'mid'}
-                    on:click={() => (price = 'mid')}
+                    class:active={selectedFilters.priceRange === 'mid'}
+                    on:click={() => togglePrice('mid')}
                 >
                     $$
                 </button>
                 <button
                     class="rounded-full w-6 h-6 bg-[#fff] price-button"
-                    class:active={price === 'high'}
-                    on:click={() => (price = 'high')}
+                    class:active={selectedFilters.priceRange === 'high'}
+                    on:click={() => togglePrice('high')}
                 >
                     $$$
                 </button>
@@ -90,32 +174,72 @@
     <div class="md:hidden flex gap-[6px]">
         <label class="search">
             <button class="search__button">
-                <IconSearch></IconSearch>
+                <IconSearch />
             </button>
             <input type="text" class="search__input" />
         </label>
         <a href="#" class="md:rounded-none rounded-full button-view button-view--link">
-            <IconDownload></IconDownload>
+            <IconDownload />
         </a>
     </div>
     <div class="filters">
-        <Filter info={filters[0]} />
-        <Filter info={filters[1]} />
-        <Filter info={filters[2]} />
-        <Filter info={filters[3]} />
-        <Filter info={filters[4]} />
-        <Filter info={filters[5]} />
-        <Filter info={filters[6]} />
+        {#if filters.length > 0}
+            <Select
+                class="w-[176px]"
+                options={filters[0].list}
+                placeholder={filters[0].name}
+                defaultOption="Tous"
+                bind:selected={selectedFilters.producer}
+            />
+            <Select
+                class="w-[176px]"
+                options={filters[1].list}
+                placeholder={filters[1].name}
+                defaultOption="Tous"
+                bind:selected={selectedFilters.region}
+            />
+            <Select
+                class="w-[176px]"
+                options={filters[2].list}
+                placeholder={filters[2].name}
+                defaultOption="Tous"
+                bind:selected={selectedFilters.color}
+            />
+            <Select
+                class="w-[176px]"
+                options={filters[4].list}
+                placeholder={filters[4].name}
+                defaultOption="Tous"
+                bind:selected={selectedFilters.format}
+            />
+            <Select
+                class="w-[176px]"
+                options={filters[5].list}
+                placeholder={filters[5].name}
+                defaultOption="Tous"
+                bind:selected={selectedFilters.vintage}
+            />
+        {:else}
+            <p>No filters available.</p>
+        {/if}
+        <Select
+            class="w-[176px] self-end"
+            options={['Prix', 'Alphabétique']}
+            placeholder="Trier"
+            defaultOption="Tous"
+            bind:selected={selectedFilters.sorting}
+        />
     </div>
+
     <div class="hidden justify-end gap-2 md:flex">
         <button class="button-view" class:active={isGrid} on:click={() => (isGrid = true)}>
-            <IconGrid></IconGrid>
+            <IconGrid />
         </button>
         <button class="button-view" class:active={!isGrid} on:click={() => (isGrid = false)}>
-            <IconList></IconList>
+            <IconList />
         </button>
         <a href="#" class="button-view button-view--link">
-            <IconDownload></IconDownload>
+            <IconDownload />
         </a>
     </div>
 </div>

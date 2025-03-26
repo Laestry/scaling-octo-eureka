@@ -40,7 +40,7 @@
     >
         <div class="absolute">
             <button
-                class="rotate-45 text-5xl"
+                class="hover:translate-y-0.5 transition-transform rotate-45 text-5xl"
                 style="line-height: 24px"
                 on:click|preventDefault|stopPropagation={() => cart.removeCompletely(product.id)}
             >
@@ -71,9 +71,11 @@
             <div class="flex items-center w-fit h-fit mr-[2px]">
                 <p class="product-table-counter__value ml-[2px]">{$itemQuantity * product.uvc}</p>
                 <div class="flex flex-col justify-center items-center">
-                    <button class="product-table-counter__button" on:click={() => cart.add(product)}><Plus /></button>
+                    <button class="abutton product-table-counter__button" on:click={() => cart.add(product)}
+                        ><Plus /></button
+                    >
                     <button
-                        class="product-table-counter__button {$itemQuantity > 1 ? '' : '!text-gray-300'}"
+                        class="abutton product-table-counter__button {$itemQuantity > 1 ? '' : '!text-gray-300'}"
                         on:click={() => {
                             if ($itemQuantity > 1) cart.remove(product.id);
                         }}
@@ -149,12 +151,12 @@
             <p class="product-table-counter__value">{$itemQuantity * product.uvc}</p>
             <div class="flex flex-col justify-center items-center">
                 <button
-                    class="product-table-counter__button"
+                    class="abutton product-table-counter__button"
                     style="line-height: 16px"
                     on:click={() => cart.add(product)}>+</button
                 >
                 <button
-                    class="product-table-counter__button {$itemQuantity > 1 ? '' : 'text-gray-300'}"
+                    class="abutton product-table-counter__button {$itemQuantity > 1 ? '' : 'text-gray-300'}"
                     style="line-height: 16px"
                     on:click={() => {
                         if ($itemQuantity > 1) cart.remove(product.id);
