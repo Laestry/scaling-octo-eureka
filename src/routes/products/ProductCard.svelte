@@ -40,8 +40,6 @@
             animations = animations.filter((anim) => anim.id !== id);
         }, 600);
     }
-
-    export let cartQuantity = 0;
 </script>
 
 {#if isMain}

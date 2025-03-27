@@ -1,6 +1,7 @@
 <script lang="ts">
     import { teleport, clickOutside } from '$lib/utils';
     import SimpleBar from '@woden/svelte-simplebar';
+    import { createEventDispatcher } from 'svelte';
 
     // Option type for object options
     type Option = { value: number | string; label: number | string };
@@ -24,6 +25,7 @@
         | 'warning'
         | 'disabled' = 'enabled';
     export let hint: string = '';
+    export let validate = false;
 
     let isOpen = false;
     let userInput = '';
@@ -65,6 +67,10 @@
         }
     }
 
+    $: if (selected !== undefined && !userInput) {
+        inputValue = typeof selected === 'object' ? String(selected.label) : String(selected);
+    }
+
     function selectOption(opt: Option) {
         // Display the label as a string in the input field.
         inputValue = String(opt.label);
@@ -91,20 +97,24 @@
 
     let error = false;
     export function handleValidate() {
+        if (!validate) return;
         error = selected === null || selected === undefined;
         console.log('handleValidate', error, selected);
     }
     export let inputClass = '';
+    const dispatch = createEventDispatcher();
     function selectDefault() {
         inputValue = '';
         selected = undefined;
         isOpen = false;
         userInput = '';
+        dispatch('defaultSelected');
     }
 </script>
 
 <div bind:this={wrapperElement} class="flex bg-white border-t {$$props.class}">
     <input
+        autocomplete="none"
         class="text {selected ? 'text-wblue' : 'text-wblack'} {inputClass}"
         style="width: calc(100% - 21px);"
         bind:value={inputValue}

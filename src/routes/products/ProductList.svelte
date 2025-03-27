@@ -37,7 +37,7 @@
                 Format
                 <!--                <IconArrow1/>-->
             </th>
-            <th class="w-[175px]"> $ {$isPrixResto ? 'Resto' : 'Perso'}</th>
+            <th class="w-[175px]" style="font-family: 'Riposte', 'serif'">$ {$isPrixResto ? 'Resto' : 'Perso'}</th>
         </tr>
         {#each products as product (product.id)}
             <ProductRow {product} />

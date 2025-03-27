@@ -25,18 +25,16 @@
         return images[i]!;
     }
 
-    let img = '';
-    $: {
-        product;
-        img = getImage();
-    }
+    // Instead of loading the image immediately, we'll use a delayed variable.
+    let delayedImage = '';
+    let loadImageTimer: NodeJS.Timeout;
 
     // Preload the image and set a flag when it's loaded.
     let imgLoaded = false;
-    $: if (img) {
+    $: if (delayedImage) {
         imgLoaded = false;
         const imageLoader = new Image();
-        imageLoader.src = img;
+        imageLoader.src = delayedImage;
         imageLoader.onload = () => {
             imgLoaded = true;
         };
@@ -56,10 +54,18 @@
     function handleMouseEnter(e: MouseEvent) {
         hovered = true;
         handleMouseMove(e); // update mouse position on enter
+        // Start a timer to load the image after 300ms.
+        loadImageTimer = setTimeout(() => {
+            delayedImage = getImage();
+        }, 0);
     }
 
     function handleMouseLeave(e: MouseEvent) {
         hovered = false;
+        // Cancel the image load timer if hover ends too soon.
+        clearTimeout(loadImageTimer);
+        delayedImage = '';
+        imgLoaded = false;
     }
 
     // We'll use a timer to differentiate between single and double clicks.
@@ -130,7 +136,7 @@
         </span>
     </td>
 
-    {#if hovered && imgLoaded}
+    {#if hovered && imgLoaded && delayedImage}
         <div
             class="absolute pointer-events-none product-row-image"
             style="left: {mouseX}px; top: {mouseY}px; transform: translate(-50%, -50%);"
@@ -146,7 +152,7 @@
                 </div>
             {/each}
             <div class="bg-wblack text-white text-xs">2clics = +panier</div>
-            <img transition:fade={{ duration: 300 }} src={img} alt={product.name} />
+            <img transition:fade={{ duration: 300 }} src={delayedImage} alt={product.name} />
             <div class="bg-wblack text-white text-xs">1clic = voir produit</div>
         </div>
     {/if}

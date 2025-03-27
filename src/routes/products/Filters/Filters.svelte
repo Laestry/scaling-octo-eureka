@@ -3,6 +3,9 @@
     import Select from '$lib/components/Select.svelte';
     import type { TFilters } from '$lib/models/general';
     import { isPrixResto } from '$lib/store';
+    import { goto } from '$app/navigation';
+    import { createEventDispatcher, onMount } from 'svelte';
+    import { page } from '$app/stores';
 
     export let isGrid = true;
     export let categories = [];
@@ -64,7 +67,7 @@
         const orderMap: Record<string, { customName: string; order: number }> = {
             providerName: { customName: 'Producteurs', order: 1 },
             originRegion: { customName: 'Regions', order: 2 },
-            specificCategory: { customName: 'Couleur', order: 3 },
+            specificCategory: { customName: 'Charactère', order: 3 },
             uvc: { customName: 'Bouteilles (X/caisse)', order: 4 },
             lblFormat: { customName: 'Format', order: 5 },
             vintage: { customName: 'Vintage', order: 6 }
@@ -91,6 +94,7 @@
 
     // Format the flat categories array into grouped filters
     const filters = formatCategories(categories);
+    const dispatch = createEventDispatcher();
 
     function clearAllFilters() {
         selectedFilters = {
@@ -104,6 +108,8 @@
             sorting: undefined,
             nameSearch: undefined
         };
+        console.log('resetFilters');
+        dispatch('resetFilters');
     }
 
     function togglePrice(range: 'low' | 'mid' | 'high') {
@@ -113,6 +119,35 @@
             selectedFilters.priceRange = range;
         }
     }
+
+    let isMounted = false;
+    onMount(() => {
+        isMounted = true;
+    });
+
+    function setParams() {
+        console.log('setParams');
+        const params = new URLSearchParams();
+        if (selectedFilters.producer) params.set('producer', selectedFilters.producer);
+        if (selectedFilters.region) params.set('region', selectedFilters.region);
+        if (selectedFilters.color) params.set('color', selectedFilters.color);
+        if (selectedFilters.uvc) params.set('uvc', String(selectedFilters.uvc));
+        if (selectedFilters.format) params.set('format', selectedFilters.format);
+        if (selectedFilters.vintage) params.set('vintage', selectedFilters.vintage);
+        if (selectedFilters.priceRange) params.set('priceRange', selectedFilters.priceRange);
+        if (selectedFilters.sorting) params.set('sorting', selectedFilters.sorting);
+        if (selectedFilters.nameSearch) params.set('nameSearch', selectedFilters.nameSearch);
+        goto(`?${params.toString()}`, { replaceState: true, noScroll: true });
+    }
+
+    $: {
+        if (isMounted) {
+            selectedFilters;
+            setParams();
+        }
+    }
+
+    $: console.log(selectedFilters);
 </script>
 
 <div class="mt-15 flex flex-col gap-3">

@@ -12,17 +12,19 @@
     let record = data.products;
     let isGrid = true;
 
-    let selectedFilters: TFilters = {
-        producer: undefined,
-        region: undefined,
-        color: undefined,
-        uvc: undefined,
-        format: undefined,
-        vintage: undefined,
-        priceRange: undefined,
-        sorting: undefined,
-        nameSearch: undefined
-    };
+    let selectedFilters: TFilters = data.filterObj
+        ? data.filterObj
+        : {
+              producer: undefined,
+              region: undefined,
+              color: undefined,
+              uvc: undefined,
+              format: undefined,
+              vintage: undefined,
+              priceRange: undefined,
+              sorting: undefined,
+              nameSearch: undefined
+          };
 
     // Pagination state
     let currentPage = 2;
@@ -30,9 +32,6 @@
     let hasMore = true;
     let sentinel: HTMLDivElement;
 
-    /**
-     * loadMoreProducts: Fetches the next page of products.
-     */
     async function loadMoreProducts() {
         if (isLoading || !hasMore) return;
         isLoading = true;
@@ -79,17 +78,19 @@
         } else if (selectedFilters.sorting === 'Alphabétique') {
             sort = 'name';
         }
-
+        console.log('filterString', filterString);
         try {
             const result = await pb.collection('alcohol_products').getList(currentPage, 20, {
                 filter: filterString || undefined,
                 sort: sort || undefined
             });
-
+            console.log('result', result);
             if (result.totalPages === result.page) {
+                products = [...products, ...result.items];
                 hasMore = false;
             } else {
                 products = [...products, ...result.items];
+
                 record = result;
                 currentPage = result.page + 1;
             }
@@ -100,10 +101,14 @@
         }
     }
 
-    async function updateProducts() {
-        console.log('updateProducts');
+    let skipTwice = 0;
+    async function updateProducts(reset = false) {
+        console.log('updateProducts', selectedFilters);
+
         const filtersApplied = Object.values(selectedFilters).some((filter) => filter !== undefined);
-        if (!filtersApplied) {
+        if (skipTwice !== 2 && !reset) {
+            // if (!filtersApplied && !reset) {
+            skipTwice++;
             console.log('No filters applied.');
             return;
         }
@@ -139,15 +144,15 @@
             }
         };
     });
-
-    // Clean up any resources when the component is destroyed.
-    onDestroy(() => {
-        // No debounce timer in this version; clean up if necessary.
-    });
 </script>
 
 <div>
-    <Filters bind:isGrid categories={data.categories} bind:selectedFilters />
+    <Filters
+        bind:isGrid
+        categories={data.categories}
+        bind:selectedFilters
+        on:resetFilters={() => updateProducts(true)}
+    />
     {#if isLoading && products.length === 0}
         loading wines
     {:else if products.length === 0}
