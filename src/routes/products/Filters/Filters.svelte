@@ -5,8 +5,8 @@
     import { isPrixResto } from '$lib/store';
 
     export let isGrid = true;
-
     export let categories = [];
+    export let selectedFilters: TFilters;
 
     type Category = {
         name: string;
@@ -92,18 +92,6 @@
     // Format the flat categories array into grouped filters
     const filters = formatCategories(categories);
 
-    export let selectedFilters: TFilters = {
-        producer: undefined,
-        region: undefined,
-        color: undefined,
-        uvc: undefined,
-        format: undefined,
-        vintage: undefined,
-        priceRange: undefined,
-        sorting: undefined,
-        nameSearch: undefined
-    };
-
     function clearAllFilters() {
         selectedFilters = {
             producer: undefined,
@@ -117,8 +105,6 @@
             nameSearch: undefined
         };
     }
-
-    $: console.log(selectedFilters);
 
     function togglePrice(range: 'low' | 'mid' | 'high') {
         if (selectedFilters.priceRange === range) {
