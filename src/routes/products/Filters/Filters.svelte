@@ -5,7 +5,8 @@
     import { isPrixResto } from '$lib/store';
     import { goto } from '$app/navigation';
     import { createEventDispatcher, onMount } from 'svelte';
-    import { page } from '$app/stores';
+    import { page, navigating } from '$app/stores';
+    import { replaceState } from '$app/navigation';
 
     export let isGrid = true;
     export let categories = [];
@@ -141,7 +142,7 @@
     }
 
     $: {
-        if (isMounted) {
+        if (isMounted && !navigating) {
             selectedFilters;
             setParams();
         }
