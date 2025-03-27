@@ -34,7 +34,7 @@
 
     {#key currentPath}
         <div
-            in:fly={isRight ? { x: -200, duration: 1000, delay: 300 } : { x: 200, duration: 1000, delay: 300 }}
+            in:fly={isRight ? { x: -200, duration: 1000, delay: 1000 } : { x: 200, duration: 1000, delay: 1000 }}
             out:fly={isRight ? { x: 200, duration: 1000 } : { x: -200, duration: 1000 }}
         >
             <slot />

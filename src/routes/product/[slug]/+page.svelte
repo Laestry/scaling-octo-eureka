@@ -153,11 +153,10 @@
                             on:click={() => (expand_description = !expand_description)}
                             class="abutton product-table__description flex justify-between w-full"
                         >
-                            <span
-                                >Le prix inclut les taxes et <span class="text-wblue underline"
-                                    >le frais d’agent de 16%.</span
-                                ></span
-                            >
+                            <span>
+                                Le prix inclut les taxes et
+                                <span class="text-wblue underline"> le frais d’agent de 16%. </span>
+                            </span>
 
                             <span class="text-wred">
                                 {expand_description ? '-' : '+'}
@@ -186,14 +185,14 @@
         </div>
     </div>
 
-    <div class="mt-[20px] flex flex-col gap-[13px]">
-        <Accordion title="Du même producteur">
-            <div>body</div>
-        </Accordion>
-        <Accordion title="De la même région">
-            <div>body</div>
-        </Accordion>
-    </div>
+    <!--    <div class="mt-[20px] flex flex-col gap-[13px]">-->
+    <!--        <Accordion title="Du même producteur">-->
+    <!--            <div>body</div>-->
+    <!--        </Accordion>-->
+    <!--        <Accordion title="De la même région">-->
+    <!--            <div>body</div>-->
+    <!--        </Accordion>-->
+    <!--    </div>-->
 </div>
 
 <style lang="scss">
