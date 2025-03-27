@@ -1,27 +1,17 @@
-import type { Product } from '$lib/server/prisma';
+import type { AlcoholProduct } from '$lib/models/pocketbase';
+import { isPrixResto } from '$lib/store';
+import { derived, get } from 'svelte/store';
 
-export function alcoholFormat({ alcohol }: Product) {
-    return `${(alcohol * 100).toFixed(2)}%`;
-}
+export const priceFormat = derived(isPrixResto, ($isPrixResto) => {
+    return function ({ pricing, uvc }: AlcoholProduct, bottle: boolean = true, options: { none?: boolean } = {}) {
+        let price = $isPrixResto ? pricing.price : pricing.priceTaxIn;
 
-export function volumeFormat({ volume }: Product) {
-    return `${volume}ml`;
-}
-
-export function priceFormat({ price, uvc }: Product, bottle: boolean = true, options: { none?: boolean } = {}) {
-    const { none = false } = options; // Destructure 'none' from options with default value
-    if (none) return `${price.toFixed(2)} $`;
-    if (bottle) {
-        return `${(price / uvc).toFixed(2)} $ / B`;
-    } else {
-        return `${price.toFixed(2)} $ / C`;
-    }
-}
-
-export function originFormat({ originCity, originRegion, originCountry, originCountryCode }: Product) {
-    return (
-        [originCity, originRegion, originCountry, originCountryCode ? `[${originCountryCode}]` : '']
-            .filter(Boolean)
-            .join(', ') || '-'
-    );
-}
+        const { none = false } = options;
+        if (none) return `${price.toFixed(2)} $`;
+        if (bottle) {
+            return `${(price / uvc).toFixed(2)} $ / B`;
+        } else {
+            return `${price.toFixed(2)} $ / C`;
+        }
+    };
+});

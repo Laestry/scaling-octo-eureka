@@ -2,9 +2,9 @@
     import { IconSearch, IconDownload, IconList, IconGrid } from '$lib/icons';
     import Select from '$lib/components/Select.svelte';
     import type { TFilters } from '$lib/models/general';
+    import { isPrixResto } from '$lib/store';
 
     export let isGrid = true;
-    export let isRestaurantPrice = true;
 
     export let categories = [];
 
@@ -85,7 +85,7 @@
 
         // Remove the temporary "order" property before returning.
         const res = result.map(({ order, ...rest }) => rest);
-        console.log('formatCategories', res);
+        // console.log('formatCategories', res);
         return res;
     }
 
@@ -142,8 +142,8 @@
         </div>
         <div class="flex gap-1 items-center">
             <label class="checkbox">
-                <input type="checkbox" class="checkbox__input" bind:checked={isRestaurantPrice} />
-                <span class="checkbox__text {isRestaurantPrice ? '' : 'line-through'}">Prix Resto</span>
+                <input type="checkbox" class="checkbox__input" bind:checked={$isPrixResto} />
+                <span class="checkbox__text"> {$isPrixResto ? 'Prix Resto' : 'Prix Perso'}</span>
                 <span class="checkbox__box"></span>
             </label>
             <div class="flex gap-1">

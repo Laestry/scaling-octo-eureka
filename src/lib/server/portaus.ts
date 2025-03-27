@@ -120,7 +120,6 @@ export const PortausApi = {
         if (!format) {
             console.warn('no format', obj);
         }
-        const price = Math.max(obj.pricing.priceTaxIn, 0);
         const vintage =
             Math.min(Math.max(parseInt(obj.currentVintage) || 0, 0), new Date().getFullYear() + 1) || undefined;
 
@@ -141,7 +140,9 @@ export const PortausApi = {
             vintage,
             uvc,
             quantity,
-            price,
+            price: Math.max(obj.pricing.price, 0),
+            priceTaxIn: Math.max(obj.pricing.price, 0),
+            pricing: obj.pricing,
             originCity: processString(obj.originCity) || '',
             originRegion: processString(obj.originRegion) || '',
             originCountry: processString(obj.originCountry) || '',

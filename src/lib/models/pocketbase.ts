@@ -14,6 +14,7 @@ export type AlcoholProduct = {
     uvc: number;
     vintage: number;
     price: number;
+    pricing: Pricing;
     originCity: string;
     originRegion: string;
     originCountry: string;
@@ -21,6 +22,14 @@ export type AlcoholProduct = {
     category: string;
     specificCategory: string;
     tags: string[];
+};
+
+export type Pricing = {
+    agencyFee: number;
+    agencyFeeTaxes: number;
+    agencyFeeWTaxes: number;
+    price: number;
+    priceTaxIn: number;
 };
 
 export function mapToAlcoholProducts(items: RecordModel[]): AlcoholProduct[] {

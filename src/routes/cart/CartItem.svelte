@@ -71,9 +71,9 @@
             <div class="flex items-center w-fit h-fit mr-[2px]">
                 <p class="product-table-counter__value ml-[2px]">{$itemQuantity * product.uvc}</p>
                 <div class="flex flex-col justify-center items-center">
-                    <button class="abutton product-table-counter__button" on:click={() => cart.add(product)}
-                        ><Plus /></button
-                    >
+                    <button class="abutton product-table-counter__button" on:click={() => cart.add(product)}>
+                        <Plus />
+                    </button>
                     <button
                         class="abutton product-table-counter__button {$itemQuantity > 1 ? '' : '!text-gray-300'}"
                         on:click={() => {
@@ -118,10 +118,10 @@
         </div>
         <div class="flex flex-col items-end">
             <div class="product-price">
-                {priceFormat(product)}
+                {$priceFormat(product)}
             </div>
             <div class="product-price {product.uvc > 1 ? '' : 'text-transparent'}">
-                {priceFormat(product, false)}
+                {$priceFormat(product, false)}
             </div>
         </div>
     </a>

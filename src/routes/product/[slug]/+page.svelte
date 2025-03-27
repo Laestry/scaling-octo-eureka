@@ -107,10 +107,10 @@
                             </div>
                             <div class="flex flex-col py-2 w-full">
                                 <p class="product-table__price">
-                                    {priceFormat(product, true)}
+                                    {$priceFormat(product, true)}
                                 </p>
                                 <p class="product-table__price">
-                                    {priceFormat(product, false)}
+                                    {$priceFormat(product, false)}
                                 </p>
                                 <p class="product-table__type-region">Acheter avant <br /> JJ mois, 20XX</p>
                                 <p />

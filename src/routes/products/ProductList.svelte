@@ -1,22 +1,26 @@
 <script lang="ts">
     import { fade } from 'svelte/transition';
-    import type { Product } from '$lib/server/prisma';
     import { goto } from '$app/navigation';
-    import { originFormat, priceFormat, volumeFormat } from '../product/[slug]/utils';
+    import { priceFormat } from '../product/[slug]/utils';
     import { IconArrow1 } from '$lib/icons';
+    import type { AlcoholProduct } from '$lib/models/pocketbase';
 
-    export let products: Product[];
+    export let products: AlcoholProduct[];
 </script>
 
 <div in:fade class="mt-[32px]">
     <table class="">
         <tr>
-            <th class="w-[289px]">
-                Nom
+            <th class="w-[191px]">
+                Region
                 <IconArrow1></IconArrow1>
             </th>
-            <th class="w-[193p]">
+            <th class="w-[193px]">
                 Vigneron
+                <IconArrow1></IconArrow1>
+            </th>
+            <th class="w-[289px]">
+                Vin
                 <IconArrow1></IconArrow1>
             </th>
             <th class="w-[94px]">
@@ -27,36 +31,27 @@
                 Type
                 <IconArrow1></IconArrow1>
             </th>
-            <th class="w-[191px]">
-                Regrion
+            <th class="w-[96px]">
+                Format
                 <IconArrow1></IconArrow1>
             </th>
-            <th class="w-[96px]">Format</th>
-            <th class="w-[175px]">$</th>
+            <th class="w-[175px]"> $ </th>
         </tr>
         {#each products as product (product.id)}
             <tr on:click={() => goto(`/products/${product.slug}`)} class="cursor-pointer">
+                <td>{product.originRegion || '-'}</td>
+                <td>
+                    {product.providerName || '-'}
+                </td>
                 <td class="truncate">{product.name || '-'}</td>
-                <td>
-                    {#if product.providerName}
-                        {#if product.providerSite}
-                            <a href={product.providerSite || '#'}>{product.providerName}</a>
-                        {:else}
-                            {product.providerName}
-                        {/if}
-                    {/if}
-                </td>
                 <td>{product.vintage || '-'}</td>
-                <td>{product.specificCategory || '-'}</td>
-                <td>{originFormat(product)}</td>
+                <td class="capitalize">{product.specificCategory || '-'}</td>
+                <td>{product.uvc} x {product.lblFormat}</td>
                 <td>
-                    {product.quantity} x {volumeFormat(product)}
-                </td>
-                <td>
-                    {priceFormat(product)} / C
+                    {$priceFormat(product)}
                     <br />
-                    <span class="gray">
-                        {priceFormat(product)} / B
+                    <span class="gray {product.uvc === 1 ? 'invisible' : ''}">
+                        {$priceFormat(product, false)}
                     </span>
                 </td>
             </tr>

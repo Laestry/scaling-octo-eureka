@@ -66,7 +66,7 @@
 
             <div class="flex flex-col items-end" style="position: relative; overflow: visible;">
                 <div class="product-price">
-                    {priceFormat(product, false, { none: true })}
+                    {$priceFormat(product, false, { none: true })}
                 </div>
                 <button
                     class="text-color5 text-sm font-bold cursor-cell whitespace-nowrap"
@@ -100,10 +100,10 @@
             </div>
             <div class="flex flex-col items-end">
                 <div class="product-price">
-                    {priceFormat(product)}
+                    {$priceFormat(product)}
                 </div>
                 <div class="product-price {product.uvc > 1 ? '' : 'text-transparent'}">
-                    {priceFormat(product, false)}
+                    {$priceFormat(product, false)}
                 </div>
             </div>
         </a>
