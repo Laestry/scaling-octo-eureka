@@ -55,6 +55,7 @@
         border-bottom: 1px solid var(--border--02);
     }
     th {
+        height: 48px;
         color: #000;
         font-size: 12px;
         font-style: normal;

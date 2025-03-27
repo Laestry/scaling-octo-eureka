@@ -91,6 +91,21 @@
 
     const itemQuantity = getItemQuantityStore(product.id);
     let animations: { id: number }[] = [];
+
+    let region = '';
+    $: {
+        const r = product.originRegion?.trim() || '';
+        const c = product.originCountry?.trim() || '';
+        if (r && c) {
+            region = `${r}, ${c}`;
+        } else if (r) {
+            region = r;
+        } else if (c) {
+            region = c;
+        } else {
+            region = '-';
+        }
+    }
 </script>
 
 <!-- Attach only the custom click handler (plus mouse events for hover) -->
@@ -99,15 +114,15 @@
     on:mouseleave={handleMouseLeave}
     on:mousemove={handleMouseMove}
     on:click={handleClick}
-    class="relative cursor-pointer"
+    class="relative cursor-pointer border-y border-[#181C1C33]"
 >
-    <td>{product.originRegion || '-'}</td>
+    <td>{region || '-'}</td>
     <td>{product.providerName || '-'}</td>
     <td class="truncate">{product.name || '-'}</td>
     <td>{product.vintage || '-'}</td>
     <td class="capitalize">{product.specificCategory || '-'}</td>
     <td>{product.uvc} x {product.lblFormat}</td>
-    <td class="text-right">
+    <td class="text-right pr-[5px]">
         {$priceFormat(product)}
         <br />
         <span class="text-[#949494] {product.uvc === 1 ? 'invisible' : ''}">
@@ -122,7 +137,7 @@
         >
             {#each animations as anim (anim.id)}
                 <div
-                    class="fly-animation"
+                    class="fly-animation !text-wblack"
                     in:fly={{ y: 25, duration: 600 }}
                     out:fly={{ y: -30, duration: 600 }}
                     style="position: absolute; left: 50%; top: -20px; transform: translateX(-50%); pointer-events: none; z-index: 10;"
@@ -130,9 +145,9 @@
                     {$itemQuantity > 0 ? $itemQuantity * product.uvc : ''}
                 </div>
             {/each}
-            <div class="bg-wblack text-white text-xs">2 clics = +panier</div>
+            <div class="bg-wblack text-white text-xs">2clics = +panier</div>
             <img transition:fade={{ duration: 300 }} src={img} alt={product.name} />
-            <div class="bg-wblack text-white text-xs">1 clic = détails du produit</div>
+            <div class="bg-wblack text-white text-xs">1clic = voir produit</div>
         </div>
     {/if}
 </tr>
@@ -146,5 +161,11 @@
         height: auto;
         pointer-events: none;
         z-index: 10;
+    }
+    td {
+        height: 48px;
+    }
+    tr:hover {
+        color: #181c1c33;
     }
 </style>
