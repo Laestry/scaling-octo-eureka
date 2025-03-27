@@ -176,7 +176,7 @@
                                     <li>Cheeeeers!</li>
                                 </ol>
                                 <br />
-                                Questions? <a href="">Ecrivez-nous</a>.
+                                Questions? <a href="mailto:info@wardetassocies.com">Ecrivez-nous</a>.
                             </div>
                         {/if}
                     </div>
