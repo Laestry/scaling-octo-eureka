@@ -2,55 +2,81 @@
     let selected: string;
 </script>
 
-<div class="pt-[106px] pb-[48px] flex flex-col justify-center items-center bg-color1 w-full">
-    <img class="h-[102px] w-auto" src="/images/Ward%20&%20Associes.svg" alt="Ward & Associes" />
+<div
+    class="flex flex-col justify-center items-center w-full bg-color1
+           md:pt-[106px] md:pb-[48px] md:px-1 px-4"
+>
+    <img class="h-[107px]" src="/images/Ward%20&%20Associes.svg" alt="Ward & Associes" />
 
-    <div class="mt-[104px] max-w-[1154px] w-full flex flex-wrap items-start footer">
-        <div class="w-[82px] h-[53px] flex justify-center items-center">
-            <img width="70px" src="/logo.svg" alt="logo" />
-        </div>
+    <div class="md:mt-[104px] max-w-[1137px] w-full flex flex-wrap items-start footer">
+        <img class="md:inline hidden" width="69px" height="53px" src="/logo.svg" alt="logo" />
 
-        <div class="flex flex-col ml-[15px] w-[368px]" style="letter-spacing: 5%">
-            <p class=" leading-4 text-xs">Inscrivez-vous à notre Infolettre pour recevoir toutes les exclusivités!</p>
-            <div class="flex flex-wrap mt-[26px] gap-1">
-                <input class="footerInput w-[94px]" placeholder="Prénom" autocomplete="first-name" />
-                <input class="footerInput w-[94px]" placeholder="Nom" autocomplete="family-name" />
+        <div
+            class="flex flex-col
+                   md:ml-[21px] md:w-[368px]"
+        >
+            <p class="leading-4 text-xs">Inscrivez-vous à notre Infolettre pour recevoir toutes les exclusivités!</p>
+            <!--            form-->
+            <div class="flex flex-wrap md:mt-[26px] mt-2 gap-1">
+                <input
+                    class="order-1 md:order-1 md:w-[94px] md:flex-0 flex-1"
+                    placeholder="Prénom"
+                    autocomplete="first-name"
+                />
+                <input
+                    class="order-2 md:order-2 md:w-[94px] md:flex-0 flex-1"
+                    placeholder="Nom"
+                    autocomplete="family-name"
+                />
+                <input
+                    class="order-3 md:order-4 md:w-[272px] w-full"
+                    placeholder="Ton courriel ici"
+                    autocomplete="email"
+                />
                 <select
                     bind:value={selected}
-                    class="bg-wpink text-white w-[169px] border-t border-white text-xs tracking-[0.6px]"
+                    class="order-4 md:order-3
+                    md:w-[169px] h-[24px]
+                    md:flex-0 flex-1
+                    bg-wpink text-white border-t border-white text-xs tracking-[0.6px]"
                 >
-                    <option value={'Restaurateur'}>
-                        {'Restaurateur'}
-                    </option>
-                    <option value={'Particulier'}>
-                        {'Particulier'}
-                    </option>
-                    <option value={'Curieux SAQ'}>
-                        {'Curieux SAQ'}
-                    </option>
+                    <option value="Restaurateur">Restaurateur</option>
+                    <option value="Particulier">Particulier</option>
+                    <option value="Curieux SAQ">Curieux SAQ</option>
                 </select>
-                <input class="footerInput w-[272px]" placeholder="Ton courriel ici" autocomplete="email" />
-                <button class=" text-center bg-white rounded-3xl w-[90px] text-xs letter tracking-[0.6px]"
-                    >Cheeeers!</button
-                >
+                <button class="order-5 text-center bg-white rounded-3xl w-[90px] text-xs letter tracking-[0.6px]">
+                    Cheeeers!
+                </button>
             </div>
         </div>
 
-        <div class="flex flex-col ml-auto w-[176px] gap-1">
-            <a href="/associes" class=" leading-[28px]">L’agence</a>
-            <a href="/Rendez-vous" class=" leading-[28px]">Rendez-vous</a>
-            <a href="mailto:info@wardetassocies.com" class=" leading-[28px]">Questions</a>
+        <!--        links-->
+        <div
+            class="links flex flex-col gap-1
+                   md:ml-auto
+                   md:w-[176px] w-full
+                   md:items-start items-center
+                   md:my-0 my-2"
+        >
+            <a href="/associes">L’agence</a>
+            <a href="/Rendez-vous">Rendez-vous</a>
+            <a href="mailto:info@wardetassocies.com">Questions</a>
             <a
                 target="_blank"
                 href="https://www.saq.com/fr/produits?nom_agent_promo=Ward+%26+Associ%C3%A9s%2C+Repr%C3%A9sentants+en+Vin"
-                class=" leading-[28px]">W& à la SAQ</a
             >
+                W& à la SAQ
+            </a>
         </div>
+
+        <!--        contacts-->
         <div class="flex flex-col mt-[2px] ml-4 w-[209px] gap-1 text-[13px]">
             <p class="leading-[16px]">1217 Saint-Zotique Est, Montréal, Qc. H2S 1N6</p>
             <p class="leading-[28px]">
                 <a href="mailto:info@wardetassocies.com">info@wardetassocies.com</a>
             </p>
+
+            <!--            credits-->
             <div class="mt-11">
                 Crédits Site
                 <br />
@@ -59,6 +85,8 @@
                 Développé par <a href="https://www.jackgaarkeuken.com/" class="underline text-white">Jack Gaarkeuken</a>
             </div>
         </div>
+
+        <!--        socials-->
         <div class="flex flex-col gap-[10px] mt-[11px] ml-[73px] mr-[15px]">
             <a href="/static" class="">
                 <img class="h-[16px]" src="/icons/socials/Instagram.svg" alt="Instagram" />
@@ -71,11 +99,13 @@
 </div>
 
 <style lang="scss">
+    .links a {
+        line-height: 28px;
+    }
+
     input {
         font-size: 12px;
         letter-spacing: 0.6px;
-    }
-    .footerInput {
         height: 24px;
         text-align: center;
         border-radius: 100px;
@@ -84,7 +114,7 @@
         color: white;
     }
 
-    .footerInput::placeholder {
+    input::placeholder {
         color: white;
     }
 
