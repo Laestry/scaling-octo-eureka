@@ -71,7 +71,7 @@
             specificCategory: { customName: 'Charactère', order: 3 },
             uvc: { customName: 'Bouteilles (X/caisse)', order: 4 },
             lblFormat: { customName: 'Format', order: 5 },
-            vintage: { customName: 'Vintage', order: 6 }
+            vintage: { customName: 'Millesime', order: 6 }
         };
 
         // Replace names with custom ones and add an order property for sorting.
