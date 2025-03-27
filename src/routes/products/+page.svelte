@@ -125,7 +125,7 @@
                 });
             },
             {
-                rootMargin: '300px' // Adjust this margin as needed.
+                rootMargin: isGrid ? '500px' : '300px' // Adjust this margin as needed.
             }
         );
 

@@ -4,6 +4,8 @@
     import { priceFormat } from '../product/[slug]/utils';
     import { IconArrow1 } from '$lib/icons';
     import type { AlcoholProduct } from '$lib/models/pocketbase';
+    import { isPrixResto } from '$lib/store';
+    import ProductRow from './ProductRow.svelte';
 
     export let products: AlcoholProduct[];
 </script>
@@ -13,48 +15,32 @@
         <tr>
             <th class="w-[191px]">
                 Region
-                <IconArrow1></IconArrow1>
+                <!--                <IconArrow1/>-->
             </th>
             <th class="w-[193px]">
                 Vigneron
-                <IconArrow1></IconArrow1>
+                <!--                <IconArrow1/>-->
             </th>
             <th class="w-[289px]">
                 Vin
-                <IconArrow1></IconArrow1>
+                <!--                <IconArrow1/>-->
             </th>
             <th class="w-[94px]">
                 Mil.
-                <IconArrow1></IconArrow1>
+                <!--                <IconArrow1/>-->
             </th>
             <th class="w-[98px]">
                 Type
-                <IconArrow1></IconArrow1>
+                <!--                <IconArrow1/>-->
             </th>
             <th class="w-[96px]">
                 Format
-                <IconArrow1></IconArrow1>
+                <!--                <IconArrow1/>-->
             </th>
-            <th class="w-[175px]"> $ </th>
+            <th class="w-[175px]"> $ {$isPrixResto ? 'Resto' : 'Perso'}</th>
         </tr>
         {#each products as product (product.id)}
-            <tr on:click={() => goto(`/products/${product.slug}`)} class="cursor-pointer">
-                <td>{product.originRegion || '-'}</td>
-                <td>
-                    {product.providerName || '-'}
-                </td>
-                <td class="truncate">{product.name || '-'}</td>
-                <td>{product.vintage || '-'}</td>
-                <td class="capitalize">{product.specificCategory || '-'}</td>
-                <td>{product.uvc} x {product.lblFormat}</td>
-                <td>
-                    {$priceFormat(product)}
-                    <br />
-                    <span class="gray {product.uvc === 1 ? 'invisible' : ''}">
-                        {$priceFormat(product, false)}
-                    </span>
-                </td>
-            </tr>
+            <ProductRow {product} />
         {/each}
     </table>
 </div>
@@ -90,10 +76,6 @@
     td:last-child {
         padding-right: 8px;
         text-align: right;
-    }
-
-    td > span.gray {
-        color: #949494;
     }
 
     td {

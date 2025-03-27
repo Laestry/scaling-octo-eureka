@@ -28,7 +28,6 @@
     }
 
     const itemQuantity = getItemQuantityStore(product.id);
-    export let cartQuantity = 0;
 </script>
 
 <div class="lg:flex hidden h-[142px] border-b border-wblue mb-[11px]">

@@ -94,7 +94,7 @@
         error = selected === null || selected === undefined;
         console.log('handleValidate', error, selected);
     }
-
+    export let inputClass = '';
     function selectDefault() {
         inputValue = '';
         selected = undefined;
@@ -103,32 +103,31 @@
     }
 </script>
 
-<div class="bg-white flex border-t {$$props.class}">
-    <div bind:this={wrapperElement} class="flex w-full">
-        <input
-            class="text {selected ? 'text-wblue' : 'text-wblack'}"
-            style="width: calc(100% - 21px);"
-            bind:value={inputValue}
-            {placeholder}
-            {disabled}
-            on:input={handleInput}
-            on:focus={handleOpen}
-            on:click={handleOpen}
-            on:blur={handleValidate}
-        />
-        <div class="m-[6px] w-[9px] h-[9px]">
-            <svg width="9" height="9" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                <line class:rotate={isOpen} class="line" x1="50" y1="10" x2="50" y2="90" stroke-width="10" />
-                <line class="line" x1="90" y1="50" x2="10" y2="50" stroke-width="10" />
-            </svg>
-        </div>
+<div bind:this={wrapperElement} class="flex bg-white border-t {$$props.class}">
+    <input
+        class="text {selected ? 'text-wblue' : 'text-wblack'} {inputClass}"
+        style="width: calc(100% - 21px);"
+        bind:value={inputValue}
+        {placeholder}
+        {disabled}
+        on:input={handleInput}
+        on:focus={handleOpen}
+        on:click={handleOpen}
+        on:blur={handleValidate}
+    />
+    <div class="m-[6px] w-[9px] h-[9px]">
+        <svg width="9" height="9" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <line class:rotate={isOpen} class="line" x1="50" y1="10" x2="50" y2="90" stroke-width="10" />
+            <line class="line" x1="90" y1="50" x2="10" y2="50" stroke-width="10" />
+        </svg>
     </div>
-    {#if error}
-        <div class="error">
-            {hint}
-        </div>
-    {/if}
 </div>
+{#if error}
+    <div class="error">
+        {hint}
+    </div>
+{/if}
+
 {#if isOpen && optionsFiltered.length > 0}
     <div
         use:teleport={'body'}

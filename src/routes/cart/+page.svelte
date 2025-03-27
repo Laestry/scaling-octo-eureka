@@ -201,7 +201,8 @@
 
             <Select
                 bind:this={saqSelect}
-                class="w-full max-w-[464px]"
+                class="w-full max-w-[464px] !border-wblue "
+                inputClass="!text-wblack !placeholder-wblue"
                 {options}
                 placeholder="Choisir votre SAQ"
                 hint="Veuillez sélectionner une succursale SAQ"
