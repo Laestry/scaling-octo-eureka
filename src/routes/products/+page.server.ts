@@ -17,6 +17,7 @@ export async function load({ locals, url }) {
     const sortingCandidate = params.get('sorting');
     const sorting = sortingCandidate === 'Prix' || sortingCandidate === 'Alphabétique' ? sortingCandidate : undefined;
     const nameSearch = params.get('nameSearch') || undefined;
+    const tag = params.get('tag') || undefined;
 
     const filterObj: TFilters = {
         producer,
@@ -27,7 +28,8 @@ export async function load({ locals, url }) {
         vintage,
         priceRange,
         sorting,
-        nameSearch
+        nameSearch,
+        tag
     };
 
     let filterParts: string[] = [];
@@ -37,6 +39,7 @@ export async function load({ locals, url }) {
     if (filterObj.uvc) filterParts.push(`uvc=${filterObj.uvc}`);
     if (filterObj.format) filterParts.push(`lblFormat="${filterObj.format}"`);
     if (filterObj.vintage) filterParts.push(`vintage="${filterObj.vintage}"`);
+    if (filterObj.tag) filterParts.push(`tags~"${filterObj.tag}"`);
 
     // Example for priceRange (you might need to adjust the logic)
     if (filterObj.priceRange) {

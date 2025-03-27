@@ -10,6 +10,7 @@
     export let data: PageData;
     let products = data.products.items;
     let record = data.products;
+    let hasMore = record.page !== record.totalPages;
     let isGrid = true;
 
     let selectedFilters: TFilters = data.filterObj
@@ -29,7 +30,6 @@
     // Pagination state
     let currentPage = 2;
     let isLoading = false;
-    let hasMore = true;
     let sentinel: HTMLDivElement;
 
     async function loadMoreProducts() {

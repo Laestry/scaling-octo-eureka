@@ -8,4 +8,5 @@ export interface TFilters {
     priceRange: 'low' | 'mid' | 'high' | undefined;
     sorting: 'Prix' | 'Alphabétique' | undefined;
     nameSearch: string | undefined;
+    tag: string | undefined;
 }
