@@ -88,7 +88,7 @@
 {:else}
     <div class="product {size}">
         <a href="/product/{product.slug}">
-            <img class="bg-no-repeat object-cover bg-center img mb-[7px]" src={img} alt="Wine" />
+            <img class="bg-no-repeat object-cover bg-center img mb-[15px]" src={img} alt="Wine" />
         </a>
         <a href="/product/{product.slug}" class="flex justify-between w-full">
             <div class="flex flex-col w-full product-name" style="width: calc(100% - 100px)">
