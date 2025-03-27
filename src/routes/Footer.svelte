@@ -6,7 +6,7 @@
     <img class="h-[102px] w-auto" src="/images/Ward%20&%20Associes.svg" alt="Ward & Associes" />
 
     <div class="mt-[104px] max-w-[1154px] w-full flex flex-wrap items-start footer">
-        <div class="w-[82px] h-[82px] flex justify-center items-center">
+        <div class="w-[82px] h-[53px] flex justify-center items-center">
             <img width="70px" src="/logo.svg" alt="logo" />
         </div>
 
