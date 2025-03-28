@@ -62,23 +62,22 @@
         // run once in case the page is already scrolled
         handleScroll();
 
+        console.log('header', $page.url.pathname);
+
         return () => {
             window.removeEventListener('scroll', handleScroll);
         };
     });
 </script>
 
+<!--cart and search button-->
 <div class="w-full flex justify-center">
     <div
-        class="mt-8 lg:w-[1136px] md:w-[680px] w-[358px] fixed flex justify-end gap-1 items-center"
+        class="md:mt-8 mt-2.5 lg:w-[1136px] md:w-[760px] w-[300px] fixed flex justify-end md:gap-1 gap-2.5 items-center"
         style="z-index: 10000"
     >
         {#if showGoBack}
-            <a
-                transition:fade
-                class="abutton p-1 h-[24px] w-[24px] text-[0px] flex items-center justify-center rounded-full circle"
-                href="#logo"
-            >
+            <a transition:fade class="abutton circle" href="#logo">
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
                     xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -89,6 +88,7 @@
                     id="Layer_1"
                     viewBox="0 0 330 330"
                     xml:space="preserve"
+                    class="w-3.5"
                 >
                     <path
                         id="XMLID_224_"
@@ -98,46 +98,92 @@
             </a>
         {/if}
 
-        <a
-            class="abutton px-0.5 h-[24px] w-fit min-w-[24px] text-center !text-[14px] flex items-center justify-center rounded-full circle {$totalItems >
-            0
-                ? '!bg-wred !text-white'
-                : ''}"
-            href="/cart"
-        >
+        <a class="abutton !w-fit circle {$totalItems > 0 ? '!bg-wred !text-white' : ''}" href="/cart">
             {$totalItems}
         </a>
-        <a class="abutton h-[24px] w-[24px] flex items-center justify-center rounded-full p-1 circle" href="/products">
-            <IconSearch />
+        <a class="abutton circle" href="/products">
+            <div class="h-3.5 w-3.5">
+                <IconSearch />
+            </div>
         </a>
     </div>
 </div>
 
-<div
-    class="backdrops"
-    class:backdrops--1={backdrop === 'main'}
-    class:backdrops--2={backdrop === 'associes'}
-    class:backdrops--3={backdrop === 'vision'}
->
+<!--navlinks-->
+{#if $page.url.pathname === '/cart' || $page.url.pathname.startsWith('/product')}
+    <div class="w-full flex justify-center">
+        <div
+            class="lg:w-[1136px] md:w-[760px] w-[300px] flex flex-col md:items-center lg:mb-[64px] md:mb-[40px] mb-[80px]"
+        >
+            <a id="logo" href="/">
+                <Logo
+                    color={computedColor}
+                    class="abutton
+                       lg:w-[132px] lg:h-[130px]
+                       md:w-[83px] md:h-[82px]
+                       w-[43px] h-[33px]
+                       md:mt-0 mt-4"
+                />
+            </a>
+            {#if $page.url.pathname === '/cart'}
+                <div class="header-products-links !text-black">Panier d’achat</div>
+            {:else}
+                <div class="flex lg:gap-[16px] md:gap-[12px] mt-[22px] justify-between header-products-links">
+                    <a
+                        class="abutton"
+                        style="color: var(--dynamic-color);"
+                        href="/associes"
+                        class:active={backdrop === 'associes'}
+                    >
+                        Associes
+                    </a>
+                    <a
+                        class="abutton"
+                        style="color: var(--dynamic-color);"
+                        href="/vision"
+                        class:active={backdrop === 'vision'}
+                    >
+                        Vision
+                    </a>
+                    <a
+                        class="abutton"
+                        style="color: var(--dynamic-color);"
+                        href="/products"
+                        class:active={$page.url.pathname === '/products'}
+                    >
+                        Vins
+                    </a>
+                </div>
+            {/if}
+        </div>
+    </div>
+{:else}
     <div
-        class="absolute top-0 left-2/4 translate-x-[-50%] z-10
+        class="backdrops"
+        class:backdrops--1={backdrop === 'main'}
+        class:backdrops--2={backdrop === 'associes'}
+        class:backdrops--3={backdrop === 'vision'}
+    >
+        <div
+            class="absolute top-0 left-2/4 translate-x-[-50%] z-10
 
       flex flex-col lg:h-[176px] items-center lg:w-[1136px] md:w-[680px] w-[358px]"
-        style="--dynamic-color: {computedColor}; color: var(--dynamic-color);"
-        in:fly={isRight ? { x: -200, duration: 1000, delay: 300 } : { x: 200, duration: 1000, delay: 300 }}
-        out:fly={isRight ? { x: 200, duration: 1000 } : { x: -200, duration: 1000 }}
-    >
-        <a id="logo" href="/" class="abutton h-[130px] w-[130px] flex items-center justify-center">
-            <Logo color={computedColor} />
-        </a>
-        <div
-            class="sticky top-16 md:flex hidden uppercase items-center lg:h-[96px] h-auto flex-1 mt-[22px]"
             style="--dynamic-color: {computedColor}; color: var(--dynamic-color);"
         >
-            <div class="flex gap-[16px] lg:flex-row flex-col">
-                {#if $page.url.pathname === '/cart'}
-                    <div class="header-links !text-black">Panier d’achat</div>
-                {:else}
+            <a id="logo" href="/">
+                <Logo
+                    color={computedColor}
+                    class="abutton
+                       lg:w-[132px] lg:h-[130px]
+                       "
+                />
+            </a>
+
+            <div
+                class="sticky top-16 md:flex hidden uppercase items-center lg:h-[96px] h-auto flex-1 mt-[22px]"
+                style="--dynamic-color: {computedColor}; color: var(--dynamic-color);"
+            >
+                <div class="flex gap-[16px] lg:flex-row flex-col">
                     <a
                         class="abutton header-links"
                         style="color: var(--dynamic-color);"
@@ -162,22 +208,61 @@
                     >
                         Vins
                     </a>
-                {/if}
+                </div>
             </div>
         </div>
-    </div>
 
-    {#if backdrop}
-        <a href="/" class="backdrop backdrop--1" />
-        <a href="/associes" class="backdrop backdrop--2" />
-        <a href="/vision" class="backdrop backdrop--3" />
-    {/if}
-</div>
+        {#if backdrop}
+            <a href="/" class="backdrop backdrop--1" />
+            <a href="/associes" class="backdrop backdrop--2" />
+            <a href="/vision" class="backdrop backdrop--3" />
+        {/if}
+    </div>
+{/if}
 
 <style lang="scss">
     .circle {
+        padding: 0.25rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 12px;
+        text-align: center;
+        height: 24px;
+        width: 24px;
+        min-width: 24px;
+        font-size: 14px;
         background-color: white;
         color: #000;
+
+        @media (max-width: 767px) {
+            border-radius: 24px;
+            height: 42px;
+            width: 42px;
+            min-width: 42px;
+            font-size: 16px;
+        }
+    }
+
+    .header-products-links a {
+        text-transform: capitalize;
+        width: 176px;
+        padding: 2px 0;
+        text-align: center;
+        color: #de6643;
+        font-size: 24px;
+        font-weight: 400;
+        line-height: 150%;
+
+        @media (max-width: 1119px) {
+            font-size: 12px;
+            height: auto;
+            width: auto;
+            padding: 0 24px;
+        }
+
+        @media (max-width: 767px) {
+        }
     }
 
     .header-links {
@@ -197,10 +282,13 @@
             width: auto;
         }
     }
-    .header-links.active {
+
+    .active {
         text-decoration: underline;
         text-underline-position: under;
     }
+
+    //backdrop
     .backdrop {
         width: 100%;
         background-image: url('/images/mainbackdrop.png');
