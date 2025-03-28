@@ -200,6 +200,7 @@
             <div class="text-base text-nowrap w-[176px]">Pour la cueillette</div>
 
             <Select
+                fontSize="16px"
                 bind:this={saqSelect}
                 class="w-full max-w-[464px] !border-wblue "
                 inputClass="!text-wblack !placeholder-wblue"

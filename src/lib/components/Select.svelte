@@ -26,6 +26,7 @@
         | 'disabled' = 'enabled';
     export let hint: string = '';
     export let validate = false;
+    export let fontSize: string = '12px';
 
     let isOpen = false;
     let userInput = '';
@@ -112,7 +113,11 @@
     }
 </script>
 
-<div bind:this={wrapperElement} class="flex bg-white border-t {$$props.class}">
+<div
+    bind:this={wrapperElement}
+    class="flex bg-white border-t {$$props.class}"
+    style="--font-size: {fontSize}; font-size: var(--font-size);"
+>
     <input
         autocomplete="none"
         class="text {selected ? 'text-wblue' : 'text-wblack'} {inputClass}"
@@ -144,7 +149,7 @@
         use:clickOutside
         on:click_outside={() => (isOpen = false)}
         class="select-options"
-        style={getStyle()}
+        style="--font-size: {fontSize}; font-size: var(--font-size); {getStyle()}"
     >
         <div class="select-options__wrapper svrollbar">
             <SimpleBar style="width:100%; height: fit-content; max-height: 210px" forceVisible={true} autoHide={false}>
@@ -229,8 +234,15 @@
     .open .input__chevron {
         transform: rotate(-180deg);
     }
+
+    input,
+    .select-options,
+    .error,
+    .line,
     .text {
-        font-size: 14px;
+        font-size: inherit;
+    }
+    .text {
         text-align: left;
     }
 </style>

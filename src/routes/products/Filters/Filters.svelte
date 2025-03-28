@@ -166,11 +166,11 @@
     // $: console.log(selectedFilters);
 </script>
 
-<div class="mt-15 flex flex-col gap-3">
+<div class="mt-15 flex flex-col lg:gap-4 md:gap-3 gap-[20px]">
     <div class="flex justify-between">
         <div class="flex gap-1 items-center w-full">
             <button class="all-button abutton text-" on:click={clearAllFilters}>Voir tout</button>
-            <label class="search md:hidden">
+            <label class="search md:flex hidden">
                 <div class="search__button">
                     <IconSearch />
                 </div>
@@ -209,7 +209,7 @@
         </div>
     </div>
     <div class="md:hidden flex gap-[6px]">
-        <label class="search">
+        <label class="search md:hidden flex">
             <button class="search__button">
                 <IconSearch />
             </button>
@@ -222,35 +222,35 @@
     <div class="filters">
         {#if filters.length > 0}
             <Select
-                class="w-[176px]"
+                class="cusselect"
                 options={filters[0].list}
                 placeholder={filters[0].name}
                 defaultOption="Tous"
                 bind:selected={selectedFilters.producer}
             />
             <Select
-                class="w-[176px]"
+                class="cusselect"
                 options={filters[1].list}
                 placeholder={filters[1].name}
                 defaultOption="Tous"
                 bind:selected={selectedFilters.region}
             />
             <Select
-                class="w-[176px]"
+                class="cusselect"
                 options={filters[2].list}
                 placeholder={filters[2].name}
                 defaultOption="Tous"
                 bind:selected={selectedFilters.color}
             />
             <Select
-                class="w-[176px]"
+                class="cusselect"
                 options={filters[4].list}
                 placeholder={filters[4].name}
                 defaultOption="Tous"
                 bind:selected={selectedFilters.format}
             />
             <Select
-                class="w-[176px]"
+                class="cusselect"
                 options={filters[5].list}
                 placeholder={filters[5].name}
                 defaultOption="Tous"
@@ -260,7 +260,7 @@
             <p>No filters available.</p>
         {/if}
         <Select
-            class="w-[176px] self-end"
+            class="cusselect self-end"
             options={['Prix', 'Alphabétique']}
             placeholder="Trier"
             defaultOption="Tous"
@@ -282,6 +282,16 @@
 </div>
 
 <style lang="scss">
+    :global(.cusselect) {
+        width: 176px;
+        @media (max-width: 1136px) {
+            width: 121px;
+        }
+        @media (max-width: 760px) {
+            width: 147px;
+        }
+    }
+
     .icon {
         width: 24px; /* Set desired width */
         height: 24px; /* Set desired height */
@@ -293,6 +303,10 @@
         flex-wrap: wrap;
         gap: 16px;
 
+        @media (max-width: 1136px) {
+            gap: 6px;
+        }
+
         :global {
             .filter {
                 &:last-of-type {
@@ -302,7 +316,6 @@
         }
     }
     .search {
-        display: flex;
         align-items: center;
         padding: 5px 10px;
         border-radius: 100px;

@@ -125,7 +125,7 @@
 
             <div class="flex flex-col items-end" style="position: relative; overflow: visible;">
                 <button
-                    class="text-color5 text-[11px] font-bold cursor-cell whitespace-nowrap"
+                    class="text-color5 md:text-[13px] text-[11px] font-bold cursor-cell whitespace-nowrap"
                     on:click|preventDefault|stopPropagation={handleAdd}
                 >
                     ADD +
