@@ -1,17 +1,17 @@
 <script lang="ts">
-    import { onMount, onDestroy } from 'svelte';
+    import { onMount } from 'svelte';
     import ProductGrid from './ProductGrid.svelte';
     import ProductList from './ProductList.svelte';
     import Filters from './Filters/Filters.svelte';
     import type { PageData } from './$types';
     import type { TFilters } from '$lib/models/general';
     import { pb } from '$lib/pocketbase';
+    import { isGrid } from '$lib/store';
 
     export let data: PageData;
     let products = data.products.items;
     let record = data.products;
     let hasMore = record.page !== record.totalPages;
-    let isGrid = true;
 
     let selectedFilters: TFilters = data.filterObj
         ? data.filterObj
@@ -38,6 +38,9 @@
 
         // Build the filter string based on selected filters.
         const filterParts: string[] = [];
+        if (selectedFilters.tag) {
+            filterParts.push(`tags~"${selectedFilters.tag}"`);
+        }
         if (selectedFilters.producer) {
             filterParts.push(`providerName="${selectedFilters.producer}"`);
         }
@@ -147,17 +150,12 @@
 </script>
 
 <div>
-    <Filters
-        bind:isGrid
-        categories={data.categories}
-        bind:selectedFilters
-        on:resetFilters={() => updateProducts(true)}
-    />
+    <Filters categories={data.categories} bind:selectedFilters on:resetFilters={() => updateProducts(true)} />
     {#if isLoading && products.length === 0}
         loading wines
     {:else if products.length === 0}
         <div class="mt-[100px]">No Wines found under that search</div>
-    {:else if isGrid}
+    {:else if $isGrid}
         <ProductGrid class="mt-[12px]" {products} />
     {:else}
         <ProductList {products} />

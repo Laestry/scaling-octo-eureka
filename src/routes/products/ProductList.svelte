@@ -39,7 +39,7 @@
             </th>
             <th class="w-[175px]" style="font-family: 'Riposte', 'serif'">$ {$isPrixResto ? 'Resto' : 'Perso'}</th>
         </tr>
-        {#each products as product (product.id)}
+        {#each products as product}
             <ProductRow {product} />
         {/each}
     </table>

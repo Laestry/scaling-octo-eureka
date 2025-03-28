@@ -2,13 +2,12 @@
     import { IconSearch, IconDownload, IconList, IconGrid } from '$lib/icons';
     import Select from '$lib/components/Select.svelte';
     import type { TFilters } from '$lib/models/general';
-    import { isPrixResto } from '$lib/store';
-    import { goto } from '$app/navigation';
+    import { isGrid, isPrixResto } from '$lib/store';
     import { createEventDispatcher, onMount } from 'svelte';
-    import { page, navigating } from '$app/stores';
+    import { page } from '$app/stores';
     import { replaceState } from '$app/navigation';
+    import { delay } from '$lib/utils';
 
-    export let isGrid = true;
     export let categories = [];
     export let selectedFilters: TFilters;
 
@@ -107,7 +106,8 @@
             vintage: undefined,
             priceRange: undefined,
             sorting: undefined,
-            nameSearch: undefined
+            nameSearch: undefined,
+            tag: undefined
         };
         console.log('resetFilters');
         dispatch('resetFilters');
@@ -126,35 +126,84 @@
         isMounted = true;
     });
 
-    function setParams() {
-        // const newUrl = new URL($page.url);
-        //
-        // // Set your search parameters
-        // newUrl.searchParams.set('isGrid', isGrid ? 'y' : 'n');
-        // if (selectedFilters.producer) newUrl.searchParams.set('producer', selectedFilters.producer);
-        // if (selectedFilters.region) newUrl.searchParams.set('region', selectedFilters.region);
-        // if (selectedFilters.color) newUrl.searchParams.set('color', selectedFilters.color);
-        // if (selectedFilters.uvc) newUrl.searchParams.set('uvc', String(selectedFilters.uvc));
-        // if (selectedFilters.format) newUrl.searchParams.set('format', selectedFilters.format);
-        // if (selectedFilters.vintage) newUrl.searchParams.set('vintage', selectedFilters.vintage);
-        // if (selectedFilters.priceRange) newUrl.searchParams.set('priceRange', selectedFilters.priceRange);
-        // if (selectedFilters.sorting) newUrl.searchParams.set('sorting', selectedFilters.sorting);
-        // if (selectedFilters.nameSearch) newUrl.searchParams.set('nameSearch', selectedFilters.nameSearch);
-        //
-        // // Update the browser's URL without triggering a navigation
-        // replaceState(newUrl, $page.state);
+    async function setParams() {
+        await delay(100);
+
+        // Update isGrid always
+        // $page.url.searchParams.set('isGrid', $isGrid ? 'y' : 'n');
+        if (!isMounted) return;
+
+        if (selectedFilters.producer) {
+            $page.url.searchParams.set('producer', selectedFilters.producer);
+        } else {
+            $page.url.searchParams.delete('producer');
+        }
+
+        if (selectedFilters.region) {
+            $page.url.searchParams.set('region', selectedFilters.region);
+        } else {
+            $page.url.searchParams.delete('region');
+        }
+
+        if (selectedFilters.color) {
+            $page.url.searchParams.set('color', selectedFilters.color);
+        } else {
+            $page.url.searchParams.delete('color');
+        }
+
+        if (selectedFilters.uvc) {
+            $page.url.searchParams.set('uvc', String(selectedFilters.uvc));
+        } else {
+            $page.url.searchParams.delete('uvc');
+        }
+
+        if (selectedFilters.format) {
+            $page.url.searchParams.set('format', selectedFilters.format);
+        } else {
+            $page.url.searchParams.delete('format');
+        }
+
+        if (selectedFilters.vintage) {
+            $page.url.searchParams.set('vintage', selectedFilters.vintage);
+        } else {
+            $page.url.searchParams.delete('vintage');
+        }
+
+        if (selectedFilters.priceRange) {
+            $page.url.searchParams.set('priceRange', selectedFilters.priceRange);
+        } else {
+            $page.url.searchParams.delete('priceRange');
+        }
+
+        if (selectedFilters.sorting) {
+            $page.url.searchParams.set('sorting', selectedFilters.sorting);
+        } else {
+            $page.url.searchParams.delete('sorting');
+        }
+
+        if (selectedFilters.nameSearch) {
+            $page.url.searchParams.set('nameSearch', selectedFilters.nameSearch);
+        } else {
+            $page.url.searchParams.delete('nameSearch');
+        }
+
+        if (selectedFilters.tag) {
+            $page.url.searchParams.set('tag', selectedFilters.tag);
+        } else {
+            $page.url.searchParams.delete('tag');
+        }
+
+        replaceState($page.url, $page.state);
     }
 
     $: {
         if (isMounted) {
-            isGrid;
             selectedFilters;
             setParams();
         }
     }
 
     $: console.log(selectedFilters);
-    $: console.log('isGrid', isGrid);
 </script>
 
 <div class="mt-15 flex flex-col gap-3">
@@ -260,10 +309,10 @@
     </div>
 
     <div class="hidden justify-end gap-2 md:flex">
-        <button class="button-view" class:active={isGrid} on:click={() => (isGrid = true)}>
+        <button class="button-view" class:active={$isGrid} on:click={() => isGrid.set(true)}>
             <IconGrid />
         </button>
-        <button class="button-view" class:active={!isGrid} on:click={() => (isGrid = false)}>
+        <button class="button-view" class:active={!$isGrid} on:click={() => isGrid.set(false)}>
             <IconList />
         </button>
         <a href="#" class="button-view button-view--link">
