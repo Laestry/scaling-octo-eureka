@@ -156,7 +156,7 @@
     {:else if products.length === 0}
         <div class="mt-[100px]">No Wines found under that search</div>
     {:else if $isGrid}
-        <ProductGrid class="mt-[12px]" {products} />
+        <ProductGrid class="lg:mt-4 md:mt-5 mt-10" {products} />
     {:else}
         <ProductList {products} />
     {/if}
