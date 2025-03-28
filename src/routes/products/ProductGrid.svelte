@@ -18,8 +18,11 @@
         display: flex;
         flex-wrap: wrap;
         align-items: start;
-        row-gap: 16px;
+        row-gap: 40px;
         justify-content: space-between;
+        @media screen and (max-width: 1136px) {
+            row-gap: 20px;
+        }
     }
     @media screen and (max-width: 1136px) {
         .products-grid {

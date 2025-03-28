@@ -107,7 +107,7 @@
             </div>
         </a>
         <a href="/product/{product.slug}" class="flex flex-col items-start justify-start w-full product-name">
-            <b>{product.name || '-'}</b>
+            <b class="truncate w-full">{product.name || '-'}</b>
             <div class="w-full flex">
                 <div class="truncate" style="max-width: calc(100% - 37px)">{product.providerName ?? ''}</div>
                 <span>
@@ -125,7 +125,7 @@
 
             <div class="flex flex-col items-end" style="position: relative; overflow: visible;">
                 <button
-                    class="text-color5 text-sm font-bold cursor-cell whitespace-nowrap"
+                    class="text-color5 text-[11px] font-bold cursor-cell whitespace-nowrap"
                     on:click|preventDefault|stopPropagation={handleAdd}
                 >
                     ADD +
@@ -274,20 +274,17 @@
                 height: 354px;
             }
             @media (max-width: 760px) {
-                width: 196px;
+                width: 145px;
                 height: auto;
             }
 
             .img {
-                width: 368px;
                 height: 362px;
                 @media (max-width: 1136px) {
-                    width: 245px;
-                    height: 328px;
+                    height: 240px;
                 }
                 @media (max-width: 760px) {
-                    width: 196px;
-                    height: 262px;
+                    height: 193px;
                 }
             }
         }
