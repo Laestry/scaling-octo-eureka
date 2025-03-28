@@ -2,7 +2,8 @@
     import { priceFormat } from '../product/[slug]/utils';
     import { cart, getItemQuantityStore } from '$lib/cart';
     import { fly } from 'svelte/transition';
-    export let product;
+    import type { AlcoholProduct } from '$lib/models/pocketbase';
+    export let product: AlcoholProduct;
     export let size: 's' | 'm' | 'l' | 'v' = 's';
     export let isMain = false;
 

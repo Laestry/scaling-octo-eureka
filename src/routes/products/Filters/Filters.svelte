@@ -127,28 +127,34 @@
     });
 
     function setParams() {
-        console.log('setParams');
-        const params = new URLSearchParams();
-        if (selectedFilters.producer) params.set('producer', selectedFilters.producer);
-        if (selectedFilters.region) params.set('region', selectedFilters.region);
-        if (selectedFilters.color) params.set('color', selectedFilters.color);
-        if (selectedFilters.uvc) params.set('uvc', String(selectedFilters.uvc));
-        if (selectedFilters.format) params.set('format', selectedFilters.format);
-        if (selectedFilters.vintage) params.set('vintage', selectedFilters.vintage);
-        if (selectedFilters.priceRange) params.set('priceRange', selectedFilters.priceRange);
-        if (selectedFilters.sorting) params.set('sorting', selectedFilters.sorting);
-        if (selectedFilters.nameSearch) params.set('nameSearch', selectedFilters.nameSearch);
-        goto(`?${params.toString()}`, { replaceState: true, noScroll: true });
+        // const newUrl = new URL($page.url);
+        //
+        // // Set your search parameters
+        // newUrl.searchParams.set('isGrid', isGrid ? 'y' : 'n');
+        // if (selectedFilters.producer) newUrl.searchParams.set('producer', selectedFilters.producer);
+        // if (selectedFilters.region) newUrl.searchParams.set('region', selectedFilters.region);
+        // if (selectedFilters.color) newUrl.searchParams.set('color', selectedFilters.color);
+        // if (selectedFilters.uvc) newUrl.searchParams.set('uvc', String(selectedFilters.uvc));
+        // if (selectedFilters.format) newUrl.searchParams.set('format', selectedFilters.format);
+        // if (selectedFilters.vintage) newUrl.searchParams.set('vintage', selectedFilters.vintage);
+        // if (selectedFilters.priceRange) newUrl.searchParams.set('priceRange', selectedFilters.priceRange);
+        // if (selectedFilters.sorting) newUrl.searchParams.set('sorting', selectedFilters.sorting);
+        // if (selectedFilters.nameSearch) newUrl.searchParams.set('nameSearch', selectedFilters.nameSearch);
+        //
+        // // Update the browser's URL without triggering a navigation
+        // replaceState(newUrl, $page.state);
     }
 
     $: {
-        if (isMounted && !navigating) {
+        if (isMounted) {
+            isGrid;
             selectedFilters;
             setParams();
         }
     }
 
     $: console.log(selectedFilters);
+    $: console.log('isGrid', isGrid);
 </script>
 
 <div class="mt-15 flex flex-col gap-3">

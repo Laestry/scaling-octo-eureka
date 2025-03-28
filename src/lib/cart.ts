@@ -90,7 +90,7 @@ export function createCart(): CartStore {
 export const cart = createCart();
 
 // Derived store to calculate the total number of items in the cart
-export const totalItems = derived(cart, ($cart) => $cart.reduce((acc, item) => acc + item.quantity, 0));
+export const totalItems = derived(cart, ($cart) => $cart.reduce((acc, item) => acc + item.quantity * item.uvc, 0));
 
 /**
  * Get the quantity of a specific item in the cart
