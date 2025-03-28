@@ -81,13 +81,13 @@
         } else if (selectedFilters.sorting === 'Alphabétique') {
             sort = 'name';
         }
-        console.log('filterString', filterString);
+        // console.log('filterString', filterString);
         try {
             const result = await pb.collection('alcohol_products').getList(currentPage, 20, {
                 filter: filterString || undefined,
                 sort: sort || undefined
             });
-            console.log('result', result);
+            // console.log('result', result);
             if (result.totalPages === result.page) {
                 products = [...products, ...result.items];
                 hasMore = false;
@@ -106,7 +106,7 @@
 
     let skipTwice = 0;
     async function updateProducts(reset = false) {
-        console.log('updateProducts', selectedFilters);
+        // console.log('updateProducts', selectedFilters);
 
         const filtersApplied = Object.values(selectedFilters).some((filter) => filter !== undefined);
         if (skipTwice !== 2 && !reset) {

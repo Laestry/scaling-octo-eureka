@@ -126,84 +126,44 @@
         isMounted = true;
     });
 
-    async function setParams() {
-        await delay(100);
+    function syncParam(key: string, value: string | number | undefined) {
+        if (value !== undefined && value !== null && value !== '') {
+            $page.url.searchParams.set(key, String(value));
+        } else {
+            $page.url.searchParams.delete(key);
+        }
+    }
 
-        // Update isGrid always
-        // $page.url.searchParams.set('isGrid', $isGrid ? 'y' : 'n');
+    async function setParams() {
         if (!isMounted) return;
 
-        if (selectedFilters.producer) {
-            $page.url.searchParams.set('producer', selectedFilters.producer);
-        } else {
-            $page.url.searchParams.delete('producer');
-        }
+        // await delay(300);
+        console.log('setParams', $page.url);
 
-        if (selectedFilters.region) {
-            $page.url.searchParams.set('region', selectedFilters.region);
-        } else {
-            $page.url.searchParams.delete('region');
-        }
+        syncParam('producer', selectedFilters.producer);
+        syncParam('region', selectedFilters.region);
+        syncParam('color', selectedFilters.color);
+        syncParam('uvc', selectedFilters.uvc);
+        syncParam('format', selectedFilters.format);
+        syncParam('vintage', selectedFilters.vintage);
+        syncParam('priceRange', selectedFilters.priceRange);
+        syncParam('sorting', selectedFilters.sorting);
+        syncParam('nameSearch', selectedFilters.nameSearch);
+        syncParam('tag', selectedFilters.tag);
 
-        if (selectedFilters.color) {
-            $page.url.searchParams.set('color', selectedFilters.color);
-        } else {
-            $page.url.searchParams.delete('color');
+        try {
+            replaceState($page.url, $page.state);
+        } catch (error) {
+            console.error(error);
         }
-
-        if (selectedFilters.uvc) {
-            $page.url.searchParams.set('uvc', String(selectedFilters.uvc));
-        } else {
-            $page.url.searchParams.delete('uvc');
-        }
-
-        if (selectedFilters.format) {
-            $page.url.searchParams.set('format', selectedFilters.format);
-        } else {
-            $page.url.searchParams.delete('format');
-        }
-
-        if (selectedFilters.vintage) {
-            $page.url.searchParams.set('vintage', selectedFilters.vintage);
-        } else {
-            $page.url.searchParams.delete('vintage');
-        }
-
-        if (selectedFilters.priceRange) {
-            $page.url.searchParams.set('priceRange', selectedFilters.priceRange);
-        } else {
-            $page.url.searchParams.delete('priceRange');
-        }
-
-        if (selectedFilters.sorting) {
-            $page.url.searchParams.set('sorting', selectedFilters.sorting);
-        } else {
-            $page.url.searchParams.delete('sorting');
-        }
-
-        if (selectedFilters.nameSearch) {
-            $page.url.searchParams.set('nameSearch', selectedFilters.nameSearch);
-        } else {
-            $page.url.searchParams.delete('nameSearch');
-        }
-
-        if (selectedFilters.tag) {
-            $page.url.searchParams.set('tag', selectedFilters.tag);
-        } else {
-            $page.url.searchParams.delete('tag');
-        }
-
-        replaceState($page.url, $page.state);
     }
 
     $: {
-        if (isMounted) {
-            selectedFilters;
-            setParams();
-        }
+        selectedFilters;
+        setParams();
     }
 
-    $: console.log(selectedFilters);
+    // $: console.log(selectedFilters);
 </script>
 
 <div class="mt-15 flex flex-col gap-3">
