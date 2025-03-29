@@ -2,7 +2,7 @@
     import Logo from '$lib/components/Logo.svelte';
     import { page, navigating } from '$app/stores';
     import { IconSearch } from '$lib/icons';
-    import { fly, fade } from 'svelte/transition';
+    import { fade } from 'svelte/transition';
     import { totalItems } from '$lib/cart';
     import { onMount } from 'svelte';
 
@@ -169,20 +169,22 @@
         <div
             class="absolute top-0 left-2/4 translate-x-[-50%] z-10
 
-      flex flex-col lg:h-[176px] items-center lg:w-[1136px] md:w-[680px] w-[358px]"
+      flex flex-col lg:h-[176px] items-center lg:w-[1136px] md:w-[680px] w-[300px]"
             style="--dynamic-color: {computedColor}; color: var(--dynamic-color);"
         >
-            <a id="logo" href="/">
+            <a id="logo" href="/" class="self-start">
                 <Logo
                     color={computedColor}
                     class="abutton
                        lg:w-[132px] lg:h-[130px]
-                       "
+                       md:w-[83px] md:h-[82px]
+                       w-[43px] h-[33px]
+                       md:mt-0 mt-4"
                 />
             </a>
 
             <div
-                class="sticky top-16 md:flex hidden uppercase items-center lg:h-[96px] h-auto flex-1 mt-[22px]"
+                class="sticky top-16 flex uppercase items-center lg:h-[96px] h-auto flex-1 mt-[22px]"
                 style="--dynamic-color: {computedColor}; color: var(--dynamic-color);"
             >
                 <div class="flex gap-[16px] lg:flex-row flex-col">
@@ -252,7 +254,7 @@
         width: 176px;
         padding: 2px 0;
         text-align: center;
-        color: #de6643;
+        color: var(--red);
         font-size: 24px;
         font-weight: 400;
         line-height: 150%;
@@ -274,7 +276,7 @@
         height: 40px;
         padding: 2px 0;
         text-align: center;
-        color: #de6643;
+        color: var(--red);
         font-size: 24px;
         font-weight: 400;
         line-height: 150%;
@@ -307,11 +309,17 @@
     .backdrop--1 {
         transform: translateX(-140px);
         z-index: 3;
+        @media (max-width: 767px) {
+            transform: translateX(0px);
+        }
     }
     .backdrop--2 {
         transform: translateX(-70px);
         background-image: url('/images/winefermenting.png');
         z-index: 2;
+        @media (max-width: 767px) {
+            transform: translateX(0);
+        }
     }
     .backdrop--3 {
         background-image: url('/images/vision.png');
@@ -319,12 +327,21 @@
     }
     .backdrops--2 .backdrop--1 {
         transform: translateX(calc(-100% + 70px));
+        @media (max-width: 767px) {
+            transform: translateX(-100%);
+        }
     }
     .backdrops--3 .backdrop--1 {
         transform: translateX(calc(-100% + 70px));
+        @media (max-width: 767px) {
+            transform: translateX(-100%);
+        }
     }
     .backdrops--3 .backdrop--2 {
         transform: translateX(calc(-100% + 140px));
+        @media (max-width: 767px) {
+            transform: translateX(-100%);
+        }
     }
 
     .backdrops {
@@ -332,6 +349,9 @@
         position: relative;
         height: 772px;
         width: 100%;
+        @media (max-width: 1119px) {
+            height: 545px;
+        }
     }
     .backdrops:not(:is(.backdrops--1, .backdrops--2, .backdrops--3)) {
         height: 200px;
