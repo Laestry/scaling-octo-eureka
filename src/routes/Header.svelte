@@ -73,14 +73,16 @@
 <!--cart and search button-->
 <div class="w-full flex justify-center">
     <div
-        class="md:mt-8 mt-2.5 lg:w-[1136px] md:w-[760px] w-[300px] fixed flex justify-end md:gap-1 gap-2.5 items-center"
+        class="fixed flex justify-end items-center pointer-events-none
+        lg:w-[1136px] md:w-[760px] w-[300px]
+        md:mt-8 mt-2.5
+        md:gap-1 gap-2.5"
         style="z-index: 10000"
     >
         {#if showGoBack}
             <a transition:fade class="abutton circle" href="#logo">
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    xmlns:xlink="http://www.w3.org/1999/xlink"
                     fill="#000000"
                     height="800px"
                     width="800px"
@@ -222,6 +224,7 @@
 
 <style lang="scss">
     .circle {
+        pointer-events: auto;
         padding: 0.25rem;
         display: flex;
         align-items: center;
