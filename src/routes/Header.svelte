@@ -172,7 +172,7 @@
       flex flex-col lg:h-[176px] items-center lg:w-[1136px] md:w-[680px] w-[300px]"
             style="--dynamic-color: {computedColor}; color: var(--dynamic-color);"
         >
-            <a id="logo" href="/" class="self-start">
+            <a id="logo" href="/" class="md:self-center self-start">
                 <Logo
                     color={computedColor}
                     class="abutton
@@ -184,7 +184,9 @@
             </a>
 
             <div
-                class="sticky top-16 flex uppercase items-center lg:h-[96px] h-auto flex-1 mt-[22px]"
+                class="flex uppercase items-center flex-1
+                lg:h-[96px] h-auto
+                lg:mt-[22px] md:mt-[20px] mt-[20px] mt-[148px]"
                 style="--dynamic-color: {computedColor}; color: var(--dynamic-color);"
             >
                 <div class="flex gap-[16px] lg:flex-row flex-col">
