@@ -3,7 +3,11 @@
     import { priceFormat } from '../product/[slug]/utils';
     import { cart, getItemQuantityStore } from '$lib/cart';
     import { fly, fade } from 'svelte/transition';
+    import { createEventDispatcher } from 'svelte';
+    import Plus from '$lib/icons/Plus.svelte';
     export let product: any;
+
+    const dispatcher = createEventDispatcher();
 
     // Create an array of example image paths.
     const images = new Array(8).fill('').map((_, i) => `/images/example_wines/${i + 1}.jpg`);
@@ -47,7 +51,14 @@
 
     function handleMouseMove(e: MouseEvent) {
         const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
-        mouseX = e.clientX - rect.left;
+        // Get the raw mouse x position relative to the row.
+        const rawX = e.clientX - rect.left;
+        // Assume the plus button cell is 40px wide + the half of the image.
+        const plusButtonWidth = 90;
+        // Calculate the maximum allowed x coordinate.
+        const safeMax = rect.width - plusButtonWidth;
+        // Clamp the x coordinate so it doesn't exceed safeMax.
+        mouseX = rawX > safeMax ? safeMax : rawX;
         mouseY = e.clientY - rect.top;
     }
 
@@ -68,31 +79,17 @@
         imgLoaded = false;
     }
 
-    // We'll use a timer to differentiate between single and double clicks.
-    let clickCount = 0;
-    let clickTimer: NodeJS.Timeout;
+    function handleClick() {
+        goto(`/product/${product.slug}`);
+    }
 
-    function handleClick(e: MouseEvent) {
-        clickCount++;
-        if (clickCount === 1) {
-            // Start timer to wait for a potential second click.
-            clickTimer = setTimeout(() => {
-                // No second click occurred within the delay: single click.
-                goto(`/product/${product.slug}`);
-                clickCount = 0;
-            }, 550);
-        } else if (clickCount === 2) {
-            // Double click detected: cancel single click.
-            clearTimeout(clickTimer);
-            clickCount = 0;
-            // Execute double-click behavior: add product to cart.
-            cart.add(product);
-            const id = Date.now();
-            animations = [...animations, { id }];
-            setTimeout(() => {
-                animations = animations.filter((anim) => anim.id !== id);
-            }, 600);
-        }
+    function handleAdd() {
+        cart.add(product);
+        const id = Date.now();
+        animations = [...animations, { id }];
+        setTimeout(() => {
+            animations = animations.filter((anim) => anim.id !== id);
+        }, 600);
     }
 
     const itemQuantity = getItemQuantityStore(product.id);
@@ -120,7 +117,7 @@
     on:mouseleave={handleMouseLeave}
     on:mousemove={handleMouseMove}
     on:click={handleClick}
-    class="relative cursor-pointer border-y border-[#181C1C33]"
+    class="relative cursor-pointer border-y border-[#181C1C33] {$$props['class']}"
 >
     <td>{region || '-'}</td>
     <td>{product.providerName || '-'}</td>
@@ -134,6 +131,12 @@
         <span class="text-[#949494] {product.uvc === 1 ? 'invisible' : ''}">
             {$priceFormat(product, false)}
         </span>
+    </td>
+
+    <td class="text-wblue">
+        <button class="abutton w-full h-full" style="padding: 18px 16px 17px 12px" on:click|stopPropagation={handleAdd}>
+            <Plus />
+        </button>
     </td>
 
     {#if hovered && imgLoaded && delayedImage}
@@ -151,14 +154,16 @@
                     {$itemQuantity > 0 ? $itemQuantity * product.uvc : ''}
                 </div>
             {/each}
-            <div class="bg-wblack text-white text-xs">2clics = +panier</div>
             <img transition:fade={{ duration: 300 }} src={delayedImage} alt={product.name} />
-            <div class="bg-wblack text-white text-xs">1clic = voir produit</div>
         </div>
     {/if}
 </tr>
 
 <style>
+    tr:hover {
+        background: #da58994d;
+    }
+
     tr.relative {
         position: relative;
     }
@@ -170,8 +175,5 @@
     }
     td {
         height: 48px;
-    }
-    tr:hover {
-        color: #181c1c33;
     }
 </style>

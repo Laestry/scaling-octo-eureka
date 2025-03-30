@@ -10,7 +10,7 @@
     export let products: AlcoholProduct[];
 </script>
 
-<div in:fade class="mt-[32px]">
+<div in:fade class="mt-[32px] productTable">
     <table class="">
         <tr>
             <th class="w-[191px]">
@@ -37,23 +37,33 @@
                 Format
                 <!--                <IconArrow1/>-->
             </th>
-            <th class="w-[175px]" style="font-family: 'Riposte', 'serif'">$ {$isPrixResto ? 'Resto' : 'Perso'}</th>
+            <th class="w-[175px] !text-end !pr-[5px]" style="font-family: 'Riposte', 'serif'">
+                $ {$isPrixResto ? 'Resto' : 'Perso'}
+            </th>
+            <th class="w-[40px]" />
         </tr>
+
         {#each products as product}
-            <ProductRow {product} />
+            <ProductRow {product} class="productRow" />
         {/each}
     </table>
 </div>
 
 <style lang="scss">
+    :global(.productTable:not(:has(th:hover)):has(tr:hover) tr:not(:hover)) {
+        filter: blur(2px);
+    }
+
+    :global(.productRow tr) {
+        transition: filter 0.3s ease;
+    }
+
     table {
         table-layout: fixed;
         width: 100%; /* Adjust as needed */
         background: white;
     }
-    tr {
-        border-bottom: 1px solid var(--border--02);
-    }
+
     th {
         height: 48px;
         color: #000;
@@ -68,15 +78,6 @@
     th > :global(.icon) {
         margin-left: 8px;
         display: inline;
-    }
-    th:first-child,
-    td:first-child {
-        padding-left: 8px;
-    }
-    th:last-child,
-    td:last-child {
-        padding-right: 8px;
-        text-align: right;
     }
 
     td {
