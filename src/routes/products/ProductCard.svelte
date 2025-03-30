@@ -3,6 +3,7 @@
     import { cart, getItemQuantityStore } from '$lib/cart';
     import { fly } from 'svelte/transition';
     import type { AlcoholProduct } from '$lib/models/pocketbase';
+    import Plus from '$lib/icons/Plus.svelte';
     export let product: AlcoholProduct;
     export let size: 's' | 'm' | 'l' | 'v' = 's';
     export let isMain = false;
@@ -68,10 +69,10 @@
                     {$priceFormat(product, false, { none: true })}
                 </div>
                 <button
-                    class="text-color5 text-sm font-bold cursor-cell whitespace-nowrap"
+                    class="abutton text-color5 md:text-[13px] font-bold cursor-cell whitespace-nowrap"
                     on:click|preventDefault|stopPropagation={handleAdd}
                 >
-                    ADD +
+                    <Plus size="18" />
                 </button>
                 {#each animations as anim (anim.id)}
                     <div
@@ -125,10 +126,10 @@
 
             <div class="flex flex-col items-end" style="position: relative; overflow: visible;">
                 <button
-                    class="text-color5 md:text-[13px] text-[11px] font-bold cursor-cell whitespace-nowrap"
+                    class="abutton text-color5 md:text-[13px] font-bold cursor-cell whitespace-nowrap"
                     on:click|preventDefault|stopPropagation={handleAdd}
                 >
-                    ADD +
+                    <Plus size="18" />
                 </button>
                 {#each animations as anim (anim.id)}
                     <div
