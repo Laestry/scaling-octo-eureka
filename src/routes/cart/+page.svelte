@@ -128,7 +128,7 @@
             <div transition:fly={{ y: -100, duration: 300 }}>
                 <hr class="mt-[53px] mb-4 border-wpink" />
 
-                <div class="flex lg:flex-row flex-col w-full gap-4" bind:this={formEl}>
+                <div class="flex lg:flex-row flex-col w-full md:gap-4 gap-0" bind:this={formEl}>
                     <div class="text-base text-nowrap w-[176px]">Pour la commande</div>
                     <div class="flex flex-1 flex-wrap gap-y-2 gap-x-4">
                         <Input
@@ -198,7 +198,7 @@
                     </div>
                 </div>
 
-                <div class="flex md:flex-row flex-col w-full gap-4 mt-[40px]">
+                <div class="flex md:flex-row flex-col w-full md:gap-4 gap-0 md:mt-[40px] mt-[20px]">
                     <div class="text-base text-nowrap w-[176px]">Pour la cueillette</div>
 
                     <Select
@@ -212,11 +212,11 @@
                     />
                 </div>
 
-                <div class="text-base text-nowrap w-[176px] mt-[40px]">La commande</div>
+                <div class="text-base text-nowrap w-[176px] md:mt-[40px] mt-[20px]">La commande</div>
             </div>
         {/if}
 
-        <hr class={isFinalize ? 'mt-[18px]' : 'mt-[53px]'} />
+        <hr class={isFinalize ? 'md:mt-[18px] mt-[0px]' : 'mt-[53px]'} />
         <div class="">
             <div class="  flex lg:flex-col lg:gap-0 flex-wrap gap-2 justify-between">
                 {#each $cart as item (item.id)}
@@ -226,7 +226,7 @@
                 {/each}
             </div>
 
-            <div class="max-w-[464px] w-full ml-auto mt-[9px]">
+            <div class="max-w-[464px] w-full ml-auto md:mt-[9px] mt-4">
                 <hr class="border-wred mb-[7px]" />
                 <div class="flex justify-between">
                     <div class="text-xs">Total</div>
@@ -260,15 +260,15 @@
                 {/if}
             </div>
 
-            <div class="flex justify-between mt-[58px]">
+            <div class="flex flex-wrap gap-2.5 justify-between md:mt-[58px] mt-6">
                 <button
                     on:click={() => goto('/products')}
-                    class="abutton bg-wblue text-white text-base w-full max-w-[271px] rounded-3xl"
+                    class="abutton bg-wblue text-white text-base w-full md:max-w-[271px] rounded-3xl"
                 >
                     Continuer mes achats
                 </button>
                 <button
-                    class="abutton bg-wred text-white text-base w-full max-w-[271px] rounded-3xl"
+                    class="abutton bg-wred text-white text-base w-full md:max-w-[271px] rounded-3xl"
                     on:click={() => {
                         if (isFinalize) handleSubmit();
                         else {
