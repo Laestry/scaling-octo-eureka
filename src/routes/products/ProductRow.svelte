@@ -160,8 +160,8 @@
 </tr>
 
 <style>
-    tr:hover {
-        background: #da58994d;
+    tr.relative:hover {
+        background-color: #da58994d;
     }
 
     tr.relative {
