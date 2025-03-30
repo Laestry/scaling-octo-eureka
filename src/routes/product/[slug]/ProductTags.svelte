@@ -4,13 +4,16 @@
     export let product: AlcoholProduct;
 </script>
 
-<div class="flex justify-between {$$props.class}">
-    <p class="tags flex flex-wrap max-w-[368px] gap-1 productTag">
-        {#if product.tags.length > 0}
-            {#each product.tags as tag}
-                <a href="/products?tag={tag}">{tag}</a>
-            {/each}
-        {/if}
+<div class="flex justify-between md:flex-row flex-col md:gap-0 gap-2.5 {$$props.class}">
+    <p
+        class="tags flex flex-wrap gap-1 productTag justify-start
+              lg:max-w-[368px] max-w-[253px]"
+    >
+        <!--{#if product.tags.length > 0}-->
+        <!--    {#each product.tags as tag}-->
+        <!--        <a href="/products?tag={tag}">{tag}</a>-->
+        <!--    {/each}-->
+        <!--{/if}-->
 
         {#if product.providerName}
             <a href="/products?producer={product.providerName}">{product.providerName}</a>
@@ -33,12 +36,13 @@
         {/if}
     </p>
 
-    <a href="#" class="passport">Fiche technique complète</a>
+    <a href="#" class="passport whitespace-nowrap"> Fiche technique complète </a>
 </div>
 
 <style lang="scss">
     .tags a {
         text-transform: uppercase;
+        white-space: nowrap;
     }
     .productTag a {
         text-decoration: underline;

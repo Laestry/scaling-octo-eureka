@@ -33,7 +33,11 @@
     const img2 = '/images/example_wines/SHOP PAGE/In-situ Product Shot - stack.png';
 </script>
 
-<div class="mt-[40px] lg:max-w-[1162px] md:max-w-[780px] max-w-[320px] mx-auto">
+<div
+    class="mx-auto
+           lg:max-w-[1162px] md:max-w-[780px] max-w-[320px]
+           lg:mt-[56px] mt-[48px]"
+>
     <div>
         <ProductTags
             {product}
@@ -71,55 +75,74 @@
                 </button>
             </div>
 
-            <!--description-->
             <div>
                 <div
                     class="mt-[12px] flex items-end
                         lg:w-[560px] md:w-[394px] h-full"
                 >
-                    <h1 class="product-title">{product.name}</h1>
+                    <h1 class="lg:text-[42px] text-2xl">{product.name}</h1>
                 </div>
+
                 <div class="flex flex-col lg:w-[464px] md:w-[380px] h-full">
-                    <div class="product-description mt-4 h-[141px] w-full px-[15px]">
+                    <!--description-->
+                    <div class="product-description mt-4 h-[141px] w-full pr-[15px]">
                         <Svroller width="100%" height="100%" margin={{ right: -15 }} alwaysVisible>
                             {@html product.fullDescription}
-                            <!--                    <button on:click={() => (expand_description = !expand_description)}-->
-                            <!--                        >{expand_description ? '-' : '+'}</button-->
-                            <!--                    >-->
+                            <!--                            <button on:click={() => (expand_description = !expand_description)}>-->
+                            <!--                                {expand_description ? '-' : '+'}-->
+                            <!--                            </button>-->
                         </Svroller>
                     </div>
 
-                    <div class=" w-full mt-4">
-                        <div class="flex product-table">
+                    <div class="w-full mt-4">
+                        <!--                    facts block-->
+                        <div class="flex product-table lg:h-[141px] h-[104px]">
+                            <!--                            left-->
                             <div
-                                class="flex flex-col md:min-w-[280px] md:w-[280px] min-w-[186px] w-[186px] border-r-[1px] border-r-[#E859EB]"
+                                class="flex flex-col border-r-[1px] border-r-[#E859EB]
+                                        lg:w-[279px] md:w-[235px] w-[186px]"
                             >
-                                <p class="product-table__type capitalize">{product.specificCategory}</p>
-                                <p class="product-table__description">
-                                    <b class="font-bold">{product.providerName}</b>
-                                    <br />
-                                    {product.name ?? ''}
-                                    <br />
-                                    {product.vintage}
-                                    <br />
-                                    {product.uvc} x {product.lblFormat}
+                                <p class="border-b border-wred lg:h-[32px] h-[28px] capitalize flex items-center">
+                                    {product.specificCategory}
                                 </p>
+                                <div class="flex items-center flex-1">
+                                    <div class="w-fit">
+                                        <b class="font-bold">{product.providerName}</b>
+                                        <br />
+                                        {product.name ?? ''}
+                                        <br />
+                                        {product.vintage}
+                                        <br />
+                                        {product.uvc} x {product.lblFormat}
+                                    </div>
+                                </div>
                             </div>
-                            <div class="flex flex-col py-2 w-full">
-                                <p class="product-table__price">
-                                    {$priceFormat(product, true)}
-                                </p>
-                                <p class="product-table__price">
-                                    {$priceFormat(product, false)}
-                                </p>
-                                <p class="product-table__type-region">Acheter avant <br /> JJ mois, 20XX</p>
-                                <p />
+
+                            <!--                            right-->
+                            <div class="flex flex-col flex-1">
+                                <div
+                                    class="flex flex-col items-end justify-center
+                                        lg:h-[70px] h-[45px] border-b border-wblue"
+                                >
+                                    <b>
+                                        {$priceFormat(product, true)}
+                                    </b>
+                                    <b>
+                                        {$priceFormat(product, false)}
+                                    </b>
+                                </div>
+
+                                <div class="flex flex-1 items-center justify-end">
+                                    Acheter avant <br /> JJ mois, 20XX
+                                </div>
                             </div>
                         </div>
+
+                        <!--                        add products-->
                         <div
-                            class="flex md:flex-row flex-col pt-4 pb-8 border-b-[1px] border-b-[#DE6643] relative justify-between"
+                            class="flex md:flex-row flex-col pt-4 pb-8 relative justify-between border-b-[1px] border-b-[#DE6643]"
                         >
-                            <div class="flex md:flex-col flex-row gap-2">
+                            <div class="flex md:flex-col flex-row md:items-start items-center gap-2">
                                 <p class="product-table__count">Bouteilles ({product.uvc}/caisse)</p>
                                 <div class="product-table-counter">
                                     <p class="product-table-counter__value">{in_cart * product.uvc}</p>
@@ -149,9 +172,11 @@
                             </div>
                             <p class="absolute text-[16px] bg-[#F6F1F2] text-[#DE6643] bottom-[-12px] pr-1">*</p>
                         </div>
+
+                        <!--                        question-->
                         <button
                             on:click={() => (expand_description = !expand_description)}
-                            class="abutton product-table__description flex justify-between w-full"
+                            class="abutton flex justify-between w-full lg:text-base text-xs mt-2"
                         >
                             <span>
                                 Le prix inclut les taxes et
@@ -163,8 +188,8 @@
                             </span>
                         </button>
                         {#if expand_description}
-                            <div transition:fade>
-                                <ol class="list-decimal ml-[17px] text-base">
+                            <div transition:fade class="question">
+                                <ol class="list-decimal ml-[17px]">
                                     <li>
                                         Au moment de finaliser votre commande, vous serez chargé pour les frais d’agence
                                         (soit 16%) sur ce site.
@@ -196,19 +221,19 @@
 </div>
 
 <style lang="scss">
-    .product-title {
-        color: #191c1c;
-        font-size: 32px;
-        font-style: normal;
-        font-weight: 400;
-        line-height: 42px; /* 131.25% */
+    @media (max-width: 1136px) {
     }
-    .product-description {
-        color: #191c1c;
+    @media (max-width: 760px) {
+    }
+
+    .question {
         font-size: 16px;
-        font-style: normal;
-        font-weight: 400;
-        line-height: 120%; /* 19.2px */
+        @media (max-width: 1136px) {
+            font-size: 12px;
+        }
+    }
+
+    .product-description {
         display: flex;
         flex-direction: column;
         align-items: flex-start;
@@ -226,59 +251,21 @@
     .product-description button {
         color: #de6643;
     }
-    .product-description :global(p) {
-        display: inline;
-    }
+
     .product-table {
-        border-top: 1px solid #4975b8;
-        border-bottom: 1px solid #000;
-    }
-    .product-table__price {
-        color: #1e1e1e;
-        text-align: right;
         font-size: 16px;
-        font-style: normal;
-        font-weight: 700;
-        line-height: 120%; /* 19.2px */
-        text-transform: capitalize;
+        border-top: 1px solid var(--blue);
+        border-bottom: 1px solid var(--black);
+        @media (max-width: 1136px) {
+            font-size: 11px;
+        }
     }
-    .product-table__type {
-        color: #1e1e1e;
-        font-size: 16px;
-        font-style: normal;
-        font-weight: 400;
-        line-height: 120%; /* 19.2px */
-        padding: 8px 0px;
-        border-bottom: 1px solid #de6643;
-    }
-    .product-table__type-region {
-        color: #1e1e1e;
-        font-size: 16px;
-        font-style: normal;
-        font-weight: 400;
-        line-height: 120%; /* 19.2px */
-        padding: 8px 0px;
-        border-top: 1px solid #de6643;
-        text-align: right;
-        margin-top: 29px;
-    }
-    .product-table__description {
-        color: #1e1e1e;
-        padding: 8px 0px;
-        font-size: 16px;
-        font-style: normal;
-        font-weight: 400;
-        line-height: 120%;
-    }
+
     a {
         color: #4975b8;
-        font-family: 'Riposte';
-        font-size: 16px;
-        font-style: normal;
-        font-weight: 400;
-        line-height: 120%;
         text-decoration-line: underline;
     }
+
     .product-table__button {
         border-radius: 12px;
         background: rgba(45, 99, 176, 0.5);
@@ -290,9 +277,9 @@
         color: #f6f1f2;
         text-align: center;
         font-size: 16px;
-        font-style: normal;
-        font-weight: 400;
-        line-height: 120%; /* 19.2px */
+        @media (max-width: 1136px) {
+            font-size: 12px;
+        }
     }
     .product-table__button:last-child {
         background: #2d63b0;
@@ -301,12 +288,14 @@
         background: var(--WARD-RED, #f15a38);
     }
     .product-table__count {
-        color: #1e1e1e;
-        font-family: 'Riposte';
         font-size: 16px;
-        font-style: normal;
-        font-weight: 400;
-        line-height: 120%; /* 19.2px */
+
+        @media (max-width: 1136px) {
+            font-size: 12px;
+        }
+        @media (max-width: 760px) {
+            font-size: 12px;
+        }
     }
     .product-table__favorite {
         top: 20px;
@@ -318,6 +307,9 @@
         display: flex;
         gap: 5px;
         align-items: center;
+        @media (max-width: 1136px) {
+            font-size: 12px;
+        }
     }
     @media (max-width: 767px) {
         .product-table-counter {
@@ -334,11 +326,6 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        font-family: 'Riposte';
-        font-size: 16px;
-        font-style: normal;
-        font-weight: 400;
-        line-height: 120%; /* 19.2px */
         border-radius: 12px;
         background: #2d63b0;
         width: 46px;
@@ -353,10 +340,5 @@
         flex-shrink: 0;
         color: #1e1e1e;
         text-align: center;
-        font-family: 'Riposte';
-        font-size: 16px;
-        font-style: normal;
-        font-weight: 400;
-        line-height: 120%; /* 19.2px */
     }
 </style>

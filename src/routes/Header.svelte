@@ -114,9 +114,7 @@
 <!--navlinks-->
 {#if $page.url.pathname === '/cart' || $page.url.pathname.startsWith('/product')}
     <div class="w-full flex justify-center">
-        <div
-            class="lg:w-[1136px] md:w-[760px] w-[300px] flex flex-col md:items-center lg:mb-[64px] md:mb-[40px] mb-[80px]"
-        >
+        <div class="lg:w-[1136px] md:w-[760px] w-[300px] flex flex-col md:items-center">
             <a id="logo" href="/">
                 <Logo
                     color={computedColor}

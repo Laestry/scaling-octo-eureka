@@ -149,7 +149,7 @@
     });
 </script>
 
-<div>
+<div class="lg:mb-[56px] md:mb-[40px] mb-[80px]">
     <Filters categories={data.categories} bind:selectedFilters on:resetFilters={() => updateProducts(true)} />
     {#if isLoading && products.length === 0}
         loading wines
