@@ -119,163 +119,167 @@
         }
     }
 
-    let isFinalize = false;
+    let isFinalize = true;
 </script>
 
-{#if isFinalize}
-    <div transition:fly={{ y: -100, duration: 300 }}>
-        <hr class="mt-[53px] mb-4 border-wpink" />
-
-        <div class="flex w-full gap-4" bind:this={formEl}>
-            <div class="text-base text-nowrap w-[176px]">Pour la commande</div>
-            <div class="flex flex-1 flex-wrap gap-y-2 gap-x-4">
-                <Input
-                    placeholder="Prénom"
-                    class="w-full"
-                    bind:this={firstNameInput}
-                    bind:value={formData.firstName}
-                    validate={{ type: 'string', minLength: 1, pattern: '^[\\s\\S]*$' }}
-                    hint="Prénom requis."
-                />
-                <Input
-                    placeholder="Nom"
-                    class="w-full"
-                    bind:this={lastNameInput}
-                    bind:value={formData.lastName}
-                    validate={{ type: 'string', minLength: 1, pattern: '^[\\s\\S]*$' }}
-                    hint="Nom requis"
-                />
-                <Input
-                    placeholder="Adresse"
-                    class="max-w-[464px] w-full"
-                    bind:this={addressInput}
-                    bind:value={formData.address}
-                    validate={{ type: 'string', minLength: 1, pattern: '^[\\s\\S]*$' }}
-                    hint="Adresse requise"
-                />
-                <Input
-                    placeholder="Ville"
-                    class="max-w-[272px] w-full"
-                    bind:this={cityInput}
-                    bind:value={formData.city}
-                    validate={{ type: 'string', minLength: 1, pattern: '^[\\s\\S]*$' }}
-                    hint="Ville requise"
-                />
-                <Input
-                    placeholder="Code postal"
-                    class="max-w-[176px] w-full"
-                    bind:this={postalCodeInput}
-                    bind:value={formData.postalCode}
-                    validate={{ type: 'string', minLength: 5, pattern: '^[\\s\\S]*$' }}
-                    hint="Code postal min. 5 caractères"
-                />
-                <Input
-                    placeholder="Téléphone"
-                    class="max-w-[272px] w-full"
-                    bind:this={phoneInput}
-                    bind:value={formData.phone}
-                    validate={{ type: 'string', minLength: 11, pattern: '^[\\s\\S]*$' }}
-                    hint="Téléphone (min. 10 chiffres avec +)"
-                />
-                <Input
-                    placeholder="Courriel"
-                    class="max-w-[268px] w-full"
-                    bind:this={emailInput}
-                    bind:value={formData.email}
-                    validate={{
-                        type: 'string',
-                        pattern: '^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$',
-                        maxLength: 254
-                    }}
-                    hint="Courriel valide requis"
-                />
-                <div class="flex gap-1.5 items-center flex-1 justify-end">
-                    <span class="text-xs">Inscrivez-moi à l’infolettre.</span>
-                    <Toggle onText="Oui!" offText="Non" />
-                </div>
-            </div>
-        </div>
-
-        <div class="flex w-full gap-4 mt-[40px]">
-            <div class="text-base text-nowrap w-[176px]">Pour la cueillette</div>
-
-            <Select
-                fontSize="16px"
-                bind:this={saqSelect}
-                class="w-full max-w-[464px] !border-wblue "
-                inputClass="!text-wblack !placeholder-wblue"
-                {options}
-                placeholder="Choisir votre SAQ"
-                hint="Veuillez sélectionner une succursale SAQ"
-            />
-        </div>
-
-        <div class="text-base text-nowrap w-[176px] mt-[40px]">La commande</div>
-    </div>
-{/if}
-
-<hr class={isFinalize ? 'mt-[18px]' : 'mt-[53px]'} />
-<div class="">
-    <div class="  flex lg:flex-col lg:gap-0 flex-wrap gap-3">
-        {#each $cart as item (item.id)}
-            <div transition:fade>
-                <CartItem product={item} isCart size="m" />
-            </div>
-        {/each}
-    </div>
-
-    <div class="max-w-[464px] w-full ml-auto mt-[9px]">
-        <hr class="border-wred mb-[7px]" />
-        <div class="flex justify-between">
-            <div class="text-xs">Total</div>
-            <b>
-                {$cart
-                    .reduce((total, item) => {
-                        const unitPrice = $isPrixResto ? item.pricing.price : item.pricing.priceTaxIn;
-                        const itemTotal = unitPrice * item.quantity;
-                        const agencyTotal = item.pricing.agencyFeeWTaxes * item.quantity;
-                        return total + itemTotal + agencyTotal;
-                    }, 0)
-                    .toFixed(2)} $
-            </b>
-        </div>
-        <div class="text-xs">Frais d’agence et taxes incluses</div>
+<div class="w-full flex justify-center">
+    <div class="lg:w-[1136px] md:w-[760px] w-[300px]">
         {#if isFinalize}
-            <div transition:fly={{ y: 100 }}>
-                <hr class="border-wred mt-[10px] mb-[7px]" />
+            <div transition:fly={{ y: -100, duration: 300 }}>
+                <hr class="mt-[53px] mb-4 border-wpink" />
+
+                <div class="flex lg:flex-row flex-col w-full gap-4" bind:this={formEl}>
+                    <div class="text-base text-nowrap w-[176px]">Pour la commande</div>
+                    <div class="flex flex-1 flex-wrap gap-y-2 gap-x-4">
+                        <Input
+                            placeholder="Prénom"
+                            class="w-full"
+                            bind:this={firstNameInput}
+                            bind:value={formData.firstName}
+                            validate={{ type: 'string', minLength: 1, pattern: '^[\\s\\S]*$' }}
+                            hint="Prénom requis."
+                        />
+                        <Input
+                            placeholder="Nom"
+                            class="w-full"
+                            bind:this={lastNameInput}
+                            bind:value={formData.lastName}
+                            validate={{ type: 'string', minLength: 1, pattern: '^[\\s\\S]*$' }}
+                            hint="Nom requis"
+                        />
+                        <Input
+                            placeholder="Adresse"
+                            class="lg:max-w-[464px] w-full"
+                            bind:this={addressInput}
+                            bind:value={formData.address}
+                            validate={{ type: 'string', minLength: 1, pattern: '^[\\s\\S]*$' }}
+                            hint="Adresse requise"
+                        />
+                        <Input
+                            placeholder="Ville"
+                            class="lg:max-w-[272px] lg:w-full md:min-w-0 min-w-[300px] flex-1 "
+                            bind:this={cityInput}
+                            bind:value={formData.city}
+                            validate={{ type: 'string', minLength: 1, pattern: '^[\\s\\S]*$' }}
+                            hint="Ville requise"
+                        />
+                        <Input
+                            placeholder="Code postal"
+                            class="lg:max-w-[176px] lg:w-full w-fit md:flex-none flex-1 "
+                            bind:this={postalCodeInput}
+                            bind:value={formData.postalCode}
+                            validate={{ type: 'string', minLength: 5, pattern: '^[\\s\\S]*$' }}
+                            hint="Code postal min. 5 caractères"
+                        />
+                        <Input
+                            placeholder="Téléphone"
+                            class="lg:max-w-[272px] w-full "
+                            bind:this={phoneInput}
+                            bind:value={formData.phone}
+                            validate={{ type: 'string', minLength: 11, pattern: '^[\\s\\S]*$' }}
+                            hint="Téléphone (min. 10 chiffres avec +)"
+                        />
+                        <Input
+                            placeholder="Courriel"
+                            class="lg:max-w-[268px] lg:w-full flex-1 "
+                            bind:this={emailInput}
+                            bind:value={formData.email}
+                            validate={{
+                                type: 'string',
+                                pattern: '^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$',
+                                maxLength: 254
+                            }}
+                            hint="Courriel valide requis"
+                        />
+                        <div class="flex gap-1.5 items-center lg:flex-1 flex-none lg:w-auto w-fit justify-end">
+                            <span class="text-xs">Inscrivez-moi à l’infolettre.</span>
+                            <Toggle onText="Oui!" offText="Non" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex md:flex-row flex-col w-full gap-4 mt-[40px]">
+                    <div class="text-base text-nowrap w-[176px]">Pour la cueillette</div>
+
+                    <Select
+                        fontSize="16px"
+                        bind:this={saqSelect}
+                        class="w-full lg:max-w-[464px] !border-wblue "
+                        inputClass="!text-wblack !placeholder-wblue"
+                        {options}
+                        placeholder="Choisir votre SAQ"
+                        hint="Veuillez sélectionner une succursale SAQ"
+                    />
+                </div>
+
+                <div class="text-base text-nowrap w-[176px] mt-[40px]">La commande</div>
+            </div>
+        {/if}
+
+        <hr class={isFinalize ? 'mt-[18px]' : 'mt-[53px]'} />
+        <div class="">
+            <div class="  flex lg:flex-col lg:gap-0 flex-wrap gap-2 justify-between">
+                {#each $cart as item (item.id)}
+                    <div transition:fade>
+                        <CartItem product={item} isCart size="m" />
+                    </div>
+                {/each}
+            </div>
+
+            <div class="max-w-[464px] w-full ml-auto mt-[9px]">
+                <hr class="border-wred mb-[7px]" />
                 <div class="flex justify-between">
-                    <div class="text-xs">Montant chargé maintenant</div>
+                    <div class="text-xs">Total</div>
                     <b>
                         {$cart
                             .reduce((total, item) => {
-                                return total + item.pricing.agencyFeeWTaxes * item.quantity;
+                                const unitPrice = $isPrixResto ? item.pricing.price : item.pricing.priceTaxIn;
+                                const itemTotal = unitPrice * item.quantity;
+                                const agencyTotal = item.pricing.agencyFeeWTaxes * item.quantity;
+                                return total + itemTotal + agencyTotal;
                             }, 0)
                             .toFixed(2)} $
                     </b>
                 </div>
-                <div class="text-xs">*La différence sera chargée au moment de la cueillette</div>
+                <div class="text-xs">Frais d’agence et taxes incluses</div>
+                {#if isFinalize}
+                    <div transition:fly={{ y: 100 }}>
+                        <hr class="border-wred mt-[10px] mb-[7px]" />
+                        <div class="flex justify-between">
+                            <div class="text-xs">Montant chargé maintenant</div>
+                            <b>
+                                {$cart
+                                    .reduce((total, item) => {
+                                        return total + item.pricing.agencyFeeWTaxes * item.quantity;
+                                    }, 0)
+                                    .toFixed(2)} $
+                            </b>
+                        </div>
+                        <div class="text-xs">*La différence sera chargée au moment de la cueillette</div>
+                    </div>
+                {/if}
             </div>
-        {/if}
-    </div>
 
-    <div class="flex justify-between mt-[58px]">
-        <button
-            on:click={() => goto('/products')}
-            class="abutton bg-wblue text-white text-base w-full max-w-[271px] rounded-3xl"
-        >
-            Continuer mes achats
-        </button>
-        <button
-            class="abutton bg-wred text-white text-base w-full max-w-[271px] rounded-3xl"
-            on:click={() => {
-                if (isFinalize) handleSubmit();
-                else {
-                    isFinalize = true;
-                    goto('#logo');
-                }
-            }}
-        >
-            {#if isFinalize}Confirmer la commande{:else}Finaliser ma commande{/if}
-        </button>
+            <div class="flex justify-between mt-[58px]">
+                <button
+                    on:click={() => goto('/products')}
+                    class="abutton bg-wblue text-white text-base w-full max-w-[271px] rounded-3xl"
+                >
+                    Continuer mes achats
+                </button>
+                <button
+                    class="abutton bg-wred text-white text-base w-full max-w-[271px] rounded-3xl"
+                    on:click={() => {
+                        if (isFinalize) handleSubmit();
+                        else {
+                            isFinalize = true;
+                            goto('#logo');
+                        }
+                    }}
+                >
+                    {#if isFinalize}Confirmer la commande{:else}Finaliser ma commande{/if}
+                </button>
+            </div>
+        </div>
     </div>
 </div>

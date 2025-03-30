@@ -3,6 +3,7 @@
     export let value: string;
     export let validate: object | undefined;
     export let hint;
+    export let placeholder: string;
 
     let error = false;
     let validateFn;
@@ -25,7 +26,7 @@
 </script>
 
 <div class={$$props['class'] ?? ''}>
-    <input type="text" bind:value on:blur={handleValidate} class={$$props['class'] ?? ''} {...$$restProps} />
+    <input type="text" bind:value on:blur={handleValidate} class="w-full" {placeholder} />
     {#if error}
         <div class="error">{hint}</div>
     {/if}

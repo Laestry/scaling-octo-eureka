@@ -125,44 +125,40 @@
         </div>
     </a>
 
-    <span class="product-name text-start w-full" title="product.name">
-        <b>{product.name || '-'}</b>
-    </span>
-
-    <div class="flex w-full justify-between">
-        <div class="w-full product-name">
-            <div class="w-full flex">
-                <div class="truncate lg:max-w-[170px] md:max-w-[89px] max-w-[59px]">
-                    {product.providerName ?? ''}
-                </div>
-                <span>
-                    {#if product.providerName && product.vintage},
-                    {/if}
-                    {product.vintage ?? ''}
-                </span>
-            </div>
-            <div class="product-name description">
-                {product.uvc} <span class="lowercase">x</span>
-                {product.lblFormat}
-            </div>
+    <a href="/product/{product.slug}" class="flex flex-col items-start justify-start w-full product-name">
+        <b class="truncate w-full">{product.name || '-'}</b>
+        <div class="w-full flex">
+            <div class="truncate" style="max-width: calc(100% - 37px)">{product.providerName ?? ''}</div>
+            <span>
+                {#if product.providerName && product.vintage},
+                {/if}
+                {product.vintage ?? ''}
+            </span>
         </div>
+    </a>
+    <div class="flex justify-between items-end w-full">
+        <a href="/product/{product.slug}" class="product-name description">
+            {product.uvc} <span class="lowercase">x</span>
+            {product.lblFormat}
+        </a>
+
         <div class="flex items-center w-fit h-fit self-end">
+            <button
+                class="abutton product-table-counter__button {$itemQuantity > 1 ? '' : 'text-gray-300'}"
+                style="line-height: 16px"
+                on:click={() => {
+                    if ($itemQuantity > 1) cart.remove(product.id);
+                }}
+                >-
+            </button>
+
             <p class="product-table-counter__value">{$itemQuantity * product.uvc}</p>
-            <div class="flex flex-col justify-center items-center">
-                <button
-                    class="abutton product-table-counter__button"
-                    style="line-height: 16px"
-                    on:click={() => cart.add(product)}>+</button
-                >
-                <button
-                    class="abutton product-table-counter__button {$itemQuantity > 1 ? '' : 'text-gray-300'}"
-                    style="line-height: 16px"
-                    on:click={() => {
-                        if ($itemQuantity > 1) cart.remove(product.id);
-                    }}
-                    >-
-                </button>
-            </div>
+            <button
+                class="abutton product-table-counter__button"
+                style="line-height: 16px"
+                on:click={() => cart.add(product)}
+                >+
+            </button>
         </div>
     </div>
 </div>
