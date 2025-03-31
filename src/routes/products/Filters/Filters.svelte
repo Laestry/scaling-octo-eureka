@@ -65,8 +65,8 @@
         // Custom mapping for renaming and ordering.
         // key: original type, value: { customName: string, order: number }
         const orderMap: Record<string, { customName: string; order: number }> = {
-            providerName: { customName: 'Producteurs', order: 1 },
-            originRegion: { customName: 'Regions', order: 2 },
+            providerName: { customName: 'Producteurs', order: 2 },
+            originRegion: { customName: 'Regions', order: 1 },
             specificCategory: { customName: 'Charactère', order: 3 },
             uvc: { customName: 'Bouteilles (X/caisse)', order: 4 },
             lblFormat: { customName: 'Format', order: 5 },
