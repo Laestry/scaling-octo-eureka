@@ -15,7 +15,12 @@ export async function load({ locals, url }) {
             ? priceRangeCandidate
             : undefined;
     const sortingCandidate = params.get('sorting');
-    const sorting = sortingCandidate === 'Prix' || sortingCandidate === 'Alphabétique' ? sortingCandidate : undefined;
+    const sorting =
+        sortingCandidate === 'Prix croissant' ||
+        sortingCandidate === 'Prix décroissant' ||
+        sortingCandidate === 'Alphabétique'
+            ? sortingCandidate
+            : undefined;
     const nameSearch = params.get('nameSearch') || undefined;
     const tag = params.get('tag') || undefined;
 

@@ -4,7 +4,7 @@ import { PUBLIC_DB_URL } from '$env/static/public';
 import { POCKETBASE_ADMIN_PASSWORD, POCKETBASE_ADMIN_USER } from '$env/static/private';
 import { upsertBatch } from '$lib/server/pocketbase';
 
-export async function GET({ locals }) {
+export async function GET({ locals }): Promise<void> {
     const tokens = await PortausApi.getTokens();
     locals.pbAdmin = new PocketBase(PUBLIC_DB_URL);
     await locals.pbAdmin.collection('_superusers').authWithPassword(POCKETBASE_ADMIN_USER, POCKETBASE_ADMIN_PASSWORD);
@@ -18,7 +18,7 @@ export async function GET({ locals }) {
 
         // Upsert the products from the current page into Pocketbase using batch.
         const pocketRes = await upsertBatch(locals.pbAdmin, processedProducts);
-
+        console.log(pocketRes);
         // const pocketRes = await pb.collection('alcohol_products').create(processedProducts[0]);
 
         // Update totalPages based on the API response (ensuring it's a number).
