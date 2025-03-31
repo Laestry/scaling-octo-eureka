@@ -54,9 +54,20 @@ export async function load({ locals, url }) {
 
     const filter = filterParts.join(' && ');
 
+    let sortField: string | undefined;
+    if (filterObj.sorting) {
+        if (filterObj.sorting === 'Prix croissant') {
+            sortField = 'price';
+        } else if (filterObj.sorting === 'Prix décroissant') {
+            sortField = '-price';
+        } else if (filterObj.sorting === 'Alphabétique') {
+            sortField = 'name';
+        }
+    }
+
     const productsPromise = locals.pb.collection('alcohol_products').getList(1, 20, {
-        filter: filter || undefined
-        // You can also pass sort or other options if needed.
+        filter: filter || undefined,
+        sort: sortField || undefined
     });
     const categoriesPromise = locals.pb.collection('categories').getFullList();
 

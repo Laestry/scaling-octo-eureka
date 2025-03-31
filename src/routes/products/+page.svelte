@@ -76,8 +76,10 @@
 
         // Determine sort order: "Prix" for price or "Alphabétique" for name.
         let sort = '';
-        if (selectedFilters.sorting === 'Prix') {
+        if (selectedFilters.sorting === 'Prix croissant') {
             sort = 'price';
+        } else if (selectedFilters.sorting === 'Prix décroissant') {
+            sort = '-price';
         } else if (selectedFilters.sorting === 'Alphabétique') {
             sort = 'name';
         }

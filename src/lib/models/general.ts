@@ -6,7 +6,7 @@ export interface TFilters {
     format: string | undefined;
     vintage: string | undefined;
     priceRange: 'low' | 'mid' | 'high' | undefined;
-    sorting: 'Prix' | 'Alphabétique' | undefined;
+    sorting: 'Prix croissant' | 'Prix décroissant' | 'Alphabétique' | undefined;
     nameSearch: string | undefined;
     tag: string | undefined;
 }

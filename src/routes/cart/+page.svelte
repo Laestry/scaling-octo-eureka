@@ -119,7 +119,7 @@
         }
     }
 
-    let isFinalize = true;
+    let isFinalize = false;
 </script>
 
 <div class="w-full flex justify-center">

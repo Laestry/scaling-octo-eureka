@@ -261,7 +261,7 @@
         {/if}
         <Select
             class="cusselect self-end"
-            options={['Prix', 'Alphabétique']}
+            options={['Prix croissant', 'Prix décroissant', 'Alphabétique']}
             placeholder="Trier"
             defaultOption="Tous"
             bind:selected={selectedFilters.sorting}
