@@ -1,5 +1,6 @@
-import { PORTAUS_LOGIN, PORTAUS_PASSWORD, PORTAUS_BASE, PORTAUS_API_KEY } from '$env/static/private';
+import { PORTAUS_LOGIN, PORTAUS_PASSWORD, PORTAUS_BASE, PORTAUS_API_KEY, JWT_SECRET } from '$env/static/private';
 import type { ApiTypes } from '$lib/server/portausModels';
+import jwt from 'jsonwebtoken'; // added import for JWT
 
 type Tokens = {
     accessToken: string;
@@ -12,6 +13,14 @@ const methods: Record<keyof ApiTypes.ResMap, 'GET' | 'POST'> = {
     '/api/v1/payments/intents': 'POST',
     '/api/v1/saq-branches': 'GET' // new endpoint added here
 };
+
+// Helper function to generate JWT for the API key
+function generateApiKeyJWT(): string {
+    const payload = { API_KEY: PORTAUS_API_KEY.trim() };
+    // A JWT secret is required to sign the token.
+    const secret = JWT_SECRET;
+    return jwt.sign(payload, secret);
+}
 
 async function request<P extends keyof ApiTypes.ResMap>({
     path,
@@ -39,9 +48,10 @@ async function request<P extends keyof ApiTypes.ResMap>({
         headers['x-portaus-context'] = tokens.contextToken;
     }
 
-    // For the payment intents endpoint, convert the API key to a JWT token before sending
-    if (path === '/api/v1/payments/intents' || path === '/api/v1/saq-branches') {
-        headers['apikey'] = PORTAUS_API_KEY;
+    // For the payment intents and SAQ branches endpoints, generate a JWT containing the API key
+    // Note: getSaqBranches uses '/API/latest/admin/saq-branches' which is different from the method record key.
+    if (path === '/api/v1/payments/intents' || path === '/API/latest/admin/saq-branches') {
+        headers['apikey'] = generateApiKeyJWT();
     }
 
     const res = await fetch(`${PORTAUS_BASE}${path}${query}`, {
@@ -126,6 +136,7 @@ export const PortausApi = {
 
         return {
             id: obj.puid,
+            id2: obj.id,
             sku: obj.sku,
             slug: obj.slug,
             name: processString(obj.name) || processString(obj.cmsName) || '',

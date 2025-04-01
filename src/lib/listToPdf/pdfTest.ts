@@ -1,4 +1,5 @@
 import { jsPDF } from 'jspdf';
+import PocketBase from 'pocketbase';
 
 /**
  * Converts a remote font file (from URL) into a base64 string.
@@ -45,9 +46,9 @@ async function loadFontFromUrl(
     fontStyle: string
 ): Promise<void> {
     const base64Font = await fetchFontAsBase64(url);
-    // Add the font file to jsPDF's Virtual File System
+    // Add the font file to jsPDF's Virtual File System.
     doc.addFileToVFS(fileName, base64Font);
-    // Register the font with jsPDF
+    // Register the font with jsPDF.
     doc.addFont(fileName, fontName, fontStyle);
 }
 
@@ -56,14 +57,17 @@ async function loadFontFromUrl(
  * Loads custom Riposte fonts directly from URLs.
  * Waits for document.fonts.ready before rendering.
  *
+ * Instead of saving the PDF, this function returns the generated PDF as a Blob.
+ *
  * @param elementId - The ID of the element to convert to PDF.
- * @param pdfFilename - The file name for the downloaded PDF.
+ * @param pdfFilename - The file name for the PDF (used only for naming purposes).
+ * @returns A Promise resolving to the PDF Blob.
  */
-export async function generatePDFFromId(elementId: string, pdfFilename: string = 'output.pdf'): Promise<void> {
+export async function generatePDFFromId(elementId: string, pdfFilename: string = 'output.pdf'): Promise<Blob> {
     const element = document.getElementById(elementId);
     if (!element) {
         console.error(`Element with id "${elementId}" not found.`);
-        return;
+        throw new Error(`Element with id "${elementId}" not found.`);
     }
 
     // Define PDF dimensions in pixels.
@@ -91,25 +95,32 @@ export async function generatePDFFromId(elementId: string, pdfFilename: string =
     // Load custom Riposte fonts from URL.
     await loadFontFromUrl(doc, '/fonts/Riposte-Regular.ttf', 'Riposte-Regular.otf', 'Riposte', 'normal');
     await loadFontFromUrl(doc, '/fonts/Riposte-Bold.ttf', 'Riposte-Bold.otf', 'Riposte', 'bold');
-    // Set default font (using the normal style)
+    // Set default font (using the normal style).
     doc.setFont('Riposte', 'normal');
 
     // Wait for all fonts to be fully loaded.
     await document.fonts.ready;
     console.log('Fonts are ready, generating PDF...');
 
-    await doc.html(element, {
-        callback: (doc: jsPDF) => {
-            doc.save(pdfFilename);
-        },
-        x: margin,
-        y: margin,
-        width: pdfWidth - margin * 2,
-        html2canvas: {
-            scale: 1,
-            useCORS: true,
-            scrollY: 0,
-            windowWidth: element.offsetWidth
-        }
+    // Use jsPDF's html method to generate the PDF.
+    const pdfBlob = await new Promise<Blob>((resolve, reject) => {
+        doc.html(element, {
+            callback: (doc: jsPDF) => {
+                // Instead of saving the file, output the PDF as a Blob.
+                const blob = doc.output('blob');
+                resolve(blob);
+            },
+            x: margin,
+            y: margin,
+            width: pdfWidth - margin * 2,
+            html2canvas: {
+                scale: 1,
+                useCORS: true,
+                scrollY: 0,
+                windowWidth: element.offsetWidth
+            }
+        });
     });
+
+    return pdfBlob;
 }

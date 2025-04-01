@@ -1,11 +1,6 @@
-import { PortausApi } from '$lib/server/portaus';
-import PocketBase from 'pocketbase';
-import { PUBLIC_DB_URL } from '$env/static/public';
-import { POCKETBASE_ADMIN_PASSWORD, POCKETBASE_ADMIN_USER } from '$env/static/private';
-import { upsertBatch } from '$lib/server/pocketbase';
+import { createPaymentIntent } from '$lib/server/portausApi';
 
 export async function GET({ locals }) {
-    const tokens = await PortausApi.getTokens();
     const payload = {
         customer: {
             firstName: 'John',
@@ -48,7 +43,7 @@ export async function GET({ locals }) {
         portausCompanyId: 0,
         lines: [
             {
-                puid: 'PROD12345',
+                puid: '61c01838-ea00-461a-9a76-c414a6c80c23',
                 prices: [
                     {
                         label: 'Regular Price',
@@ -84,6 +79,6 @@ export async function GET({ locals }) {
             address: '123 Main Street'
         }
     };
-    let res = await PortausApi.createPaymentIntent(payload, tokens);
+    let res = await createPaymentIntent(payload);
     console.log(res);
 }

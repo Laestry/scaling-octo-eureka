@@ -215,7 +215,14 @@
             </button>
             <input type="text" class="search__input" />
         </label>
-        <a href="#" class="md:rounded-none rounded-full button-view button-view--link">
+        <a
+            href={$isPrixResto
+                ? 'https://ward.pockethost.io/api/files/pbc_30851581/93ej7tuns0916g5/products_resto_03b592zlit.pdf'
+                : 'https://ward.pockethost.io/api/files/pbc_30851581/93ej7tuns0916g5/products_perso_qucjutpys2.pdf'}
+            download={$isPrixResto ? 'wardetassocies-prix-resto.pdf' : 'wardetassocies-prix-perso.pdf'}
+            class="md:rounded-none rounded-full button-view button-view--link"
+            target="_blank"
+        >
             <IconDownload />
         </a>
     </div>
@@ -275,7 +282,14 @@
         <button class="button-view" class:active={!$isGrid} on:click={() => isGrid.set(false)}>
             <IconList />
         </button>
-        <a href="#" class="button-view button-view--link">
+        <a
+            href={$isPrixResto
+                ? 'https://ward.pockethost.io/api/files/pbc_30851581/93ej7tuns0916g5/products_resto_03b592zlit.pdf'
+                : 'https://ward.pockethost.io/api/files/pbc_30851581/93ej7tuns0916g5/products_perso_qucjutpys2.pdf'}
+            download={$isPrixResto ? 'wardetassocies-prix-resto.pdf' : 'wardetassocies-prix-perso.pdf'}
+            target="_blank"
+            class="md:rounded-none rounded-full button-view button-view--link"
+        >
             <IconDownload />
         </a>
     </div>

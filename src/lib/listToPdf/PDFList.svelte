@@ -1,6 +1,7 @@
 <script lang="ts">
     import type { AlcoholProduct } from '$lib/models/pocketbase';
 
+    export let id;
     export let products;
     export let prixResto = false;
 
@@ -26,7 +27,7 @@
 </script>
 
 <!-- Container to be rendered (e.g. for PDF generation) -->
-<div id="pdfContent">
+<div {id}>
     <table>
         <thead>
             <tr>
@@ -36,7 +37,7 @@
                 <th class="w-mil">Mil.</th>
                 <th class="w-type">Type</th>
                 <th class="w-format">Format</th>
-                <th class="w-price">$ Perso</th>
+                <th class="w-price">$ {prixResto ? 'Resto' : 'Perso'}</th>
             </tr>
         </thead>
         <tbody>
