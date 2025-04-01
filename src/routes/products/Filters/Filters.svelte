@@ -65,8 +65,8 @@
         // Custom mapping for renaming and ordering.
         // key: original type, value: { customName: string, order: number }
         const orderMap: Record<string, { customName: string; order: number }> = {
-            providerName: { customName: 'Producteurs', order: 2 },
             originRegion: { customName: 'Regions', order: 1 },
+            providerName: { customName: 'Producteurs', order: 2 },
             specificCategory: { customName: 'Charactère', order: 3 },
             uvc: { customName: 'Bouteilles (X/caisse)', order: 4 },
             lblFormat: { customName: 'Format', order: 5 },
@@ -233,14 +233,14 @@
                 options={filters[0].list}
                 placeholder={filters[0].name}
                 defaultOption="Tous"
-                bind:selected={selectedFilters.producer}
+                bind:selected={selectedFilters.region}
             />
             <Select
                 class="cusselect"
                 options={filters[1].list}
                 placeholder={filters[1].name}
                 defaultOption="Tous"
-                bind:selected={selectedFilters.region}
+                bind:selected={selectedFilters.producer}
             />
             <Select
                 class="cusselect"

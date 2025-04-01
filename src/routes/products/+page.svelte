@@ -35,7 +35,7 @@
     async function loadMoreProducts() {
         if (isLoading || !hasMore) return;
         isLoading = true;
-
+        console.log('selectedFilters', selectedFilters);
         // Build the filter string based on selected filters.
         const filterParts: string[] = [];
         if (selectedFilters.tag) {
@@ -83,7 +83,7 @@
         } else if (selectedFilters.sorting === 'Alphabétique') {
             sort = 'name';
         }
-        // console.log('filterString', filterString);
+        console.log('filterString', filterString);
         try {
             const result = await pb.collection('alcohol_products').getList(currentPage, 20, {
                 filter: filterString || undefined,
