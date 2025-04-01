@@ -138,7 +138,7 @@
                         out:fly={{ y: -30, duration: 600 }}
                         style="position: absolute; left: 50%; top: -20px; transform: translateX(-50%); pointer-events: none; z-index: 10;"
                     >
-                        {$itemQuantity > 0 ? $itemQuantity : ''}
+                        {$itemQuantity > 0 ? $itemQuantity * product.uvc : ''}
                     </div>
                 {/each}
             </div>
