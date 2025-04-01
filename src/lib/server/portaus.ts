@@ -1,4 +1,10 @@
-import { PORTAUS_LOGIN, PORTAUS_PASSWORD, PORTAUS_BASE, PORTAUS_API_KEY } from '$env/static/private';
+import {
+    PORTAUS_LOGIN,
+    PORTAUS_PASSWORD,
+    PORTAUS_BASE,
+    PORTAUS_API_KEY,
+    PORTAUS_JWT_SECRET
+} from '$env/static/private';
 import type { ApiTypes } from '$lib/server/portausModels';
 import jwt from 'jsonwebtoken'; // added import for JWT
 
@@ -18,7 +24,7 @@ const methods: Record<keyof ApiTypes.ResMap, 'GET' | 'POST'> = {
 function generateApiKeyJWT(): string {
     const payload = { API_KEY: PORTAUS_API_KEY.trim() };
     // A JWT secret is required to sign the token.
-    const secret = JWT_SECRET;
+    const secret = PORTAUS_JWT_SECRET;
     return jwt.sign(payload, secret);
 }
 
