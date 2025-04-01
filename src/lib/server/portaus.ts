@@ -1,4 +1,4 @@
-import { PORTAUS_LOGIN, PORTAUS_PASSWORD, PORTAUS_BASE, PORTAUS_API_KEY, JWT_SECRET } from '$env/static/private';
+import { PORTAUS_LOGIN, PORTAUS_PASSWORD, PORTAUS_BASE, PORTAUS_API_KEY } from '$env/static/private';
 import type { ApiTypes } from '$lib/server/portausModels';
 import jwt from 'jsonwebtoken'; // added import for JWT
 
