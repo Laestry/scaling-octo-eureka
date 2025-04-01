@@ -1,6 +1,6 @@
 import type { AlcoholProduct } from '$lib/models/pocketbase';
 import { isPrixResto } from '$lib/store';
-import { derived, get } from 'svelte/store';
+import { derived } from 'svelte/store';
 
 export const priceFormat = derived(isPrixResto, ($isPrixResto) => {
     return function ({ pricing, uvc }: AlcoholProduct, bottle: boolean = true, options: { none?: boolean } = {}) {

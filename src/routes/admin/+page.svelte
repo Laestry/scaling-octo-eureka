@@ -105,7 +105,8 @@
 This is to create the pdf, it will upload automatically, just ignore it:
 <button on:click={handleDownload}>Download PDF</button>
 
-<div class="w-[1136px]" style="position: absolute; left: -10000px;">
-    <PDFList products={allProcessedProducts} />
+<!--<div class="w-[1136px]" style="position: absolute; left: -10000px;">-->
+<div class="w-[1136px]">
+    <PDFList products={allProcessedProducts} prixResto />
     <!--    <ProductList id="pdfContent" products={allProcessedProducts} isPDF={true} />-->
 </div>

@@ -1,8 +1,8 @@
 <script lang="ts">
-    import { priceFormat } from '../../routes/product/[slug]/utils';
+    import type { AlcoholProduct } from '$lib/models/pocketbase';
 
     export let products;
-    export let prixResto;
+    export let prixResto = false;
 
     // Compute region for a given product.
     function getRegion(product: any): string {
@@ -12,6 +12,16 @@
         if (r) return r;
         if (c) return c;
         return '-';
+    }
+
+    function priceFormatPDF({ pricing, uvc }: AlcoholProduct, bottle: boolean = true) {
+        let price = prixResto ? pricing.price : pricing.priceTaxIn;
+
+        if (bottle) {
+            return `${(price / uvc).toFixed(2)} $ / B`;
+        } else {
+            return `${price.toFixed(2)} $ / C`;
+        }
     }
 </script>
 
@@ -39,10 +49,10 @@
                     <td class="capitalize">{product.specificCategory || '-'}</td>
                     <td>{product.uvc} x {product.lblFormat}</td>
                     <td class="text-right pr-5">
-                        {$priceFormat(product)}
+                        {priceFormatPDF(product, true)}
                         <br />
                         <span class="text-gray">
-                            {$priceFormat(product, false)}
+                            {priceFormatPDF(product, false)}
                         </span>
                     </td>
                 </tr>
