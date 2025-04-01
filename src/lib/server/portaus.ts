@@ -101,6 +101,7 @@ export const PortausApi = {
             path: '/API/latest/admin/inventories/1/products',
             body: {
                 limit: '50',
+                orderBy: 'age',
                 page: String(page)
             }
         });

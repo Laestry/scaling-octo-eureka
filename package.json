@@ -48,6 +48,7 @@
         "@woden/svelte-simplebar": "^1.0.0",
         "cross-env": "^7.0.3",
         "jsonwebtoken": "^9.0.2",
+        "jspdf": "^3.0.1",
         "perfect-scrollbar": "^1.5.6",
         "pocketbase": "^0.25.2",
         "simplebar": "^6.3.0",

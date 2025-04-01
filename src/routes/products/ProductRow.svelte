@@ -6,6 +6,7 @@
     import { createEventDispatcher } from 'svelte';
     import Plus from '$lib/icons/Plus.svelte';
     export let product: any;
+    export let isPDF = false;
 
     const dispatcher = createEventDispatcher();
 
@@ -133,11 +134,17 @@
         </span>
     </td>
 
-    <td class="text-wblue">
-        <button class="abutton w-full h-full" style="padding: 18px 16px 17px 12px" on:click|stopPropagation={handleAdd}>
-            <Plus />
-        </button>
-    </td>
+    {#if !isPDF}
+        <td class="text-wblue">
+            <button
+                class="abutton w-full h-full"
+                style="padding: 18px 16px 17px 12px"
+                on:click|stopPropagation={handleAdd}
+            >
+                <Plus />
+            </button>
+        </td>
+    {/if}
 
     {#if hovered && imgLoaded && delayedImage}
         <div
@@ -154,7 +161,9 @@
                     {$itemQuantity > 0 ? $itemQuantity * product.uvc : ''}
                 </div>
             {/each}
-            <img transition:fade={{ duration: 300 }} src={delayedImage} alt={product.name} />
+            {#if !isPDF}
+                <img transition:fade={{ duration: 300 }} src={delayedImage} alt={product.name} />
+            {/if}
         </div>
     {/if}
 </tr>

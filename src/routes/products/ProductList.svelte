@@ -7,10 +7,12 @@
     import { isPrixResto } from '$lib/store';
     import ProductRow from './ProductRow.svelte';
 
+    export let isPDF = false;
+
     export let products: AlcoholProduct[];
 </script>
 
-<div in:fade class="mt-[32px] productTable">
+<div id="pdfContent" in:fade class="mt-[32px] productTable {$$props['class']}">
     <table class="">
         <tr>
             <th class="w-[191px]">
@@ -40,11 +42,13 @@
             <th class="w-[175px] !text-end !pr-[5px]" style="font-family: 'Riposte', 'serif'">
                 $ {$isPrixResto ? 'Resto' : 'Perso'}
             </th>
-            <th class="w-[40px]" />
+            {#if !isPDF}
+                <th class="w-[40px]" />
+            {/if}
         </tr>
 
         {#each products as product}
-            <ProductRow {product} class="productRow" />
+            <ProductRow {isPDF} {product} class="productRow" />
         {/each}
     </table>
 </div>

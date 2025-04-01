@@ -1,0 +1,111 @@
+<script lang="ts">
+    import ProductList from '../products/ProductList.svelte';
+    import { generatePDFFromId } from '$lib/listToPdf/pdfTest';
+    import { exampleData } from '$lib/listToPdf/exampleData';
+    import { jsPDF } from 'jspdf';
+    import PDFList from '$lib/listToPdf/PDFList.svelte';
+
+    export let data;
+    const tokens = data.tokens;
+
+    let currentPage = 1;
+    let totalPages = 1;
+    let allProcessedProducts = exampleData;
+    let loading = false;
+    let error = null;
+    let processing = false;
+    let cancelRequested = false;
+    let abortController: AbortController;
+
+    // Function to fetch a single page from the API endpoint with cancellation support
+    async function fetchPage(page: number) {
+        loading = true;
+        // Create a new AbortController for this fetch
+        abortController = new AbortController();
+        try {
+            const res = await fetch(`/api/getProductsFromPortaus`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                signal: abortController.signal,
+                body: JSON.stringify({
+                    tokens,
+                    page
+                })
+            });
+            const responseData = await res.json();
+            totalPages = responseData.totalPages;
+            // Append the processed products from the current page to the aggregate array
+            allProcessedProducts = [...allProcessedProducts, ...responseData.processedProducts];
+            console.log('Processed products so far:', allProcessedProducts);
+        } catch (err: any) {
+            if (err.name === 'AbortError') {
+                console.log('Fetch aborted');
+            } else {
+                error = err;
+                console.error('Error fetching page', page, err);
+            }
+        } finally {
+            loading = false;
+        }
+    }
+
+    // Function to sequentially fetch all pages and update progress
+    async function fetchAllPages() {
+        // Reset state for a new run
+        processing = true;
+        cancelRequested = false;
+        currentPage = 1;
+        allProcessedProducts = [];
+        error = null;
+
+        // Fetch the first page
+        await fetchPage(currentPage);
+        // Fetch remaining pages if any
+        // while (currentPage < totalPages && !cancelRequested) {
+        //     currentPage++;
+        await fetchPage(currentPage);
+        // }
+        processing = false;
+    }
+
+    // Function to cancel processing
+    function cancelProcessing() {
+        cancelRequested = true;
+        if (abortController) {
+            abortController.abort();
+        }
+    }
+
+    function handleDownload() {
+        generatePDFFromId('pdfContent', 'products.pdf').catch((err) => console.error('Error generating PDF:', err));
+    }
+</script>
+
+<div>
+    <h3>Product Processing Progress</h3>
+    <!-- Start Processing Button -->
+    <button on:click={fetchAllPages} disabled={processing}>
+        {processing ? 'Processing...' : 'Start Processing'}
+    </button>
+    <!-- Cancel Button: only visible during processing -->
+    {#if processing}
+        <button on:click={cancelProcessing}> Cancel </button>
+    {/if}
+    <p>Completed Steps: {currentPage} / {totalPages}</p>
+    {#if error}
+        <p>Error: {error.message}</p>
+    {/if}
+
+    <h4>Processed Products</h4>
+    <ul>
+        amount processed: {allProcessedProducts.length}
+    </ul>
+</div>
+
+This is to create the pdf, it will upload automatically, just ignore it:
+<button on:click={handleDownload}>Download PDF</button>
+
+<div class="w-[1136px]" style="position: absolute; left: -10000px;">
+    <PDFList products={allProcessedProducts} />
+    <!--    <ProductList id="pdfContent" products={allProcessedProducts} isPDF={true} />-->
+</div>
