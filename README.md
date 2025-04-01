@@ -1,4 +1,4 @@
-vercel push |
+vercel push ||
 
 for migrations
 ```
