@@ -19,9 +19,13 @@
         flex-wrap: wrap;
         align-items: start;
         row-gap: 40px;
-        justify-content: space-between;
+        column-gap: 16px;
         @media screen and (max-width: 1136px) {
             row-gap: 20px;
+            column-gap: 12px;
+        }
+        @media screen and (max-width: 767px) {
+            column-gap: 10px;
         }
     }
     @media screen and (max-width: 1136px) {

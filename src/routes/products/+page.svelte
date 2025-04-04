@@ -38,27 +38,51 @@
         console.log('selectedFilters', selectedFilters);
         // Build the filter string based on selected filters.
         const filterParts: string[] = [];
+
         if (selectedFilters.tag) {
+            // Assuming tag is always a single value.
             filterParts.push(`tags~"${selectedFilters.tag}"`);
         }
+
+        // For fields that might be arrays, create sub-filters.
         if (selectedFilters.producer) {
-            filterParts.push(`providerName="${selectedFilters.producer}"`);
+            if (Array.isArray(selectedFilters.producer)) {
+                const producers = selectedFilters.producer.map((prod: string) => `providerName="${prod}"`).join(' || ');
+                filterParts.push(`(${producers})`);
+            } else {
+                filterParts.push(`providerName="${selectedFilters.producer}"`);
+            }
         }
+
         if (selectedFilters.region) {
-            filterParts.push(`originRegion="${selectedFilters.region}"`);
+            if (Array.isArray(selectedFilters.region)) {
+                const regions = selectedFilters.region.map((reg: string) => `originRegion="${reg}"`).join(' || ');
+                filterParts.push(`(${regions})`);
+            } else {
+                filterParts.push(`originRegion="${selectedFilters.region}"`);
+            }
         }
+
         if (selectedFilters.color) {
+            // Assuming color is a single value.
             filterParts.push(`specificCategory="${selectedFilters.color}"`);
         }
+
         if (selectedFilters.uvc) {
+            // Assuming uvc is a single value.
             filterParts.push(`uvc=${selectedFilters.uvc}`);
         }
+
         if (selectedFilters.format) {
+            // Assuming format is a single value.
             filterParts.push(`lblFormat="${selectedFilters.format}"`);
         }
+
         if (selectedFilters.vintage) {
+            // Assuming vintage is a single value.
             filterParts.push(`vintage="${selectedFilters.vintage}"`);
         }
+
         if (selectedFilters.priceRange) {
             if (selectedFilters.priceRange === 'low') {
                 filterParts.push(`price>=20 && price<=30`);
@@ -68,11 +92,13 @@
                 filterParts.push(`price>=40`);
             }
         }
+
         if (selectedFilters.nameSearch) {
             // Use the ~ operator for partial matches (adjust per PocketBase syntax)
             filterParts.push(`name ~ "${selectedFilters.nameSearch}"`);
         }
-        const filterString = filterParts.join(' && ');
+
+        const filterString = filterParts.join(' || ');
 
         // Determine sort order: "Prix" for price or "Alphabétique" for name.
         let sort = '';
@@ -95,7 +121,6 @@
                 hasMore = false;
             } else {
                 products = [...products, ...result.items];
-
                 record = result;
                 currentPage = result.page + 1;
             }

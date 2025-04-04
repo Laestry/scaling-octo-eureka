@@ -6,7 +6,6 @@
     import { createEventDispatcher, onMount } from 'svelte';
     import { page } from '$app/stores';
     import { replaceState } from '$app/navigation';
-    import { delay } from '$lib/utils';
 
     export let categories = [];
     export let selectedFilters: TFilters;
@@ -160,7 +159,7 @@
 
     $: {
         selectedFilters;
-        setParams();
+        // setParams();
     }
 
     // $: console.log(selectedFilters);
@@ -229,6 +228,7 @@
     <div class="filters">
         {#if filters.length > 0}
             <Select
+                multiple
                 class="cusselect"
                 options={filters[0].list}
                 placeholder={filters[0].name}
@@ -236,6 +236,7 @@
                 bind:selected={selectedFilters.region}
             />
             <Select
+                multiple
                 class="cusselect"
                 options={filters[1].list}
                 placeholder={filters[1].name}
@@ -243,6 +244,7 @@
                 bind:selected={selectedFilters.producer}
             />
             <Select
+                multiple
                 class="cusselect"
                 options={filters[2].list}
                 placeholder={filters[2].name}
@@ -250,6 +252,7 @@
                 bind:selected={selectedFilters.color}
             />
             <Select
+                multiple
                 class="cusselect"
                 options={filters[4].list}
                 placeholder={filters[4].name}
@@ -257,6 +260,7 @@
                 bind:selected={selectedFilters.format}
             />
             <Select
+                multiple
                 class="cusselect"
                 options={filters[5].list}
                 placeholder={filters[5].name}

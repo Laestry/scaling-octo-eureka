@@ -1,14 +1,24 @@
 import type { TFilters } from '$lib/models/general';
 
 export async function load({ locals, url }) {
+    function getArrayParam(key: string): string[] | undefined {
+        const arr = params.getAll(key);
+        return arr.length ? arr : undefined;
+    }
+
     const params = url.searchParams;
-    const producer = params.get('producer') || undefined;
-    const region = params.get('region') || undefined;
-    const color = params.get('color') || undefined;
-    const uvcStr = params.get('uvc');
-    const uvc = uvcStr !== null && !isNaN(Number(uvcStr)) ? Number(uvcStr) : undefined;
-    const format = params.get('format') || undefined;
-    const vintage = params.get('vintage') || undefined;
+    const producer = getArrayParam('producer');
+    const region = getArrayParam('region');
+    const color = getArrayParam('color');
+    const format = getArrayParam('format');
+    const vintage = getArrayParam('vintage');
+
+    // For numeric values like uvc, convert them:
+    const uvcArr = params
+        .getAll('uvc')
+        .map((val) => Number(val))
+        .filter((val) => !isNaN(val));
+    const uvc = uvcArr.length ? uvcArr : undefined;
     const priceRangeCandidate = params.get('priceRange');
     const priceRange =
         priceRangeCandidate === 'low' || priceRangeCandidate === 'mid' || priceRangeCandidate === 'high'
