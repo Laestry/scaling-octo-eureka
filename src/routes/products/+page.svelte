@@ -39,48 +39,37 @@
         // Build the filter string based on selected filters.
         const filterParts: string[] = [];
 
+        function addFilter(
+            value: string | number | (string | number)[] | undefined,
+            condition: (val: string | number) => string
+        ) {
+            if (value) {
+                if (Array.isArray(value)) {
+                    // If the array is empty, do nothing.
+                    if (value.length > 0) {
+                        filterParts.push(`(${value.map(condition).join(' || ')})`);
+                    }
+                } else {
+                    filterParts.push(condition(value));
+                }
+            }
+        }
+
+        addFilter(selectedFilters.producer, (prod) => `providerName="${prod}"`);
+        addFilter(selectedFilters.region, (reg) => `originRegion="${reg}"`);
+        addFilter(selectedFilters.color, (col) => `specificCategory="${col}"`);
+        addFilter(selectedFilters.uvc, (uvc) => `uvc=${uvc}`);
+        addFilter(selectedFilters.format, (fmt) => `lblFormat="${fmt}"`);
+        addFilter(selectedFilters.vintage, (vin) => `vintage="${vin}"`);
+
         if (selectedFilters.tag) {
             // Assuming tag is always a single value.
             filterParts.push(`tags~"${selectedFilters.tag}"`);
         }
 
-        // For fields that might be arrays, create sub-filters.
-        if (selectedFilters.producer) {
-            if (Array.isArray(selectedFilters.producer)) {
-                const producers = selectedFilters.producer.map((prod: string) => `providerName="${prod}"`).join(' || ');
-                filterParts.push(`(${producers})`);
-            } else {
-                filterParts.push(`providerName="${selectedFilters.producer}"`);
-            }
-        }
-
-        if (selectedFilters.region) {
-            if (Array.isArray(selectedFilters.region)) {
-                const regions = selectedFilters.region.map((reg: string) => `originRegion="${reg}"`).join(' || ');
-                filterParts.push(`(${regions})`);
-            } else {
-                filterParts.push(`originRegion="${selectedFilters.region}"`);
-            }
-        }
-
-        if (selectedFilters.color) {
-            // Assuming color is a single value.
-            filterParts.push(`specificCategory="${selectedFilters.color}"`);
-        }
-
-        if (selectedFilters.uvc) {
-            // Assuming uvc is a single value.
-            filterParts.push(`uvc=${selectedFilters.uvc}`);
-        }
-
-        if (selectedFilters.format) {
-            // Assuming format is a single value.
-            filterParts.push(`lblFormat="${selectedFilters.format}"`);
-        }
-
-        if (selectedFilters.vintage) {
-            // Assuming vintage is a single value.
-            filterParts.push(`vintage="${selectedFilters.vintage}"`);
+        if (selectedFilters.nameSearch) {
+            // Use the ~ operator for partial matches (adjust per PocketBase syntax)
+            filterParts.push(`name ~ "${selectedFilters.nameSearch}"`);
         }
 
         if (selectedFilters.priceRange) {
@@ -93,12 +82,7 @@
             }
         }
 
-        if (selectedFilters.nameSearch) {
-            // Use the ~ operator for partial matches (adjust per PocketBase syntax)
-            filterParts.push(`name ~ "${selectedFilters.nameSearch}"`);
-        }
-
-        const filterString = filterParts.join(' || ');
+        const filterString = filterParts.join(' && ');
 
         // Determine sort order: "Prix" for price or "Alphabétique" for name.
         let sort = '';
