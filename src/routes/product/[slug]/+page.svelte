@@ -8,8 +8,10 @@
     import Minus from '$lib/icons/Minus.svelte';
     import type { AlcoholProduct } from '$lib/models/pocketbase';
     import { Svroller } from 'svrollbar';
-    import { fly, slide, fade } from 'svelte/transition';
+    import { fade } from 'svelte/transition';
     import ProductCard from '../../products/ProductCard.svelte';
+    import { onMount } from 'svelte';
+    import { pb } from '$lib/pocketbase';
 
     export let data: PageData;
     $: console.log('data', data);
@@ -32,6 +34,34 @@
     const img1 = '/images/example_wines/SHOP PAGE/Product Shot - stack.png';
     const img = '/images/example_wines/SHOP PAGE/9x16 Product Shot - stack.png';
     const img2 = '/images/example_wines/SHOP PAGE/In-situ Product Shot - stack.png';
+
+    let sameProducerProducts: AlcoholProduct[] = [];
+    let sameRegionProducts: AlcoholProduct[] = [];
+
+    onMount(async () => {
+        const producerPromise = product.providerName
+            ? pb.collection('alcohol_products').getList(1, 4, {
+                  filter: `providerName="${product.providerName}"`,
+                  sort: 'quantity'
+              })
+            : Promise.resolve({ items: [] });
+
+        const regionPromise = product.originRegion
+            ? pb.collection('alcohol_products').getList(1, 4, {
+                  filter: `originRegion="${product.originRegion}"`,
+                  sort: 'quantity'
+              })
+            : Promise.resolve({ items: [] });
+
+        const [sameProducerProductsRecord, sameRegionProductsRecord] = await Promise.all([
+            producerPromise,
+            regionPromise
+        ]);
+        sameProducerProducts = sameProducerProductsRecord.items;
+        sameRegionProducts = sameRegionProductsRecord.items;
+    });
+
+    $: console.log(sameProducerProducts, sameRegionProducts);
 </script>
 
 <div
@@ -212,12 +242,21 @@
     </div>
 
     <div class="mt-[20px] flex flex-col gap-[13px]">
-        <Accordion title="Du même producteur">
-            <ProductCard {product} size="m" />
-        </Accordion>
-        <Accordion title="De la même région">
-            <div>body</div>
-        </Accordion>
+        {#if product.providerName}
+            <Accordion title="Du même producteur">
+                {#each sameProducerProducts as producerProduct}
+                    <ProductCard product={producerProduct} size="m" />
+                {/each}
+            </Accordion>
+        {/if}
+
+        {#if product.originRegion}
+            <Accordion title="De la même région">
+                {#each sameRegionProducts as regionProduct}
+                    <ProductCard product={regionProduct} size="m" />
+                {/each}
+            </Accordion>
+        {/if}
     </div>
 </div>
 
@@ -250,7 +289,7 @@
     }
 
     .product-description button {
-        color: #de6643;
+        color: var(--red);
     }
 
     .product-table {

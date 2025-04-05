@@ -5,41 +5,45 @@
 
     export let title = '';
 
-    let closed = true;
+    let closed = false;
 </script>
 
-<div>
+<div
+    class="accordion border-wblack border-t bg-white
+    lg:px-[13px] lg:pt-[11px] lg:pb-[13px]
+    p-[10px]"
+>
     <button
-        class="accordion flex justify-between w-full bg-[#fff] px-[6px] py-[3px] text-[#DE6643] cursor-pointer"
+        class="flex justify-between items-center w-full text-wred cursor-pointer
+        lg:text-xl md:text-lg text-base
+        lg:h-[21px] md:h-[24px] h-[20px]"
         class:active={!closed}
         on:click={() => (closed = !closed)}
     >
         {title}
-        <div>
+        <span class="h-2.5">
             {#if closed}
-                <div in:fade class="flex items-center justify-center h-[24px] w-[28px]">
-                    <img src={IconPlus} alt="" />
-                </div>
+                <img in:fade src={IconPlus} alt="" />
             {:else}
-                <div in:fade class="flex items-center justify-center h-[24px] w-[28px]">
-                    <img src={IconMinus} alt="" />
-                </div>
+                <img in:fade src={IconMinus} alt="" />
             {/if}
-        </div>
+        </span>
     </button>
 
     {#if !closed}
-        <div class="bg-[#fff] p-[6px]" transition:slide>
+        <div
+            transition:slide
+            class="flex flex-wrap gap-y-[30px]
+                   lg:gap-4 md:gap-3 gap-2.5
+                   lg:mt-[34px] mt-[30px]"
+        >
             <slot />
         </div>
     {/if}
 </div>
 
 <style lang="scss">
-    .accordion {
-        border-top: 1px solid #181c1c;
-        &.active {
-            color: #3777bc;
-        }
+    .active {
+        color: var(--blue);
     }
 </style>
