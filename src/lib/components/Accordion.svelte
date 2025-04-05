@@ -5,11 +5,11 @@
 
     export let title = '';
 
-    let closed = false;
+    let closed = true;
 </script>
 
 <div
-    class="accordion border-wblack border-t bg-white
+    class="border-wblack border-t bg-white
     lg:px-[13px] lg:pt-[11px] lg:pb-[13px]
     p-[10px]"
 >

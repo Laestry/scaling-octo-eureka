@@ -241,7 +241,7 @@
         </div>
     </div>
 
-    <div class="mt-[20px] flex flex-col gap-[13px]">
+    <div class="mt-[20px] flex flex-col lg:gap-[22px] gap-[10px]">
         {#if product.providerName}
             <Accordion title="Du même producteur">
                 {#each sameProducerProducts as producerProduct}
