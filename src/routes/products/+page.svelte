@@ -158,7 +158,13 @@
             }
         };
     });
+
+    $: outerWidth = 0;
+
+    $: if (outerWidth < 1162) isGrid.set(true);
 </script>
+
+<svelte:window bind:outerWidth />
 
 <div class="lg:mt-[56px] md:mt-[40px] mt-[80px]">
     <Filters categories={data.categories} bind:selectedFilters on:resetFilters={() => updateProducts(true)} />

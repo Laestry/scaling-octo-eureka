@@ -10,9 +10,6 @@
     let sizeSequence2 = ['l', 'm', 's', 'm'];
 
     $: outerWidth = 0;
-    $: innerWidth = 0;
-    $: outerHeight = 0;
-    $: innerHeight = 0;
 
     $: if (outerWidth < 767) {
         sizeSequence1 = ['m', 'm', 'l'];
@@ -23,7 +20,7 @@
     }
 </script>
 
-<svelte:window bind:innerWidth bind:outerWidth bind:innerHeight bind:outerHeight />
+<svelte:window bind:outerWidth />
 
 <div class="flex flex-col items-center">
     <div class="flex mx-auto flex-col min-h-[90vh] lg:w-[1136px] md:w-[760px] w-[300px]">

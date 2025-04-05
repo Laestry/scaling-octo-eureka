@@ -15,7 +15,7 @@
 <div id="pdfContent" in:fade class="mt-[32px] productTable {$$props['class']}">
     <table class="">
         <tr>
-            <th class="w-[191px]">
+            <th class="w-[151px]">
                 Region
                 <!--                <IconArrow1/>-->
             </th>
