@@ -9,6 +9,7 @@
     import type { AlcoholProduct } from '$lib/models/pocketbase';
     import { Svroller } from 'svrollbar';
     import { fly, slide, fade } from 'svelte/transition';
+    import ProductCard from '../../products/ProductCard.svelte';
 
     export let data: PageData;
     $: console.log('data', data);
@@ -210,14 +211,14 @@
         </div>
     </div>
 
-    <!--    <div class="mt-[20px] flex flex-col gap-[13px]">-->
-    <!--        <Accordion title="Du même producteur">-->
-    <!--            <div>body</div>-->
-    <!--        </Accordion>-->
-    <!--        <Accordion title="De la même région">-->
-    <!--            <div>body</div>-->
-    <!--        </Accordion>-->
-    <!--    </div>-->
+    <div class="mt-[20px] flex flex-col gap-[13px]">
+        <Accordion title="Du même producteur">
+            <ProductCard {product} size="m" />
+        </Accordion>
+        <Accordion title="De la même région">
+            <div>body</div>
+        </Accordion>
+    </div>
 </div>
 
 <style lang="scss">

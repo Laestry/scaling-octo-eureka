@@ -6,19 +6,28 @@
     $: console.log('data', data);
     let products = data.products.items;
 
-    const sizeSequence1 = ['m', 's', 'l', 'm', 'l', 'm', 's', 'm'];
-    const sizeSequence2 = ['l', 'm', 's', 'm'];
+    let sizeSequence1 = ['m', 's', 'l', 'm', 'l', 'm', 's', 'm'];
+    let sizeSequence2 = ['l', 'm', 's', 'm'];
+
+    $: outerWidth = 0;
+    $: innerWidth = 0;
+    $: outerHeight = 0;
+    $: innerHeight = 0;
+
+    $: if (outerWidth < 767) {
+        sizeSequence1 = ['m', 'm', 'l'];
+        sizeSequence2 = ['m', 'm', 'l'];
+    } else {
+        sizeSequence1 = ['m', 's', 'l', 'm', 'l', 'm', 's', 'm'];
+        sizeSequence2 = ['l', 'm', 's', 'm'];
+    }
 </script>
 
-<!-- <Header color="#DE6643" class="absolute top-0 left-2/4 translate-x-[-50%] z-10" /> -->
-<!-- <div class="backdrops">
-</div> -->
+<svelte:window bind:innerWidth bind:outerWidth bind:innerHeight bind:outerHeight />
 
 <div class="flex flex-col items-center">
-    <div class="flex flex-col min-h-[90vh] w-full lg:max-w-[1212px] px-[38px] md:max-w-[836px] max-w-[376px]">
-        <div
-            class=" justify-between md:flex-row flex-col-reverse flex md:mt-[134px] gap-[20px] my-[80px] md:mb-[137px]"
-        >
+    <div class="flex mx-auto flex-col min-h-[90vh] lg:w-[1136px] md:w-[760px] w-[300px]">
+        <div class="justify-between md:flex-row flex-col-reverse flex md:mt-[134px] gap-[20px] my-[80px] md:mb-[137px]">
             <div class="h3 description max-w-[844px] text-color1">
                 Lorem ipsum dolor sit amet consectetur. Leo justo enim et in. Aliquam at feugiat tortor purus quis eu
                 ultrices quis tincidunt. Tellus integer egestas lectus ac.
@@ -121,7 +130,6 @@
         }
     }
     .description {
-        font-family: 'Riposte', sans-serif;
         font-size: 32px;
         font-style: normal;
         font-weight: 400;
@@ -129,7 +137,6 @@
     }
 
     .title {
-        font-family: 'Riposte', sans-serif;
         font-size: 30px;
         font-style: normal;
         font-weight: 700;
@@ -137,7 +144,6 @@
     }
 
     .description2 {
-        font-family: 'Riposte', sans-serif;
         font-size: 52px;
         font-style: normal;
         font-weight: 500;
@@ -145,13 +151,12 @@
     }
 
     .main-page-button {
-        font-family: 'Riposte', sans-serif;
         font-size: 30px;
         font-style: normal;
         font-weight: 700;
         line-height: 125%;
     }
-    @media (max-width: 1119px) {
+    @media (max-width: 1162px) {
         .description {
             font-size: 20px;
             line-height: 125%;

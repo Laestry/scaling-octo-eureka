@@ -3,7 +3,7 @@ module.exports = {
     content: ['./src/**/*.{html,js,svelte,ts}'],
     theme: {
         screens: {
-            md: '780px',
+            md: '767px',
             lg: '1162px'
         },
         extend: {

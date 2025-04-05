@@ -6,15 +6,19 @@
 <!-- <div class="backdrop" /> -->
 
 <div class="w-full flex flex-col mx-auto lg:max-w-[1212px] px-[38px] md:max-w-[836px] max-w-[376px] vision">
-    <p class="vision__suptitle">Une vision centrée sur la vie </p>
-    <p class="vision__title">We place human values at the heart of our experience and in the origin of the import leo justo enim et in. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt  labore et dolore magna aliqua. Ut enim  minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
+    <p class="vision__suptitle">Une vision centrée sur la vie</p>
+    <p class="vision__title">
+        We place human values at the heart of our experience and in the origin of the import leo justo enim et in. Lorem
+        ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt labore et dolore magna
+        aliqua. Ut enim minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+    </p>
     <div class="vision__row">
         <div class="vision__inner-row">
-            <img src="/images/vision-img-01.jpg" alt="" class="vision__img">
+            <img src="/images/vision-img-01.jpg" alt="" class="vision__img" />
             <p class="vision__text">Le terroir, selon Untel de la région blabla.</p>
         </div>
         <div class="vision__inner-row">
-            <img src="/images/vision-img-02.jpg" alt="" class="vision__img vision__img--big">
+            <img src="/images/vision-img-02.jpg" alt="" class="vision__img vision__img--big" />
             <p class="vision__text">Riche en coquilles, on y goûte la mer.</p>
         </div>
     </div>
@@ -22,78 +26,120 @@
         <p class="vision-list__title">Éternel étudiants</p>
         <div class="vision-list__row">
             <p class="vision-list__text">
-                Lorem ipsum dolor sit amet consectetur. Leo justo enim et in. Aliquam at feugiat tortor purus quis eu ultrices quis tincidunt. Tellus integer egestas lectus ac. <br>
-                Lorem ipsum dolor sit amet consectetur. Leo justo enim et in. Aliquam at feugiat tortor purus quis eu ultrices quis tincidunt. Tellus integer egestas lectus ac.
+                Lorem ipsum dolor sit amet consectetur. Leo justo enim et in. Aliquam at feugiat tortor purus quis eu
+                ultrices quis tincidunt. Tellus integer egestas lectus ac. <br />
+                Lorem ipsum dolor sit amet consectetur. Leo justo enim et in. Aliquam at feugiat tortor purus quis eu ultrices
+                quis tincidunt. Tellus integer egestas lectus ac.
             </p>
             <div class="vision-list__col">
                 <div class="vision-list__item">
                     <p class="vision-list__item-title">— Zéro, zéro</p>
-                    <p class="vision-list__item-text">Lorem ipsum dolor sit amet consectetur. Leo justo enim et in. Aliquam at feugiat tortor purus quis eu ultrices quis tincidunt. Tellus integer egestas lectus ac.</p>
+                    <p class="vision-list__item-text">
+                        Lorem ipsum dolor sit amet consectetur. Leo justo enim et in. Aliquam at feugiat tortor purus
+                        quis eu ultrices quis tincidunt. Tellus integer egestas lectus ac.
+                    </p>
                 </div>
                 <div class="vision-list__item">
                     <p class="vision-list__item-title">— Zéro, zéro</p>
-                    <p class="vision-list__item-text">Lorem ipsum dolor sit amet consectetur. Leo justo enim et in. Aliquam at feugiat tortor purus quis eu ultrices quis tincidunt. Tellus integer egestas lectus ac.</p>
+                    <p class="vision-list__item-text">
+                        Lorem ipsum dolor sit amet consectetur. Leo justo enim et in. Aliquam at feugiat tortor purus
+                        quis eu ultrices quis tincidunt. Tellus integer egestas lectus ac.
+                    </p>
                 </div>
                 <div class="vision-list__item">
                     <p class="vision-list__item-title">— Zéro, zéro</p>
-                    <p class="vision-list__item-text">Lorem ipsum dolor sit amet consectetur. Leo justo enim et in. Aliquam at feugiat tortor purus quis eu ultrices quis tincidunt. Tellus integer egestas lectus ac.</p>
+                    <p class="vision-list__item-text">
+                        Lorem ipsum dolor sit amet consectetur. Leo justo enim et in. Aliquam at feugiat tortor purus
+                        quis eu ultrices quis tincidunt. Tellus integer egestas lectus ac.
+                    </p>
                 </div>
                 <div class="vision-list__item">
                     <p class="vision-list__item-title">— Zéro, zéro</p>
-                    <p class="vision-list__item-text">Lorem ipsum dolor sit amet consectetur. Leo justo enim et in. Aliquam at feugiat tortor purus quis eu ultrices quis tincidunt. Tellus integer egestas lectus ac.</p>
+                    <p class="vision-list__item-text">
+                        Lorem ipsum dolor sit amet consectetur. Leo justo enim et in. Aliquam at feugiat tortor purus
+                        quis eu ultrices quis tincidunt. Tellus integer egestas lectus ac.
+                    </p>
                 </div>
                 <div class="vision-list__item">
                     <p class="vision-list__item-title">— Zéro, zéro</p>
-                    <p class="vision-list__item-text">Lorem ipsum dolor sit amet consectetur. Leo justo enim et in. Aliquam at feugiat tortor purus quis eu ultrices quis tincidunt. Tellus integer egestas lectus ac.</p>
+                    <p class="vision-list__item-text">
+                        Lorem ipsum dolor sit amet consectetur. Leo justo enim et in. Aliquam at feugiat tortor purus
+                        quis eu ultrices quis tincidunt. Tellus integer egestas lectus ac.
+                    </p>
                 </div>
                 <div class="vision-list__item">
                     <p class="vision-list__item-title">— Zéro, zéro</p>
-                    <p class="vision-list__item-text">Lorem ipsum dolor sit amet consectetur. Leo justo enim et in. Aliquam at feugiat tortor purus quis eu ultrices quis tincidunt. Tellus integer egestas lectus ac.</p>
+                    <p class="vision-list__item-text">
+                        Lorem ipsum dolor sit amet consectetur. Leo justo enim et in. Aliquam at feugiat tortor purus
+                        quis eu ultrices quis tincidunt. Tellus integer egestas lectus ac.
+                    </p>
                 </div>
             </div>
         </div>
     </div>
-    <p class="vision__title vision__title--right">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa. </p>
+    <p class="vision__title vision__title--right">
+        Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur
+        sint occaecat cupidatat non proident, sunt in culpa.
+    </p>
     <div class="vision-list">
         <div class="vision-list__row">
             <div class="vision__inner-row">
-                <img src="/images/vision-img-03.jpg" alt="" class="vision__img">
+                <img src="/images/vision-img-03.jpg" alt="" class="vision__img" />
                 <p class="vision__text">Le terroir, selon Untel de la région blabla.</p>
             </div>
             <div class="vision-list__col">
                 <div class="vision-list__item">
                     <p class="vision-list__item-title">— Zéro, zéro</p>
-                    <p class="vision-list__item-text">Lorem ipsum dolor sit amet consectetur. Leo justo enim et in. Aliquam at feugiat tortor purus quis eu ultrices quis tincidunt. Tellus integer egestas lectus ac.</p>
+                    <p class="vision-list__item-text">
+                        Lorem ipsum dolor sit amet consectetur. Leo justo enim et in. Aliquam at feugiat tortor purus
+                        quis eu ultrices quis tincidunt. Tellus integer egestas lectus ac.
+                    </p>
                 </div>
                 <div class="vision-list__item">
                     <p class="vision-list__item-title">— Zéro, zéro</p>
-                    <p class="vision-list__item-text">Lorem ipsum dolor sit amet consectetur. Leo justo enim et in. Aliquam at feugiat tortor purus quis eu ultrices quis tincidunt. Tellus integer egestas lectus ac.</p>
+                    <p class="vision-list__item-text">
+                        Lorem ipsum dolor sit amet consectetur. Leo justo enim et in. Aliquam at feugiat tortor purus
+                        quis eu ultrices quis tincidunt. Tellus integer egestas lectus ac.
+                    </p>
                 </div>
                 <div class="vision-list__item">
                     <p class="vision-list__item-title">— Zéro, zéro</p>
-                    <p class="vision-list__item-text">Lorem ipsum dolor sit amet consectetur. Leo justo enim et in. Aliquam at feugiat tortor purus quis eu ultrices quis tincidunt. Tellus integer egestas lectus ac.</p>
+                    <p class="vision-list__item-text">
+                        Lorem ipsum dolor sit amet consectetur. Leo justo enim et in. Aliquam at feugiat tortor purus
+                        quis eu ultrices quis tincidunt. Tellus integer egestas lectus ac.
+                    </p>
                 </div>
                 <div class="vision-list__item">
                     <p class="vision-list__item-title">— Zéro, zéro</p>
-                    <p class="vision-list__item-text">Lorem ipsum dolor sit amet consectetur. Leo justo enim et in. Aliquam at feugiat tortor purus quis eu ultrices quis tincidunt. Tellus integer egestas lectus ac.</p>
+                    <p class="vision-list__item-text">
+                        Lorem ipsum dolor sit amet consectetur. Leo justo enim et in. Aliquam at feugiat tortor purus
+                        quis eu ultrices quis tincidunt. Tellus integer egestas lectus ac.
+                    </p>
                 </div>
                 <div class="vision-list__item">
                     <p class="vision-list__item-title">— Zéro, zéro</p>
-                    <p class="vision-list__item-text">Lorem ipsum dolor sit amet consectetur. Leo justo enim et in. Aliquam at feugiat tortor purus quis eu ultrices quis tincidunt. Tellus integer egestas lectus ac.</p>
+                    <p class="vision-list__item-text">
+                        Lorem ipsum dolor sit amet consectetur. Leo justo enim et in. Aliquam at feugiat tortor purus
+                        quis eu ultrices quis tincidunt. Tellus integer egestas lectus ac.
+                    </p>
                 </div>
                 <div class="vision-list__item">
                     <p class="vision-list__item-title">— Zéro, zéro</p>
-                    <p class="vision-list__item-text">Lorem ipsum dolor sit amet consectetur. Leo justo enim et in. Aliquam at feugiat tortor purus quis eu ultrices quis tincidunt. Tellus integer egestas lectus ac.</p>
+                    <p class="vision-list__item-text">
+                        Lorem ipsum dolor sit amet consectetur. Leo justo enim et in. Aliquam at feugiat tortor purus
+                        quis eu ultrices quis tincidunt. Tellus integer egestas lectus ac.
+                    </p>
                 </div>
             </div>
         </div>
     </div>
 </div>
-<div class="instablock" >
+<div class="instablock">
     <div class="lg:max-w-[1212px] px-[38px] md:max-w-[836px] max-w-[376px] mx-auto container">
         <button class="instablock__button">@wardetassocies</button>
         <p class="instablock__title">
-            Ne laissez pas une goutte vous échapper. Restez à l'affût pour tout savoir sur nos dégustations, nos nouveautés, équipes et vignerons.
+            Ne laissez pas une goutte vous échapper. Restez à l'affût pour tout savoir sur nos dégustations, nos
+            nouveautés, équipes et vignerons.
         </p>
     </div>
 </div>
@@ -101,7 +147,7 @@
 <style lang="scss">
     .instablock {
         margin-bottom: -53px;
-        background: #DA5899;
+        background: #da5899;
         width: 100%;
         padding: 64px 0;
         &__button {
@@ -122,7 +168,7 @@
             gap: 150px;
         }
         &__title {
-            color: #F6F1F2;
+            color: #f6f1f2;
             font-size: 50px;
             font-style: normal;
             font-weight: 400;
@@ -142,18 +188,18 @@
             }
         }
         &__suptitle {
-            color: var(--WARD-BLACK, #181C1C);
+            color: var(--WARD-BLACK, #181c1c);
             font-family: 'Riposte';
             font-size: 30px;
             font-style: normal;
             font-weight: 400;
             line-height: 125%; /* 37.5px */
-            &+* {
+            & + * {
                 margin-top: 16px;
             }
         }
         &__title {
-            color: var(--WARD-RED, #F15A38);
+            color: var(--WARD-RED, #f15a38);
             font-family: 'Riposte';
             font-size: 50px;
             font-style: normal;
@@ -164,12 +210,12 @@
             &--right {
                 margin-left: auto;
                 padding: 150px 0px 75px;
-                &+* {
+                & + * {
                     margin-top: 0 !important;
                 }
             }
 
-            &+* {
+            & + * {
                 margin-top: 72px;
             }
         }
@@ -184,7 +230,7 @@
             gap: 16px;
         }
         &__text {
-            color: var(--WARD-BLACK, #181C1C);
+            color: var(--WARD-BLACK, #181c1c);
             font-family: 'Riposte';
             font-size: 12px;
             font-style: normal;
@@ -218,7 +264,7 @@
             align-items: flex-start;
         }
         &__text {
-            color: #191C1C;
+            color: #191c1c;
             font-family: 'Riposte';
             font-size: 30px;
             font-style: normal;
@@ -244,7 +290,7 @@
                 line-height: 120%; /* 19.2px */
             }
             &-text {
-                color: #191C1C;
+                color: #191c1c;
                 font-family: 'Riposte';
                 font-size: 16px;
                 font-style: normal;
@@ -252,12 +298,12 @@
                 font-weight: 400;
                 line-height: 120%; /* 19.2px */
             }
-            &+& {
+            & + & {
                 margin-top: 50px;
             }
         }
     }
-    @media (max-width: 1119px) {
+    @media (max-width: 1162px) {
         .instablock {
             .container {
                 gap: 100px;
@@ -295,7 +341,7 @@
                 margin-top: 80px;
             }
             &__item {
-                &+& {
+                & + & {
                     margin-top: 20px;
                 }
                 &-text {
@@ -349,7 +395,6 @@
         }
         .vision-list {
             &__item {
-
                 &-text {
                     font-size: 12px;
                 }

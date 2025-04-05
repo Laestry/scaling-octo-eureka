@@ -259,7 +259,7 @@
         font-weight: 400;
         line-height: 150%;
 
-        @media (max-width: 1119px) {
+        @media (max-width: 1162px) {
             font-size: 12px;
             height: auto;
             width: auto;
@@ -281,7 +281,7 @@
         font-weight: 400;
         line-height: 150%;
 
-        @media (max-width: 1119px) {
+        @media (max-width: 1162px) {
             font-size: 48px;
             height: auto;
             width: auto;
@@ -349,14 +349,14 @@
         position: relative;
         height: 772px;
         width: 100%;
-        @media (max-width: 1119px) {
+        @media (max-width: 1162px) {
             height: 545px;
         }
     }
     .backdrops:not(:is(.backdrops--1, .backdrops--2, .backdrops--3)) {
         height: 200px;
     }
-    @media (max-width: 1119px) and (min-width: 680px) {
+    @media (max-width: 1162px) and (min-width: 680px) {
         .backdrops:not(:is(.backdrops--1, .backdrops--2, .backdrops--3)) {
             height: 430px;
         }
