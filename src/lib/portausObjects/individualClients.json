@@ -1,0 +1,4676 @@
+{
+  "list": [
+    {
+      "rank": "1",
+      "id": 2759,
+      "type": 0,
+      "name": "George ",
+      "usualName": null,
+      "lateFeeActivated": false,
+      "lateFeeNotificationActivated": false,
+      "gracePeriod": 30,
+      "indTypeFee": 0,
+      "fee": 5,
+      "reminderActivated": true,
+      "reminderType": null,
+      "nbDaysReminder": 3,
+      "audit": null,
+      "updatedAt": "2025-03-31T06:29:26.244Z",
+      "createdAt": "2025-03-31T06:29:26.244Z",
+      "active": true,
+      "customFields": [],
+      "extraInfo": null,
+      "invoiceBeforeProcessing": false,
+      "onlineInvoicingInd": true,
+      "emailCustomContent": null,
+      "sendInvoiceInAttachment": false,
+      "lockVersion": 1,
+      "taxable": true,
+      "systemId": "WARDPROD",
+      "portausCompanyId": 1,
+      "lastSalesOrderDate": "2025-03-31T06:31:19.000Z",
+      "lastReservationDate": null,
+      "contact": {
+        "id": 3166,
+        "firstName": "George",
+        "lastName": "",
+        "email": "",
+        "phone": "",
+        "phoneExt": null,
+        "sex": null,
+        "birthDate": null,
+        "addresses": []
+      },
+      "currency": {
+        "id": 1,
+        "code": "CAD"
+      },
+      "language": {
+        "id": 1,
+        "name": "Français",
+        "code": "fr",
+        "longCode": "fr-CA",
+        "cmsLanguage": true
+      },
+      "invoiceTerm": {
+        "id": 2,
+        "code": "NET_30",
+        "value": "P30D",
+        "order_": 3
+      },
+      "tags": [],
+      "paymentTypes": [
+        {
+          "id": 2,
+          "code": "CHECK_ONLINE",
+          "configuration": null,
+          "type": 1,
+          "active": true,
+          "category": {
+            "id": 2,
+            "code": "CHECK"
+          }
+        },
+        {
+          "id": 3,
+          "code": "BANK_TRANSFER_ONLINE",
+          "configuration": null,
+          "type": 1,
+          "active": true,
+          "category": {
+            "id": 3,
+            "code": "BANK_TRANSFER"
+          }
+        }
+      ],
+      "balance": {
+        "outstanding": 0
+      },
+      "portausCompany": {
+        "id": 1,
+        "name": "Ward et associés",
+        "contactName": "David Ward",
+        "contactEmail": "david@wardetassocies.com",
+        "address": {
+          "city": "Montréal",
+          "state": "Québec",
+          "street": "1217 St-Zotique E",
+          "country": "Canada",
+          "postalCode": "H2S 1N6"
+        },
+        "phone": null,
+        "mobile": null,
+        "fiscalEndDay": 31,
+        "fiscalEndMonth": 12,
+        "systemId": "WARDPROD",
+        "customEmailFromInd": false,
+        "customEmailFrom": null,
+        "defaultDetailedInvoicePrices": true,
+        "invoiceTemplateShortId": "Hkl5Un-SDH",
+        "saqProcessModuleInd": false,
+        "invoicingModuleActive": true,
+        "indRoundingPrice": false,
+        "roundingStrategy": 1,
+        "externalAccountApiActive": false,
+        "code": null,
+        "automaticDelayReservation": false,
+        "reportCustomization": {
+          "priceRange": [
+            {
+              "max": 15,
+              "min": 0
+            },
+            {
+              "max": 30,
+              "min": 15
+            },
+            {
+              "max": 45,
+              "min": 30
+            },
+            {
+              "max": 55,
+              "min": 45
+            },
+            {
+              "max": 70,
+              "min": 55
+            },
+            {
+              "max": 85,
+              "min": 70
+            },
+            {
+              "max": 100,
+              "min": 85
+            }
+          ]
+        },
+        "invoice": {
+          "personnalizedInvoice": true,
+          "paymentInstruction": null,
+          "prefix": "INV"
+        },
+        "taxes": [
+          {
+            "id": 1,
+            "rate": 0.05,
+            "name": "TPS",
+            "number": "811808716"
+          },
+          {
+            "id": 2,
+            "rate": 0.09975,
+            "name": "TVQ",
+            "number": "1217685610"
+          }
+        ],
+        "currency": {
+          "id": 1,
+          "code": "CAD"
+        },
+        "agent": {
+          "number": "7527327"
+        },
+        "formattedAddress": {
+          "line1": "1217 St-Zotique E",
+          "line2": "Montréal, Québec",
+          "line3": "Canada, H2S 1N6"
+        }
+      }
+    },
+    {
+      "rank": "2",
+      "id": 2756,
+      "type": 0,
+      "name": "Georgy Kotlyar",
+      "usualName": "Georgy Kotlyar",
+      "lateFeeActivated": false,
+      "lateFeeNotificationActivated": false,
+      "gracePeriod": 30,
+      "indTypeFee": 0,
+      "fee": 5,
+      "reminderActivated": false,
+      "reminderType": null,
+      "nbDaysReminder": 3,
+      "audit": null,
+      "updatedAt": "2025-03-31T03:00:12.623Z",
+      "createdAt": "2025-03-30T19:26:10.109Z",
+      "active": true,
+      "customFields": [],
+      "extraInfo": {
+        "location": {
+          "id": 160,
+          "code": "SAQ",
+          "content": {
+            "city": "Saint-Lin-des-Laurentides",
+            "phone": "450 439-1748",
+            "number": "23016",
+            "address": "997, rue Saint-Isidore"
+          }
+        }
+      },
+      "invoiceBeforeProcessing": true,
+      "onlineInvoicingInd": true,
+      "emailCustomContent": {
+        "INVOICE_NOTICE": "null"
+      },
+      "sendInvoiceInAttachment": false,
+      "lockVersion": 1,
+      "taxable": true,
+      "systemId": "WARDPROD",
+      "portausCompanyId": 1,
+      "lastSalesOrderDate": "2025-04-06T22:24:08.000Z",
+      "lastReservationDate": null,
+      "balance": {
+        "draft": "0.00",
+        "total": "181.27",
+        "outstanding": "81.08",
+        "paid": "100.19",
+        "overdue": "0.00"
+      },
+      "contact": {
+        "id": 3164,
+        "firstName": "Georgy",
+        "lastName": "Kotlyar",
+        "email": "georg3600@gmail.com",
+        "phone": "0996093449",
+        "phoneExt": null,
+        "sex": 1,
+        "birthDate": null,
+        "denomination": {
+          "id": 1,
+          "name": "Mister",
+          "shortName": "Mr."
+        },
+        "addresses": [
+          {
+            "id": 2755,
+            "street": "1603 Capitol Avenue",
+            "city": "Cheyenne",
+            "otherState": null,
+            "postalCode": "82001",
+            "code": null,
+            "type": {
+              "id": 1,
+              "code": "BILLING"
+            },
+            "country": {
+              "id": 2,
+              "isoCode": "US"
+            }
+          },
+          {
+            "id": 2757,
+            "street": "122/58 M1",
+            "city": "Koh Samui",
+            "otherState": null,
+            "postalCode": "84320",
+            "code": null,
+            "type": {
+              "id": 1,
+              "code": "BILLING"
+            },
+            "country": {
+              "id": 224,
+              "isoCode": "TH"
+            }
+          }
+        ]
+      },
+      "deliveryType": {
+        "id": 3,
+        "code": "DELIVERY",
+        "choice_custom_info": "SAQ",
+        "portausCompanyId": 1
+      },
+      "currency": {
+        "id": 1,
+        "code": "CAD"
+      },
+      "language": {
+        "id": 1,
+        "name": "Français",
+        "code": "fr",
+        "longCode": "fr-CA",
+        "cmsLanguage": true
+      },
+      "invoiceTerm": {
+        "id": 2,
+        "code": "NET_30",
+        "value": "P30D",
+        "order_": 3
+      },
+      "class": {
+        "id": 1,
+        "code": "Titulaire de permis",
+        "description": "Class client regroupant les clients licenciés",
+        "ind": "LICENCIE",
+        "indAgencyType": null,
+        "systemId": "WARDPROD",
+        "portausCompanyId": 1
+      },
+      "tags": [],
+      "paymentTypes": [
+        {
+          "id": 1,
+          "code": "CREDIT_CARD",
+          "configuration": null,
+          "type": 1,
+          "active": true,
+          "category": {
+            "id": 1,
+            "code": "CREDIT_CARD"
+          }
+        }
+      ],
+      "portausCompany": {
+        "id": 1,
+        "name": "Ward et associés",
+        "contactName": "David Ward",
+        "contactEmail": "david@wardetassocies.com",
+        "address": {
+          "city": "Montréal",
+          "state": "Québec",
+          "street": "1217 St-Zotique E",
+          "country": "Canada",
+          "postalCode": "H2S 1N6"
+        },
+        "phone": null,
+        "mobile": null,
+        "fiscalEndDay": 31,
+        "fiscalEndMonth": 12,
+        "systemId": "WARDPROD",
+        "customEmailFromInd": false,
+        "customEmailFrom": null,
+        "defaultDetailedInvoicePrices": true,
+        "invoiceTemplateShortId": "Hkl5Un-SDH",
+        "saqProcessModuleInd": false,
+        "invoicingModuleActive": true,
+        "indRoundingPrice": false,
+        "roundingStrategy": 1,
+        "externalAccountApiActive": false,
+        "code": null,
+        "automaticDelayReservation": false,
+        "reportCustomization": {
+          "priceRange": [
+            {
+              "max": 15,
+              "min": 0
+            },
+            {
+              "max": 30,
+              "min": 15
+            },
+            {
+              "max": 45,
+              "min": 30
+            },
+            {
+              "max": 55,
+              "min": 45
+            },
+            {
+              "max": 70,
+              "min": 55
+            },
+            {
+              "max": 85,
+              "min": 70
+            },
+            {
+              "max": 100,
+              "min": 85
+            }
+          ]
+        },
+        "invoice": {
+          "personnalizedInvoice": true,
+          "paymentInstruction": null,
+          "prefix": "INV"
+        },
+        "taxes": [
+          {
+            "id": 1,
+            "rate": 0.05,
+            "name": "TPS",
+            "number": "811808716"
+          },
+          {
+            "id": 2,
+            "rate": 0.09975,
+            "name": "TVQ",
+            "number": "1217685610"
+          }
+        ],
+        "currency": {
+          "id": 1,
+          "code": "CAD"
+        },
+        "agent": {
+          "number": "7527327"
+        },
+        "formattedAddress": {
+          "line1": "1217 St-Zotique E",
+          "line2": "Montréal, Québec",
+          "line3": "Canada, H2S 1N6"
+        }
+      }
+    },
+    {
+      "rank": "3",
+      "id": 2755,
+      "type": 0,
+      "name": "Yordanka ",
+      "usualName": null,
+      "lateFeeActivated": false,
+      "lateFeeNotificationActivated": false,
+      "gracePeriod": 30,
+      "indTypeFee": 0,
+      "fee": 5,
+      "reminderActivated": true,
+      "reminderType": null,
+      "nbDaysReminder": 3,
+      "audit": null,
+      "updatedAt": "2024-04-26T18:13:47.815Z",
+      "createdAt": "2024-04-26T18:03:35.206Z",
+      "active": true,
+      "customFields": [],
+      "extraInfo": null,
+      "invoiceBeforeProcessing": true,
+      "onlineInvoicingInd": true,
+      "emailCustomContent": {
+        "INVOICE_NOTICE": "null"
+      },
+      "sendInvoiceInAttachment": false,
+      "lockVersion": 1,
+      "taxable": true,
+      "systemId": "WARDPROD",
+      "portausCompanyId": 1,
+      "lastSalesOrderDate": null,
+      "lastReservationDate": null,
+      "balance": {
+        "draft": "0.00",
+        "total": "137.97",
+        "outstanding": "0.00",
+        "paid": "137.97",
+        "overdue": "0.00"
+      },
+      "contact": {
+        "id": 3162,
+        "firstName": "Yordanka",
+        "lastName": "",
+        "email": "imbanks@yahoo.com",
+        "phone": "",
+        "phoneExt": null,
+        "sex": 0,
+        "birthDate": null,
+        "addresses": []
+      },
+      "deliveryType": {
+        "id": 6,
+        "code": "PICKUP_CUSTOMER_BEFORE_15",
+        "choice_custom_info": null,
+        "portausCompanyId": 1
+      },
+      "currency": {
+        "id": 1,
+        "code": "CAD"
+      },
+      "language": {
+        "id": 1,
+        "name": "Français",
+        "code": "fr",
+        "longCode": "fr-CA",
+        "cmsLanguage": true
+      },
+      "invoiceTerm": {
+        "id": 2,
+        "code": "NET_30",
+        "value": "P30D",
+        "order_": 3
+      },
+      "class": {
+        "id": 2,
+        "code": "Particulier",
+        "description": "Classe client regroupant tous les clients non licenciés",
+        "ind": "PARTICULIER",
+        "indAgencyType": "PARTICULIER",
+        "systemId": "WARDPROD",
+        "portausCompanyId": 1
+      },
+      "tags": [],
+      "paymentTypes": [
+        {
+          "id": 3,
+          "code": "BANK_TRANSFER_ONLINE",
+          "configuration": null,
+          "type": 1,
+          "active": true,
+          "category": {
+            "id": 3,
+            "code": "BANK_TRANSFER"
+          }
+        },
+        {
+          "id": 2,
+          "code": "CHECK_ONLINE",
+          "configuration": null,
+          "type": 1,
+          "active": true,
+          "category": {
+            "id": 2,
+            "code": "CHECK"
+          }
+        },
+        {
+          "id": 1,
+          "code": "CREDIT_CARD",
+          "configuration": null,
+          "type": 1,
+          "active": true,
+          "category": {
+            "id": 1,
+            "code": "CREDIT_CARD"
+          }
+        }
+      ],
+      "portausCompany": {
+        "id": 1,
+        "name": "Ward et associés",
+        "contactName": "David Ward",
+        "contactEmail": "david@wardetassocies.com",
+        "address": {
+          "city": "Montréal",
+          "state": "Québec",
+          "street": "1217 St-Zotique E",
+          "country": "Canada",
+          "postalCode": "H2S 1N6"
+        },
+        "phone": null,
+        "mobile": null,
+        "fiscalEndDay": 31,
+        "fiscalEndMonth": 12,
+        "systemId": "WARDPROD",
+        "customEmailFromInd": false,
+        "customEmailFrom": null,
+        "defaultDetailedInvoicePrices": true,
+        "invoiceTemplateShortId": "Hkl5Un-SDH",
+        "saqProcessModuleInd": false,
+        "invoicingModuleActive": true,
+        "indRoundingPrice": false,
+        "roundingStrategy": 1,
+        "externalAccountApiActive": false,
+        "code": null,
+        "automaticDelayReservation": false,
+        "reportCustomization": {
+          "priceRange": [
+            {
+              "max": 15,
+              "min": 0
+            },
+            {
+              "max": 30,
+              "min": 15
+            },
+            {
+              "max": 45,
+              "min": 30
+            },
+            {
+              "max": 55,
+              "min": 45
+            },
+            {
+              "max": 70,
+              "min": 55
+            },
+            {
+              "max": 85,
+              "min": 70
+            },
+            {
+              "max": 100,
+              "min": 85
+            }
+          ]
+        },
+        "invoice": {
+          "personnalizedInvoice": true,
+          "paymentInstruction": null,
+          "prefix": "INV"
+        },
+        "taxes": [
+          {
+            "id": 1,
+            "rate": 0.05,
+            "name": "TPS",
+            "number": "811808716"
+          },
+          {
+            "id": 2,
+            "rate": 0.09975,
+            "name": "TVQ",
+            "number": "1217685610"
+          }
+        ],
+        "currency": {
+          "id": 1,
+          "code": "CAD"
+        },
+        "agent": {
+          "number": "7527327"
+        },
+        "formattedAddress": {
+          "line1": "1217 St-Zotique E",
+          "line2": "Montréal, Québec",
+          "line3": "Canada, H2S 1N6"
+        }
+      }
+    },
+    {
+      "rank": "4",
+      "id": 2751,
+      "type": 0,
+      "name": "Jérôme Gonthier",
+      "usualName": null,
+      "lateFeeActivated": false,
+      "lateFeeNotificationActivated": false,
+      "gracePeriod": 30,
+      "indTypeFee": 0,
+      "fee": 5,
+      "reminderActivated": true,
+      "reminderType": null,
+      "nbDaysReminder": 3,
+      "audit": null,
+      "updatedAt": "2024-04-22T15:13:39.330Z",
+      "createdAt": "2024-04-22T15:12:50.274Z",
+      "active": true,
+      "customFields": [],
+      "extraInfo": {
+        "location": {
+          "id": 202,
+          "code": "SAQ",
+          "content": {
+            "city": "Montréal",
+            "phone": "514 873-2274",
+            "number": "23134",
+            "address": "440, boul. de Maisonneuve Ouest"
+          }
+        }
+      },
+      "invoiceBeforeProcessing": true,
+      "onlineInvoicingInd": true,
+      "emailCustomContent": {
+        "INVOICE_NOTICE": "null"
+      },
+      "sendInvoiceInAttachment": false,
+      "lockVersion": 1,
+      "taxable": true,
+      "systemId": "WARDPROD",
+      "portausCompanyId": 1,
+      "lastSalesOrderDate": "2024-04-22T15:12:54.000Z",
+      "lastReservationDate": null,
+      "balance": {
+        "draft": "0.00",
+        "total": "58.22",
+        "outstanding": "0.00",
+        "paid": "58.22",
+        "overdue": "0.00"
+      },
+      "contact": {
+        "id": 3155,
+        "firstName": "Jérôme",
+        "lastName": "Gonthier",
+        "email": "jer.gonthier@gmail.com",
+        "phone": "514-651-5496",
+        "phoneExt": null,
+        "sex": 1,
+        "birthDate": null,
+        "denomination": {
+          "id": 1,
+          "name": "Mister",
+          "shortName": "Mr."
+        },
+        "addresses": [
+          {
+            "id": 2752,
+            "street": "3828  Av. de l'Hôtel-de-Ville ",
+            "city": "Montréal, Québec",
+            "otherState": null,
+            "postalCode": "H2W 2G5",
+            "code": null,
+            "type": {
+              "id": 3,
+              "code": "PRINCIPAL"
+            },
+            "country": {
+              "id": 1,
+              "isoCode": "CA"
+            }
+          }
+        ]
+      },
+      "deliveryType": {
+        "id": 3,
+        "code": "DELIVERY",
+        "choice_custom_info": "SAQ",
+        "portausCompanyId": 1
+      },
+      "currency": {
+        "id": 1,
+        "code": "CAD"
+      },
+      "language": {
+        "id": 1,
+        "name": "Français",
+        "code": "fr",
+        "longCode": "fr-CA",
+        "cmsLanguage": true
+      },
+      "invoiceTerm": {
+        "id": 2,
+        "code": "NET_30",
+        "value": "P30D",
+        "order_": 3
+      },
+      "class": {
+        "id": 2,
+        "code": "Particulier",
+        "description": "Classe client regroupant tous les clients non licenciés",
+        "ind": "PARTICULIER",
+        "indAgencyType": "PARTICULIER",
+        "systemId": "WARDPROD",
+        "portausCompanyId": 1
+      },
+      "tags": [],
+      "paymentTypes": [
+        {
+          "id": 1,
+          "code": "CREDIT_CARD",
+          "configuration": null,
+          "type": 1,
+          "active": true,
+          "category": {
+            "id": 1,
+            "code": "CREDIT_CARD"
+          }
+        },
+        {
+          "id": 3,
+          "code": "BANK_TRANSFER_ONLINE",
+          "configuration": null,
+          "type": 1,
+          "active": true,
+          "category": {
+            "id": 3,
+            "code": "BANK_TRANSFER"
+          }
+        },
+        {
+          "id": 2,
+          "code": "CHECK_ONLINE",
+          "configuration": null,
+          "type": 1,
+          "active": true,
+          "category": {
+            "id": 2,
+            "code": "CHECK"
+          }
+        }
+      ],
+      "portausCompany": {
+        "id": 1,
+        "name": "Ward et associés",
+        "contactName": "David Ward",
+        "contactEmail": "david@wardetassocies.com",
+        "address": {
+          "city": "Montréal",
+          "state": "Québec",
+          "street": "1217 St-Zotique E",
+          "country": "Canada",
+          "postalCode": "H2S 1N6"
+        },
+        "phone": null,
+        "mobile": null,
+        "fiscalEndDay": 31,
+        "fiscalEndMonth": 12,
+        "systemId": "WARDPROD",
+        "customEmailFromInd": false,
+        "customEmailFrom": null,
+        "defaultDetailedInvoicePrices": true,
+        "invoiceTemplateShortId": "Hkl5Un-SDH",
+        "saqProcessModuleInd": false,
+        "invoicingModuleActive": true,
+        "indRoundingPrice": false,
+        "roundingStrategy": 1,
+        "externalAccountApiActive": false,
+        "code": null,
+        "automaticDelayReservation": false,
+        "reportCustomization": {
+          "priceRange": [
+            {
+              "max": 15,
+              "min": 0
+            },
+            {
+              "max": 30,
+              "min": 15
+            },
+            {
+              "max": 45,
+              "min": 30
+            },
+            {
+              "max": 55,
+              "min": 45
+            },
+            {
+              "max": 70,
+              "min": 55
+            },
+            {
+              "max": 85,
+              "min": 70
+            },
+            {
+              "max": 100,
+              "min": 85
+            }
+          ]
+        },
+        "invoice": {
+          "personnalizedInvoice": true,
+          "paymentInstruction": null,
+          "prefix": "INV"
+        },
+        "taxes": [
+          {
+            "id": 1,
+            "rate": 0.05,
+            "name": "TPS",
+            "number": "811808716"
+          },
+          {
+            "id": 2,
+            "rate": 0.09975,
+            "name": "TVQ",
+            "number": "1217685610"
+          }
+        ],
+        "currency": {
+          "id": 1,
+          "code": "CAD"
+        },
+        "agent": {
+          "number": "7527327"
+        },
+        "formattedAddress": {
+          "line1": "1217 St-Zotique E",
+          "line2": "Montréal, Québec",
+          "line3": "Canada, H2S 1N6"
+        }
+      }
+    },
+    {
+      "rank": "5",
+      "id": 2749,
+      "type": 0,
+      "name": "Olivier Drapeau",
+      "usualName": null,
+      "lateFeeActivated": false,
+      "lateFeeNotificationActivated": false,
+      "gracePeriod": 30,
+      "indTypeFee": 0,
+      "fee": 5,
+      "reminderActivated": true,
+      "reminderType": null,
+      "nbDaysReminder": 3,
+      "audit": null,
+      "updatedAt": "2024-04-17T13:38:17.823Z",
+      "createdAt": "2024-04-17T13:37:32.702Z",
+      "active": true,
+      "customFields": [],
+      "extraInfo": {
+        "location": {
+          "id": 175,
+          "code": "SAQ",
+          "content": {
+            "city": "Montréal",
+            "phone": "514 270-1776",
+            "number": "23066",
+            "address": "900, rue Beaubien"
+          }
+        }
+      },
+      "invoiceBeforeProcessing": true,
+      "onlineInvoicingInd": true,
+      "emailCustomContent": {
+        "INVOICE_NOTICE": "null"
+      },
+      "sendInvoiceInAttachment": false,
+      "lockVersion": 1,
+      "taxable": true,
+      "systemId": "WARDPROD",
+      "portausCompanyId": 1,
+      "lastSalesOrderDate": "2024-04-17T13:37:39.000Z",
+      "lastReservationDate": null,
+      "balance": {
+        "draft": "0.00",
+        "total": "48.84",
+        "outstanding": "0.00",
+        "paid": "48.84",
+        "overdue": "0.00"
+      },
+      "contact": {
+        "id": 3152,
+        "firstName": "Olivier",
+        "lastName": "Drapeau",
+        "email": "olidrap71@hotmail.fr",
+        "phone": "514-377-0514,",
+        "phoneExt": null,
+        "sex": 1,
+        "birthDate": null,
+        "addresses": [
+          {
+            "id": 2749,
+            "street": "6636, av. de Chateaubriand",
+            "city": " montreal (quebec) ",
+            "otherState": null,
+            "postalCode": "h2s 2n7",
+            "code": null,
+            "type": {
+              "id": 3,
+              "code": "PRINCIPAL"
+            },
+            "country": {
+              "id": 1,
+              "isoCode": "CA"
+            }
+          }
+        ]
+      },
+      "deliveryType": {
+        "id": 3,
+        "code": "DELIVERY",
+        "choice_custom_info": "SAQ",
+        "portausCompanyId": 1
+      },
+      "currency": {
+        "id": 1,
+        "code": "CAD"
+      },
+      "language": {
+        "id": 1,
+        "name": "Français",
+        "code": "fr",
+        "longCode": "fr-CA",
+        "cmsLanguage": true
+      },
+      "invoiceTerm": {
+        "id": 2,
+        "code": "NET_30",
+        "value": "P30D",
+        "order_": 3
+      },
+      "class": {
+        "id": 2,
+        "code": "Particulier",
+        "description": "Classe client regroupant tous les clients non licenciés",
+        "ind": "PARTICULIER",
+        "indAgencyType": "PARTICULIER",
+        "systemId": "WARDPROD",
+        "portausCompanyId": 1
+      },
+      "tags": [],
+      "paymentTypes": [
+        {
+          "id": 2,
+          "code": "CHECK_ONLINE",
+          "configuration": null,
+          "type": 1,
+          "active": true,
+          "category": {
+            "id": 2,
+            "code": "CHECK"
+          }
+        },
+        {
+          "id": 3,
+          "code": "BANK_TRANSFER_ONLINE",
+          "configuration": null,
+          "type": 1,
+          "active": true,
+          "category": {
+            "id": 3,
+            "code": "BANK_TRANSFER"
+          }
+        },
+        {
+          "id": 1,
+          "code": "CREDIT_CARD",
+          "configuration": null,
+          "type": 1,
+          "active": true,
+          "category": {
+            "id": 1,
+            "code": "CREDIT_CARD"
+          }
+        }
+      ],
+      "portausCompany": {
+        "id": 1,
+        "name": "Ward et associés",
+        "contactName": "David Ward",
+        "contactEmail": "david@wardetassocies.com",
+        "address": {
+          "city": "Montréal",
+          "state": "Québec",
+          "street": "1217 St-Zotique E",
+          "country": "Canada",
+          "postalCode": "H2S 1N6"
+        },
+        "phone": null,
+        "mobile": null,
+        "fiscalEndDay": 31,
+        "fiscalEndMonth": 12,
+        "systemId": "WARDPROD",
+        "customEmailFromInd": false,
+        "customEmailFrom": null,
+        "defaultDetailedInvoicePrices": true,
+        "invoiceTemplateShortId": "Hkl5Un-SDH",
+        "saqProcessModuleInd": false,
+        "invoicingModuleActive": true,
+        "indRoundingPrice": false,
+        "roundingStrategy": 1,
+        "externalAccountApiActive": false,
+        "code": null,
+        "automaticDelayReservation": false,
+        "reportCustomization": {
+          "priceRange": [
+            {
+              "max": 15,
+              "min": 0
+            },
+            {
+              "max": 30,
+              "min": 15
+            },
+            {
+              "max": 45,
+              "min": 30
+            },
+            {
+              "max": 55,
+              "min": 45
+            },
+            {
+              "max": 70,
+              "min": 55
+            },
+            {
+              "max": 85,
+              "min": 70
+            },
+            {
+              "max": 100,
+              "min": 85
+            }
+          ]
+        },
+        "invoice": {
+          "personnalizedInvoice": true,
+          "paymentInstruction": null,
+          "prefix": "INV"
+        },
+        "taxes": [
+          {
+            "id": 1,
+            "rate": 0.05,
+            "name": "TPS",
+            "number": "811808716"
+          },
+          {
+            "id": 2,
+            "rate": 0.09975,
+            "name": "TVQ",
+            "number": "1217685610"
+          }
+        ],
+        "currency": {
+          "id": 1,
+          "code": "CAD"
+        },
+        "agent": {
+          "number": "7527327"
+        },
+        "formattedAddress": {
+          "line1": "1217 St-Zotique E",
+          "line2": "Montréal, Québec",
+          "line3": "Canada, H2S 1N6"
+        }
+      }
+    },
+    {
+      "rank": "6",
+      "id": 2748,
+      "type": 0,
+      "name": "Francis Parenteau",
+      "usualName": null,
+      "lateFeeActivated": false,
+      "lateFeeNotificationActivated": false,
+      "gracePeriod": 30,
+      "indTypeFee": 0,
+      "fee": 5,
+      "reminderActivated": true,
+      "reminderType": null,
+      "nbDaysReminder": 3,
+      "audit": null,
+      "updatedAt": "2024-04-17T13:22:11.029Z",
+      "createdAt": "2024-04-17T13:20:50.425Z",
+      "active": true,
+      "customFields": [],
+      "extraInfo": {
+        "location": {
+          "id": 209,
+          "code": "SAQ",
+          "content": {
+            "city": "Ville Mont-Royal",
+            "phone": "514 733-6414",
+            "number": "23151",
+            "address": "2305, chemin Rockland, suite 502.1"
+          }
+        }
+      },
+      "invoiceBeforeProcessing": true,
+      "onlineInvoicingInd": true,
+      "emailCustomContent": {
+        "INVOICE_NOTICE": "null"
+      },
+      "sendInvoiceInAttachment": false,
+      "lockVersion": 1,
+      "taxable": true,
+      "systemId": "WARDPROD",
+      "portausCompanyId": 1,
+      "lastSalesOrderDate": "2024-04-17T13:20:58.000Z",
+      "lastReservationDate": null,
+      "balance": {
+        "draft": "0.00",
+        "total": "56.57",
+        "outstanding": "0.00",
+        "paid": "56.57",
+        "overdue": "0.00"
+      },
+      "contact": {
+        "id": 3151,
+        "firstName": "Francis",
+        "lastName": "Parenteau",
+        "email": "francisparenteau5@gmail.com",
+        "phone": "439-392-1419",
+        "phoneExt": null,
+        "sex": 1,
+        "birthDate": null,
+        "denomination": {
+          "id": 1,
+          "name": "Mister",
+          "shortName": "Mr."
+        },
+        "addresses": [
+          {
+            "id": 2748,
+            "street": "308-4239 Rue Jean-Talon O",
+            "city": "Montréal, QC",
+            "otherState": null,
+            "postalCode": " H4P 0A5",
+            "code": null,
+            "type": {
+              "id": 3,
+              "code": "PRINCIPAL"
+            },
+            "country": {
+              "id": 1,
+              "isoCode": "CA"
+            }
+          }
+        ]
+      },
+      "deliveryType": {
+        "id": 3,
+        "code": "DELIVERY",
+        "choice_custom_info": "SAQ",
+        "portausCompanyId": 1
+      },
+      "currency": {
+        "id": 1,
+        "code": "CAD"
+      },
+      "language": {
+        "id": 1,
+        "name": "Français",
+        "code": "fr",
+        "longCode": "fr-CA",
+        "cmsLanguage": true
+      },
+      "invoiceTerm": {
+        "id": 2,
+        "code": "NET_30",
+        "value": "P30D",
+        "order_": 3
+      },
+      "class": {
+        "id": 2,
+        "code": "Particulier",
+        "description": "Classe client regroupant tous les clients non licenciés",
+        "ind": "PARTICULIER",
+        "indAgencyType": "PARTICULIER",
+        "systemId": "WARDPROD",
+        "portausCompanyId": 1
+      },
+      "tags": [],
+      "paymentTypes": [
+        {
+          "id": 3,
+          "code": "BANK_TRANSFER_ONLINE",
+          "configuration": null,
+          "type": 1,
+          "active": true,
+          "category": {
+            "id": 3,
+            "code": "BANK_TRANSFER"
+          }
+        },
+        {
+          "id": 2,
+          "code": "CHECK_ONLINE",
+          "configuration": null,
+          "type": 1,
+          "active": true,
+          "category": {
+            "id": 2,
+            "code": "CHECK"
+          }
+        },
+        {
+          "id": 1,
+          "code": "CREDIT_CARD",
+          "configuration": null,
+          "type": 1,
+          "active": true,
+          "category": {
+            "id": 1,
+            "code": "CREDIT_CARD"
+          }
+        }
+      ],
+      "portausCompany": {
+        "id": 1,
+        "name": "Ward et associés",
+        "contactName": "David Ward",
+        "contactEmail": "david@wardetassocies.com",
+        "address": {
+          "city": "Montréal",
+          "state": "Québec",
+          "street": "1217 St-Zotique E",
+          "country": "Canada",
+          "postalCode": "H2S 1N6"
+        },
+        "phone": null,
+        "mobile": null,
+        "fiscalEndDay": 31,
+        "fiscalEndMonth": 12,
+        "systemId": "WARDPROD",
+        "customEmailFromInd": false,
+        "customEmailFrom": null,
+        "defaultDetailedInvoicePrices": true,
+        "invoiceTemplateShortId": "Hkl5Un-SDH",
+        "saqProcessModuleInd": false,
+        "invoicingModuleActive": true,
+        "indRoundingPrice": false,
+        "roundingStrategy": 1,
+        "externalAccountApiActive": false,
+        "code": null,
+        "automaticDelayReservation": false,
+        "reportCustomization": {
+          "priceRange": [
+            {
+              "max": 15,
+              "min": 0
+            },
+            {
+              "max": 30,
+              "min": 15
+            },
+            {
+              "max": 45,
+              "min": 30
+            },
+            {
+              "max": 55,
+              "min": 45
+            },
+            {
+              "max": 70,
+              "min": 55
+            },
+            {
+              "max": 85,
+              "min": 70
+            },
+            {
+              "max": 100,
+              "min": 85
+            }
+          ]
+        },
+        "invoice": {
+          "personnalizedInvoice": true,
+          "paymentInstruction": null,
+          "prefix": "INV"
+        },
+        "taxes": [
+          {
+            "id": 1,
+            "rate": 0.05,
+            "name": "TPS",
+            "number": "811808716"
+          },
+          {
+            "id": 2,
+            "rate": 0.09975,
+            "name": "TVQ",
+            "number": "1217685610"
+          }
+        ],
+        "currency": {
+          "id": 1,
+          "code": "CAD"
+        },
+        "agent": {
+          "number": "7527327"
+        },
+        "formattedAddress": {
+          "line1": "1217 St-Zotique E",
+          "line2": "Montréal, Québec",
+          "line3": "Canada, H2S 1N6"
+        }
+      }
+    },
+    {
+      "rank": "7",
+      "id": 2747,
+      "type": 0,
+      "name": "Nicolas Lavoie",
+      "usualName": null,
+      "lateFeeActivated": false,
+      "lateFeeNotificationActivated": false,
+      "gracePeriod": 30,
+      "indTypeFee": 0,
+      "fee": 5,
+      "reminderActivated": true,
+      "reminderType": null,
+      "nbDaysReminder": 3,
+      "audit": null,
+      "updatedAt": "2024-04-15T18:44:24.299Z",
+      "createdAt": "2024-04-15T18:40:54.724Z",
+      "active": true,
+      "customFields": [],
+      "extraInfo": {
+        "location": {
+          "id": 206,
+          "code": "SAQ",
+          "content": {
+            "city": "Terrebonne",
+            "phone": "450 471-9180",
+            "number": "23144",
+            "address": "1100, boul. des Seigneurs Est"
+          }
+        }
+      },
+      "invoiceBeforeProcessing": true,
+      "onlineInvoicingInd": true,
+      "emailCustomContent": {
+        "INVOICE_NOTICE": "null"
+      },
+      "sendInvoiceInAttachment": false,
+      "lockVersion": 1,
+      "taxable": true,
+      "systemId": "WARDPROD",
+      "portausCompanyId": 1,
+      "lastSalesOrderDate": "2024-04-15T18:43:08.000Z",
+      "lastReservationDate": null,
+      "balance": {
+        "draft": "0.00",
+        "total": "47.18",
+        "outstanding": "0.00",
+        "paid": "47.18",
+        "overdue": "0.00"
+      },
+      "contact": {
+        "id": 3149,
+        "firstName": "Nicolas",
+        "lastName": "Lavoie",
+        "email": "patch_45@hotmail.com",
+        "phone": "514-984-5141",
+        "phoneExt": null,
+        "sex": 1,
+        "birthDate": null,
+        "denomination": {
+          "id": 1,
+          "name": "Mister",
+          "shortName": "Mr."
+        },
+        "addresses": [
+          {
+            "id": 2747,
+            "street": "225 Francois Brunet  ",
+            "city": "Terrebonne,QC ",
+            "otherState": null,
+            "postalCode": "J6V1R1",
+            "code": null,
+            "type": {
+              "id": 3,
+              "code": "PRINCIPAL"
+            },
+            "country": {
+              "id": 1,
+              "isoCode": "CA"
+            }
+          }
+        ]
+      },
+      "deliveryType": {
+        "id": 3,
+        "code": "DELIVERY",
+        "choice_custom_info": "SAQ",
+        "portausCompanyId": 1
+      },
+      "currency": {
+        "id": 1,
+        "code": "CAD"
+      },
+      "language": {
+        "id": 1,
+        "name": "Français",
+        "code": "fr",
+        "longCode": "fr-CA",
+        "cmsLanguage": true
+      },
+      "invoiceTerm": {
+        "id": 2,
+        "code": "NET_30",
+        "value": "P30D",
+        "order_": 3
+      },
+      "class": {
+        "id": 2,
+        "code": "Particulier",
+        "description": "Classe client regroupant tous les clients non licenciés",
+        "ind": "PARTICULIER",
+        "indAgencyType": "PARTICULIER",
+        "systemId": "WARDPROD",
+        "portausCompanyId": 1
+      },
+      "tags": [],
+      "paymentTypes": [
+        {
+          "id": 1,
+          "code": "CREDIT_CARD",
+          "configuration": null,
+          "type": 1,
+          "active": true,
+          "category": {
+            "id": 1,
+            "code": "CREDIT_CARD"
+          }
+        },
+        {
+          "id": 2,
+          "code": "CHECK_ONLINE",
+          "configuration": null,
+          "type": 1,
+          "active": true,
+          "category": {
+            "id": 2,
+            "code": "CHECK"
+          }
+        },
+        {
+          "id": 3,
+          "code": "BANK_TRANSFER_ONLINE",
+          "configuration": null,
+          "type": 1,
+          "active": true,
+          "category": {
+            "id": 3,
+            "code": "BANK_TRANSFER"
+          }
+        }
+      ],
+      "portausCompany": {
+        "id": 1,
+        "name": "Ward et associés",
+        "contactName": "David Ward",
+        "contactEmail": "david@wardetassocies.com",
+        "address": {
+          "city": "Montréal",
+          "state": "Québec",
+          "street": "1217 St-Zotique E",
+          "country": "Canada",
+          "postalCode": "H2S 1N6"
+        },
+        "phone": null,
+        "mobile": null,
+        "fiscalEndDay": 31,
+        "fiscalEndMonth": 12,
+        "systemId": "WARDPROD",
+        "customEmailFromInd": false,
+        "customEmailFrom": null,
+        "defaultDetailedInvoicePrices": true,
+        "invoiceTemplateShortId": "Hkl5Un-SDH",
+        "saqProcessModuleInd": false,
+        "invoicingModuleActive": true,
+        "indRoundingPrice": false,
+        "roundingStrategy": 1,
+        "externalAccountApiActive": false,
+        "code": null,
+        "automaticDelayReservation": false,
+        "reportCustomization": {
+          "priceRange": [
+            {
+              "max": 15,
+              "min": 0
+            },
+            {
+              "max": 30,
+              "min": 15
+            },
+            {
+              "max": 45,
+              "min": 30
+            },
+            {
+              "max": 55,
+              "min": 45
+            },
+            {
+              "max": 70,
+              "min": 55
+            },
+            {
+              "max": 85,
+              "min": 70
+            },
+            {
+              "max": 100,
+              "min": 85
+            }
+          ]
+        },
+        "invoice": {
+          "personnalizedInvoice": true,
+          "paymentInstruction": null,
+          "prefix": "INV"
+        },
+        "taxes": [
+          {
+            "id": 1,
+            "rate": 0.05,
+            "name": "TPS",
+            "number": "811808716"
+          },
+          {
+            "id": 2,
+            "rate": 0.09975,
+            "name": "TVQ",
+            "number": "1217685610"
+          }
+        ],
+        "currency": {
+          "id": 1,
+          "code": "CAD"
+        },
+        "agent": {
+          "number": "7527327"
+        },
+        "formattedAddress": {
+          "line1": "1217 St-Zotique E",
+          "line2": "Montréal, Québec",
+          "line3": "Canada, H2S 1N6"
+        }
+      }
+    },
+    {
+      "rank": "8",
+      "id": 2746,
+      "type": 0,
+      "name": "Andrée-Anne Chrétien",
+      "usualName": null,
+      "lateFeeActivated": false,
+      "lateFeeNotificationActivated": false,
+      "gracePeriod": 30,
+      "indTypeFee": 0,
+      "fee": 5,
+      "reminderActivated": true,
+      "reminderType": null,
+      "nbDaysReminder": 3,
+      "audit": null,
+      "updatedAt": "2024-04-15T18:11:27.938Z",
+      "createdAt": "2024-04-15T18:01:15.580Z",
+      "active": true,
+      "customFields": [],
+      "extraInfo": {
+        "location": {
+          "id": 178,
+          "code": "SAQ",
+          "content": {
+            "city": "Repentigny",
+            "phone": "450 654-6260",
+            "number": "23070",
+            "address": "86, boul. Brien"
+          }
+        }
+      },
+      "invoiceBeforeProcessing": true,
+      "onlineInvoicingInd": true,
+      "emailCustomContent": {
+        "INVOICE_NOTICE": "null"
+      },
+      "sendInvoiceInAttachment": false,
+      "lockVersion": 1,
+      "taxable": true,
+      "systemId": "WARDPROD",
+      "portausCompanyId": 1,
+      "lastSalesOrderDate": "2024-04-15T18:01:24.000Z",
+      "lastReservationDate": null,
+      "balance": {
+        "draft": "0.00",
+        "total": "495.86",
+        "outstanding": "495.86",
+        "paid": "0.00",
+        "overdue": "495.86"
+      },
+      "contact": {
+        "id": 3148,
+        "firstName": "Andrée-Anne",
+        "lastName": "Chrétien",
+        "email": "aanneachretien@gmail.com",
+        "phone": "514 706-6405",
+        "phoneExt": null,
+        "sex": 0,
+        "birthDate": null,
+        "denomination": {
+          "id": 2,
+          "name": "Madam",
+          "shortName": "Mrs."
+        },
+        "addresses": [
+          {
+            "id": 2746,
+            "street": "60, rue Jacques-Archambault",
+            "city": ".Pointe-aux-Trembles, QC",
+            "otherState": null,
+            "postalCode": "H1A 5H7",
+            "code": null,
+            "type": {
+              "id": 3,
+              "code": "PRINCIPAL"
+            },
+            "country": {
+              "id": 1,
+              "isoCode": "CA"
+            }
+          }
+        ]
+      },
+      "deliveryType": {
+        "id": 3,
+        "code": "DELIVERY",
+        "choice_custom_info": "SAQ",
+        "portausCompanyId": 1
+      },
+      "currency": {
+        "id": 1,
+        "code": "CAD"
+      },
+      "language": {
+        "id": 1,
+        "name": "Français",
+        "code": "fr",
+        "longCode": "fr-CA",
+        "cmsLanguage": true
+      },
+      "invoiceTerm": {
+        "id": 2,
+        "code": "NET_30",
+        "value": "P30D",
+        "order_": 3
+      },
+      "class": {
+        "id": 2,
+        "code": "Particulier",
+        "description": "Classe client regroupant tous les clients non licenciés",
+        "ind": "PARTICULIER",
+        "indAgencyType": "PARTICULIER",
+        "systemId": "WARDPROD",
+        "portausCompanyId": 1
+      },
+      "tags": [],
+      "paymentTypes": [
+        {
+          "id": 3,
+          "code": "BANK_TRANSFER_ONLINE",
+          "configuration": null,
+          "type": 1,
+          "active": true,
+          "category": {
+            "id": 3,
+            "code": "BANK_TRANSFER"
+          }
+        },
+        {
+          "id": 2,
+          "code": "CHECK_ONLINE",
+          "configuration": null,
+          "type": 1,
+          "active": true,
+          "category": {
+            "id": 2,
+            "code": "CHECK"
+          }
+        },
+        {
+          "id": 1,
+          "code": "CREDIT_CARD",
+          "configuration": null,
+          "type": 1,
+          "active": true,
+          "category": {
+            "id": 1,
+            "code": "CREDIT_CARD"
+          }
+        }
+      ],
+      "portausCompany": {
+        "id": 1,
+        "name": "Ward et associés",
+        "contactName": "David Ward",
+        "contactEmail": "david@wardetassocies.com",
+        "address": {
+          "city": "Montréal",
+          "state": "Québec",
+          "street": "1217 St-Zotique E",
+          "country": "Canada",
+          "postalCode": "H2S 1N6"
+        },
+        "phone": null,
+        "mobile": null,
+        "fiscalEndDay": 31,
+        "fiscalEndMonth": 12,
+        "systemId": "WARDPROD",
+        "customEmailFromInd": false,
+        "customEmailFrom": null,
+        "defaultDetailedInvoicePrices": true,
+        "invoiceTemplateShortId": "Hkl5Un-SDH",
+        "saqProcessModuleInd": false,
+        "invoicingModuleActive": true,
+        "indRoundingPrice": false,
+        "roundingStrategy": 1,
+        "externalAccountApiActive": false,
+        "code": null,
+        "automaticDelayReservation": false,
+        "reportCustomization": {
+          "priceRange": [
+            {
+              "max": 15,
+              "min": 0
+            },
+            {
+              "max": 30,
+              "min": 15
+            },
+            {
+              "max": 45,
+              "min": 30
+            },
+            {
+              "max": 55,
+              "min": 45
+            },
+            {
+              "max": 70,
+              "min": 55
+            },
+            {
+              "max": 85,
+              "min": 70
+            },
+            {
+              "max": 100,
+              "min": 85
+            }
+          ]
+        },
+        "invoice": {
+          "personnalizedInvoice": true,
+          "paymentInstruction": null,
+          "prefix": "INV"
+        },
+        "taxes": [
+          {
+            "id": 1,
+            "rate": 0.05,
+            "name": "TPS",
+            "number": "811808716"
+          },
+          {
+            "id": 2,
+            "rate": 0.09975,
+            "name": "TVQ",
+            "number": "1217685610"
+          }
+        ],
+        "currency": {
+          "id": 1,
+          "code": "CAD"
+        },
+        "agent": {
+          "number": "7527327"
+        },
+        "formattedAddress": {
+          "line1": "1217 St-Zotique E",
+          "line2": "Montréal, Québec",
+          "line3": "Canada, H2S 1N6"
+        }
+      }
+    },
+    {
+      "rank": "9",
+      "id": 2735,
+      "type": 0,
+      "name": "Pierre-Mathieu Toupin",
+      "usualName": null,
+      "lateFeeActivated": false,
+      "lateFeeNotificationActivated": false,
+      "gracePeriod": 30,
+      "indTypeFee": 0,
+      "fee": 5,
+      "reminderActivated": true,
+      "reminderType": null,
+      "nbDaysReminder": 3,
+      "audit": null,
+      "updatedAt": "2024-04-03T14:59:34.936Z",
+      "createdAt": "2024-04-03T14:58:38.593Z",
+      "active": true,
+      "customFields": [],
+      "extraInfo": {
+        "location": {
+          "id": 168,
+          "code": "SAQ",
+          "content": {
+            "city": "Hull",
+            "phone": "819 777-1944",
+            "number": "23050",
+            "address": "705, boul. de la Carrière"
+          }
+        }
+      },
+      "invoiceBeforeProcessing": true,
+      "onlineInvoicingInd": true,
+      "emailCustomContent": {
+        "INVOICE_NOTICE": "null"
+      },
+      "sendInvoiceInAttachment": false,
+      "lockVersion": 1,
+      "taxable": true,
+      "systemId": "WARDPROD",
+      "portausCompanyId": 1,
+      "lastSalesOrderDate": "2024-04-03T14:58:51.000Z",
+      "lastReservationDate": null,
+      "balance": {
+        "draft": "0.00",
+        "total": "50.77",
+        "outstanding": "0.00",
+        "paid": "50.77",
+        "overdue": "0.00"
+      },
+      "contact": {
+        "id": 3129,
+        "firstName": "Pierre-Mathieu",
+        "lastName": "Toupin",
+        "email": "pm.toupin@hotmail.fr",
+        "phone": "438-838-8822",
+        "phoneExt": null,
+        "sex": 1,
+        "birthDate": null,
+        "denomination": {
+          "id": 1,
+          "name": "Mister",
+          "shortName": "Mr."
+        },
+        "addresses": [
+          {
+            "id": 2734,
+            "street": "186 chemin Fleming",
+            "city": " Cantley, QC ",
+            "otherState": null,
+            "postalCode": "J8V 3B4",
+            "code": null,
+            "type": {
+              "id": 3,
+              "code": "PRINCIPAL"
+            },
+            "country": {
+              "id": 1,
+              "isoCode": "CA"
+            }
+          }
+        ]
+      },
+      "deliveryType": {
+        "id": 3,
+        "code": "DELIVERY",
+        "choice_custom_info": "SAQ",
+        "portausCompanyId": 1
+      },
+      "currency": {
+        "id": 1,
+        "code": "CAD"
+      },
+      "language": {
+        "id": 1,
+        "name": "Français",
+        "code": "fr",
+        "longCode": "fr-CA",
+        "cmsLanguage": true
+      },
+      "invoiceTerm": {
+        "id": 2,
+        "code": "NET_30",
+        "value": "P30D",
+        "order_": 3
+      },
+      "class": {
+        "id": 2,
+        "code": "Particulier",
+        "description": "Classe client regroupant tous les clients non licenciés",
+        "ind": "PARTICULIER",
+        "indAgencyType": "PARTICULIER",
+        "systemId": "WARDPROD",
+        "portausCompanyId": 1
+      },
+      "tags": [],
+      "paymentTypes": [
+        {
+          "id": 1,
+          "code": "CREDIT_CARD",
+          "configuration": null,
+          "type": 1,
+          "active": true,
+          "category": {
+            "id": 1,
+            "code": "CREDIT_CARD"
+          }
+        },
+        {
+          "id": 3,
+          "code": "BANK_TRANSFER_ONLINE",
+          "configuration": null,
+          "type": 1,
+          "active": true,
+          "category": {
+            "id": 3,
+            "code": "BANK_TRANSFER"
+          }
+        },
+        {
+          "id": 2,
+          "code": "CHECK_ONLINE",
+          "configuration": null,
+          "type": 1,
+          "active": true,
+          "category": {
+            "id": 2,
+            "code": "CHECK"
+          }
+        }
+      ],
+      "portausCompany": {
+        "id": 1,
+        "name": "Ward et associés",
+        "contactName": "David Ward",
+        "contactEmail": "david@wardetassocies.com",
+        "address": {
+          "city": "Montréal",
+          "state": "Québec",
+          "street": "1217 St-Zotique E",
+          "country": "Canada",
+          "postalCode": "H2S 1N6"
+        },
+        "phone": null,
+        "mobile": null,
+        "fiscalEndDay": 31,
+        "fiscalEndMonth": 12,
+        "systemId": "WARDPROD",
+        "customEmailFromInd": false,
+        "customEmailFrom": null,
+        "defaultDetailedInvoicePrices": true,
+        "invoiceTemplateShortId": "Hkl5Un-SDH",
+        "saqProcessModuleInd": false,
+        "invoicingModuleActive": true,
+        "indRoundingPrice": false,
+        "roundingStrategy": 1,
+        "externalAccountApiActive": false,
+        "code": null,
+        "automaticDelayReservation": false,
+        "reportCustomization": {
+          "priceRange": [
+            {
+              "max": 15,
+              "min": 0
+            },
+            {
+              "max": 30,
+              "min": 15
+            },
+            {
+              "max": 45,
+              "min": 30
+            },
+            {
+              "max": 55,
+              "min": 45
+            },
+            {
+              "max": 70,
+              "min": 55
+            },
+            {
+              "max": 85,
+              "min": 70
+            },
+            {
+              "max": 100,
+              "min": 85
+            }
+          ]
+        },
+        "invoice": {
+          "personnalizedInvoice": true,
+          "paymentInstruction": null,
+          "prefix": "INV"
+        },
+        "taxes": [
+          {
+            "id": 1,
+            "rate": 0.05,
+            "name": "TPS",
+            "number": "811808716"
+          },
+          {
+            "id": 2,
+            "rate": 0.09975,
+            "name": "TVQ",
+            "number": "1217685610"
+          }
+        ],
+        "currency": {
+          "id": 1,
+          "code": "CAD"
+        },
+        "agent": {
+          "number": "7527327"
+        },
+        "formattedAddress": {
+          "line1": "1217 St-Zotique E",
+          "line2": "Montréal, Québec",
+          "line3": "Canada, H2S 1N6"
+        }
+      }
+    },
+    {
+      "rank": "10",
+      "id": 2734,
+      "type": 0,
+      "name": "Nolan Geoffrey",
+      "usualName": null,
+      "lateFeeActivated": false,
+      "lateFeeNotificationActivated": false,
+      "gracePeriod": 30,
+      "indTypeFee": 0,
+      "fee": 5,
+      "reminderActivated": true,
+      "reminderType": null,
+      "nbDaysReminder": 3,
+      "audit": null,
+      "updatedAt": "2024-04-03T14:49:48.424Z",
+      "createdAt": "2024-04-02T17:09:30.416Z",
+      "active": true,
+      "customFields": [],
+      "extraInfo": {
+        "location": {
+          "id": 4,
+          "code": "SAQ",
+          "content": {
+            "city": "Dollard-des-Ormeaux",
+            "phone": "514 685-2784",
+            "number": "23153",
+            "address": "40, boulevard Brunswick"
+          }
+        }
+      },
+      "invoiceBeforeProcessing": true,
+      "onlineInvoicingInd": true,
+      "emailCustomContent": {
+        "INVOICE_NOTICE": "null"
+      },
+      "sendInvoiceInAttachment": false,
+      "lockVersion": 1,
+      "taxable": true,
+      "systemId": "WARDPROD",
+      "portausCompanyId": 1,
+      "lastSalesOrderDate": "2024-04-03T14:40:06.000Z",
+      "lastReservationDate": "2024-04-10T17:59:17.000Z",
+      "balance": {
+        "draft": "0.00",
+        "total": "148.73",
+        "outstanding": "0.00",
+        "paid": "148.73",
+        "overdue": "0.00"
+      },
+      "contact": {
+        "id": 3127,
+        "firstName": "Nolan",
+        "lastName": "Geoffrey",
+        "email": "nolan@acierco.com",
+        "phone": " 514-688-3449",
+        "phoneExt": null,
+        "sex": 1,
+        "birthDate": null,
+        "denomination": {
+          "id": 1,
+          "name": "Mister",
+          "shortName": "Mr."
+        },
+        "addresses": [
+          {
+            "id": 2733,
+            "street": "231 Rue Trinidad",
+            "city": "Dollard-des-Ormeaux, QC ",
+            "otherState": null,
+            "postalCode": "H9G 2X4",
+            "code": null,
+            "type": {
+              "id": 3,
+              "code": "PRINCIPAL"
+            },
+            "country": {
+              "id": 1,
+              "isoCode": "CA"
+            }
+          }
+        ]
+      },
+      "deliveryType": {
+        "id": 3,
+        "code": "DELIVERY",
+        "choice_custom_info": "SAQ",
+        "portausCompanyId": 1
+      },
+      "currency": {
+        "id": 1,
+        "code": "CAD"
+      },
+      "language": {
+        "id": 1,
+        "name": "Français",
+        "code": "fr",
+        "longCode": "fr-CA",
+        "cmsLanguage": true
+      },
+      "invoiceTerm": {
+        "id": 2,
+        "code": "NET_30",
+        "value": "P30D",
+        "order_": 3
+      },
+      "class": {
+        "id": 2,
+        "code": "Particulier",
+        "description": "Classe client regroupant tous les clients non licenciés",
+        "ind": "PARTICULIER",
+        "indAgencyType": "PARTICULIER",
+        "systemId": "WARDPROD",
+        "portausCompanyId": 1
+      },
+      "tags": [],
+      "paymentTypes": [
+        {
+          "id": 2,
+          "code": "CHECK_ONLINE",
+          "configuration": null,
+          "type": 1,
+          "active": true,
+          "category": {
+            "id": 2,
+            "code": "CHECK"
+          }
+        },
+        {
+          "id": 1,
+          "code": "CREDIT_CARD",
+          "configuration": null,
+          "type": 1,
+          "active": true,
+          "category": {
+            "id": 1,
+            "code": "CREDIT_CARD"
+          }
+        },
+        {
+          "id": 3,
+          "code": "BANK_TRANSFER_ONLINE",
+          "configuration": null,
+          "type": 1,
+          "active": true,
+          "category": {
+            "id": 3,
+            "code": "BANK_TRANSFER"
+          }
+        }
+      ],
+      "portausCompany": {
+        "id": 1,
+        "name": "Ward et associés",
+        "contactName": "David Ward",
+        "contactEmail": "david@wardetassocies.com",
+        "address": {
+          "city": "Montréal",
+          "state": "Québec",
+          "street": "1217 St-Zotique E",
+          "country": "Canada",
+          "postalCode": "H2S 1N6"
+        },
+        "phone": null,
+        "mobile": null,
+        "fiscalEndDay": 31,
+        "fiscalEndMonth": 12,
+        "systemId": "WARDPROD",
+        "customEmailFromInd": false,
+        "customEmailFrom": null,
+        "defaultDetailedInvoicePrices": true,
+        "invoiceTemplateShortId": "Hkl5Un-SDH",
+        "saqProcessModuleInd": false,
+        "invoicingModuleActive": true,
+        "indRoundingPrice": false,
+        "roundingStrategy": 1,
+        "externalAccountApiActive": false,
+        "code": null,
+        "automaticDelayReservation": false,
+        "reportCustomization": {
+          "priceRange": [
+            {
+              "max": 15,
+              "min": 0
+            },
+            {
+              "max": 30,
+              "min": 15
+            },
+            {
+              "max": 45,
+              "min": 30
+            },
+            {
+              "max": 55,
+              "min": 45
+            },
+            {
+              "max": 70,
+              "min": 55
+            },
+            {
+              "max": 85,
+              "min": 70
+            },
+            {
+              "max": 100,
+              "min": 85
+            }
+          ]
+        },
+        "invoice": {
+          "personnalizedInvoice": true,
+          "paymentInstruction": null,
+          "prefix": "INV"
+        },
+        "taxes": [
+          {
+            "id": 1,
+            "rate": 0.05,
+            "name": "TPS",
+            "number": "811808716"
+          },
+          {
+            "id": 2,
+            "rate": 0.09975,
+            "name": "TVQ",
+            "number": "1217685610"
+          }
+        ],
+        "currency": {
+          "id": 1,
+          "code": "CAD"
+        },
+        "agent": {
+          "number": "7527327"
+        },
+        "formattedAddress": {
+          "line1": "1217 St-Zotique E",
+          "line2": "Montréal, Québec",
+          "line3": "Canada, H2S 1N6"
+        }
+      }
+    },
+    {
+      "rank": "11",
+      "id": 2733,
+      "type": 0,
+      "name": "Ian St-Martin",
+      "usualName": null,
+      "lateFeeActivated": false,
+      "lateFeeNotificationActivated": false,
+      "gracePeriod": 30,
+      "indTypeFee": 0,
+      "fee": 5,
+      "reminderActivated": true,
+      "reminderType": null,
+      "nbDaysReminder": 3,
+      "audit": null,
+      "updatedAt": "2024-04-02T14:58:09.059Z",
+      "createdAt": "2024-04-02T14:56:09.420Z",
+      "active": true,
+      "customFields": [],
+      "extraInfo": {
+        "location": {
+          "id": 284,
+          "code": "SAQ",
+          "content": {
+            "city": "Trois-Rivières",
+            "phone": "819 374-5944",
+            "number": "33561",
+            "address": "4675, boul. des Forges"
+          }
+        }
+      },
+      "invoiceBeforeProcessing": true,
+      "onlineInvoicingInd": true,
+      "emailCustomContent": {
+        "INVOICE_NOTICE": "null"
+      },
+      "sendInvoiceInAttachment": false,
+      "lockVersion": 1,
+      "taxable": true,
+      "systemId": "WARDPROD",
+      "portausCompanyId": 1,
+      "lastSalesOrderDate": "2024-04-02T14:56:14.000Z",
+      "lastReservationDate": null,
+      "balance": {
+        "draft": "0.00",
+        "total": "57.67",
+        "outstanding": "0.00",
+        "paid": "57.67",
+        "overdue": "0.00"
+      },
+      "contact": {
+        "id": 3126,
+        "firstName": "Ian",
+        "lastName": "St-Martin",
+        "email": "ian.st-martin@hotmail.com",
+        "phone": " 819-269-5170",
+        "phoneExt": null,
+        "sex": 1,
+        "birthDate": null,
+        "denomination": {
+          "id": 1,
+          "name": "Mister",
+          "shortName": "Mr."
+        },
+        "addresses": [
+          {
+            "id": 2732,
+            "street": "7230 P-E Neveu, Trois-Rivieres, Québec G8Y 5A8",
+            "city": "Trois-Rivieres Québec ",
+            "otherState": null,
+            "postalCode": "G8Y 5A8",
+            "code": null,
+            "type": {
+              "id": 3,
+              "code": "PRINCIPAL"
+            },
+            "country": {
+              "id": 1,
+              "isoCode": "CA"
+            }
+          }
+        ]
+      },
+      "deliveryType": {
+        "id": 3,
+        "code": "DELIVERY",
+        "choice_custom_info": "SAQ",
+        "portausCompanyId": 1
+      },
+      "currency": {
+        "id": 1,
+        "code": "CAD"
+      },
+      "language": {
+        "id": 1,
+        "name": "Français",
+        "code": "fr",
+        "longCode": "fr-CA",
+        "cmsLanguage": true
+      },
+      "invoiceTerm": {
+        "id": 2,
+        "code": "NET_30",
+        "value": "P30D",
+        "order_": 3
+      },
+      "class": {
+        "id": 2,
+        "code": "Particulier",
+        "description": "Classe client regroupant tous les clients non licenciés",
+        "ind": "PARTICULIER",
+        "indAgencyType": "PARTICULIER",
+        "systemId": "WARDPROD",
+        "portausCompanyId": 1
+      },
+      "tags": [],
+      "paymentTypes": [
+        {
+          "id": 1,
+          "code": "CREDIT_CARD",
+          "configuration": null,
+          "type": 1,
+          "active": true,
+          "category": {
+            "id": 1,
+            "code": "CREDIT_CARD"
+          }
+        },
+        {
+          "id": 2,
+          "code": "CHECK_ONLINE",
+          "configuration": null,
+          "type": 1,
+          "active": true,
+          "category": {
+            "id": 2,
+            "code": "CHECK"
+          }
+        },
+        {
+          "id": 3,
+          "code": "BANK_TRANSFER_ONLINE",
+          "configuration": null,
+          "type": 1,
+          "active": true,
+          "category": {
+            "id": 3,
+            "code": "BANK_TRANSFER"
+          }
+        }
+      ],
+      "portausCompany": {
+        "id": 1,
+        "name": "Ward et associés",
+        "contactName": "David Ward",
+        "contactEmail": "david@wardetassocies.com",
+        "address": {
+          "city": "Montréal",
+          "state": "Québec",
+          "street": "1217 St-Zotique E",
+          "country": "Canada",
+          "postalCode": "H2S 1N6"
+        },
+        "phone": null,
+        "mobile": null,
+        "fiscalEndDay": 31,
+        "fiscalEndMonth": 12,
+        "systemId": "WARDPROD",
+        "customEmailFromInd": false,
+        "customEmailFrom": null,
+        "defaultDetailedInvoicePrices": true,
+        "invoiceTemplateShortId": "Hkl5Un-SDH",
+        "saqProcessModuleInd": false,
+        "invoicingModuleActive": true,
+        "indRoundingPrice": false,
+        "roundingStrategy": 1,
+        "externalAccountApiActive": false,
+        "code": null,
+        "automaticDelayReservation": false,
+        "reportCustomization": {
+          "priceRange": [
+            {
+              "max": 15,
+              "min": 0
+            },
+            {
+              "max": 30,
+              "min": 15
+            },
+            {
+              "max": 45,
+              "min": 30
+            },
+            {
+              "max": 55,
+              "min": 45
+            },
+            {
+              "max": 70,
+              "min": 55
+            },
+            {
+              "max": 85,
+              "min": 70
+            },
+            {
+              "max": 100,
+              "min": 85
+            }
+          ]
+        },
+        "invoice": {
+          "personnalizedInvoice": true,
+          "paymentInstruction": null,
+          "prefix": "INV"
+        },
+        "taxes": [
+          {
+            "id": 1,
+            "rate": 0.05,
+            "name": "TPS",
+            "number": "811808716"
+          },
+          {
+            "id": 2,
+            "rate": 0.09975,
+            "name": "TVQ",
+            "number": "1217685610"
+          }
+        ],
+        "currency": {
+          "id": 1,
+          "code": "CAD"
+        },
+        "agent": {
+          "number": "7527327"
+        },
+        "formattedAddress": {
+          "line1": "1217 St-Zotique E",
+          "line2": "Montréal, Québec",
+          "line3": "Canada, H2S 1N6"
+        }
+      }
+    },
+    {
+      "rank": "12",
+      "id": 2728,
+      "type": 0,
+      "name": "Joanie Lavigne",
+      "usualName": null,
+      "lateFeeActivated": false,
+      "lateFeeNotificationActivated": false,
+      "gracePeriod": 30,
+      "indTypeFee": 0,
+      "fee": 5,
+      "reminderActivated": true,
+      "reminderType": null,
+      "nbDaysReminder": 3,
+      "audit": null,
+      "updatedAt": "2024-03-22T13:10:11.864Z",
+      "createdAt": "2024-03-22T13:09:27.901Z",
+      "active": true,
+      "customFields": [],
+      "extraInfo": {
+        "location": {
+          "id": 170,
+          "code": "SAQ",
+          "content": {
+            "city": "Montréal",
+            "phone": "514 276-1512",
+            "number": "23055",
+            "address": "7077, Casgrain"
+          }
+        }
+      },
+      "invoiceBeforeProcessing": true,
+      "onlineInvoicingInd": true,
+      "emailCustomContent": {
+        "INVOICE_NOTICE": "null"
+      },
+      "sendInvoiceInAttachment": false,
+      "lockVersion": 1,
+      "taxable": true,
+      "systemId": "WARDPROD",
+      "portausCompanyId": 1,
+      "lastSalesOrderDate": "2024-03-22T13:09:32.000Z",
+      "lastReservationDate": null,
+      "balance": {
+        "draft": "0.00",
+        "total": "33.66",
+        "outstanding": "0.00",
+        "paid": "33.66",
+        "overdue": "0.00"
+      },
+      "contact": {
+        "id": 3118,
+        "firstName": "Joanie",
+        "lastName": "Lavigne",
+        "email": "joanie_lavigne@hotmail.com",
+        "phone": "514 436-8874",
+        "phoneExt": null,
+        "sex": 0,
+        "birthDate": null,
+        "denomination": {
+          "id": 2,
+          "name": "Madam",
+          "shortName": "Mrs."
+        },
+        "addresses": [
+          {
+            "id": 2727,
+            "street": "6685 De Gaspé",
+            "city": " Montréal",
+            "otherState": null,
+            "postalCode": "H2S 2Y1",
+            "code": null,
+            "type": {
+              "id": 3,
+              "code": "PRINCIPAL"
+            },
+            "country": {
+              "id": 1,
+              "isoCode": "CA"
+            }
+          }
+        ]
+      },
+      "deliveryType": {
+        "id": 3,
+        "code": "DELIVERY",
+        "choice_custom_info": "SAQ",
+        "portausCompanyId": 1
+      },
+      "currency": {
+        "id": 1,
+        "code": "CAD"
+      },
+      "language": {
+        "id": 1,
+        "name": "Français",
+        "code": "fr",
+        "longCode": "fr-CA",
+        "cmsLanguage": true
+      },
+      "invoiceTerm": {
+        "id": 2,
+        "code": "NET_30",
+        "value": "P30D",
+        "order_": 3
+      },
+      "class": {
+        "id": 2,
+        "code": "Particulier",
+        "description": "Classe client regroupant tous les clients non licenciés",
+        "ind": "PARTICULIER",
+        "indAgencyType": "PARTICULIER",
+        "systemId": "WARDPROD",
+        "portausCompanyId": 1
+      },
+      "tags": [],
+      "paymentTypes": [
+        {
+          "id": 2,
+          "code": "CHECK_ONLINE",
+          "configuration": null,
+          "type": 1,
+          "active": true,
+          "category": {
+            "id": 2,
+            "code": "CHECK"
+          }
+        },
+        {
+          "id": 1,
+          "code": "CREDIT_CARD",
+          "configuration": null,
+          "type": 1,
+          "active": true,
+          "category": {
+            "id": 1,
+            "code": "CREDIT_CARD"
+          }
+        },
+        {
+          "id": 3,
+          "code": "BANK_TRANSFER_ONLINE",
+          "configuration": null,
+          "type": 1,
+          "active": true,
+          "category": {
+            "id": 3,
+            "code": "BANK_TRANSFER"
+          }
+        }
+      ],
+      "portausCompany": {
+        "id": 1,
+        "name": "Ward et associés",
+        "contactName": "David Ward",
+        "contactEmail": "david@wardetassocies.com",
+        "address": {
+          "city": "Montréal",
+          "state": "Québec",
+          "street": "1217 St-Zotique E",
+          "country": "Canada",
+          "postalCode": "H2S 1N6"
+        },
+        "phone": null,
+        "mobile": null,
+        "fiscalEndDay": 31,
+        "fiscalEndMonth": 12,
+        "systemId": "WARDPROD",
+        "customEmailFromInd": false,
+        "customEmailFrom": null,
+        "defaultDetailedInvoicePrices": true,
+        "invoiceTemplateShortId": "Hkl5Un-SDH",
+        "saqProcessModuleInd": false,
+        "invoicingModuleActive": true,
+        "indRoundingPrice": false,
+        "roundingStrategy": 1,
+        "externalAccountApiActive": false,
+        "code": null,
+        "automaticDelayReservation": false,
+        "reportCustomization": {
+          "priceRange": [
+            {
+              "max": 15,
+              "min": 0
+            },
+            {
+              "max": 30,
+              "min": 15
+            },
+            {
+              "max": 45,
+              "min": 30
+            },
+            {
+              "max": 55,
+              "min": 45
+            },
+            {
+              "max": 70,
+              "min": 55
+            },
+            {
+              "max": 85,
+              "min": 70
+            },
+            {
+              "max": 100,
+              "min": 85
+            }
+          ]
+        },
+        "invoice": {
+          "personnalizedInvoice": true,
+          "paymentInstruction": null,
+          "prefix": "INV"
+        },
+        "taxes": [
+          {
+            "id": 1,
+            "rate": 0.05,
+            "name": "TPS",
+            "number": "811808716"
+          },
+          {
+            "id": 2,
+            "rate": 0.09975,
+            "name": "TVQ",
+            "number": "1217685610"
+          }
+        ],
+        "currency": {
+          "id": 1,
+          "code": "CAD"
+        },
+        "agent": {
+          "number": "7527327"
+        },
+        "formattedAddress": {
+          "line1": "1217 St-Zotique E",
+          "line2": "Montréal, Québec",
+          "line3": "Canada, H2S 1N6"
+        }
+      }
+    },
+    {
+      "rank": "13",
+      "id": 2725,
+      "type": 0,
+      "name": "Marilou Leduc",
+      "usualName": null,
+      "lateFeeActivated": false,
+      "lateFeeNotificationActivated": false,
+      "gracePeriod": 30,
+      "indTypeFee": 0,
+      "fee": 5,
+      "reminderActivated": true,
+      "reminderType": null,
+      "nbDaysReminder": 3,
+      "audit": null,
+      "updatedAt": "2024-03-19T20:08:17.204Z",
+      "createdAt": "2024-03-18T21:04:59.147Z",
+      "active": true,
+      "customFields": [],
+      "extraInfo": null,
+      "invoiceBeforeProcessing": false,
+      "onlineInvoicingInd": true,
+      "emailCustomContent": {
+        "INVOICE_NOTICE": "null"
+      },
+      "sendInvoiceInAttachment": false,
+      "lockVersion": 1,
+      "taxable": true,
+      "systemId": "WARDPROD",
+      "portausCompanyId": 1,
+      "lastSalesOrderDate": "2024-03-18T21:05:46.000Z",
+      "lastReservationDate": null,
+      "balance": {
+        "draft": "0.00",
+        "total": "0.00",
+        "outstanding": "0.00",
+        "paid": "0.00",
+        "overdue": "0.00"
+      },
+      "contact": {
+        "id": 3114,
+        "firstName": "Marilou",
+        "lastName": "Leduc",
+        "email": "marilou.leduc.2@gmail.com",
+        "phone": "(438) 837-4796",
+        "phoneExt": null,
+        "sex": 0,
+        "birthDate": null,
+        "addresses": [
+          {
+            "id": 2724,
+            "street": "3-145 chemin du Richelieu",
+            "city": "McMasterville",
+            "otherState": null,
+            "postalCode": "J3G1T6",
+            "code": null,
+            "type": {
+              "id": 1,
+              "code": "BILLING"
+            },
+            "country": {
+              "id": 1,
+              "isoCode": "CA"
+            },
+            "state": {
+              "id": 1,
+              "name": "Quebec"
+            }
+          }
+        ]
+      },
+      "currency": {
+        "id": 1,
+        "code": "CAD"
+      },
+      "language": {
+        "id": 1,
+        "name": "Français",
+        "code": "fr",
+        "longCode": "fr-CA",
+        "cmsLanguage": true
+      },
+      "invoiceTerm": {
+        "id": 2,
+        "code": "NET_30",
+        "value": "P30D",
+        "order_": 3
+      },
+      "rep": {
+        "id": 2913,
+        "firstName": "Catherine",
+        "lastName": "St-Gelais Viau",
+        "email": "catherine@wardetassocies.com",
+        "phone": null,
+        "phoneExt": null,
+        "sex": null,
+        "birthDate": null,
+        "webAccess": true,
+        "systemId": "WARDPROD",
+        "roles": [
+          {
+            "id": 16,
+            "code": "SALES_REP",
+            "name": "Rep",
+            "weight": 960,
+            "createdAt": "2023-10-19T17:34:59.789Z",
+            "updatedAt": "2023-10-19T17:34:59.789Z"
+          },
+          {
+            "id": 7,
+            "code": "CRM_MANAGER",
+            "name": "CRM Manager",
+            "weight": 880,
+            "createdAt": "2023-11-02T00:00:00.000Z",
+            "updatedAt": "2023-11-02T00:00:00.000Z"
+          }
+        ],
+        "portausCompanies": [
+          {
+            "id": 1,
+            "active": true
+          }
+        ],
+        "active": true
+      },
+      "tags": [],
+      "paymentTypes": [
+        {
+          "id": 3,
+          "code": "BANK_TRANSFER_ONLINE",
+          "configuration": null,
+          "type": 1,
+          "active": true,
+          "category": {
+            "id": 3,
+            "code": "BANK_TRANSFER"
+          }
+        },
+        {
+          "id": 2,
+          "code": "CHECK_ONLINE",
+          "configuration": null,
+          "type": 1,
+          "active": true,
+          "category": {
+            "id": 2,
+            "code": "CHECK"
+          }
+        },
+        {
+          "id": 1,
+          "code": "CREDIT_CARD",
+          "configuration": null,
+          "type": 1,
+          "active": true,
+          "category": {
+            "id": 1,
+            "code": "CREDIT_CARD"
+          }
+        }
+      ],
+      "portausCompany": {
+        "id": 1,
+        "name": "Ward et associés",
+        "contactName": "David Ward",
+        "contactEmail": "david@wardetassocies.com",
+        "address": {
+          "city": "Montréal",
+          "state": "Québec",
+          "street": "1217 St-Zotique E",
+          "country": "Canada",
+          "postalCode": "H2S 1N6"
+        },
+        "phone": null,
+        "mobile": null,
+        "fiscalEndDay": 31,
+        "fiscalEndMonth": 12,
+        "systemId": "WARDPROD",
+        "customEmailFromInd": false,
+        "customEmailFrom": null,
+        "defaultDetailedInvoicePrices": true,
+        "invoiceTemplateShortId": "Hkl5Un-SDH",
+        "saqProcessModuleInd": false,
+        "invoicingModuleActive": true,
+        "indRoundingPrice": false,
+        "roundingStrategy": 1,
+        "externalAccountApiActive": false,
+        "code": null,
+        "automaticDelayReservation": false,
+        "reportCustomization": {
+          "priceRange": [
+            {
+              "max": 15,
+              "min": 0
+            },
+            {
+              "max": 30,
+              "min": 15
+            },
+            {
+              "max": 45,
+              "min": 30
+            },
+            {
+              "max": 55,
+              "min": 45
+            },
+            {
+              "max": 70,
+              "min": 55
+            },
+            {
+              "max": 85,
+              "min": 70
+            },
+            {
+              "max": 100,
+              "min": 85
+            }
+          ]
+        },
+        "invoice": {
+          "personnalizedInvoice": true,
+          "paymentInstruction": null,
+          "prefix": "INV"
+        },
+        "taxes": [
+          {
+            "id": 1,
+            "rate": 0.05,
+            "name": "TPS",
+            "number": "811808716"
+          },
+          {
+            "id": 2,
+            "rate": 0.09975,
+            "name": "TVQ",
+            "number": "1217685610"
+          }
+        ],
+        "currency": {
+          "id": 1,
+          "code": "CAD"
+        },
+        "agent": {
+          "number": "7527327"
+        },
+        "formattedAddress": {
+          "line1": "1217 St-Zotique E",
+          "line2": "Montréal, Québec",
+          "line3": "Canada, H2S 1N6"
+        }
+      }
+    },
+    {
+      "rank": "14",
+      "id": 2724,
+      "type": 0,
+      "name": "Marco Travaglini",
+      "usualName": null,
+      "lateFeeActivated": false,
+      "lateFeeNotificationActivated": false,
+      "gracePeriod": 30,
+      "indTypeFee": 0,
+      "fee": 5,
+      "reminderActivated": true,
+      "reminderType": null,
+      "nbDaysReminder": 3,
+      "audit": null,
+      "updatedAt": "2024-03-18T20:00:40.413Z",
+      "createdAt": "2024-03-18T19:59:43.222Z",
+      "active": true,
+      "customFields": [],
+      "extraInfo": {
+        "location": {
+          "id": 234,
+          "code": "SAQ",
+          "content": {
+            "city": "Laval",
+            "phone": "450 978-3189",
+            "number": "23218",
+            "address": "250, promenade du Centropolis"
+          }
+        }
+      },
+      "invoiceBeforeProcessing": true,
+      "onlineInvoicingInd": true,
+      "emailCustomContent": {
+        "INVOICE_NOTICE": "null"
+      },
+      "sendInvoiceInAttachment": false,
+      "lockVersion": 1,
+      "taxable": true,
+      "systemId": "WARDPROD",
+      "portausCompanyId": 1,
+      "lastSalesOrderDate": "2024-03-18T19:59:49.000Z",
+      "lastReservationDate": null,
+      "balance": {
+        "draft": "0.00",
+        "total": "57.67",
+        "outstanding": "0.00",
+        "paid": "57.67",
+        "overdue": "0.00"
+      },
+      "contact": {
+        "id": 3113,
+        "firstName": "Marco",
+        "lastName": "Travaglini",
+        "email": "marco.travs@gmail.com",
+        "phone": "514-442-8112",
+        "phoneExt": null,
+        "sex": 1,
+        "birthDate": null,
+        "denomination": {
+          "id": 1,
+          "name": "Mister",
+          "shortName": "Mr."
+        },
+        "addresses": [
+          {
+            "id": 2723,
+            "street": "1069 Rue Ridgewood",
+            "city": "Laval",
+            "otherState": null,
+            "postalCode": "H7W 1K9",
+            "code": null,
+            "type": {
+              "id": 3,
+              "code": "PRINCIPAL"
+            },
+            "country": {
+              "id": 1,
+              "isoCode": "CA"
+            }
+          }
+        ]
+      },
+      "deliveryType": {
+        "id": 3,
+        "code": "DELIVERY",
+        "choice_custom_info": "SAQ",
+        "portausCompanyId": 1
+      },
+      "currency": {
+        "id": 1,
+        "code": "CAD"
+      },
+      "language": {
+        "id": 1,
+        "name": "Français",
+        "code": "fr",
+        "longCode": "fr-CA",
+        "cmsLanguage": true
+      },
+      "invoiceTerm": {
+        "id": 2,
+        "code": "NET_30",
+        "value": "P30D",
+        "order_": 3
+      },
+      "class": {
+        "id": 2,
+        "code": "Particulier",
+        "description": "Classe client regroupant tous les clients non licenciés",
+        "ind": "PARTICULIER",
+        "indAgencyType": "PARTICULIER",
+        "systemId": "WARDPROD",
+        "portausCompanyId": 1
+      },
+      "tags": [],
+      "paymentTypes": [
+        {
+          "id": 1,
+          "code": "CREDIT_CARD",
+          "configuration": null,
+          "type": 1,
+          "active": true,
+          "category": {
+            "id": 1,
+            "code": "CREDIT_CARD"
+          }
+        },
+        {
+          "id": 3,
+          "code": "BANK_TRANSFER_ONLINE",
+          "configuration": null,
+          "type": 1,
+          "active": true,
+          "category": {
+            "id": 3,
+            "code": "BANK_TRANSFER"
+          }
+        },
+        {
+          "id": 2,
+          "code": "CHECK_ONLINE",
+          "configuration": null,
+          "type": 1,
+          "active": true,
+          "category": {
+            "id": 2,
+            "code": "CHECK"
+          }
+        }
+      ],
+      "portausCompany": {
+        "id": 1,
+        "name": "Ward et associés",
+        "contactName": "David Ward",
+        "contactEmail": "david@wardetassocies.com",
+        "address": {
+          "city": "Montréal",
+          "state": "Québec",
+          "street": "1217 St-Zotique E",
+          "country": "Canada",
+          "postalCode": "H2S 1N6"
+        },
+        "phone": null,
+        "mobile": null,
+        "fiscalEndDay": 31,
+        "fiscalEndMonth": 12,
+        "systemId": "WARDPROD",
+        "customEmailFromInd": false,
+        "customEmailFrom": null,
+        "defaultDetailedInvoicePrices": true,
+        "invoiceTemplateShortId": "Hkl5Un-SDH",
+        "saqProcessModuleInd": false,
+        "invoicingModuleActive": true,
+        "indRoundingPrice": false,
+        "roundingStrategy": 1,
+        "externalAccountApiActive": false,
+        "code": null,
+        "automaticDelayReservation": false,
+        "reportCustomization": {
+          "priceRange": [
+            {
+              "max": 15,
+              "min": 0
+            },
+            {
+              "max": 30,
+              "min": 15
+            },
+            {
+              "max": 45,
+              "min": 30
+            },
+            {
+              "max": 55,
+              "min": 45
+            },
+            {
+              "max": 70,
+              "min": 55
+            },
+            {
+              "max": 85,
+              "min": 70
+            },
+            {
+              "max": 100,
+              "min": 85
+            }
+          ]
+        },
+        "invoice": {
+          "personnalizedInvoice": true,
+          "paymentInstruction": null,
+          "prefix": "INV"
+        },
+        "taxes": [
+          {
+            "id": 1,
+            "rate": 0.05,
+            "name": "TPS",
+            "number": "811808716"
+          },
+          {
+            "id": 2,
+            "rate": 0.09975,
+            "name": "TVQ",
+            "number": "1217685610"
+          }
+        ],
+        "currency": {
+          "id": 1,
+          "code": "CAD"
+        },
+        "agent": {
+          "number": "7527327"
+        },
+        "formattedAddress": {
+          "line1": "1217 St-Zotique E",
+          "line2": "Montréal, Québec",
+          "line3": "Canada, H2S 1N6"
+        }
+      }
+    },
+    {
+      "rank": "15",
+      "id": 2721,
+      "type": 0,
+      "name": "Elisapie ",
+      "usualName": null,
+      "lateFeeActivated": false,
+      "lateFeeNotificationActivated": false,
+      "gracePeriod": 30,
+      "indTypeFee": 0,
+      "fee": 5,
+      "reminderActivated": true,
+      "reminderType": null,
+      "nbDaysReminder": 3,
+      "audit": null,
+      "updatedAt": "2024-03-11T18:49:35.314Z",
+      "createdAt": "2024-03-11T18:49:35.314Z",
+      "active": true,
+      "customFields": [],
+      "extraInfo": null,
+      "invoiceBeforeProcessing": true,
+      "onlineInvoicingInd": true,
+      "emailCustomContent": null,
+      "sendInvoiceInAttachment": false,
+      "lockVersion": 1,
+      "taxable": true,
+      "systemId": "WARDPROD",
+      "portausCompanyId": 1,
+      "lastSalesOrderDate": null,
+      "lastReservationDate": null,
+      "balance": {
+        "draft": "0.00",
+        "total": "350.01",
+        "outstanding": "0.00",
+        "paid": "350.01",
+        "overdue": "0.00"
+      },
+      "contact": {
+        "id": 3109,
+        "firstName": "Elisapie",
+        "lastName": "",
+        "email": "",
+        "phone": "",
+        "phoneExt": null,
+        "sex": 0,
+        "birthDate": null,
+        "denomination": {
+          "id": 2,
+          "name": "Madam",
+          "shortName": "Mrs."
+        },
+        "addresses": []
+      },
+      "currency": {
+        "id": 1,
+        "code": "CAD"
+      },
+      "language": {
+        "id": 1,
+        "name": "Français",
+        "code": "fr",
+        "longCode": "fr-CA",
+        "cmsLanguage": true
+      },
+      "invoiceTerm": {
+        "id": 2,
+        "code": "NET_30",
+        "value": "P30D",
+        "order_": 3
+      },
+      "class": {
+        "id": 2,
+        "code": "Particulier",
+        "description": "Classe client regroupant tous les clients non licenciés",
+        "ind": "PARTICULIER",
+        "indAgencyType": "PARTICULIER",
+        "systemId": "WARDPROD",
+        "portausCompanyId": 1
+      },
+      "tags": [],
+      "paymentTypes": [
+        {
+          "id": 3,
+          "code": "BANK_TRANSFER_ONLINE",
+          "configuration": null,
+          "type": 1,
+          "active": true,
+          "category": {
+            "id": 3,
+            "code": "BANK_TRANSFER"
+          }
+        },
+        {
+          "id": 2,
+          "code": "CHECK_ONLINE",
+          "configuration": null,
+          "type": 1,
+          "active": true,
+          "category": {
+            "id": 2,
+            "code": "CHECK"
+          }
+        }
+      ],
+      "portausCompany": {
+        "id": 1,
+        "name": "Ward et associés",
+        "contactName": "David Ward",
+        "contactEmail": "david@wardetassocies.com",
+        "address": {
+          "city": "Montréal",
+          "state": "Québec",
+          "street": "1217 St-Zotique E",
+          "country": "Canada",
+          "postalCode": "H2S 1N6"
+        },
+        "phone": null,
+        "mobile": null,
+        "fiscalEndDay": 31,
+        "fiscalEndMonth": 12,
+        "systemId": "WARDPROD",
+        "customEmailFromInd": false,
+        "customEmailFrom": null,
+        "defaultDetailedInvoicePrices": true,
+        "invoiceTemplateShortId": "Hkl5Un-SDH",
+        "saqProcessModuleInd": false,
+        "invoicingModuleActive": true,
+        "indRoundingPrice": false,
+        "roundingStrategy": 1,
+        "externalAccountApiActive": false,
+        "code": null,
+        "automaticDelayReservation": false,
+        "reportCustomization": {
+          "priceRange": [
+            {
+              "max": 15,
+              "min": 0
+            },
+            {
+              "max": 30,
+              "min": 15
+            },
+            {
+              "max": 45,
+              "min": 30
+            },
+            {
+              "max": 55,
+              "min": 45
+            },
+            {
+              "max": 70,
+              "min": 55
+            },
+            {
+              "max": 85,
+              "min": 70
+            },
+            {
+              "max": 100,
+              "min": 85
+            }
+          ]
+        },
+        "invoice": {
+          "personnalizedInvoice": true,
+          "paymentInstruction": null,
+          "prefix": "INV"
+        },
+        "taxes": [
+          {
+            "id": 1,
+            "rate": 0.05,
+            "name": "TPS",
+            "number": "811808716"
+          },
+          {
+            "id": 2,
+            "rate": 0.09975,
+            "name": "TVQ",
+            "number": "1217685610"
+          }
+        ],
+        "currency": {
+          "id": 1,
+          "code": "CAD"
+        },
+        "agent": {
+          "number": "7527327"
+        },
+        "formattedAddress": {
+          "line1": "1217 St-Zotique E",
+          "line2": "Montréal, Québec",
+          "line3": "Canada, H2S 1N6"
+        }
+      }
+    },
+    {
+      "rank": "16",
+      "id": 2717,
+      "type": 0,
+      "name": "Bérangère Chateigner",
+      "usualName": null,
+      "lateFeeActivated": false,
+      "lateFeeNotificationActivated": false,
+      "gracePeriod": 30,
+      "indTypeFee": 0,
+      "fee": 5,
+      "reminderActivated": true,
+      "reminderType": null,
+      "nbDaysReminder": 3,
+      "audit": null,
+      "updatedAt": "2024-02-19T21:25:09.187Z",
+      "createdAt": "2024-02-19T21:24:28.402Z",
+      "active": true,
+      "customFields": [],
+      "extraInfo": null,
+      "invoiceBeforeProcessing": true,
+      "onlineInvoicingInd": true,
+      "emailCustomContent": {
+        "INVOICE_NOTICE": "null"
+      },
+      "sendInvoiceInAttachment": false,
+      "lockVersion": 1,
+      "taxable": true,
+      "systemId": "WARDPROD",
+      "portausCompanyId": 1,
+      "lastSalesOrderDate": null,
+      "lastReservationDate": null,
+      "balance": {
+        "draft": "0.00",
+        "total": "275.94",
+        "outstanding": "0.00",
+        "paid": "275.94",
+        "overdue": "0.00"
+      },
+      "contact": {
+        "id": 3099,
+        "firstName": "Bérangère",
+        "lastName": "Chateigner",
+        "email": "berangere@cardiganmtl.com",
+        "phone": "",
+        "phoneExt": null,
+        "sex": 0,
+        "birthDate": null,
+        "addresses": []
+      },
+      "deliveryType": {
+        "id": 4,
+        "code": "PICKUP_REP_BEFORE_15",
+        "choice_custom_info": null,
+        "portausCompanyId": 1
+      },
+      "currency": {
+        "id": 1,
+        "code": "CAD"
+      },
+      "language": {
+        "id": 1,
+        "name": "Français",
+        "code": "fr",
+        "longCode": "fr-CA",
+        "cmsLanguage": true
+      },
+      "invoiceTerm": {
+        "id": 2,
+        "code": "NET_30",
+        "value": "P30D",
+        "order_": 3
+      },
+      "class": {
+        "id": 2,
+        "code": "Particulier",
+        "description": "Classe client regroupant tous les clients non licenciés",
+        "ind": "PARTICULIER",
+        "indAgencyType": "PARTICULIER",
+        "systemId": "WARDPROD",
+        "portausCompanyId": 1
+      },
+      "tags": [],
+      "paymentTypes": [
+        {
+          "id": 3,
+          "code": "BANK_TRANSFER_ONLINE",
+          "configuration": null,
+          "type": 1,
+          "active": true,
+          "category": {
+            "id": 3,
+            "code": "BANK_TRANSFER"
+          }
+        },
+        {
+          "id": 1,
+          "code": "CREDIT_CARD",
+          "configuration": null,
+          "type": 1,
+          "active": true,
+          "category": {
+            "id": 1,
+            "code": "CREDIT_CARD"
+          }
+        },
+        {
+          "id": 2,
+          "code": "CHECK_ONLINE",
+          "configuration": null,
+          "type": 1,
+          "active": true,
+          "category": {
+            "id": 2,
+            "code": "CHECK"
+          }
+        }
+      ],
+      "portausCompany": {
+        "id": 1,
+        "name": "Ward et associés",
+        "contactName": "David Ward",
+        "contactEmail": "david@wardetassocies.com",
+        "address": {
+          "city": "Montréal",
+          "state": "Québec",
+          "street": "1217 St-Zotique E",
+          "country": "Canada",
+          "postalCode": "H2S 1N6"
+        },
+        "phone": null,
+        "mobile": null,
+        "fiscalEndDay": 31,
+        "fiscalEndMonth": 12,
+        "systemId": "WARDPROD",
+        "customEmailFromInd": false,
+        "customEmailFrom": null,
+        "defaultDetailedInvoicePrices": true,
+        "invoiceTemplateShortId": "Hkl5Un-SDH",
+        "saqProcessModuleInd": false,
+        "invoicingModuleActive": true,
+        "indRoundingPrice": false,
+        "roundingStrategy": 1,
+        "externalAccountApiActive": false,
+        "code": null,
+        "automaticDelayReservation": false,
+        "reportCustomization": {
+          "priceRange": [
+            {
+              "max": 15,
+              "min": 0
+            },
+            {
+              "max": 30,
+              "min": 15
+            },
+            {
+              "max": 45,
+              "min": 30
+            },
+            {
+              "max": 55,
+              "min": 45
+            },
+            {
+              "max": 70,
+              "min": 55
+            },
+            {
+              "max": 85,
+              "min": 70
+            },
+            {
+              "max": 100,
+              "min": 85
+            }
+          ]
+        },
+        "invoice": {
+          "personnalizedInvoice": true,
+          "paymentInstruction": null,
+          "prefix": "INV"
+        },
+        "taxes": [
+          {
+            "id": 1,
+            "rate": 0.05,
+            "name": "TPS",
+            "number": "811808716"
+          },
+          {
+            "id": 2,
+            "rate": 0.09975,
+            "name": "TVQ",
+            "number": "1217685610"
+          }
+        ],
+        "currency": {
+          "id": 1,
+          "code": "CAD"
+        },
+        "agent": {
+          "number": "7527327"
+        },
+        "formattedAddress": {
+          "line1": "1217 St-Zotique E",
+          "line2": "Montréal, Québec",
+          "line3": "Canada, H2S 1N6"
+        }
+      }
+    },
+    {
+      "rank": "17",
+      "id": 2714,
+      "type": 0,
+      "name": "Philippe Hébert",
+      "usualName": "Philippe Hébert",
+      "lateFeeActivated": false,
+      "lateFeeNotificationActivated": false,
+      "gracePeriod": 30,
+      "indTypeFee": 0,
+      "fee": 5,
+      "reminderActivated": true,
+      "reminderType": null,
+      "nbDaysReminder": 3,
+      "audit": null,
+      "updatedAt": "2024-02-19T15:15:04.213Z",
+      "createdAt": "2024-02-15T00:13:01.720Z",
+      "active": true,
+      "customFields": [],
+      "extraInfo": null,
+      "invoiceBeforeProcessing": true,
+      "onlineInvoicingInd": true,
+      "emailCustomContent": {
+        "INVOICE_NOTICE": "null"
+      },
+      "sendInvoiceInAttachment": false,
+      "lockVersion": 1,
+      "taxable": true,
+      "systemId": "WARDPROD",
+      "portausCompanyId": 1,
+      "lastSalesOrderDate": "2024-02-16T19:50:22.000Z",
+      "lastReservationDate": null,
+      "balance": {
+        "draft": "0.00",
+        "total": "33.39",
+        "outstanding": "0.00",
+        "paid": "33.39",
+        "overdue": "0.00"
+      },
+      "contact": {
+        "id": 3095,
+        "firstName": "Philippe",
+        "lastName": "Hébert",
+        "email": "philypon@gmail.com",
+        "phone": " 5149189513",
+        "phoneExt": null,
+        "sex": 1,
+        "birthDate": null,
+        "addresses": [
+          {
+            "id": 2714,
+            "street": "1423 rue Langevin",
+            "city": "Saint-Hubert",
+            "otherState": null,
+            "postalCode": "J4t 1X5",
+            "code": null,
+            "type": {
+              "id": 3,
+              "code": "PRINCIPAL"
+            },
+            "country": {
+              "id": 1,
+              "isoCode": "CA"
+            },
+            "state": {
+              "id": 1,
+              "name": "Quebec"
+            }
+          }
+        ]
+      },
+      "currency": {
+        "id": 1,
+        "code": "CAD"
+      },
+      "language": {
+        "id": 1,
+        "name": "Français",
+        "code": "fr",
+        "longCode": "fr-CA",
+        "cmsLanguage": true
+      },
+      "invoiceTerm": {
+        "id": 2,
+        "code": "NET_30",
+        "value": "P30D",
+        "order_": 3
+      },
+      "class": {
+        "id": 2,
+        "code": "Particulier",
+        "description": "Classe client regroupant tous les clients non licenciés",
+        "ind": "PARTICULIER",
+        "indAgencyType": "PARTICULIER",
+        "systemId": "WARDPROD",
+        "portausCompanyId": 1
+      },
+      "rep": {
+        "id": 2913,
+        "firstName": "Catherine",
+        "lastName": "St-Gelais Viau",
+        "email": "catherine@wardetassocies.com",
+        "phone": null,
+        "phoneExt": null,
+        "sex": null,
+        "birthDate": null,
+        "webAccess": true,
+        "systemId": "WARDPROD",
+        "roles": [
+          {
+            "id": 16,
+            "code": "SALES_REP",
+            "name": "Rep",
+            "weight": 960,
+            "createdAt": "2023-10-19T17:34:59.789Z",
+            "updatedAt": "2023-10-19T17:34:59.789Z"
+          },
+          {
+            "id": 7,
+            "code": "CRM_MANAGER",
+            "name": "CRM Manager",
+            "weight": 880,
+            "createdAt": "2023-11-02T00:00:00.000Z",
+            "updatedAt": "2023-11-02T00:00:00.000Z"
+          }
+        ],
+        "portausCompanies": [
+          {
+            "id": 1,
+            "active": true
+          }
+        ],
+        "active": true
+      },
+      "tags": [],
+      "paymentTypes": [
+        {
+          "id": 2,
+          "code": "CHECK_ONLINE",
+          "configuration": null,
+          "type": 1,
+          "active": true,
+          "category": {
+            "id": 2,
+            "code": "CHECK"
+          }
+        },
+        {
+          "id": 1,
+          "code": "CREDIT_CARD",
+          "configuration": null,
+          "type": 1,
+          "active": true,
+          "category": {
+            "id": 1,
+            "code": "CREDIT_CARD"
+          }
+        },
+        {
+          "id": 3,
+          "code": "BANK_TRANSFER_ONLINE",
+          "configuration": null,
+          "type": 1,
+          "active": true,
+          "category": {
+            "id": 3,
+            "code": "BANK_TRANSFER"
+          }
+        }
+      ],
+      "portausCompany": {
+        "id": 1,
+        "name": "Ward et associés",
+        "contactName": "David Ward",
+        "contactEmail": "david@wardetassocies.com",
+        "address": {
+          "city": "Montréal",
+          "state": "Québec",
+          "street": "1217 St-Zotique E",
+          "country": "Canada",
+          "postalCode": "H2S 1N6"
+        },
+        "phone": null,
+        "mobile": null,
+        "fiscalEndDay": 31,
+        "fiscalEndMonth": 12,
+        "systemId": "WARDPROD",
+        "customEmailFromInd": false,
+        "customEmailFrom": null,
+        "defaultDetailedInvoicePrices": true,
+        "invoiceTemplateShortId": "Hkl5Un-SDH",
+        "saqProcessModuleInd": false,
+        "invoicingModuleActive": true,
+        "indRoundingPrice": false,
+        "roundingStrategy": 1,
+        "externalAccountApiActive": false,
+        "code": null,
+        "automaticDelayReservation": false,
+        "reportCustomization": {
+          "priceRange": [
+            {
+              "max": 15,
+              "min": 0
+            },
+            {
+              "max": 30,
+              "min": 15
+            },
+            {
+              "max": 45,
+              "min": 30
+            },
+            {
+              "max": 55,
+              "min": 45
+            },
+            {
+              "max": 70,
+              "min": 55
+            },
+            {
+              "max": 85,
+              "min": 70
+            },
+            {
+              "max": 100,
+              "min": 85
+            }
+          ]
+        },
+        "invoice": {
+          "personnalizedInvoice": true,
+          "paymentInstruction": null,
+          "prefix": "INV"
+        },
+        "taxes": [
+          {
+            "id": 1,
+            "rate": 0.05,
+            "name": "TPS",
+            "number": "811808716"
+          },
+          {
+            "id": 2,
+            "rate": 0.09975,
+            "name": "TVQ",
+            "number": "1217685610"
+          }
+        ],
+        "currency": {
+          "id": 1,
+          "code": "CAD"
+        },
+        "agent": {
+          "number": "7527327"
+        },
+        "formattedAddress": {
+          "line1": "1217 St-Zotique E",
+          "line2": "Montréal, Québec",
+          "line3": "Canada, H2S 1N6"
+        }
+      }
+    },
+    {
+      "rank": "18",
+      "id": 2712,
+      "type": 0,
+      "name": "Jacob Saumur-Gouin",
+      "usualName": null,
+      "lateFeeActivated": false,
+      "lateFeeNotificationActivated": false,
+      "gracePeriod": 30,
+      "indTypeFee": 0,
+      "fee": 5,
+      "reminderActivated": true,
+      "reminderType": null,
+      "nbDaysReminder": 3,
+      "audit": null,
+      "updatedAt": "2024-02-14T18:49:30.567Z",
+      "createdAt": "2024-02-13T13:38:51.510Z",
+      "active": true,
+      "customFields": [],
+      "extraInfo": null,
+      "invoiceBeforeProcessing": true,
+      "onlineInvoicingInd": true,
+      "emailCustomContent": {
+        "INVOICE_NOTICE": "null"
+      },
+      "sendInvoiceInAttachment": false,
+      "lockVersion": 1,
+      "taxable": true,
+      "systemId": "WARDPROD",
+      "portausCompanyId": 1,
+      "lastSalesOrderDate": "2024-02-12T19:04:23.000Z",
+      "lastReservationDate": null,
+      "balance": {
+        "draft": "0.00",
+        "total": "0.00",
+        "outstanding": "0.00",
+        "paid": "0.00",
+        "overdue": "0.00"
+      },
+      "contact": {
+        "id": 3093,
+        "firstName": "Jacob",
+        "lastName": "Saumur-Gouin",
+        "email": "jsaumurgouin@brigil.com",
+        "phone": "(819) 209-7978",
+        "phoneExt": null,
+        "sex": 1,
+        "birthDate": null,
+        "denomination": {
+          "id": 1,
+          "name": "Mister",
+          "shortName": "Mr."
+        },
+        "addresses": [
+          {
+            "id": 2711,
+            "street": "425 Bd Saint-Joseph",
+            "city": "Gatineau",
+            "otherState": null,
+            "postalCode": "J8Y 3Z8",
+            "code": null,
+            "type": {
+              "id": 1,
+              "code": "BILLING"
+            },
+            "country": {
+              "id": 1,
+              "isoCode": "CA"
+            },
+            "state": {
+              "id": 1,
+              "name": "Quebec"
+            }
+          }
+        ]
+      },
+      "currency": {
+        "id": 1,
+        "code": "CAD"
+      },
+      "language": {
+        "id": 1,
+        "name": "Français",
+        "code": "fr",
+        "longCode": "fr-CA",
+        "cmsLanguage": true
+      },
+      "invoiceTerm": {
+        "id": 2,
+        "code": "NET_30",
+        "value": "P30D",
+        "order_": 3
+      },
+      "class": {
+        "id": 2,
+        "code": "Particulier",
+        "description": "Classe client regroupant tous les clients non licenciés",
+        "ind": "PARTICULIER",
+        "indAgencyType": "PARTICULIER",
+        "systemId": "WARDPROD",
+        "portausCompanyId": 1
+      },
+      "tags": [],
+      "paymentTypes": [
+        {
+          "id": 3,
+          "code": "BANK_TRANSFER_ONLINE",
+          "configuration": null,
+          "type": 1,
+          "active": true,
+          "category": {
+            "id": 3,
+            "code": "BANK_TRANSFER"
+          }
+        },
+        {
+          "id": 2,
+          "code": "CHECK_ONLINE",
+          "configuration": null,
+          "type": 1,
+          "active": true,
+          "category": {
+            "id": 2,
+            "code": "CHECK"
+          }
+        },
+        {
+          "id": 1,
+          "code": "CREDIT_CARD",
+          "configuration": null,
+          "type": 1,
+          "active": true,
+          "category": {
+            "id": 1,
+            "code": "CREDIT_CARD"
+          }
+        }
+      ],
+      "portausCompany": {
+        "id": 1,
+        "name": "Ward et associés",
+        "contactName": "David Ward",
+        "contactEmail": "david@wardetassocies.com",
+        "address": {
+          "city": "Montréal",
+          "state": "Québec",
+          "street": "1217 St-Zotique E",
+          "country": "Canada",
+          "postalCode": "H2S 1N6"
+        },
+        "phone": null,
+        "mobile": null,
+        "fiscalEndDay": 31,
+        "fiscalEndMonth": 12,
+        "systemId": "WARDPROD",
+        "customEmailFromInd": false,
+        "customEmailFrom": null,
+        "defaultDetailedInvoicePrices": true,
+        "invoiceTemplateShortId": "Hkl5Un-SDH",
+        "saqProcessModuleInd": false,
+        "invoicingModuleActive": true,
+        "indRoundingPrice": false,
+        "roundingStrategy": 1,
+        "externalAccountApiActive": false,
+        "code": null,
+        "automaticDelayReservation": false,
+        "reportCustomization": {
+          "priceRange": [
+            {
+              "max": 15,
+              "min": 0
+            },
+            {
+              "max": 30,
+              "min": 15
+            },
+            {
+              "max": 45,
+              "min": 30
+            },
+            {
+              "max": 55,
+              "min": 45
+            },
+            {
+              "max": 70,
+              "min": 55
+            },
+            {
+              "max": 85,
+              "min": 70
+            },
+            {
+              "max": 100,
+              "min": 85
+            }
+          ]
+        },
+        "invoice": {
+          "personnalizedInvoice": true,
+          "paymentInstruction": null,
+          "prefix": "INV"
+        },
+        "taxes": [
+          {
+            "id": 1,
+            "rate": 0.05,
+            "name": "TPS",
+            "number": "811808716"
+          },
+          {
+            "id": 2,
+            "rate": 0.09975,
+            "name": "TVQ",
+            "number": "1217685610"
+          }
+        ],
+        "currency": {
+          "id": 1,
+          "code": "CAD"
+        },
+        "agent": {
+          "number": "7527327"
+        },
+        "formattedAddress": {
+          "line1": "1217 St-Zotique E",
+          "line2": "Montréal, Québec",
+          "line3": "Canada, H2S 1N6"
+        }
+      }
+    },
+    {
+      "rank": "19",
+      "id": 2711,
+      "type": 0,
+      "name": "Mathilde Capezzuoli",
+      "usualName": null,
+      "lateFeeActivated": false,
+      "lateFeeNotificationActivated": false,
+      "gracePeriod": 30,
+      "indTypeFee": 0,
+      "fee": 5,
+      "reminderActivated": true,
+      "reminderType": null,
+      "nbDaysReminder": 3,
+      "audit": null,
+      "updatedAt": "2024-02-12T21:24:19.475Z",
+      "createdAt": "2024-02-12T21:21:24.496Z",
+      "active": true,
+      "customFields": [],
+      "extraInfo": null,
+      "invoiceBeforeProcessing": true,
+      "onlineInvoicingInd": true,
+      "emailCustomContent": {
+        "INVOICE_NOTICE": "null"
+      },
+      "sendInvoiceInAttachment": false,
+      "lockVersion": 1,
+      "taxable": true,
+      "systemId": "WARDPROD",
+      "portausCompanyId": 1,
+      "lastSalesOrderDate": null,
+      "lastReservationDate": null,
+      "balance": {
+        "draft": "0.00",
+        "total": "137.97",
+        "outstanding": "0.00",
+        "paid": "137.97",
+        "overdue": "0.00"
+      },
+      "contact": {
+        "id": 3092,
+        "firstName": "Mathilde",
+        "lastName": "Capezzuoli",
+        "email": "mathilde@cardiganmtl.com",
+        "phone": "(514) 333-3333",
+        "phoneExt": null,
+        "sex": 0,
+        "birthDate": null,
+        "addresses": []
+      },
+      "deliveryType": {
+        "id": 4,
+        "code": "PICKUP_REP_BEFORE_15",
+        "choice_custom_info": null,
+        "portausCompanyId": 1
+      },
+      "currency": {
+        "id": 1,
+        "code": "CAD"
+      },
+      "language": {
+        "id": 1,
+        "name": "Français",
+        "code": "fr",
+        "longCode": "fr-CA",
+        "cmsLanguage": true
+      },
+      "invoiceTerm": {
+        "id": 2,
+        "code": "NET_30",
+        "value": "P30D",
+        "order_": 3
+      },
+      "class": {
+        "id": 2,
+        "code": "Particulier",
+        "description": "Classe client regroupant tous les clients non licenciés",
+        "ind": "PARTICULIER",
+        "indAgencyType": "PARTICULIER",
+        "systemId": "WARDPROD",
+        "portausCompanyId": 1
+      },
+      "tags": [],
+      "paymentTypes": [
+        {
+          "id": 2,
+          "code": "CHECK_ONLINE",
+          "configuration": null,
+          "type": 1,
+          "active": true,
+          "category": {
+            "id": 2,
+            "code": "CHECK"
+          }
+        },
+        {
+          "id": 1,
+          "code": "CREDIT_CARD",
+          "configuration": null,
+          "type": 1,
+          "active": true,
+          "category": {
+            "id": 1,
+            "code": "CREDIT_CARD"
+          }
+        },
+        {
+          "id": 3,
+          "code": "BANK_TRANSFER_ONLINE",
+          "configuration": null,
+          "type": 1,
+          "active": true,
+          "category": {
+            "id": 3,
+            "code": "BANK_TRANSFER"
+          }
+        }
+      ],
+      "portausCompany": {
+        "id": 1,
+        "name": "Ward et associés",
+        "contactName": "David Ward",
+        "contactEmail": "david@wardetassocies.com",
+        "address": {
+          "city": "Montréal",
+          "state": "Québec",
+          "street": "1217 St-Zotique E",
+          "country": "Canada",
+          "postalCode": "H2S 1N6"
+        },
+        "phone": null,
+        "mobile": null,
+        "fiscalEndDay": 31,
+        "fiscalEndMonth": 12,
+        "systemId": "WARDPROD",
+        "customEmailFromInd": false,
+        "customEmailFrom": null,
+        "defaultDetailedInvoicePrices": true,
+        "invoiceTemplateShortId": "Hkl5Un-SDH",
+        "saqProcessModuleInd": false,
+        "invoicingModuleActive": true,
+        "indRoundingPrice": false,
+        "roundingStrategy": 1,
+        "externalAccountApiActive": false,
+        "code": null,
+        "automaticDelayReservation": false,
+        "reportCustomization": {
+          "priceRange": [
+            {
+              "max": 15,
+              "min": 0
+            },
+            {
+              "max": 30,
+              "min": 15
+            },
+            {
+              "max": 45,
+              "min": 30
+            },
+            {
+              "max": 55,
+              "min": 45
+            },
+            {
+              "max": 70,
+              "min": 55
+            },
+            {
+              "max": 85,
+              "min": 70
+            },
+            {
+              "max": 100,
+              "min": 85
+            }
+          ]
+        },
+        "invoice": {
+          "personnalizedInvoice": true,
+          "paymentInstruction": null,
+          "prefix": "INV"
+        },
+        "taxes": [
+          {
+            "id": 1,
+            "rate": 0.05,
+            "name": "TPS",
+            "number": "811808716"
+          },
+          {
+            "id": 2,
+            "rate": 0.09975,
+            "name": "TVQ",
+            "number": "1217685610"
+          }
+        ],
+        "currency": {
+          "id": 1,
+          "code": "CAD"
+        },
+        "agent": {
+          "number": "7527327"
+        },
+        "formattedAddress": {
+          "line1": "1217 St-Zotique E",
+          "line2": "Montréal, Québec",
+          "line3": "Canada, H2S 1N6"
+        }
+      }
+    },
+    {
+      "rank": "20",
+      "id": 2710,
+      "type": 0,
+      "name": "Patrice Ryan",
+      "usualName": null,
+      "lateFeeActivated": false,
+      "lateFeeNotificationActivated": false,
+      "gracePeriod": 30,
+      "indTypeFee": 0,
+      "fee": 5,
+      "reminderActivated": true,
+      "reminderType": null,
+      "nbDaysReminder": 3,
+      "audit": null,
+      "updatedAt": "2024-02-12T19:09:04.912Z",
+      "createdAt": "2024-02-12T19:07:26.344Z",
+      "active": true,
+      "customFields": [],
+      "extraInfo": {
+        "location": {
+          "id": 183,
+          "code": "SAQ",
+          "content": {
+            "city": "Montréal",
+            "phone": "514 483-1355",
+            "number": "23086",
+            "address": "4833, rue Sherbrooke Ouest"
+          }
+        }
+      },
+      "invoiceBeforeProcessing": true,
+      "onlineInvoicingInd": true,
+      "emailCustomContent": {
+        "INVOICE_NOTICE": "null"
+      },
+      "sendInvoiceInAttachment": false,
+      "lockVersion": 1,
+      "taxable": true,
+      "systemId": "WARDPROD",
+      "portausCompanyId": 1,
+      "lastSalesOrderDate": "2024-02-12T19:07:37.000Z",
+      "lastReservationDate": null,
+      "balance": {
+        "draft": "0.00",
+        "total": "41.12",
+        "outstanding": "0.00",
+        "paid": "41.12",
+        "overdue": "0.00"
+      },
+      "contact": {
+        "id": 3091,
+        "firstName": "Patrice",
+        "lastName": "Ryan",
+        "email": "pryan@ryanap.com",
+        "phone": "514.814.6895",
+        "phoneExt": null,
+        "sex": null,
+        "birthDate": null,
+        "addresses": [
+          {
+            "id": 2710,
+            "street": "2121 rue Wellington",
+            "city": " Montréal ",
+            "otherState": null,
+            "postalCode": "H3K 1X1",
+            "code": null,
+            "type": {
+              "id": 3,
+              "code": "PRINCIPAL"
+            },
+            "country": {
+              "id": 1,
+              "isoCode": "CA"
+            }
+          }
+        ]
+      },
+      "deliveryType": {
+        "id": 3,
+        "code": "DELIVERY",
+        "choice_custom_info": "SAQ",
+        "portausCompanyId": 1
+      },
+      "currency": {
+        "id": 1,
+        "code": "CAD"
+      },
+      "language": {
+        "id": 1,
+        "name": "Français",
+        "code": "fr",
+        "longCode": "fr-CA",
+        "cmsLanguage": true
+      },
+      "invoiceTerm": {
+        "id": 2,
+        "code": "NET_30",
+        "value": "P30D",
+        "order_": 3
+      },
+      "class": {
+        "id": 2,
+        "code": "Particulier",
+        "description": "Classe client regroupant tous les clients non licenciés",
+        "ind": "PARTICULIER",
+        "indAgencyType": "PARTICULIER",
+        "systemId": "WARDPROD",
+        "portausCompanyId": 1
+      },
+      "tags": [],
+      "paymentTypes": [
+        {
+          "id": 3,
+          "code": "BANK_TRANSFER_ONLINE",
+          "configuration": null,
+          "type": 1,
+          "active": true,
+          "category": {
+            "id": 3,
+            "code": "BANK_TRANSFER"
+          }
+        },
+        {
+          "id": 1,
+          "code": "CREDIT_CARD",
+          "configuration": null,
+          "type": 1,
+          "active": true,
+          "category": {
+            "id": 1,
+            "code": "CREDIT_CARD"
+          }
+        },
+        {
+          "id": 2,
+          "code": "CHECK_ONLINE",
+          "configuration": null,
+          "type": 1,
+          "active": true,
+          "category": {
+            "id": 2,
+            "code": "CHECK"
+          }
+        }
+      ],
+      "portausCompany": {
+        "id": 1,
+        "name": "Ward et associés",
+        "contactName": "David Ward",
+        "contactEmail": "david@wardetassocies.com",
+        "address": {
+          "city": "Montréal",
+          "state": "Québec",
+          "street": "1217 St-Zotique E",
+          "country": "Canada",
+          "postalCode": "H2S 1N6"
+        },
+        "phone": null,
+        "mobile": null,
+        "fiscalEndDay": 31,
+        "fiscalEndMonth": 12,
+        "systemId": "WARDPROD",
+        "customEmailFromInd": false,
+        "customEmailFrom": null,
+        "defaultDetailedInvoicePrices": true,
+        "invoiceTemplateShortId": "Hkl5Un-SDH",
+        "saqProcessModuleInd": false,
+        "invoicingModuleActive": true,
+        "indRoundingPrice": false,
+        "roundingStrategy": 1,
+        "externalAccountApiActive": false,
+        "code": null,
+        "automaticDelayReservation": false,
+        "reportCustomization": {
+          "priceRange": [
+            {
+              "max": 15,
+              "min": 0
+            },
+            {
+              "max": 30,
+              "min": 15
+            },
+            {
+              "max": 45,
+              "min": 30
+            },
+            {
+              "max": 55,
+              "min": 45
+            },
+            {
+              "max": 70,
+              "min": 55
+            },
+            {
+              "max": 85,
+              "min": 70
+            },
+            {
+              "max": 100,
+              "min": 85
+            }
+          ]
+        },
+        "invoice": {
+          "personnalizedInvoice": true,
+          "paymentInstruction": null,
+          "prefix": "INV"
+        },
+        "taxes": [
+          {
+            "id": 1,
+            "rate": 0.05,
+            "name": "TPS",
+            "number": "811808716"
+          },
+          {
+            "id": 2,
+            "rate": 0.09975,
+            "name": "TVQ",
+            "number": "1217685610"
+          }
+        ],
+        "currency": {
+          "id": 1,
+          "code": "CAD"
+        },
+        "agent": {
+          "number": "7527327"
+        },
+        "formattedAddress": {
+          "line1": "1217 St-Zotique E",
+          "line2": "Montréal, Québec",
+          "line3": "Canada, H2S 1N6"
+        }
+      }
+    }
+  ],
+  "count": 2112,
+  "pages": 106,
+  "page": 1
+}

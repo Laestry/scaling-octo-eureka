@@ -5,7 +5,7 @@
 
     export let title = '';
 
-    let closed = true;
+    export let closed = true;
 </script>
 
 <div

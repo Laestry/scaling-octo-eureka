@@ -1,0 +1,16 @@
+curl 'https://api-test-wardetassocies.portaus.net/API/v1/admin/customers/?orderBy=createdAt&direction=DESC&primary-only=true&active=true&type\[\]=0&searchTerms=&limit=20&page=1' \
+  -H 'accept: application/json, text/plain, */*' \
+  -H 'accept-language: en-US' \
+  -H 'authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OCwiZW1haWwiOiJhbGV4YW5kcmVAd2FyZGV0YXNzb2NpZXMuY29tIiwidXVpZCI6ImJlZWU4YzUwLTEzM2UtMTFmMC1iMWRiLWEzYzFiZDQzNmNmNSIsImlhdCI6MTc0Mzk4MjA2NiwiZXhwIjoxNzQ0MDI1MjY2fQ.K5BqWlUuJCgjKklMrgnft1MYvwSIustnse_w56u2iCY' \
+  -H 'if-none-match: W/"fd39-HS7EVvTWlBdHfAZ+g1si2E+1ALo"' \
+  -H 'origin: https://test-wardetassocies.portaus.net' \
+  -H 'priority: u=1, i' \
+  -H 'referer: https://test-wardetassocies.portaus.net/' \
+  -H 'sec-ch-ua: "Chromium";v="134", "Not:A-Brand";v="24", "Google Chrome";v="134"' \
+  -H 'sec-ch-ua-mobile: ?0' \
+  -H 'sec-ch-ua-platform: "macOS"' \
+  -H 'sec-fetch-dest: empty' \
+  -H 'sec-fetch-mode: cors' \
+  -H 'sec-fetch-site: same-site' \
+  -H 'user-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36' \
+  -H 'x-portaus-context: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJTWVNURU1fSUQiOiJXQVJEUFJPRCIsIlBPUlRBVVNfQ0lFX0lEIjoxLCJ1dWlkIjoiYmVlZThjNTItMTMzZS0xMWYwLWIxZGItYTNjMWJkNDM2Y2Y1IiwiaWF0IjoxNzQzOTgyMDY2fQ.A8_RAYjH9S3kUCvvGQlcplochjTivA4M2SOaSUrzgm4'

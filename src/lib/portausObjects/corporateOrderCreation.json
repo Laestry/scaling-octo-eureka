@@ -1,0 +1,116 @@
+{
+  "rank": "1",
+  "id": 12624,
+  "soNumber": "SO0000024642",
+  "date": "2025-04-06T23:40:55.000Z",
+  "expectedDeliveryDate": null,
+  "deliveryFee": null,
+  "reference": "",
+  "extraInfo": {
+    "location": null
+  },
+  "subTotal": 169.02,
+  "total": 194.33,
+  "taxes": [
+    {
+      "rate": 0.05,
+      "label": "TPS",
+      "total": 8.45,
+      "billable": 1.31,
+      "taxNumber": "811808716",
+      "taxableAmount": 169.02,
+      "billableTaxableAmount": 26.28
+    },
+    {
+      "rate": 0.09975,
+      "label": "TVQ",
+      "total": 16.86,
+      "billable": 2.62,
+      "taxNumber": "1217685610",
+      "taxableAmount": 169.02,
+      "billableTaxableAmount": 26.28
+    }
+  ],
+  "invoicedAt": null,
+  "createdAt": "2025-04-06T23:42:25.000Z",
+  "updatedAt": "2025-04-06T23:42:25.000Z",
+  "notes": "",
+  "discount": null,
+  "origin": "PORTAUS",
+  "billingContact": {
+    "id": 3165
+  },
+  "shippingContact": {
+    "id": 3165
+  },
+  "customer": {
+    "id": 2758
+  },
+  "rep": {
+    "id": 3163,
+    "firstName": "Ward",
+    "lastName": "Website"
+  },
+  "tags": [],
+  "status": {
+    "id": 13,
+    "code": "TO_PROCESS",
+    "weight": 10
+  },
+  "lines": [
+    {
+      "id": 26152,
+      "qty": 6,
+      "puid": "61c01838-ea00-461a-9a76-c414a6c80c23",
+      "prices": [
+        {
+          "label": "DEFAULT_PRODUCT_PRICE",
+          "price": 23.79,
+          "taxable": true,
+          "editState": false,
+          "productId": 240
+        },
+        {
+          "label": "PRODUCT_AGENCY_FEE",
+          "price": 4.38,
+          "taxable": true,
+          "editState": false,
+          "productId": 1
+        }
+      ],
+      "credit": null,
+      "discount": null,
+      "subTotal": 169.02,
+      "subTotalBrut": 169.02,
+      "invoicedItem": null,
+      "product": {
+        "id": 240
+      }
+    }
+  ],
+  "deliveryType": {
+    "id": 2,
+    "code": "CUSTOMER_DELIVERY_9H",
+    "choiceCustomInfo": null
+  },
+  "statusLogs": [],
+  "createdBy": {
+    "id": 8,
+    "firstName": "Alexandre",
+    "lastName": "Boily",
+    "email": "alexandre@wardetassocies.com"
+  },
+  "updatedBy": {
+    "id": 8,
+    "firstName": "Alexandre",
+    "lastName": "Boily",
+    "email": "alexandre@wardetassocies.com"
+  },
+  "invoices": [],
+  "shippingAddress": {
+    "id": 2759
+  },
+  "billingAddress": {
+    "id": 2759
+  }
+}

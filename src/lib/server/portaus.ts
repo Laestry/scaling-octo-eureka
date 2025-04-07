@@ -16,6 +16,7 @@ type Tokens = {
 const methods: Record<keyof ApiTypes.ResMap, 'GET' | 'POST'> = {
     '/auth/login': 'POST',
     '/API/latest/admin/inventories/1/products': 'GET',
+    '/API/v1/admin/customers': 'GET',
     '/api/v1/payments/intents': 'POST',
     '/api/v1/saq-branches': 'GET' // new endpoint added here
 };
@@ -48,16 +49,9 @@ async function request<P extends keyof ApiTypes.ResMap>({
         'content-type': method === 'POST' ? 'application/json' : ''
     };
 
-    // For endpoints other than payment intents, add token-based headers if provided
-    if (tokens && path !== '/api/v1/payments/intents') {
-        headers['authorization'] = tokens.accessToken;
-        headers['x-portaus-context'] = tokens.contextToken;
-    }
-
-    // For the payment intents and SAQ branches endpoints, generate a JWT containing the API key
-    // Note: getSaqBranches uses '/API/latest/admin/saq-branches' which is different from the method record key.
-    if (path === '/api/v1/payments/intents' || path === '/API/latest/admin/saq-branches') {
-        headers['apikey'] = generateApiKeyJWT();
+    if (path != '/auth/login') {
+        headers['authorization'] = tokens!.accessToken;
+        headers['x-portaus-context'] = tokens!.contextToken;
     }
 
     const res = await fetch(`${PORTAUS_BASE}${path}${query}`, {
@@ -124,7 +118,6 @@ export const PortausApi = {
         console.log('res', res);
         return res;
     },
-
     processProduct(obj: ApiTypes.List) {
         const alcohol = (parseFloat(obj.item?.extraInfo?.alcohol || '') || 0) / 100;
         const quantity = Math.max(obj.quantity['packaged'] || 0, 0);
@@ -174,17 +167,6 @@ export const PortausApi = {
         } as const;
     },
 
-    async createPaymentIntent(payload: ApiTypes.PaymentIntentPayload, tokens?: Tokens) {
-        const res = await request({
-            tokens,
-            path: '/api/v1/payments/intents',
-            body: payload
-        });
-        console.log('createPaymentIntent response', res);
-        return res as ApiTypes.PaymentIntentResponse;
-    },
-
-    // New function for retrieving SAQ branches.
     async getSaqBranches(tokens?: Tokens) {
         const res = await request({
             tokens,
@@ -192,6 +174,38 @@ export const PortausApi = {
         });
         console.log('getSaqBranches response', res);
         return res;
+    },
+
+    async getIndividualCustomers(page = 1, tokens: Tokens) {
+        const res = await request({
+            tokens,
+            path: '/API/v1/admin/customers',
+            body: {
+                orderBy: 'createdAt',
+                direction: 'DESC',
+                'primary-only': 'true',
+                active: 'true',
+                searchTerms: '',
+                limit: '50',
+                page: String(page),
+                'type[]': '0'
+            }
+        });
+        console.log('getCustomers response', res);
+        return res;
+    },
+    processCustomer(obj: ApiTypes.List) {
+        return {
+            id: obj.id,
+            email: obj.contact?.email || '',
+            billing_contact: obj.contact,
+            billing_address:
+                obj.contact?.addresses.find((addr) => addr.type?.code === 'BILLING') ||
+                obj.contact?.addresses.find((addr) => addr.type?.code === 'PRINCIPAL') ||
+                null,
+            shipping_contact: null,
+            shipping_address: null
+        } as const;
     }
 };
 
