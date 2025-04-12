@@ -9,6 +9,7 @@
     import { goto } from '$app/navigation';
     import CartItem from './CartItem.svelte';
     import { isPrixResto } from '$lib/store';
+    import { pb } from '$lib/pocketbase';
 
     async function createCheckout() {
         // Build checkout items from the cart store
@@ -119,18 +120,115 @@
         }
     }
 
-    let isFinalize = false;
+    let isFinalize = true;
+
+    let emailAccount: string;
+    let emailAccountInput: Input;
+    let existingAccount;
+    let existingContact;
+    let foundCustomer: boolean = false;
+    let hasAccount: boolean = false;
+    let checked: boolean = false;
+    let checking: boolean = false;
+    async function handleCheckForAccount() {
+        checking = true;
+        checked = false;
+        if (!emailAccountInput.handleValidate()) return;
+        console.log('handleCheckForAccount start');
+        try {
+            existingAccount = await pb.collection('users').getOne(`email="${emailAccount}"`);
+            foundCustomer = true;
+            existingContact = await pb.collection('customer_emails').getOne(`email="${emailAccount}"`);
+        } catch (e) {
+            console.log(e);
+        }
+        checking = false;
+        checked = true;
+        console.log('handleCheckForAccount', existingAccount);
+    }
+
+    let passwordAccountInput: Input;
+    let passwordAccount: string;
+    let register = false;
 </script>
 
-<div class="w-full flex justify-center">
+<div class="w-full flex justify-center mt-[53px]">
     <div class="lg:w-[1136px] md:w-[760px] w-[300px]">
         {#if isFinalize}
             <div transition:fly={{ y: -100, duration: 300 }}>
-                <hr class="mt-[53px] mb-4 border-wpink" />
+                <div class="flex flex-col w-full md:gap-1 gap-0 mb-4">
+                    <div class="flex gap-4">
+                        <div class="text-base text-nowrap w-[176px]">Votre Courriel</div>
+
+                        <form class="flex flex-1 flex-wrap gap-y-2 gap-x-4">
+                            <Input
+                                bind:this={emailAccountInput}
+                                bind:value={emailAccount}
+                                type="email"
+                                autocomplete="email"
+                                class="lg:max-w-[268px] w-full"
+                                placeholder="Courriel"
+                                hint="Courriel valide requis"
+                                validate={{
+                                    type: 'string',
+                                    pattern: '^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$',
+                                    maxLength: 254
+                                }}
+                            />
+                            {#if hasAccount}
+                                <Input
+                                    bind:this={passwordAccountInput}
+                                    bind:value={passwordAccount}
+                                    type="password"
+                                    autocomplete="password"
+                                    class="lg:max-w-[268px] w-full"
+                                    placeholder="Mot de passe"
+                                    hint="Mot de passe"
+                                    validate={{
+                                        type: 'string',
+                                        pattern: '^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$',
+                                        maxLength: 254
+                                    }}
+                                />
+                            {:else if foundCustomer || register}
+                                <Input
+                                    bind:this={passwordAccountInput}
+                                    bind:value={passwordAccount}
+                                    type="password"
+                                    autocomplete="new-password"
+                                    class="lg:max-w-[268px] w-full"
+                                    placeholder="Mot de passe"
+                                    hint="Mot de passe"
+                                    validate={{
+                                        type: 'string',
+                                        pattern: '^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$',
+                                        maxLength: 254
+                                    }}
+                                />
+                            {/if}
+
+                            <button
+                                on:click={handleCheckForAccount}
+                                class="abutton bg-wred text-white text-base w-fit rounded-3xl px-[6px] h-[32px]"
+                            >
+                                Vérifier
+                            </button>
+                        </form>
+                    </div>
+                    <span class="text-xs">
+                        Si vous avez déjà commandé chez nous, utilisez l’adresse email associée à votre commande.
+                        <br />Sinon, entrez votre email pour créer un nouveau compte.
+                        <button class="underline text-wblue" on:click={() => (register = !register)}
+                            >J’ai déjà un compte</button
+                        >
+                    </span>
+                </div>
+
+                <hr class=" mb-4 border-wpink" />
 
                 <div class="flex lg:flex-row flex-col w-full md:gap-4 gap-0" bind:this={formEl}>
                     <div class="text-base text-nowrap w-[176px]">Pour la commande</div>
-                    <div class="flex flex-1 flex-wrap gap-y-2 gap-x-4">
+                    <form class="flex flex-1 flex-wrap gap-y-2 gap-x-4">
                         <Input
                             placeholder="Prénom"
                             class="w-full"
@@ -195,7 +293,7 @@
                             <span class="text-xs">Inscrivez-moi à l’infolettre.</span>
                             <Toggle onText="Oui!" offText="Non" />
                         </div>
-                    </div>
+                    </form>
                 </div>
 
                 <div class="flex md:flex-row flex-col w-full md:gap-4 gap-0 md:mt-[40px] mt-[20px]">
@@ -216,7 +314,7 @@
             </div>
         {/if}
 
-        <hr class={isFinalize ? 'md:mt-[18px] mt-[0px]' : 'mt-[53px]'} />
+        <hr class={isFinalize ? 'md:mt-[18px] mt-[0px]' : ''} />
         <div class="">
             <div class="  flex lg:flex-col lg:gap-0 flex-wrap gap-2 justify-between">
                 {#each $cart as item (item.id)}
@@ -283,3 +381,6 @@
         </div>
     </div>
 </div>
+
+<style>
+</style>

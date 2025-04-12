@@ -253,7 +253,14 @@
                     >
                         <span>{opt.label}</span>
                         {#if multiple && selectedStates[index]}
-                            <svg width="9" height="9" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                            <svg
+                                class="rotate-45"
+                                width="9"
+                                height="9"
+                                viewBox="0 0 100 100"
+                                xmlns="http://www.w3.org/2000/svg"
+                            >
+                                <line class="line" x1="50" y1="10" x2="50" y2="90" stroke-width="10" />
                                 <line class="line" x1="90" y1="50" x2="10" y2="50" stroke-width="10" />
                             </svg>
                         {/if}
@@ -317,7 +324,7 @@
             align-items: center;
             transition: background 0.2s;
             &:hover {
-                background: var(--red);
+                color: var(--pink);
             }
         }
     }

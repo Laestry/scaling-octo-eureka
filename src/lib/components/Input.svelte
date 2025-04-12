@@ -4,6 +4,7 @@
     export let validate: object | undefined;
     export let hint;
     export let placeholder: string;
+    export let autocomplete: string = '';
 
     let error = false;
     let validateFn;
@@ -22,11 +23,12 @@
         // Run validation on blur.
         console.log(value, validateFn(value));
         error = !validateFn(value);
+        return !error; // Returns true if validation passes, false otherwise
     }
 </script>
 
 <div class={$$props['class'] ?? ''}>
-    <input type="text" bind:value on:blur={handleValidate} class="w-full" {placeholder} />
+    <input type="text" bind:value on:blur={handleValidate} class="w-full" {placeholder} {autocomplete} />
     {#if error}
         <div class="error">{hint}</div>
     {/if}
