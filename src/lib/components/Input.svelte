@@ -5,6 +5,7 @@
     export let hint;
     export let placeholder: string;
     export let autocomplete: string = '';
+    // export let type: string = 'text';
 
     let error = false;
     let validateFn;
@@ -28,7 +29,7 @@
 </script>
 
 <div class={$$props['class'] ?? ''}>
-    <input type="text" bind:value on:blur={handleValidate} class="w-full" {placeholder} {autocomplete} />
+    <input bind:value on:blur={handleValidate} class="w-full" {placeholder} {autocomplete} {...$$restProps} />
     {#if error}
         <div class="error">{hint}</div>
     {/if}

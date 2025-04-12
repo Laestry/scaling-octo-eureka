@@ -125,26 +125,42 @@
     let emailAccount: string;
     let emailAccountInput: Input;
     let existingAccount;
+    let foundAccount = false;
     let existingContact;
-    let foundCustomer: boolean = false;
-    let hasAccount: boolean = false;
+    let foundContact: boolean = false;
     let checked: boolean = false;
     let checking: boolean = false;
+
     async function handleCheckForAccount() {
         checking = true;
-        checked = false;
+        register = false;
+        foundAccount = false;
+        foundContact = false;
+
         if (!emailAccountInput.handleValidate()) return;
         console.log('handleCheckForAccount start');
         try {
-            existingAccount = await pb.collection('users').getOne(`email="${emailAccount}"`);
-            foundCustomer = true;
-            existingContact = await pb.collection('customer_emails').getOne(`email="${emailAccount}"`);
+            existingAccount = await pb.collection('users').getFirstListItem(`email="${emailAccount}"`);
+            console.log('existingAccount', existingAccount);
+            foundAccount = true;
         } catch (e) {
-            console.log(e);
+            console.log(e, existingAccount);
+        }
+
+        if (!foundAccount) {
+            try {
+                existingContact = await pb.collection('customer_emails').getFirstListItem(`email~"${emailAccount}"`);
+                console.log('existingContact', existingContact);
+                foundContact = true;
+            } catch (e) {
+                console.log(e, existingContact);
+            }
+        }
+
+        if (!foundAccount && !foundContact) {
+            register = true;
         }
         checking = false;
-        checked = true;
-        console.log('handleCheckForAccount', existingAccount);
     }
 
     let passwordAccountInput: Input;
@@ -156,17 +172,17 @@
     <div class="lg:w-[1136px] md:w-[760px] w-[300px]">
         {#if isFinalize}
             <div transition:fly={{ y: -100, duration: 300 }}>
-                <div class="flex flex-col w-full md:gap-1 gap-0 mb-4">
-                    <div class="flex gap-4">
-                        <div class="text-base text-nowrap w-[176px]">Votre Courriel</div>
+                <div class="flex gap-4 w-full mb-4">
+                    <div class="text-base text-nowrap w-[176px]">Votre Courriel</div>
 
-                        <form class="flex flex-1 flex-wrap gap-y-2 gap-x-4">
+                    <form class="flex flex-1 flex-wrap gap-y-2 gap-x-4">
+                        <div>
                             <Input
                                 bind:this={emailAccountInput}
                                 bind:value={emailAccount}
                                 type="email"
                                 autocomplete="email"
-                                class="lg:max-w-[268px] w-full"
+                                class="lg:w-[268px] w-full"
                                 placeholder="Courriel"
                                 hint="Courriel valide requis"
                                 validate={{
@@ -175,53 +191,57 @@
                                     maxLength: 254
                                 }}
                             />
-                            {#if hasAccount}
-                                <Input
-                                    bind:this={passwordAccountInput}
-                                    bind:value={passwordAccount}
-                                    type="password"
-                                    autocomplete="password"
-                                    class="lg:max-w-[268px] w-full"
-                                    placeholder="Mot de passe"
-                                    hint="Mot de passe"
-                                    validate={{
-                                        type: 'string',
-                                        pattern: '^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$',
-                                        maxLength: 254
-                                    }}
-                                />
-                            {:else if foundCustomer || register}
-                                <Input
-                                    bind:this={passwordAccountInput}
-                                    bind:value={passwordAccount}
-                                    type="password"
-                                    autocomplete="new-password"
-                                    class="lg:max-w-[268px] w-full"
-                                    placeholder="Mot de passe"
-                                    hint="Mot de passe"
-                                    validate={{
-                                        type: 'string',
-                                        pattern: '^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$',
-                                        maxLength: 254
-                                    }}
-                                />
+                            {#if foundContact || register}
+                                <button class="underline text-wblue text-xs" on:click={() => (register = !register)}>
+                                    I want to check another email
+                                </button>
                             {/if}
+                        </div>
+                        {#if foundAccount}
+                            <Input
+                                bind:this={passwordAccountInput}
+                                bind:value={passwordAccount}
+                                type="password"
+                                autocomplete="password"
+                                class="lg:max-w-[268px] w-full"
+                                placeholder="Mot de passe"
+                                hint="Mot de passe"
+                                validate={{
+                                    type: 'string',
+                                    pattern: '',
+                                    maxLength: 254
+                                }}
+                            />
+                        {:else if foundContact || register}
+                            <Input
+                                bind:this={passwordAccountInput}
+                                bind:value={passwordAccount}
+                                type="password"
+                                autocomplete="new-password"
+                                class="lg:max-w-[268px] w-full"
+                                placeholder="Nouveau mot de passe"
+                                hint="Mot de passe"
+                                validate={{
+                                    type: 'string',
+                                    pattern: '',
+                                    maxLength: 254
+                                }}
+                            />
+                        {/if}
 
-                            <button
-                                on:click={handleCheckForAccount}
-                                class="abutton bg-wred text-white text-base w-fit rounded-3xl px-[6px] h-[32px]"
-                            >
-                                Vérifier
-                            </button>
-                        </form>
-                    </div>
-                    <span class="text-xs">
-                        Si vous avez déjà commandé chez nous, utilisez l’adresse email associée à votre commande.
-                        <br />Sinon, entrez votre email pour créer un nouveau compte.
-                        <button class="underline text-wblue" on:click={() => (register = !register)}
-                            >J’ai déjà un compte</button
+                        <button
+                            on:click={handleCheckForAccount}
+                            class="abutton bg-wred text-white text-base w-fit rounded-3xl px-[6px] h-[32px]"
                         >
-                    </span>
+                            {#if foundContact || register}
+                                Create a new account with us
+                            {:else if foundAccount}
+                                Login
+                            {:else}
+                                Vérifier
+                            {/if}
+                        </button>
+                    </form>
                 </div>
 
                 <hr class=" mb-4 border-wpink" />
