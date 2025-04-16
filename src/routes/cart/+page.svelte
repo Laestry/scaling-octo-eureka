@@ -168,6 +168,10 @@
     let register = false;
 </script>
 
+<!--Courriel-->
+<!--Vérifier-->
+<!--Si vous avez déjà commandé chez nous, utilisez l’adresse email associée à votre commande.-->
+<!--Sinon, entrez votre email pour créer un nouveau compte. J’ai déjà un compte-->
 <div class="w-full flex justify-center mt-[53px]">
     <div class="lg:w-[1136px] md:w-[760px] w-[300px]">
         {#if isFinalize}
