@@ -45,6 +45,7 @@
     },
     "dependencies": {
         "@jbfulgencio/svelte-simplebar": "^1.0.0",
+        "@supabase/ssr": "^0.6.1",
         "@woden/svelte-simplebar": "^1.0.0",
         "cross-env": "^7.0.3",
         "jsonwebtoken": "^9.0.2",

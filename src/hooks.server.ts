@@ -1,67 +1,94 @@
-import PocketBase from 'pocketbase';
-import { PUBLIC_DB_URL } from '$env/static/public';
+import { i18n } from '$lib/i18n';
+import { createServerClient } from '@supabase/ssr';
+import { type Handle, redirect } from '@sveltejs/kit';
+import { sequence } from '@sveltejs/kit/hooks';
+import { PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY } from '$env/static/public';
+import type { Database } from '$lib/supabase/types';
+import { userState } from '$lib/data.svelte';
 
-export async function handle({ event, resolve }) {
-	event.locals.pb = new PocketBase(PUBLIC_DB_URL);
-	event.locals.pbAdmin = new PocketBase(PUBLIC_DB_URL);
+export const handleParaglide: Handle = i18n.handle();
 
-	const cookie = event.request.headers.get('cookie') || '';
-	event.locals.pb.authStore.loadFromCookie(cookie);
-	const hostname = event.url.hostname;
-	event.locals.isTest = hostname.includes('localhost') || hostname.includes('cadmean');
-	console.log('event.locals.isTest', event.locals.isTest);
-	// A threshold in seconds before expiration when we'll try to refresh the token.
-	// For example, 30 minutes:
-	const REFRESH_THRESHOLD = 60 * 30;
+const supabase: Handle = async ({ event, resolve }) => {
+    if (event.url.pathname.startsWith('/.well-known/appspecific/com.chrome.devtools')) {
+        return new Response(null, { status: 204 });
+    }
 
-	try {
-		if (event.locals.pb.authStore.isValid) {
-			const token = event.locals.pb.authStore.token;
+    /**
+     * Creates a Supabase client specific to this server request.
+     *
+     * The Supabase client gets the Auth token from the request cookies.
+     */
+    event.locals.supabase = createServerClient<Database>(
+        PUBLIC_SUPABASE_URL,
+        PUBLIC_SUPABASE_ANON_KEY,
 
-			// Only refresh if the token is nearing expiry
-			if (isTokenNearExpiry(token, REFRESH_THRESHOLD)) {
-				await event.locals.pb.collection('users').authRefresh();
-			}
+        {
+            cookies: {
+                getAll: () => event.cookies.getAll(),
+                /**
+                 * SvelteKit's cookies API requires `path` to be explicitly set in
+                 * the cookie options. Setting `path` to `/` replicates previous/
+                 * standard behavior.
+                 */
+                setAll: (cookiesToSet) => {
+                    cookiesToSet.forEach(({ name, value, options }) => {
+                        event.cookies.set(name, value, { ...options, path: '/' });
+                    });
+                }
+            }
+        }
+    );
 
-			event.locals.user = event.locals.pb.authStore.model;
-		} else {
-			event.locals.user = undefined;
-		}
-	} catch (error) {
-		console.error('authRefresh failed:', error);
-		event.locals.pb.authStore.clear(); // Clear invalid token
-		event.locals.user = undefined; // Reset user
-	}
+    /**
+     * Unlike `supabase.auth.getSession()`, which returns the session _without_
+     * validating the JWT, this function also calls `getUser()` to validate the
+     * JWT before returning the session.
+     */
+    event.locals.safeGetSession = async () => {
+        const {
+            data: { session }
+        } = await event.locals.supabase.auth.getSession();
+        if (!session) {
+            return { session: null, user: null };
+        }
 
-	const response = await resolve(event);
+        const {
+            data: { user },
+            error
+        } = await event.locals.supabase.auth.getUser();
+        if (error) {
+            // JWT validation has failed
+            return { session: null, user: null };
+        }
 
-	response.headers.set(
-		'set-cookie',
-		event.locals.pb.authStore.exportToCookie({
-			httpOnly: true,
-			secure: true,
-			sameSite: 'lax', // Allows cookies to be sent after external redirect (like from Stripe)
-			path: '/'
-		})
-	);
+        return { session, user };
+    };
 
-	return response;
-}
+    return resolve(event, {
+        filterSerializedResponseHeaders(name) {
+            /**
+             * Supabase libraries use the `content-range` and `x-supabase-api-version`
+             * headers, so we need to tell SvelteKit to pass it through.
+             */
+            return name === 'content-range' || name === 'x-supabase-api-version';
+        }
+    });
+};
 
-// Helper function to determine if the token is near expiry
-function isTokenNearExpiry(token, threshold) {
-	const payload = getTokenPayload(token);
-	if (!payload || !payload.exp) return false;
+const authGuard: Handle = async ({ event, resolve }) => {
+    const { session, user } = await event.locals.safeGetSession();
+    event.locals.session = session;
+    event.locals.user = user;
 
-	const now = Math.floor(Date.now() / 1000);
-	return payload.exp - now < threshold;
-}
+    if (!event.locals.session && event.url.pathname.startsWith('/board')) {
+        redirect(303, '/auth');
+    }
 
-function getTokenPayload(token) {
-	try {
-		const [, payloadBase64] = token.split('.');
-		return JSON.parse(atob(payloadBase64));
-	} catch (err) {
-		return null;
-	}
-}
+    if (event.locals.session && event.url.pathname === '/auth') {
+        redirect(303, `/dashboard/${userState.organization.id}`);
+    }
+
+    return resolve(event);
+};
+
+export const handle: Handle = sequence(supabase, authGuard, handleParaglide);

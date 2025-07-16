@@ -1,5 +1,7 @@
 import type { TFilters } from '$lib/models/general';
 
+//category & specific_category need to do
+
 export async function load({ locals, url }) {
     function getArrayParam(key: string): string[] | undefined {
         const arr = params.getAll(key);
