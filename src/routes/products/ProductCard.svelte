@@ -1,26 +1,23 @@
 <script lang="ts">
-    import { priceFormat } from '../product/[slug]/utils';
+    import { getCategory, priceFormat } from '../product/[slug]/utils';
     import { cart, getItemQuantityStore } from '$lib/cart';
     import { fly } from 'svelte/transition';
-    import type { AlcoholProduct } from '$lib/models/pocketbase';
+    // import type { AlcoholProduct, AlcoholBatch } from '$lib/models/pocketbase';
     import Plus from '$lib/icons/Plus.svelte';
-    export let product: AlcoholProduct;
+
+    export let product: any;
     export let size: 's' | 'm' | 'l' | 'v' = 's';
     export let isMain = false;
 
+    // IMAGE SELECTION (unchanged)
     const images = new Array(8).fill('').map((_, i) => `/images/example_wines/${i + 1}.jpg`);
     function getRandomNumber() {
         const n1 = parseInt(product.sku);
-        if (!Number.isNaN(n1)) {
-            return n1;
-        }
-        const n2 = product.id.split('').find((x) => !Number.isNaN(parseInt(x))) || '0';
-        return parseInt(n2);
+        return !Number.isNaN(n1) ? n1 : typeof product.id === 'number' ? product.id : parseInt(String(product.id)) || 0;
     }
     function getImage() {
         const n = getRandomNumber();
-        const i = n % images.length;
-        return images[i]!;
+        return images[n % images.length]!;
     }
     let img = '';
     $: {
@@ -28,20 +25,44 @@
         img = getImage();
     }
 
+    // CART ANIMATION
     const itemQuantity = getItemQuantityStore(product.id);
     let animations: { id: number }[] = [];
 
+    // SELECT OLDEST BATCH
+    function getOldestBatch(): any | null {
+        return (
+            product.alcohol_batches
+                ?.filter((b) => !b.is_archived && b.quantity > 0)
+                .sort((a, b) => {
+                    const aT = a.sell_before_date ? new Date(a.sell_before_date).getTime() : Infinity;
+                    const bT = b.sell_before_date ? new Date(b.sell_before_date).getTime() : Infinity;
+                    return aT - bT;
+                })[0] ?? null
+        );
+    }
+    // keep this up to date if product changes
+    $: selectedBatch = getOldestBatch();
+
     function handleAdd() {
-        // Add the product to the cart
-        cart.add(product);
-        // Create a new animation instance with a unique id (using timestamp)
+        if (!selectedBatch) return;
+
+        cart.add({
+            ...product,
+            selected_batch: {
+                id: selectedBatch.id
+            }
+        });
+
         const id = Date.now();
         animations = [...animations, { id }];
-        // Remove the animation after the duration of the transition (e.g., 600ms)
         setTimeout(() => {
             animations = animations.filter((anim) => anim.id !== id);
         }, 600);
     }
+
+    // FALLBACK FOR PROVIDER NAME
+    const providerName = product.parties?.display_name ?? '';
 </script>
 
 {#if isMain}
@@ -57,16 +78,23 @@
             >
                 <b>{product.name || '-'}</b>
                 <div class="description">
-                    <div class=" w-full {product.vintage ? '' : 'text-transparent'}">
-                        {product.providerName ?? ''}{#if product.vintage}, &nbsp;{product.vintage}
-                        {/if}
+                    <div class="w-full {selectedBatch?.vintage ? '' : 'text-transparent'}">
+                        {providerName}{#if selectedBatch?.vintage},&nbsp;{selectedBatch.vintage}{/if}
                     </div>
                 </div>
             </a>
 
             <div class="flex flex-col items-end" style="position: relative; overflow: visible;">
                 <div class="product-price">
-                    {$priceFormat(product, false, { none: true })}
+                    {#if selectedBatch}
+                        {$priceFormat(
+                            { price: selectedBatch.price, price_tax_in: selectedBatch.price_tax_in, uvc: product.uvc },
+                            true,
+                            { none: true }
+                        )}
+                    {:else}
+                        —
+                    {/if}
                 </div>
                 <button
                     class="abutton text-color5 md:text-[13px] font-bold cursor-cell whitespace-nowrap"
@@ -95,33 +123,48 @@
         <a href="/product/{product.slug}" class="flex justify-between w-full">
             <div class="flex flex-col w-full product-name" style="width: calc(100% - 100px)">
                 <div class="description">
-                    <div>{product.specificCategory ?? ''}</div>
+                    <div>{getCategory(product)}</div>
                 </div>
             </div>
             <div class="flex flex-col items-end">
                 <div class="product-price">
-                    {$priceFormat(product)}
+                    {#if selectedBatch}
+                        {$priceFormat({
+                            price: selectedBatch.price,
+                            price_tax_in: selectedBatch.price_tax_in,
+                            uvc: product.uvc
+                        })}
+                    {:else}
+                        —
+                    {/if}
                 </div>
                 <div class="product-price {product.uvc > 1 ? '' : 'text-transparent'}">
-                    {$priceFormat(product, false)}
+                    {#if selectedBatch}
+                        {$priceFormat(
+                            { price: selectedBatch.price, price_tax_in: selectedBatch.price_tax_in, uvc: product.uvc },
+                            false
+                        )}
+                    {:else}
+                        —
+                    {/if}
                 </div>
             </div>
         </a>
         <a href="/product/{product.slug}" class="flex flex-col items-start justify-start w-full product-name">
             <b class="truncate w-full">{product.name || '-'}</b>
             <div class="w-full flex">
-                <div class="truncate" style="max-width: calc(100% - 37px)">{product.providerName ?? ''}</div>
+                <div class="truncate" style="max-width: calc(100% - 37px)">{providerName}</div>
                 <span>
-                    {#if product.providerName && product.vintage},
+                    {#if providerName && selectedBatch?.vintage},
                     {/if}
-                    {product.vintage ?? ''}
+                    {selectedBatch?.vintage ?? ''}
                 </span>
             </div>
         </a>
         <div class="flex justify-between items-end w-full">
             <a href="/product/{product.slug}" class="product-name description">
                 {product.uvc} <span class="lowercase">x</span>
-                {product.lblFormat}
+                {product.volume}
             </a>
 
             <div class="flex flex-col items-end" style="position: relative; overflow: visible;">

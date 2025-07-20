@@ -353,14 +353,14 @@
                 <div class="flex justify-between">
                     <div class="text-xs">Total</div>
                     <b>
-                        {$cart
-                            .reduce((total, item) => {
-                                const unitPrice = $isPrixResto ? item.pricing.price : item.pricing.priceTaxIn;
-                                const itemTotal = unitPrice * item.quantity;
-                                const agencyTotal = item.pricing.agencyFeeWTaxes * item.quantity;
-                                return total + itemTotal + agencyTotal;
-                            }, 0)
-                            .toFixed(2)} $
+                        <!--{$cart-->
+                        <!--    .reduce((total, item) => {-->
+                        <!--        const unitPrice = $isPrixResto ? item.pricing.price : item.pricing.priceTaxIn;-->
+                        <!--        const itemTotal = unitPrice * item.quantity;-->
+                        <!--        const agencyTotal = item.pricing.agencyFeeWTaxes * item.quantity;-->
+                        <!--        return total + itemTotal + agencyTotal;-->
+                        <!--    }, 0)-->
+                        <!--    .toFixed(2)} $-->
                     </b>
                 </div>
                 <div class="text-xs">Frais d’agence et taxes incluses</div>
@@ -370,11 +370,11 @@
                         <div class="flex justify-between">
                             <div class="text-xs">Montant chargé maintenant</div>
                             <b>
-                                {$cart
-                                    .reduce((total, item) => {
-                                        return total + item.pricing.agencyFeeWTaxes * item.quantity;
-                                    }, 0)
-                                    .toFixed(2)} $
+                                <!--{$cart-->
+                                <!--    .reduce((total, item) => {-->
+                                <!--        return total + item.pricing.agencyFeeWTaxes * item.quantity;-->
+                                <!--    }, 0)-->
+                                <!--    .toFixed(2)} $-->
                             </b>
                         </div>
                         <div class="text-xs">*La différence sera chargée au moment de la cueillette</div>

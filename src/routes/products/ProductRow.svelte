@@ -19,7 +19,7 @@
         if (!Number.isNaN(n1)) {
             return n1;
         }
-        const n2 = product.external_id.split('').find((x) => !Number.isNaN(parseInt(x))) || '0';
+        const n2 = product.uuid.split('').find((x) => !Number.isNaN(parseInt(x))) || '0';
         return parseInt(n2);
     }
 

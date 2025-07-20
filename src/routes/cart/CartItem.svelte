@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { priceFormat } from '../product/[slug]/utils';
+    import { getCategory, priceFormat } from '../product/[slug]/utils';
     import { cart, getItemQuantityStore } from '$lib/cart';
     import { goto } from '$app/navigation';
     import { fade } from 'svelte/transition';
@@ -28,6 +28,8 @@
     }
 
     const itemQuantity = getItemQuantityStore(product.id);
+
+    $: selectedBatch = product.alcohol_batches?.find((b) => b.id === product.selected_batch?.id) ?? null;
 </script>
 
 <div class="lg:flex hidden h-[142px] border-b border-wblue mb-[11px]">
@@ -52,15 +54,15 @@
     <div class="max-w-[326px] flex-1 my-4 flex items-end ml-[54px] border-r border-wblue">
         <div>
             <b>{product.name}</b>
-            <div>{product.providerName}</div>
-            <div>{product.vintage}</div>
+            <div>{product.parties.display_name}</div>
+            <div>{selectedBatch.vintage ?? ''}</div>
         </div>
     </div>
 
     <div class="max-w-[190px] flex-1 my-4 flex pl-[16px] border-r border-wred">
         <div>
             <div class="text-xs mb-[20px] mt-[9px]">Format</div>
-            <div>{product.uvc} x {product.lblFormat}</div>
+            <div>{product.uvc} x {product.volume}</div>
         </div>
     </div>
 
@@ -87,7 +89,7 @@
     </div>
 
     <div class="max-w-[192px] flex-1 w-full my-4 flex items-center justify-end pr-1.5">
-        <div>{((Number(itemQuantity) || 1) * Number(product.price)).toFixed(2)} $</div>
+        <div>{((Number(itemQuantity) || 1) * Number(selectedBatch.price)).toFixed(2)} $</div>
     </div>
 </div>
 
@@ -112,15 +114,23 @@
     <a href="/product/{product.slug}" class="flex justify-between w-full">
         <div class="flex flex-col w-full product-name" style="width: calc(100% - 100px)">
             <div class="description">
-                <div>{product.specificCategory ?? ''}</div>
+                <div>{getCategory(product)}</div>
             </div>
         </div>
         <div class="flex flex-col items-end">
             <div class="product-price">
-                {$priceFormat(product)}
+                {$priceFormat(
+                    { price: selectedBatch.price, price_tax_in: selectedBatch.price_tax_in, uvc: product.uvc },
+                    true,
+                    { none: true }
+                )}
             </div>
             <div class="product-price {product.uvc > 1 ? '' : 'text-transparent'}">
-                {$priceFormat(product, false)}
+                {$priceFormat(
+                    { price: selectedBatch.price, price_tax_in: selectedBatch.price_tax_in, uvc: product.uvc },
+                    false,
+                    { none: true }
+                )}
             </div>
         </div>
     </a>
@@ -128,11 +138,11 @@
     <a href="/product/{product.slug}" class="flex flex-col items-start justify-start w-full product-name">
         <b class="truncate w-full">{product.name || '-'}</b>
         <div class="w-full flex">
-            <div class="truncate" style="max-width: calc(100% - 37px)">{product.providerName ?? ''}</div>
+            <div class="truncate" style="max-width: calc(100% - 37px)">{product.parties?.display_name ?? ''}</div>
             <span>
-                {#if product.providerName && product.vintage},
+                {#if product.parties?.display_name && selectedBatch.vintage},
                 {/if}
-                {product.vintage ?? ''}
+                {selectedBatch.vintage ?? ''}
             </span>
         </div>
     </a>

@@ -1,12 +1,12 @@
-import { i18n } from '$lib/i18n';
+// import { i18n } from '$lib/i18n';
 import { createServerClient } from '@supabase/ssr';
 import { type Handle, redirect } from '@sveltejs/kit';
 import { sequence } from '@sveltejs/kit/hooks';
 import { PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY } from '$env/static/public';
 import type { Database } from '$lib/supabase/types';
-import { userState } from '$lib/data.svelte';
+// import { userState } from '$lib/data.svelte';
 
-export const handleParaglide: Handle = i18n.handle();
+// export const handleParaglide: Handle = i18n.handle();
 
 const supabase: Handle = async ({ event, resolve }) => {
     if (event.url.pathname.startsWith('/.well-known/appspecific/com.chrome.devtools')) {
@@ -84,11 +84,11 @@ const authGuard: Handle = async ({ event, resolve }) => {
         redirect(303, '/auth');
     }
 
-    if (event.locals.session && event.url.pathname === '/auth') {
-        redirect(303, `/dashboard/${userState.organization.id}`);
-    }
+    // if (event.locals.session && event.url.pathname === '/auth') {
+    //     redirect(303, `/dashboard/${userState.organization.id}`);
+    // }
 
     return resolve(event);
 };
 
-export const handle: Handle = sequence(supabase, authGuard, handleParaglide);
+export const handle: Handle = sequence(supabase, authGuard);

@@ -82,13 +82,21 @@ export async function load({ locals, url }) {
         }
     }
 
-    const productsPromise = locals.pb.collection('alcohol_products').getList(1, 20, {
-        filter: filter || undefined,
-        sort: sortField || undefined
-    });
-    const categoriesPromise = locals.pb.collection('categories').getFullList();
+    const productsPromise = locals.supabase
+        .schema('cms_saq')
+        .from('alcohol')
+        .select('*, alcohol_batches(*), parties(display_name)', { count: 'exact', head: false })
+        .gt('alcohol_batches.quantity', 0)
+        .order('sell_before_date', { referencedTable: 'alcohol_batches', ascending: false })
+        .range(0, 19);
 
-    const [products, categories] = await Promise.all([productsPromise, categoriesPromise]);
+    // const productsPromise = locals.pb.collection('alcohol_products').getList(1, 20, {
+    //     filter: filter || undefined,
+    //     sort: sortField || undefined
+    // });
+    // const categoriesPromise = locals.pb.collection('categories').getFullList();
 
-    return { products, categories, filterObj };
+    const [products] = await Promise.all([productsPromise]);
+
+    return { products };
 }
