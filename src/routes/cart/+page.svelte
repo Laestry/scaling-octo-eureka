@@ -1,6 +1,6 @@
 <script lang="ts">
     import { cart } from '$lib/cart';
-    import { fade, fly, slide } from 'svelte/transition';
+    import { fade, fly } from 'svelte/transition';
     import Input from '$lib/components/Input.svelte';
     import Select from '$lib/components/Select.svelte';
     import { onMount } from 'svelte';
@@ -8,38 +8,19 @@
     import Toggle from '$lib/components/Toggle.svelte';
     import { goto } from '$app/navigation';
     import CartItem from './CartItem.svelte';
-    import { isPrixResto } from '$lib/store';
     import { pb } from '$lib/pocketbase';
-
-    async function createCheckout() {
-        // Build checkout items from the cart store
-        const items = $cart.map((item) => ({
-            quantity: item.quantity
-        }));
-
-        const response = await fetch('/api/createCart', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(items)
-        });
-
-        const checkoutUrl = await response.json();
-        window.location.href = checkoutUrl;
-    }
+    import { supabase } from '$lib/supabase/client';
 
     // Log the cart for debugging
-    console.log($cart);
+    console.log('cart', $cart);
 
     // Declare options; you may type these if needed.
     let options;
 
     onMount(async () => {
-        const res = await fetch('/saqBranches.json');
-        options = await res.json();
-        options = options.map((x) => ({ value: x.id, label: x.text }));
-        // console.log(options);
+        const { data, error } = await supabase.schema('cms_saq').from('saq_branches').select('*');
+        options = data.map((x) => ({ value: x.id, label: `${x.city}, ${x.address}` }));
+        console.log('branches', options);
     });
 
     const items = Array.from({ length: 500 }).map((_, i) => `item ${i}`);
@@ -87,7 +68,14 @@
     let errorMessage = '';
     let formEl;
 
-    function handleSubmit() {
+    async function handleSubmit() {
+        let selectedBatches = $cart.map((i) => ({
+            id: i.selected_batch_id,
+            quantity: i.quantity * i.uvc
+        }));
+        console.log('cart items', $cart);
+        console.log('selectedBatches', selectedBatches);
+
         // Trigger validation on each input.
         const errors = [];
         errors.push(firstNameInput.handleValidate());
@@ -97,14 +85,14 @@
         errors.push(postalCodeInput.handleValidate());
         errors.push(phoneInput.handleValidate());
         errors.push(emailInput.handleValidate());
-        errors.push(saqSelect.handleValidate());
+        // errors.push(saqSelect.handleValidate());
 
         // If any input returns an error (non-empty string), don't submit.
-        if (errors.some((e) => e !== '')) {
+        if (errors.some((valid) => valid === false)) {
             goto('#logo');
 
             errorMessage = 'Veuillez corriger les champs invalides.';
-            console.log('Validation errors:', errors);
+            console.error('Validation errors:', errors);
             return;
         }
 
@@ -118,10 +106,47 @@
             console.log('Validation errors:', result.errors);
             errorMessage = 'Le formulaire contient des erreurs.';
         }
+        let res;
+        try {
+            res = await fetch('api/submit-order', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    organizationId: 2,
+                    items: selectedBatches,
+                    customer: {
+                        saq_store_id: saqSelect.value,
+                        // saq_number: '', // add if needed
+                        billing_address: {
+                            street: formData.address,
+                            city: formData.city,
+                            postal_code: formData.postalCode
+                        },
+                        billing_contact: {
+                            first_name: formData.firstName,
+                            last_name: formData.lastName,
+                            email: formData.email,
+                            phone: formData.phone
+                        }
+                    }
+                })
+            });
+            if (!res.ok) {
+                // non-2xx status
+                throw new Error(`Server returned ${res.status}`);
+            }
+
+            const { url } = await res.json();
+            window.location.href = url;
+        } catch (err) {
+            console.error('Order submission failed:', err);
+            errorMessage = 'Une erreur réseau est survenue. Veuillez réessayer plus tard.';
+            // optionally bail out or re-throw
+            return;
+        }
     }
 
     let isFinalize = true;
-
     let emailAccount: string;
     let emailAccountInput: Input;
     let existingAccount;
@@ -323,15 +348,17 @@
                 <div class="flex md:flex-row flex-col w-full md:gap-4 gap-0 md:mt-[40px] mt-[20px]">
                     <div class="text-base text-nowrap w-[176px]">Pour la cueillette</div>
 
-                    <Select
-                        fontSize="16px"
-                        bind:this={saqSelect}
-                        class="w-full lg:max-w-[464px] !border-wblue "
-                        inputClass="!text-wblack !placeholder-wblue"
-                        {options}
-                        placeholder="Choisir votre SAQ"
-                        hint="Veuillez sélectionner une succursale SAQ"
-                    />
+                    {#if options}
+                        <Select
+                            fontSize="16px"
+                            bind:this={saqSelect}
+                            class="w-full lg:max-w-[464px] !border-wblue "
+                            inputClass="!text-wblack !placeholder-wblue"
+                            {options}
+                            placeholder="Choisir votre SAQ"
+                            hint="Veuillez sélectionner une succursale SAQ"
+                        />
+                    {/if}
                 </div>
 
                 <div class="text-base text-nowrap w-[176px] md:mt-[40px] mt-[20px]">La commande</div>
@@ -343,7 +370,7 @@
             <div class="  flex lg:flex-col lg:gap-0 flex-wrap gap-2 justify-between">
                 {#each $cart as item (item.id)}
                     <div transition:fade>
-                        <CartItem product={item} isCart size="m" />
+                        <CartItem product={item} />
                     </div>
                 {/each}
             </div>

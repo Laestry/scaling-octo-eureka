@@ -5,8 +5,11 @@
     import Footer from './Footer.svelte';
     import Header from './Header.svelte';
     import type { PageData } from './$types';
+    import { setSupabase } from '$lib/supabase/client';
 
     export let data: PageData;
+    console.log('data', data);
+    setSupabase(data.supabase);
 
     let prevPath = '';
     let currentPath = $page.url.pathname;

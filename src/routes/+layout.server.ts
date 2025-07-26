@@ -1,14 +1,12 @@
-// import type { CartItem } from '$lib/cart';
-//
-// export async function load({ cookies }) {
-//     let cart: CartItem[] = [];
-//     const cartCookie = cookies.get('cart');
-//     if (cartCookie) {
-//         try {
-//             cart = JSON.parse(cartCookie);
-//         } catch (error) {}
-//     }
-//     return {
-//         cart
-//     };
-// }
+import type { LayoutServerLoad } from './$types';
+
+export const load: LayoutServerLoad = async ({ locals: { safeGetSession }, cookies }) => {
+    if (safeGetSession) {
+        const { session, user } = await safeGetSession();
+        return {
+            user,
+            session,
+            cookies: cookies.getAll()
+        };
+    }
+};

@@ -49,9 +49,7 @@
 
         cart.add({
             ...product,
-            selected_batch: {
-                id: selectedBatch.id
-            }
+            selected_batch_id: selectedBatch.id
         });
 
         const id = Date.now();

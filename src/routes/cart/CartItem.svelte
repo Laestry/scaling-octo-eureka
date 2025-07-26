@@ -5,6 +5,7 @@
     import { fade } from 'svelte/transition';
     import Minus from '$lib/icons/Minus.svelte';
     import Plus from '$lib/icons/Plus.svelte';
+
     export let product;
 
     const images = new Array(8).fill('').map((_, i) => `/images/example_wines/${i + 1}.jpg`);
@@ -17,7 +18,7 @@
         return parseInt(n2);
     }
     function getImage() {
-        const n = getRandomNumber();
+        const n = Math.floor(Math.random() * images.length);
         const i = n % images.length;
         return images[i]!;
     }
@@ -29,7 +30,7 @@
 
     const itemQuantity = getItemQuantityStore(product.id);
 
-    $: selectedBatch = product.alcohol_batches?.find((b) => b.id === product.selected_batch?.id) ?? null;
+    $: selectedBatch = product.alcohol_batches?.find((b) => b.id === product.selected_batch_id) ?? null;
 </script>
 
 <div class="lg:flex hidden h-[142px] border-b border-wblue mb-[11px]">
@@ -54,7 +55,7 @@
     <div class="max-w-[326px] flex-1 my-4 flex items-end ml-[54px] border-r border-wblue">
         <div>
             <b>{product.name}</b>
-            <div>{product.parties.display_name}</div>
+            <div>{product.parties?.display_name ?? ''}</div>
             <div>{selectedBatch.vintage ?? ''}</div>
         </div>
     </div>
@@ -106,7 +107,8 @@
                 class="rotate-45 text-5xl"
                 style="line-height: 24px"
                 on:click|preventDefault|stopPropagation={() => cart.removeCompletely(product.id)}
-                >+
+            >
+                +
             </button>
         </div>
         <img class="bg-no-repeat object-cover bg-center img mb-[7px]" src={img} alt="Wine" />
