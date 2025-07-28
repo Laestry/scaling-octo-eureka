@@ -136,7 +136,10 @@
                 throw new Error(`Server returned ${res.status}`);
             }
 
-            const { url } = await res.json();
+            const data = await res.json();
+
+            const { url } = JSON.parse(data.body);
+
             window.location.href = url;
         } catch (err) {
             console.error('Order submission failed:', err);
