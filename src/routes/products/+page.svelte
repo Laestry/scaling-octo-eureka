@@ -5,13 +5,11 @@
     import Filters from './Filters/Filters.svelte';
     import type { PageData } from './$types';
     import type { TFilters } from '$lib/models/general';
-    import { pb } from '$lib/pocketbase';
     import { isGrid } from '$lib/store';
     import { supabase } from '$lib/supabase/client';
 
     export let data: PageData;
     let products = data.products.data;
-    let record = data.products;
     let loaded = 20;
     let hasMore = data.products.count > 20;
     const PAGE_SIZE = 20;
@@ -172,6 +170,8 @@
     // $: selectedFilters, updateProducts();
 
     onMount(() => {
+        console.log('products data', data);
+
         const observer = new IntersectionObserver(
             (entries) => {
                 entries.forEach((entry) => {
@@ -204,7 +204,7 @@
 <svelte:window bind:outerWidth />
 
 <div class="lg:mt-[56px] md:mt-[40px] mt-[80px]">
-    <Filters categories={data.categories} bind:selectedFilters on:resetFilters={() => updateProducts(true)} />
+    <Filters categories={data.categories.data} bind:selectedFilters on:resetFilters={() => updateProducts(true)} />
     {#if isLoading && products.length === 0}
         loading wines
     {:else if products.length === 0}

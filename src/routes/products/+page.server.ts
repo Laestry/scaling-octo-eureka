@@ -90,9 +90,14 @@ export async function load({ locals, url }) {
         .order('sell_before_date', { referencedTable: 'alcohol_batches', ascending: false })
         .range(0, 19);
 
-    // const categoriesPromise = locals.pb.collection('categories').getFullList();
+    const categoriesPromise = locals.supabase.schema('cms_saq').from('alcohol_categories').select('*');
 
-    const [products] = await Promise.all([productsPromise]);
+    const countriesPromise = locals.supabase
+        .schema('public')
+        .from('unicode_countries')
+        .select('*, country_name: name->>en');
 
-    return { products };
+    const [products, categories, countries] = await Promise.all([productsPromise, categoriesPromise, countriesPromise]);
+
+    return { products, categories, countries };
 }
