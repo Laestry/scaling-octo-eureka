@@ -90,10 +90,6 @@ export async function load({ locals, url }) {
         .order('sell_before_date', { referencedTable: 'alcohol_batches', ascending: false })
         .range(0, 19);
 
-    // const productsPromise = locals.pb.collection('alcohol_products').getList(1, 20, {
-    //     filter: filter || undefined,
-    //     sort: sortField || undefined
-    // });
     // const categoriesPromise = locals.pb.collection('categories').getFullList();
 
     const [products] = await Promise.all([productsPromise]);

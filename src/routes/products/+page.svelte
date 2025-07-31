@@ -204,7 +204,7 @@
 <svelte:window bind:outerWidth />
 
 <div class="lg:mt-[56px] md:mt-[40px] mt-[80px]">
-    <!--        <Filters categories={data.categories} bind:selectedFilters on:resetFilters={() => updateProducts(true)} />-->
+    <Filters categories={data.categories} bind:selectedFilters on:resetFilters={() => updateProducts(true)} />
     {#if isLoading && products.length === 0}
         loading wines
     {:else if products.length === 0}
