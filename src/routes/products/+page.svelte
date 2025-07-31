@@ -7,11 +7,14 @@
     import type { TFilters } from '$lib/models/general';
     import { pb } from '$lib/pocketbase';
     import { isGrid } from '$lib/store';
+    import { supabase } from '$lib/supabase/client';
 
     export let data: PageData;
     let products = data.products.data;
     let record = data.products;
-    let hasMore = false;
+    let loaded = 20;
+    let hasMore = data.products.count > 20;
+    const PAGE_SIZE = 20;
 
     // let selectedFilters: TFilters = data.filterObj
     //     ? data.filterObj
@@ -43,107 +46,128 @@
     let isLoading = false;
     let sentinel: HTMLDivElement;
 
-    // async function loadMoreProducts() {
-    //     return;
-    //     if (isLoading || !hasMore) return;
-    //     isLoading = true;
-    //     console.log('selectedFilters', selectedFilters);
-    //     // Build the filter string based on selected filters.
-    //     const filterParts: string[] = [];
-    //
-    //     function addFilter(
-    //         value: string | number | (string | number)[] | undefined,
-    //         condition: (val: string | number) => string
-    //     ) {
-    //         if (value) {
-    //             if (Array.isArray(value)) {
-    //                 // If the array is empty, do nothing.
-    //                 if (value.length > 0) {
-    //                     filterParts.push(`(${value.map(condition).join(' || ')})`);
-    //                 }
-    //             } else {
-    //                 filterParts.push(condition(value));
-    //             }
-    //         }
-    //     }
-    //
-    //     addFilter(selectedFilters.producer, (prod) => `providerName="${prod}"`);
-    //     addFilter(selectedFilters.region, (reg) => `originRegion="${reg}"`);
-    //     addFilter(selectedFilters.color, (col) => `specificCategory="${col}"`);
-    //     addFilter(selectedFilters.uvc, (uvc) => `uvc=${uvc}`);
-    //     addFilter(selectedFilters.format, (fmt) => `lblFormat="${fmt}"`);
-    //     addFilter(selectedFilters.vintage, (vin) => `vintage="${vin}"`);
-    //
-    //     if (selectedFilters.tag) {
-    //         // Assuming tag is always a single value.
-    //         filterParts.push(`tags~"${selectedFilters.tag}"`);
-    //     }
-    //
-    //     if (selectedFilters.nameSearch) {
-    //         // Use the ~ operator for partial matches (adjust per PocketBase syntax)
-    //         filterParts.push(`name ~ "${selectedFilters.nameSearch}"`);
-    //     }
-    //
-    //     if (selectedFilters.priceRange) {
-    //         if (selectedFilters.priceRange === 'low') {
-    //             filterParts.push(`price>=20 && price<=30`);
-    //         } else if (selectedFilters.priceRange === 'mid') {
-    //             filterParts.push(`price>=30 && price<=40`);
-    //         } else if (selectedFilters.priceRange === 'high') {
-    //             filterParts.push(`price>=40`);
-    //         }
-    //     }
-    //
-    //     const filterString = filterParts.join(' && ');
-    //
-    //     // Determine sort order: "Prix" for price or "Alphabétique" for name.
-    //     let sort = '';
-    //     if (selectedFilters.sorting === 'Prix croissant') {
-    //         sort = 'price';
-    //     } else if (selectedFilters.sorting === 'Prix décroissant') {
-    //         sort = '-price';
-    //     } else if (selectedFilters.sorting === 'Alphabétique') {
-    //         sort = 'name';
-    //     }
-    //     console.log('filterString', filterString);
-    //     try {
-    //         const result = await pb.collection('alcohol_products').getList(currentPage, 20, {
-    //             filter: filterString || undefined,
-    //             sort: sort || undefined
-    //         });
-    //         // console.log('result', result);
-    //         if (result.totalPages === result.page) {
-    //             products = [...products, ...result.items];
-    //             hasMore = false;
-    //         } else {
-    //             products = [...products, ...result.items];
-    //             record = result;
-    //             currentPage = result.page + 1;
-    //         }
-    //     } catch (error) {
-    //         console.error('Error fetching products:', error);
-    //     } finally {
-    //         isLoading = false;
-    //     }
-    // }
+    async function loadMoreProducts() {
+        if (isLoading || !hasMore) return;
+        isLoading = true;
+        console.log('selectedFilters', selectedFilters);
+        // Build the filter string based on selected filters.
+        const filterParts: string[] = [];
+
+        function addFilter(
+            value: string | number | (string | number)[] | undefined,
+            condition: (val: string | number) => string
+        ) {
+            if (value) {
+                if (Array.isArray(value)) {
+                    // If the array is empty, do nothing.
+                    if (value.length > 0) {
+                        filterParts.push(`(${value.map(condition).join(' || ')})`);
+                    }
+                } else {
+                    filterParts.push(condition(value));
+                }
+            }
+        }
+
+        // addFilter(selectedFilters.producer, (prod) => `providerName="${prod}"`);
+        // addFilter(selectedFilters.region, (reg) => `originRegion="${reg}"`);
+        // addFilter(selectedFilters.color, (col) => `specificCategory="${col}"`);
+        // addFilter(selectedFilters.uvc, (uvc) => `uvc=${uvc}`);
+        // addFilter(selectedFilters.format, (fmt) => `lblFormat="${fmt}"`);
+        // addFilter(selectedFilters.vintage, (vin) => `vintage="${vin}"`);
+
+        if (selectedFilters.tag) {
+            // Assuming tag is always a single value.
+            filterParts.push(`tags~"${selectedFilters.tag}"`);
+        }
+
+        if (selectedFilters.nameSearch) {
+            // Use the ~ operator for partial matches (adjust per PocketBase syntax)
+            filterParts.push(`name ~ "${selectedFilters.nameSearch}"`);
+        }
+
+        if (selectedFilters.priceRange) {
+            if (selectedFilters.priceRange === 'low') {
+                filterParts.push(`price>=20 && price<=30`);
+            } else if (selectedFilters.priceRange === 'mid') {
+                filterParts.push(`price>=30 && price<=40`);
+            } else if (selectedFilters.priceRange === 'high') {
+                filterParts.push(`price>=40`);
+            }
+        }
+
+        const filterString = filterParts.join(' && ');
+
+        // Determine sort order: "Prix" for price or "Alphabétique" for name.
+        let sort = '';
+        if (selectedFilters.sorting === 'Prix croissant') {
+            sort = 'price';
+        } else if (selectedFilters.sorting === 'Prix décroissant') {
+            sort = '-price';
+        } else if (selectedFilters.sorting === 'Alphabétique') {
+            sort = 'name';
+        }
+        console.log('filterString', filterString);
+        try {
+            const from = loaded;
+            const to = from + PAGE_SIZE - 1;
+
+            const { data, count, error } = await supabase
+                .schema('cms_saq')
+                .from('alcohol')
+                .select('*, alcohol_batches(*), parties!inner(display_name)', { count: 'exact', head: false })
+                .gt('alcohol_batches.quantity', 0)
+                .order('sell_before_date', {
+                    referencedTable: 'alcohol_batches',
+                    ascending: false
+                })
+                .range(from, to);
+
+            if (error) {
+                console.error('Error loading more products:', error);
+                return;
+            }
+
+            if (!data || data.length === 0) {
+                hasMore = false;
+                return;
+            }
+
+            products = [...products, ...data];
+            loaded += data.length;
+
+            // determine if there's more
+            if (count !== null) {
+                if (loaded >= count) {
+                    hasMore = false;
+                }
+            } else if (data.length < PAGE_SIZE) {
+                // fallback if count wasn't provided
+                hasMore = false;
+            }
+        } catch (error) {
+            console.error('Error fetching products:', error);
+        } finally {
+            isLoading = false;
+        }
+    }
 
     let skipTwice = 0;
-    // async function updateProducts(reset = false) {
-    //     return;
-    //     // console.log('updateProducts', selectedFilters);
-    //
-    //     const filtersApplied = Object.values(selectedFilters).some((filter) => filter !== undefined);
-    //     if (skipTwice !== 2 && !reset) {
-    //         // if (!filtersApplied && !reset) {
-    //         skipTwice++;
-    //         console.log('No filters applied.');
-    //         return;
-    //     }
-    //     currentPage = 1;
-    //     hasMore = true;
-    //     products = [];
-    //     await loadMoreProducts();
-    // }
+    async function updateProducts(reset = false) {
+        // console.log('updateProducts', selectedFilters);
+
+        const filtersApplied = Object.values(selectedFilters).some((filter) => filter !== undefined);
+        if (skipTwice !== 2 && !reset) {
+            // if (!filtersApplied && !reset) {
+            skipTwice++;
+            console.log('No filters applied.');
+            return;
+        }
+        currentPage = 1;
+        hasMore = true;
+        products = [];
+        await loadMoreProducts();
+    }
 
     // $: selectedFilters, updateProducts();
 
@@ -152,7 +176,7 @@
             (entries) => {
                 entries.forEach((entry) => {
                     if (entry.isIntersecting) {
-                        // loadMoreProducts();
+                        loadMoreProducts();
                     }
                 });
             },
@@ -180,7 +204,7 @@
 <svelte:window bind:outerWidth />
 
 <div class="lg:mt-[56px] md:mt-[40px] mt-[80px]">
-    <!--    <Filters categories={data.categories} bind:selectedFilters on:resetFilters={() => updateProducts(true)} />-->
+    <!--        <Filters categories={data.categories} bind:selectedFilters on:resetFilters={() => updateProducts(true)} />-->
     {#if isLoading && products.length === 0}
         loading wines
     {:else if products.length === 0}
