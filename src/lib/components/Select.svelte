@@ -148,6 +148,7 @@
             }
             handleValidate();
             // Keep the dropdown open for multiple selection.
+            dispatch('change', { selected });
         } else {
             // Single selection behavior.
             inputValue = String(opt.label);
@@ -155,6 +156,7 @@
             handleValidate();
             isOpen = false;
             userInput = '';
+            dispatch('change', { selected });
         }
     }
 
@@ -188,11 +190,11 @@
 
     function selectDefault() {
         inputValue = '';
-        // For multiple selection, reset selected to undefined.
-        selected = multiple ? undefined : undefined;
+        selected = undefined;
         isOpen = false;
         userInput = '';
         dispatch('defaultSelected');
+        dispatch('change', { selected: undefined });
     }
 </script>
 

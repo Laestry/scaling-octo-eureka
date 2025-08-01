@@ -1,45 +1,75 @@
-import type { TFilters } from '$lib/models/general';
-
-//category & specific_category need to do
+import type { TFilters, FetchOpts } from '$lib/models/general';
+import { fetchFilteredProductsForAlcohol } from './Filters/utils';
 
 export async function load({ locals, url }) {
+    const params = url.searchParams;
+
     function getArrayParam(key: string): string[] | undefined {
         const arr = params.getAll(key);
         return arr.length ? arr : undefined;
     }
 
-    const params = url.searchParams;
-    const producer = getArrayParam('producer');
-    const region = getArrayParam('region');
-    const color = getArrayParam('color');
-    const format = getArrayParam('format');
-    const vintage = getArrayParam('vintage');
+    // producer (short key: p)
+    const producer = getArrayParam('p');
 
-    // For numeric values like uvc, convert them:
+    // region (short key: r)
+    const region = getArrayParam('r');
+
+    // vintage (short key: v) -> numbers
+    const vintageRaw = params.getAll('v');
+    const vintageNums = vintageRaw.map((v) => Number(v)).filter((n) => !isNaN(n));
+    const vintage = vintageNums.length ? (vintageNums.length === 1 ? vintageNums[0] : vintageNums) : undefined;
+
+    // format (short key: f)
+    const format = getArrayParam('f');
+
+    // category (short key: cat) encoded as "category_specificCategory"
+    let category: string[] | undefined;
+    const catParams = params.getAll('cat');
+    if (catParams.length) {
+        category = catParams
+            .map((c) => {
+                const [catVal, specificVal] = c.split('_');
+                const categoryNum = Number(catVal);
+                const specificNum = Number(specificVal);
+                if (!isNaN(categoryNum) && !isNaN(specificNum)) {
+                    // keep the same shape your fetch util expects: JSON string or object
+                    return JSON.stringify({
+                        category: categoryNum,
+                        specificCategory: specificNum
+                    });
+                }
+                return undefined;
+            })
+            .filter(Boolean) as string[];
+        if (!category.length) category = undefined;
+    }
+
+    // uvc (long key, optional)
     const uvcArr = params
         .getAll('uvc')
-        .map((val) => Number(val))
-        .filter((val) => !isNaN(val));
-    const uvc = uvcArr.length ? uvcArr : undefined;
-    const priceRangeCandidate = params.get('priceRange');
-    const priceRange =
-        priceRangeCandidate === 'low' || priceRangeCandidate === 'mid' || priceRangeCandidate === 'high'
-            ? priceRangeCandidate
-            : undefined;
-    const sortingCandidate = params.get('sorting');
-    const sorting =
-        sortingCandidate === 'Prix croissant' ||
-        sortingCandidate === 'Prix décroissant' ||
-        sortingCandidate === 'Alphabétique'
-            ? sortingCandidate
-            : undefined;
-    const nameSearch = params.get('nameSearch') || undefined;
-    const tag = params.get('tag') || undefined;
+        .map((v) => Number(v))
+        .filter((n) => !isNaN(n));
+    const uvc = uvcArr.length ? (uvcArr.length === 1 ? uvcArr[0] : uvcArr) : undefined;
 
-    const filterObj: TFilters = {
+    // priceRange (short key: pr)
+    const pr = params.get('pr');
+    const priceRange = pr === 'low' || pr === 'mid' || pr === 'high' ? pr : undefined;
+
+    // sorting (short key: s) — must match the strings your fetch util expects
+    const s = params.get('s');
+    const sorting = s === 'Prix croissant' || s === 'Prix décroissant' || s === 'Alphabétique' ? s : undefined;
+
+    // nameSearch (q)
+    const nameSearch = params.get('q') || undefined;
+
+    // tag (t)
+    const tag = params.get('t') || undefined;
+
+    const selectedFilters: TFilters = {
         producer,
         region,
-        color,
+        category,
         uvc,
         format,
         vintage,
@@ -49,55 +79,22 @@ export async function load({ locals, url }) {
         tag
     };
 
-    let filterParts: string[] = [];
-    if (filterObj.producer) filterParts.push(`providerName="${filterObj.producer}"`);
-    if (filterObj.region) filterParts.push(`originRegion="${filterObj.region}"`);
-    if (filterObj.color) filterParts.push(`specificCategory="${filterObj.color}"`);
-    if (filterObj.uvc) filterParts.push(`uvc=${filterObj.uvc}`);
-    if (filterObj.format) filterParts.push(`lblFormat="${filterObj.format}"`);
-    if (filterObj.vintage) filterParts.push(`vintage="${filterObj.vintage}"`);
-    if (filterObj.tag) filterParts.push(`tags~"${filterObj.tag}"`);
+    // fetch filtered products (first page)
+    const PAGE_SIZE = 20;
+    const productsPromise = fetchFilteredProductsForAlcohol(locals.supabase, selectedFilters, {
+        limit: PAGE_SIZE,
+        offset: 0,
+        sorting: selectedFilters.sorting
+    } as FetchOpts);
 
-    // Example for priceRange (you might need to adjust the logic)
-    if (filterObj.priceRange) {
-        if (filterObj.priceRange === 'low') {
-            filterParts.push(`price>=20 && price<=30`);
-        } else if (filterObj.priceRange === 'mid') {
-            filterParts.push(`price>=30 && price<=40`);
-        } else if (filterObj.priceRange === 'high') {
-            filterParts.push(`price>=40`);
-        }
-    }
-
-    const filter = filterParts.join(' && ');
-
-    let sortField: string | undefined;
-    if (filterObj.sorting) {
-        if (filterObj.sorting === 'Prix croissant') {
-            sortField = 'price';
-        } else if (filterObj.sorting === 'Prix décroissant') {
-            sortField = '-price';
-        } else if (filterObj.sorting === 'Alphabétique') {
-            sortField = 'name';
-        }
-    }
-
-    const productsPromise = locals.supabase
-        .schema('cms_saq')
-        .from('alcohol')
-        .select('*, alcohol_batches(*), parties!inner(display_name)', { count: 'exact', head: false })
-        .gt('alcohol_batches.quantity', 0)
-        .order('sell_before_date', { referencedTable: 'alcohol_batches', ascending: false })
-        .range(0, 19);
-
+    // categories list (for buildDisplayFilters)
     const categoriesPromise = locals.supabase.schema('cms_saq').from('alcohol_categories').select('*');
 
-    const countriesPromise = locals.supabase
-        .schema('public')
-        .from('unicode_countries')
-        .select('*, country_name: name->>en');
+    const [products, categories] = await Promise.all([productsPromise, categoriesPromise]);
 
-    const [products, categories, countries] = await Promise.all([productsPromise, categoriesPromise, countriesPromise]);
-
-    return { products, categories, countries };
+    return {
+        products,
+        categories,
+        selectedFilters
+    };
 }

@@ -1,7 +1,7 @@
 export interface TFilters {
     producer: string[] | undefined;
     region: string[] | undefined;
-    color: string[] | undefined;
+    category: string[] | undefined;
     uvc: number[] | undefined;
     format: string[] | undefined;
     vintage: string[] | undefined;
