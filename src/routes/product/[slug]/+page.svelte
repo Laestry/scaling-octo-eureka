@@ -9,14 +9,58 @@
     import type { AlcoholProduct } from '$lib/models/pocketbase';
     import { Svroller } from 'svrollbar';
     import { fade } from 'svelte/transition';
-    import ProductCard from '../../products/ProductCard.svelte';
     import { onMount } from 'svelte';
-    import { pb } from '$lib/pocketbase';
+    import { getSpecificCategoryLabel } from '../../products/Filters/utils';
 
     export let data: PageData;
-    $: console.log('data', data);
+    console.log('data', data);
     let product: AlcoholProduct;
     $: product = data.product;
+
+    // SELECT OLDEST BATCH (same logic as in the card)
+    function getOldestBatch(): any | null {
+        if (!product?.alcohol_batches || !Array.isArray(product.alcohol_batches)) return null;
+        const valid = product.alcohol_batches.filter((b) => !b.is_archived && b.quantity > 0);
+        if (!valid.length) return null;
+        valid.sort((a, b) => {
+            const aT = a.sell_before_date ? new Date(a.sell_before_date).getTime() : Infinity;
+            const bT = b.sell_before_date ? new Date(b.sell_before_date).getTime() : Infinity;
+            return aT - bT;
+        });
+        return valid[0];
+    }
+    let selectedBatch;
+    $: if (product) selectedBatch = getOldestBatch();
+
+    // UNWRAP WEBSITE
+    function getWebsite(): any | null {
+        return product?.alcohol_website?.[0] ?? null;
+    }
+    $: website = getWebsite();
+
+    // PARSE FRENCH DESCRIPTION FROM WEBSITE
+    function parseWebsiteFrenchDesc(w: any): string {
+        if (!w) return '';
+        if (!w.description_french) return '';
+        try {
+            const parsed = JSON.parse(w.description_french);
+            if (parsed?.fr) return parsed.fr;
+        } catch (e) {
+            console.warn('failed to parse website.description_french', e);
+        }
+        return '';
+    }
+    $: websiteDescription = parseWebsiteFrenchDesc(website);
+
+    // Format "Acheter avant" based on sell_before_date
+    function formatSellBeforeDate(sellBefore: string | null | undefined): string {
+        if (!sellBefore) return '';
+        const d = new Date(sellBefore);
+        const now = new Date();
+        const months = (d.getFullYear() - now.getFullYear()) * 12 + (d.getMonth() - now.getMonth());
+        if (months < 0) return 'Expiré';
+        return `Acheter avant ${months} mois, ${d.getFullYear()}`;
+    }
 
     let currentSlide = 0;
     let expand_description = false;
@@ -38,30 +82,13 @@
     let sameProducerProducts: AlcoholProduct[] = [];
     let sameRegionProducts: AlcoholProduct[] = [];
 
+    // PROVIDER NAME (fallback)
+    let providerName = '';
+    $: if (product && product?.parties) providerName = product?.parties?.display_name ?? '';
+
     onMount(async () => {
-        const producerPromise = product.providerName
-            ? pb.collection('alcohol_products').getList(1, 4, {
-                  filter: `providerName="${product.providerName}"`,
-                  sort: 'quantity'
-              })
-            : Promise.resolve({ items: [] });
-
-        const regionPromise = product.originRegion
-            ? pb.collection('alcohol_products').getList(1, 4, {
-                  filter: `originRegion="${product.originRegion}"`,
-                  sort: 'quantity'
-              })
-            : Promise.resolve({ items: [] });
-
-        const [sameProducerProductsRecord, sameRegionProductsRecord] = await Promise.all([
-            producerPromise,
-            regionPromise
-        ]);
-        sameProducerProducts = sameProducerProductsRecord.items;
-        sameRegionProducts = sameRegionProductsRecord.items;
+        console.log('product data', data);
     });
-
-    $: console.log(sameProducerProducts, sameRegionProducts);
 </script>
 
 <div
@@ -118,7 +145,7 @@
                     <!--description-->
                     <div class="product-description mt-4 h-[141px] w-full pr-[15px]">
                         <Svroller width="100%" height="100%" margin={{ right: -15 }} alwaysVisible>
-                            {@html product.fullDescription}
+                            {@html websiteDescription}
                             <!--                            <button on:click={() => (expand_description = !expand_description)}>-->
                             <!--                                {expand_description ? '-' : '+'}-->
                             <!--                            </button>-->
@@ -134,17 +161,22 @@
                                         lg:w-[279px] md:w-[235px] w-[186px]"
                             >
                                 <p class="border-b border-wred lg:h-[32px] h-[28px] capitalize flex items-center">
-                                    {product.specificCategory}
+                                    <!--{product.category && product.specificCategory-->
+                                    <!--    ? getSpecificCategoryLabel({-->
+                                    <!--          category: product.category,-->
+                                    <!--          specificCategory: product.specificCategory-->
+                                    <!--      })-->
+                                    <!--    : '-'}-->
                                 </p>
                                 <div class="flex items-center flex-1">
                                     <div class="w-fit">
-                                        <b class="font-bold">{product.providerName}</b>
+                                        <b class="font-bold">{providerName}</b>
                                         <br />
                                         {product.name ?? ''}
                                         <br />
                                         {product.vintage}
                                         <br />
-                                        {product.uvc} x {product.lblFormat}
+                                        {product.uvc} x {product.format}{product.unit === 1 ? 'L' : 'ml'}
                                     </div>
                                 </div>
                             </div>
@@ -156,10 +188,24 @@
                                         lg:h-[70px] h-[45px] border-b border-wblue"
                                 >
                                     <b>
-                                        {$priceFormat(product, true)}
+                                        {$priceFormat(
+                                            {
+                                                price: selectedBatch.price,
+                                                price_tax_in: selectedBatch.price_tax_in,
+                                                uvc: product.uvc
+                                            },
+                                            true
+                                        )}
                                     </b>
                                     <b>
-                                        {$priceFormat(product, false)}
+                                        {$priceFormat(
+                                            {
+                                                price: selectedBatch.price,
+                                                price_tax_in: selectedBatch.price_tax_in,
+                                                uvc: product.uvc
+                                            },
+                                            false
+                                        )}
                                     </b>
                                 </div>
 
@@ -242,21 +288,21 @@
     </div>
 
     <div class="mt-[20px] flex flex-col lg:gap-[22px] gap-[10px]">
-        {#if product.providerName}
-            <Accordion title="Du même producteur">
-                {#each sameProducerProducts as producerProduct}
-                    <ProductCard product={producerProduct} size="m" />
-                {/each}
-            </Accordion>
-        {/if}
+        <!--{#if product.providerName}-->
+        <!--    <Accordion title="Du même producteur">-->
+        <!--        {#each sameProducerProducts as producerProduct}-->
+        <!--            <ProductCard product={producerProduct} size="m" />-->
+        <!--        {/each}-->
+        <!--    </Accordion>-->
+        <!--{/if}-->
 
-        {#if product.originRegion}
-            <Accordion title="De la même région">
-                {#each sameRegionProducts as regionProduct}
-                    <ProductCard product={regionProduct} size="m" />
-                {/each}
-            </Accordion>
-        {/if}
+        <!--{#if product.originRegion}-->
+        <!--    <Accordion title="De la même région">-->
+        <!--        {#each sameRegionProducts as regionProduct}-->
+        <!--            <ProductCard product={regionProduct} size="m" />-->
+        <!--        {/each}-->
+        <!--    </Accordion>-->
+        <!--{/if}-->
     </div>
 </div>
 
@@ -274,18 +320,18 @@
     }
 
     .product-description {
+        --svrollbar-track-width: 9px !important;
+        --svrollbar-track-background: white !important;
+        --svrollbar-track-opacity: 1 !important;
+        --svrollbar-thumb-width: 9px !important;
+        --svrollbar-thumb-background: var(--blue) !important;
+        --svrollbar-thumb-opacity: 0.5 !important;
         display: flex;
         flex-direction: column;
         align-items: flex-start;
         justify-content: flex-start;
 
-        --svrollbar-track-width: 9px;
-        --svrollbar-track-background: white;
-        --svrollbar-track-opacity: 1;
-
-        --svrollbar-thumb-width: 9px;
-        --svrollbar-thumb-background: var(--blue);
-        --svrollbar-thumb-opacity: 0.5;
+        overflow-y: auto;
     }
 
     .product-description button {

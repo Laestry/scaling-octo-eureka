@@ -61,16 +61,17 @@
 
     // FALLBACK FOR PROVIDER NAME
     const providerName = product.parties?.display_name ?? '';
+    product.website = product.alcohol_website?.[0] ?? null;
 </script>
 
 {#if isMain}
     <div class="product {size}">
-        <a href="/product/{product.slug}">
+        <a href="/product/{product.website.slug}">
             <img class="bg-no-repeat object-cover bg-center img" src={img} alt="Wine" />
         </a>
         <div class="flex justify-between mt-[7px] w-full">
             <a
-                href="/product/{product.slug}"
+                href="/product/{product.website.slug}"
                 class="flex flex-col uppercase w-full product-name"
                 style="width: calc(100% - 100px)"
             >
@@ -115,10 +116,10 @@
     </div>
 {:else}
     <div class="product {size}">
-        <a href="/product/{product.slug}">
+        <a href="/product/{product.website.slug}">
             <img class="bg-no-repeat object-cover bg-center img mb-[15px]" src={img} alt="Wine" />
         </a>
-        <a href="/product/{product.slug}" class="flex justify-between w-full">
+        <a href="/product/{product.website.slug}" class="flex justify-between w-full">
             <div class="flex flex-col w-full product-name" style="width: calc(100% - 100px)">
                 <div class="description">
                     <div>{getCategory(product)}</div>
@@ -148,7 +149,7 @@
                 </div>
             </div>
         </a>
-        <a href="/product/{product.slug}" class="flex flex-col items-start justify-start w-full product-name">
+        <a href="/product/{product.website.slug}" class="flex flex-col items-start justify-start w-full product-name">
             <b class="truncate w-full">{product.name || '-'}</b>
             <div class="w-full flex">
                 <div class="truncate" style="max-width: calc(100% - 37px)">{providerName}</div>
@@ -160,7 +161,7 @@
             </div>
         </a>
         <div class="flex justify-between items-end w-full">
-            <a href="/product/{product.slug}" class="product-name description">
+            <a href="/product/{product.website.slug}" class="product-name description">
                 {product.uvc} <span class="lowercase">x</span>
                 {product.volume}
             </a>

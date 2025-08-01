@@ -120,11 +120,13 @@ export async function fetchFilteredProductsForAlcohol(
     let query = supabaseClient
         .schema('cms_saq')
         .from('alcohol')
-        .select('*, alcohol_batches!inner(*), parties!inner(display_name)', { count: 'exact' })
+        .select('*, alcohol_batches!inner(*), parties!inner(display_name), alcohol_website!inner(slug)', {
+            count: 'exact'
+        })
         .gt('alcohol_batches.quantity', 0)
         .gt('alcohol_batches.price', 0)
-        .gt('alcohol_batches.price_tax_in', 0);
-
+        .gt('alcohol_batches.price_tax_in', 0)
+        .not('alcohol_website.slug', 'is', null);
     // producer filter: assumes alcohol table has producer_id column
     if (producer?.id != null) {
         query = query.eq('provider_id', producer.id);

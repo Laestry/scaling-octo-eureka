@@ -1,13 +1,18 @@
 import { error } from '@sveltejs/kit';
 
 export async function load({ locals, params }) {
-    let product = await locals.pb.collection('alcohol_products').getFirstListItem(`slug="${params.slug}"`);
+    let { data, error: serror } = await locals.supabase
+        .schema('cms_saq')
+        .from('alcohol')
+        .select('*,alcohol_batches(*),alcohol_website(*),parties(*)')
+        .eq('slug', params.slug)
+        .single();
 
-    if (!product) {
+    if (serror) {
         error(404);
     } else {
         return {
-            product
+            product: data
         };
     }
 }

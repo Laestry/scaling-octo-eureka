@@ -3,7 +3,7 @@
     import Select from '$lib/components/Select.svelte';
     import type { TFilters } from '$lib/models/general';
     import { isGrid, isPrixResto } from '$lib/store';
-    import { createEventDispatcher, onMount } from 'svelte';
+    import { createEventDispatcher, onMount, tick } from 'svelte';
     import { page } from '$app/stores';
     import { replaceState } from '$app/navigation';
     import { formatLocation, formatVolume, getSpecificCategoryLabel } from './utils';
@@ -146,8 +146,14 @@
         values.forEach((v) => sp.append(key, String(v)));
     }
 
+    let pendingSetParams = false;
+
     async function setParams() {
         if (!isMounted) return;
+        if (pendingSetParams) return; // avoid overlapping invocations
+        pendingSetParams = true;
+        await tick(); // defer until after initial microtask so router is ready
+
         const $page = get(page);
         const sp = $page.url.searchParams;
 
