@@ -41,15 +41,38 @@ export function createCart(): CartStore {
             if (!selectedBatchId) {
                 throw new Error('selectedBatchId is required to add to cart');
             }
+            const batchId = String(selectedBatchId);
 
             cartStore.update((cart: CartProduct[]) => {
-                const existing = cart.find((ci) => ci.selectedBatchId === selectedBatchId);
+                const existingIndex = cart.findIndex((ci) => String(ci.selectedBatchId) === batchId);
+                const existing = existingIndex !== -1 ? cart[existingIndex] : undefined;
+
+                // find the selected batch on the product
+                const batch: any = (item as any).alcohol_batches?.find((b: any) => String(b.id) === batchId);
+                if (!batch) {
+                    console.warn(`Selected batch ${batchId} not found on item`, item);
+                    return cart; // could throw instead if you want stricter behavior
+                }
+
+                const uvc = (item as any).uvc || 1;
+                const availableBottles = batch.calculated_quantity ?? batch.quantity ?? 0;
+                const maxCases = uvc > 0 ? Math.floor(availableBottles / uvc) : 0;
+                const currentCases = existing ? existing.quantity : 0;
+                const remainingCases = maxCases - currentCases;
+
+                if (remainingCases <= 0) {
+                    // nothing left to add
+                    return cart;
+                }
+
+                const actualAdd = Math.min(amount, remainingCases);
+
                 if (existing) {
-                    return cart.map((ci) =>
-                        ci.selectedBatchId === selectedBatchId ? { ...ci, quantity: ci.quantity + amount } : ci
+                    return cart.map((ci, i) =>
+                        i === existingIndex ? { ...ci, quantity: ci.quantity + actualAdd } : ci
                     );
                 } else {
-                    const newEntry: CartProduct = { ...item, selectedBatchId, quantity: amount };
+                    const newEntry: CartProduct = { ...item, selectedBatchId: batchId, quantity: actualAdd };
                     return [...cart, newEntry];
                 }
             });

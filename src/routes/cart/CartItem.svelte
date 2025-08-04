@@ -37,6 +37,14 @@
         isMounted = true;
         selectedBatch = product.alcohol_batches?.find((b) => b.id === product.selectedBatchId) ?? null;
     });
+
+    $: maxCases = (() => {
+        if (!selectedBatch) return 0;
+        const availableBottles = selectedBatch.calculated_quantity ?? selectedBatch.quantity ?? 0;
+        return product.uvc > 0 ? Math.floor(availableBottles / product.uvc) : 0;
+    })();
+
+    $: isAtLimit = $itemQuantity >= maxCases;
 </script>
 
 {#if isMounted && selectedBatch}
@@ -81,13 +89,19 @@
                     <p class="product-table-counter__value ml-[2px]">{$itemQuantity * product.uvc}</p>
                     <div class="flex flex-col justify-center items-center">
                         <button
-                            class="abutton product-table-counter__button"
-                            on:click={() => cart.add(product, selectedBatch.id)}
+                            class="abutton product-table-counter__button {isAtLimit
+                                ? '!text-gray-300 cursor-not-allowed'
+                                : ''}"
+                            disabled={isAtLimit}
+                            on:click={() => {
+                                if (!isAtLimit) cart.add(product, selectedBatch.id);
+                            }}
                         >
                             <Plus />
                         </button>
                         <button
-                            class="abutton product-table-counter__button {$itemQuantity > 1 ? '' : '!text-gray-300'}"
+                            class="abutton product-table-counter__button
+                                {$itemQuantity > 1 ? '' : '!text-gray-300 cursor-not-allowed'}"
                             on:click={() => {
                                 if ($itemQuantity > 1) cart.remove(product.id, selectedBatch.id);
                             }}
@@ -166,7 +180,7 @@
 
             <div class="flex items-center w-fit h-fit self-end">
                 <button
-                    class="abutton product-table-counter__button {$itemQuantity > 1 ? '' : 'text-gray-300'}"
+                    class="abutton product-table-counter__button {$itemQuantity > 1 ? '' : '!text-gray-300'}"
                     style="line-height: 16px"
                     on:click={() => {
                         if ($itemQuantity > 1) cart.remove(product.id);
@@ -176,8 +190,11 @@
 
                 <p class="product-table-counter__value">{$itemQuantity * product.uvc}</p>
                 <button
-                    class="abutton product-table-counter__button"
+                    class="abutton product-table-counter__button {$itemQuantity > 1
+                        ? ''
+                        : '!text-gray-300 cursor-not-allowed'}"
                     style="line-height: 16px"
+                    disabled={isAtLimit}
                     on:click={() => cart.add(product, selectedBatch.id)}
                     >+
                 </button>

@@ -48,13 +48,27 @@
     let expand_question = false;
 
     let in_cart = 1;
-    function add() {
-        in_cart = Math.min(in_cart + 1);
-    }
-    function remove() {
-        if (in_cart !== 0) {
-            in_cart--;
+    $: maxCases = selectedBatch ? Math.floor(selectedBatch.calculated_quantity / product.uvc) : 0;
+
+    // 2. Ensure in_cart is always between 1 and maxCases (or 0 if no stock)
+    $: {
+        if (maxCases === 0) {
+            in_cart = 0;
+        } else if (in_cart < 1) {
+            in_cart = 1;
+        } else if (in_cart > maxCases) {
+            in_cart = maxCases;
         }
+    }
+
+    function add() {
+        // never go above maxCases
+        in_cart = Math.min(in_cart + 1, maxCases);
+    }
+
+    function remove() {
+        // never go below 1 (unless there's no stock)
+        in_cart = Math.max(in_cart - 1, maxCases > 0 ? 1 : 0);
     }
     const img1 = '/images/example_wines/SHOP PAGE/Product Shot - stack.png';
     const img = '/images/example_wines/SHOP PAGE/9x1' + '6 Product Shot - stack.png';
@@ -68,7 +82,7 @@
     $: if (product && product?.parties) providerName = product?.parties?.display_name ?? '';
 
     onMount(async () => {
-        console.log('product data', data);
+        console.log('product data', data, selectedBatch);
     });
 </script>
 
@@ -218,7 +232,7 @@
                                 </button>
                                 <button
                                     class="product-table__button abutton"
-                                    on:click={() => cart.add(product, in_cart)}
+                                    on:click={() => cart.add(product, selectedBatch.id)}
                                 >
                                     Ajouter au panier
                                 </button>

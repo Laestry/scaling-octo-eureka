@@ -50,6 +50,8 @@
 
     function handleAdd() {
         if (!selectedBatch) return;
+        if ($itemQuantity >= maxCases) return;
+
         console.log('ProductCard handleAdd');
         console.log(product, selectedBatch.id);
         cart.add(product, selectedBatch.id);
@@ -64,6 +66,15 @@
 
     // FALLBACK FOR PROVIDER NAME
     const providerName = product.parties?.display_name ?? '';
+
+    $: maxCases = (() => {
+        if (!selectedBatch) return 0;
+        const availableBottles = selectedBatch.calculated_quantity ?? selectedBatch.quantity ?? 0;
+        return product.uvc > 0 ? Math.floor(availableBottles / product.uvc) : 0;
+    })();
+
+    // whether we've hit the limit already
+    $: isAtLimit = $itemQuantity >= maxCases;
 </script>
 
 {#if isMain}
@@ -98,7 +109,10 @@
                     {/if}
                 </div>
                 <button
-                    class="abutton text-color5 md:text-[13px] font-bold cursor-cell whitespace-nowrap"
+                    class="abutton text-color5 md:text-[13px] font-bold cursor-cell whitespace-nowrap {isAtLimit
+                        ? 'opacity-50 cursor-not-allowed'
+                        : ''}"
+                    disabled={isAtLimit}
                     on:click|preventDefault|stopPropagation={handleAdd}
                 >
                     <Plus size="18" />
@@ -173,7 +187,10 @@
 
             <div class="flex flex-col items-end" style="position: relative; overflow: visible;">
                 <button
-                    class="abutton text-color5 md:text-[13px] font-bold cursor-cell whitespace-nowrap"
+                    class="abutton text-color5 md:text-[13px] font-bold cursor-cell whitespace-nowrap {isAtLimit
+                        ? 'opacity-50 cursor-not-allowed'
+                        : ''}"
+                    disabled={isAtLimit}
                     on:click|preventDefault|stopPropagation={handleAdd}
                 >
                     <Plus size="18" />
