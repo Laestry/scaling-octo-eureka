@@ -10,6 +10,8 @@ export const POST: RequestHandler = async ({ request }) => {
     });
 
     if (!res.ok) {
+        const errorBody = await res.text();
+        console.error('Remote API error body:', errorBody);
         return new Response(await res.text(), { status: res.status });
     }
     const data = await res.json();

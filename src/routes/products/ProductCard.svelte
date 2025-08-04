@@ -52,7 +52,7 @@
         if (!selectedBatch) return;
         if ($itemQuantity >= maxCases) return;
 
-        console.log('ProductCard handleAdd');
+        console.log('ProductCard handleAdd', selectedBatch.id, $itemQuantity, maxCases);
         console.log(product, selectedBatch.id);
         cart.add(product, selectedBatch.id);
 

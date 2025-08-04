@@ -5,6 +5,7 @@
     import { fade } from 'svelte/transition';
     import Minus from '$lib/icons/Minus.svelte';
     import Plus from '$lib/icons/Plus.svelte';
+    import { onMount } from 'svelte';
 
     export let product;
 
@@ -28,14 +29,20 @@
         img = getImage();
     }
 
-    const itemQuantity = getItemQuantityStore(product.selectedBatchId);
-
-    let selectedBatch;
+    $: selectedBatch = product.alcohol_batches?.find((b) => b.id == product.selectedBatchId) ?? null;
     let isMounted = false;
     afterNavigate(() => {
         console.log('cartitem afterNavigate ', product, product.selectedBatchId);
+        selectedBatch = product.alcohol_batches?.find((b) => b.id == product.selectedBatchId) ?? null;
+
         isMounted = true;
-        selectedBatch = product.alcohol_batches?.find((b) => b.id === product.selectedBatchId) ?? null;
+    });
+
+    onMount(() => {
+        console.log('cartitem onMount ', product, product.selectedBatchId);
+        selectedBatch = product.alcohol_batches?.find((b) => b.id == product.selectedBatchId) ?? null;
+
+        isMounted = true;
     });
 
     $: maxCases = (() => {
@@ -45,6 +52,9 @@
     })();
 
     $: isAtLimit = $itemQuantity >= maxCases;
+    let itemQuantity = getItemQuantityStore(product.selectedBatchId);
+
+    $: if (selectedBatch) itemQuantity = getItemQuantityStore(product.selectedBatchId);
 </script>
 
 {#if isMounted && selectedBatch}
@@ -103,7 +113,7 @@
                             class="abutton product-table-counter__button
                                 {$itemQuantity > 1 ? '' : '!text-gray-300 cursor-not-allowed'}"
                             on:click={() => {
-                                if ($itemQuantity > 1) cart.remove(product.id, selectedBatch.id);
+                                if ($itemQuantity > 1) cart.remove(selectedBatch.id);
                             }}
                         >
                             <Minus />

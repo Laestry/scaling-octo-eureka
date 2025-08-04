@@ -72,8 +72,8 @@
 
     async function handleSubmit() {
         let selectedBatches = $cart.map((i) => ({
-            id: i.selectedBatchId,
-            caseQuantity: i.quantity * i.uvc
+            id: parseInt(i.selectedBatchId),
+            caseQuantity: i.quantity
         }));
         console.log('cart items', $cart);
         console.log('selectedBatches', selectedBatches);

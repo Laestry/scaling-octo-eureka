@@ -79,7 +79,8 @@ export function createCart(): CartStore {
         },
         remove: (selectedBatchId: string, amount: number = 1) => {
             cartStore.update((cart: CartProduct[]) => {
-                const index = cart.findIndex((ci) => ci.selectedBatchId === selectedBatchId);
+                const index = cart.findIndex((ci) => String(ci.selectedBatchId) === String(selectedBatchId));
+                console.log('cart remove ', index, String(selectedBatchId));
                 if (index === -1) return cart;
 
                 const ci = cart[index];
@@ -91,7 +92,9 @@ export function createCart(): CartStore {
             });
         },
         removeCompletely: (selectedBatchId: string) => {
-            cartStore.update((cart: CartProduct[]) => cart.filter((ci) => ci.selectedBatchId !== selectedBatchId));
+            cartStore.update((cart: CartProduct[]) =>
+                cart.filter((ci) => String(ci.selectedBatchId) !== String(selectedBatchId))
+            );
         },
         clear: () => {
             cartStore.set([]);
@@ -114,9 +117,9 @@ export const totalItems = derived(cart, ($cart) => $cart.reduce((acc, item) => a
  * @param {string} selectedBatchId
  * @returns derived store with quantity (or 0)
  */
-export function getItemQuantityStore(selectedBatchId: string) {
+export function getItemQuantityStore(selectedBatchId: string | number) {
     return derived(cart, ($cart) => {
-        const item = $cart.find((item) => item.selectedBatchId === selectedBatchId);
+        const item = $cart.find((item) => String(item.selectedBatchId) === String(selectedBatchId));
         return item ? item.quantity : 0;
     });
 }
