@@ -140,7 +140,7 @@
                     <!--description-->
                     <div class="product-description mt-4 h-[141px] w-full pr-[15px]">
                         <Svroller width="100%" height="100%" margin={{ right: -15 }} alwaysVisible>
-                            {@html product.alcohol_website[0].description_french}
+                            {@html JSON.parse(product.alcohol_website[0].description_french).fr}
                             <!--                            <button on:click={() => (expand_description = !expand_description)}>-->
                             <!--                                {expand_description ? '-' : '+'}-->
                             <!--                            </button>-->
