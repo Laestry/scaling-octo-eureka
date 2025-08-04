@@ -26,7 +26,6 @@
     }
 
     // CART ANIMATION
-    const itemQuantity = getItemQuantityStore(product.id);
     let animations: { id: number }[] = [];
 
     // SELECT OLDEST BATCH
@@ -43,35 +42,38 @@
     }
     // keep this up to date if product changes
     $: selectedBatch = getOldestBatch();
+    let itemQuantity;
+
+    $: if (selectedBatch) {
+        itemQuantity = getItemQuantityStore(selectedBatch.id);
+    }
 
     function handleAdd() {
         if (!selectedBatch) return;
-
-        cart.add({
-            ...product,
-            selected_batch_id: selectedBatch.id
-        });
+        console.log('ProductCard handleAdd');
+        console.log(product, selectedBatch.id);
+        cart.add(product, selectedBatch.id);
 
         const id = Date.now();
+        const duration = 600;
         animations = [...animations, { id }];
         setTimeout(() => {
             animations = animations.filter((anim) => anim.id !== id);
-        }, 600);
+        }, duration + 200);
     }
 
     // FALLBACK FOR PROVIDER NAME
     const providerName = product.parties?.display_name ?? '';
-    product.website = product.alcohol_website?.[0] ?? null;
 </script>
 
 {#if isMain}
     <div class="product {size}">
-        <a href="/product/{product.website.slug}">
+        <a href="/product/{product.alcohol_website[0]?.slug ?? 'noslug'}">
             <img class="bg-no-repeat object-cover bg-center img" src={img} alt="Wine" />
         </a>
         <div class="flex justify-between mt-[7px] w-full">
             <a
-                href="/product/{product.website.slug}"
+                href="/product/{product.alcohol_website[0]?.slug ?? 'noslug'}"
                 class="flex flex-col uppercase w-full product-name"
                 style="width: calc(100% - 100px)"
             >
@@ -108,7 +110,7 @@
                         out:fly={{ y: -30, duration: 600 }}
                         style="position: absolute; left: 50%; top: -20px; transform: translateX(-50%); pointer-events: none; z-index: 10;"
                     >
-                        {$itemQuantity > 0 ? $itemQuantity * product.uvc : ''}
+                        {$itemQuantity > 0 ? $itemQuantity * product.uvc : ''}s
                     </div>
                 {/each}
             </div>
@@ -116,10 +118,10 @@
     </div>
 {:else}
     <div class="product {size}">
-        <a href="/product/{product.website.slug}">
+        <a href="/product/{product.alcohol_website[0]?.slug ?? 'noslug'}">
             <img class="bg-no-repeat object-cover bg-center img mb-[15px]" src={img} alt="Wine" />
         </a>
-        <a href="/product/{product.website.slug}" class="flex justify-between w-full">
+        <a href="/product/{product.alcohol_website[0]?.slug ?? 'noslug'}" class="flex justify-between w-full">
             <div class="flex flex-col w-full product-name" style="width: calc(100% - 100px)">
                 <div class="description">
                     <div>{getCategory(product)}</div>
@@ -149,7 +151,10 @@
                 </div>
             </div>
         </a>
-        <a href="/product/{product.website.slug}" class="flex flex-col items-start justify-start w-full product-name">
+        <a
+            href="/product/{product.alcohol_website[0]?.slug ?? 'noslug'}"
+            class="flex flex-col items-start justify-start w-full product-name"
+        >
             <b class="truncate w-full">{product.name || '-'}</b>
             <div class="w-full flex">
                 <div class="truncate" style="max-width: calc(100% - 37px)">{providerName}</div>
@@ -161,7 +166,7 @@
             </div>
         </a>
         <div class="flex justify-between items-end w-full">
-            <a href="/product/{product.website.slug}" class="product-name description">
+            <a href="/product/{product.alcohol_website[0]?.slug ?? 'noslug'}" class="product-name description">
                 {product.uvc} <span class="lowercase">x</span>
                 {product.volume}
             </a>

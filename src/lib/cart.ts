@@ -1,79 +1,74 @@
-// cart.ts
 import { writable, derived, type Writable } from 'svelte/store';
 import type { AlcoholProduct } from '$lib/models/pocketbase';
 
-// Define a type for products in cart
-type CartProduct = AlcoholProduct & { quantity: number };
+// Cart entry is keyed by selectedBatchId; batch implies the parent product.
+type CartProduct = AlcoholProduct & { quantity: number; selectedBatchId: string };
 type Cart = CartProduct[];
 
 // Define store types
 type CartStore = Writable<Cart> & {
-    add: (item: AlcoholProduct, amount?: number) => void;
-    remove: (itemId: string) => void;
-    removeCompletely: (itemId: string) => void;
+    add: (item: AlcoholProduct, selectedBatchId: string, amount?: number) => void;
+    remove: (selectedBatchId: string, amount?: number) => void;
+    removeCompletely: (selectedBatchId: string) => void;
     clear: () => void;
 };
 
 // Create a global variable to store our cart instance
 let _cart: CartStore | undefined;
 
-// Create a writable store that initializes from localStorage if available
 export function createCart(): CartStore {
-    // If the cart already exists, return it
     if (_cart) return _cart;
 
-    // Safe access to localStorage (handles SSR)
     const getInitialCart = (): Cart => {
         if (typeof window === 'undefined') return [];
         const storedCart = localStorage.getItem('cart');
         return storedCart ? (JSON.parse(storedCart) as Cart) : [];
     };
 
-    // Create a writable store with the initial cart data
     const cartStore = writable<Cart>(getInitialCart());
 
-    // Set up localStorage sync only in browser environment
     if (typeof window !== 'undefined') {
         cartStore.subscribe((cart: Cart) => {
             localStorage.setItem('cart', JSON.stringify(cart));
         });
     }
 
-    // Create the cart store with additional methods
     _cart = {
         subscribe: cartStore.subscribe,
         set: cartStore.set,
         update: cartStore.update,
-        add: (item: AlcoholProduct, amount: number = 1) => {
-            cartStore.update((cart) => {
-                const index = cart.findIndex((cartItem) => cartItem.id === item.id);
-                if (index !== -1) {
-                    return cart.map((cartItem, i) =>
-                        i === index ? { ...cartItem, quantity: cartItem.quantity + amount } : cartItem
+        add: (item: AlcoholProduct, selectedBatchId: string, amount: number = 1) => {
+            if (!selectedBatchId) {
+                throw new Error('selectedBatchId is required to add to cart');
+            }
+
+            cartStore.update((cart: CartProduct[]) => {
+                const existing = cart.find((ci) => ci.selectedBatchId === selectedBatchId);
+                if (existing) {
+                    return cart.map((ci) =>
+                        ci.selectedBatchId === selectedBatchId ? { ...ci, quantity: ci.quantity + amount } : ci
                     );
                 } else {
-                    return [...cart, { ...item, quantity: amount }];
+                    const newEntry: CartProduct = { ...item, selectedBatchId, quantity: amount };
+                    return [...cart, newEntry];
                 }
             });
         },
-        remove: (itemId: string) => {
-            cartStore.update((cart) => {
-                const index = cart.findIndex((item) => item.id === itemId);
+        remove: (selectedBatchId: string, amount: number = 1) => {
+            cartStore.update((cart: CartProduct[]) => {
+                const index = cart.findIndex((ci) => ci.selectedBatchId === selectedBatchId);
                 if (index === -1) return cart;
 
-                const item = cart[index];
-                if (item && item.quantity > 1) {
-                    return cart.map((cartItem, i) =>
-                        i === index ? { ...cartItem, quantity: cartItem.quantity - 1 } : cartItem
-                    );
+                const ci = cart[index];
+                if (ci.quantity > amount) {
+                    return cart.map((c, i) => (i === index ? { ...c, quantity: c.quantity - amount } : c));
                 } else {
                     return cart.filter((_, i) => i !== index);
                 }
             });
         },
-        // New function to remove a product completely regardless of quantity
-        removeCompletely: (itemId: string) => {
-            cartStore.update((cart) => cart.filter((item) => item.id !== itemId));
+        removeCompletely: (selectedBatchId: string) => {
+            cartStore.update((cart: CartProduct[]) => cart.filter((ci) => ci.selectedBatchId !== selectedBatchId));
         },
         clear: () => {
             cartStore.set([]);
@@ -86,20 +81,19 @@ export function createCart(): CartStore {
     return _cart;
 }
 
-// Export the cart store - this will be the same instance everywhere it's imported
 export const cart = createCart();
 
-// Derived store to calculate the total number of items in the cart
+// total number of units (e.g., bottles) in cart
 export const totalItems = derived(cart, ($cart) => $cart.reduce((acc, item) => acc + item.quantity * item.uvc, 0));
 
 /**
- * Get the quantity of a specific item in the cart
- * @param {string} itemId - The ID of the item to check
- * @returns {number} - The quantity of the item in the cart, or 0 if not present
+ * Get the quantity of a specific batch in the cart
+ * @param {string} selectedBatchId
+ * @returns derived store with quantity (or 0)
  */
-export function getItemQuantityStore(itemId: string) {
+export function getItemQuantityStore(selectedBatchId: string) {
     return derived(cart, ($cart) => {
-        const item = $cart.find((item) => item.id === itemId);
+        const item = $cart.find((item) => item.selectedBatchId === selectedBatchId);
         return item ? item.quantity : 0;
     });
 }

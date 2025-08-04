@@ -1,6 +1,6 @@
 <script lang="ts">
     import type { PageData } from './$types';
-    import { priceFormat } from './utils';
+    import { getCategory, priceFormat } from './utils';
     import Accordion from '$lib/components/Accordion.svelte';
     import ProductTags from './ProductTags.svelte';
     import { cart } from '$lib/cart';
@@ -9,8 +9,9 @@
     import type { AlcoholProduct } from '$lib/models/pocketbase';
     import { Svroller } from 'svrollbar';
     import { fade } from 'svelte/transition';
-    import { onMount } from 'svelte';
+    import { onMount, tick } from 'svelte';
     import { getSpecificCategoryLabel } from '../../products/Filters/utils';
+    import { afterNavigate } from '$app/navigation';
 
     export let data: PageData;
     console.log('data', data);
@@ -31,26 +32,6 @@
     }
     let selectedBatch;
     $: if (product) selectedBatch = getOldestBatch();
-
-    // UNWRAP WEBSITE
-    function getWebsite(): any | null {
-        return product?.alcohol_website?.[0] ?? null;
-    }
-    $: website = getWebsite();
-
-    // PARSE FRENCH DESCRIPTION FROM WEBSITE
-    function parseWebsiteFrenchDesc(w: any): string {
-        if (!w) return '';
-        if (!w.description_french) return '';
-        try {
-            const parsed = JSON.parse(w.description_french);
-            if (parsed?.fr) return parsed.fr;
-        } catch (e) {
-            console.warn('failed to parse website.description_french', e);
-        }
-        return '';
-    }
-    $: websiteDescription = parseWebsiteFrenchDesc(website);
 
     // Format "Acheter avant" based on sell_before_date
     function formatSellBeforeDate(sellBefore: string | null | undefined): string {
@@ -76,7 +57,7 @@
         }
     }
     const img1 = '/images/example_wines/SHOP PAGE/Product Shot - stack.png';
-    const img = '/images/example_wines/SHOP PAGE/9x16 Product Shot - stack.png';
+    const img = '/images/example_wines/SHOP PAGE/9x1' + '6 Product Shot - stack.png';
     const img2 = '/images/example_wines/SHOP PAGE/In-situ Product Shot - stack.png';
 
     let sameProducerProducts: AlcoholProduct[] = [];
@@ -145,7 +126,7 @@
                     <!--description-->
                     <div class="product-description mt-4 h-[141px] w-full pr-[15px]">
                         <Svroller width="100%" height="100%" margin={{ right: -15 }} alwaysVisible>
-                            {@html websiteDescription}
+                            {@html product.alcohol_website[0].description_french}
                             <!--                            <button on:click={() => (expand_description = !expand_description)}>-->
                             <!--                                {expand_description ? '-' : '+'}-->
                             <!--                            </button>-->
@@ -161,12 +142,7 @@
                                         lg:w-[279px] md:w-[235px] w-[186px]"
                             >
                                 <p class="border-b border-wred lg:h-[32px] h-[28px] capitalize flex items-center">
-                                    <!--{product.category && product.specificCategory-->
-                                    <!--    ? getSpecificCategoryLabel({-->
-                                    <!--          category: product.category,-->
-                                    <!--          specificCategory: product.specificCategory-->
-                                    <!--      })-->
-                                    <!--    : '-'}-->
+                                    {product.category && product.specific_category ? getCategory(product) : '-'}
                                 </p>
                                 <div class="flex items-center flex-1">
                                     <div class="w-fit">

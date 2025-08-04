@@ -10,9 +10,10 @@
     import CartItem from './CartItem.svelte';
     import { pb } from '$lib/pocketbase';
     import { supabase } from '$lib/supabase/client';
+    import { isPrixResto } from '$lib/store';
+    import { totalsPerUnit } from '$lib/utils';
 
     // Log the cart for debugging
-    console.log('cart', $cart);
 
     // Declare options; you may type these if needed.
     let options;
@@ -20,7 +21,8 @@
     onMount(async () => {
         const { data, error } = await supabase.schema('cms_saq').from('saq_branches').select('*');
         options = data.map((x) => ({ value: x.id, label: `${x.city}, ${x.address}` }));
-        console.log('branches', options);
+        // console.log('branches', options);
+        console.log('cart', $cart);
     });
 
     const items = Array.from({ length: 500 }).map((_, i) => `item ${i}`);
@@ -70,7 +72,7 @@
 
     async function handleSubmit() {
         let selectedBatches = $cart.map((i) => ({
-            id: i.selected_batch_id,
+            id: i.selectedBatchId,
             quantity: i.quantity * i.uvc
         }));
         console.log('cart items', $cart);
@@ -194,6 +196,18 @@
     let passwordAccountInput: Input;
     let passwordAccount: string;
     let register = false;
+
+    // taxes 0.05 0.09975
+
+    $: total = $cart.reduce((acc, item) => {
+        const { lineTotal } = totalsPerUnit(item, $isPrixResto);
+        return acc + lineTotal * item.quantity;
+    }, 0);
+
+    $: agencyAndTaxesTotal = $cart.reduce((acc, item) => {
+        const { agencyWithTaxes } = totalsPerUnit(item, $isPrixResto);
+        return acc + agencyWithTaxes * item.quantity;
+    }, 0);
 </script>
 
 <!--Courriel-->
@@ -371,10 +385,12 @@
         <hr class={isFinalize ? 'md:mt-[18px] mt-[0px]' : ''} />
         <div class="">
             <div class="  flex lg:flex-col lg:gap-0 flex-wrap gap-2 justify-between">
-                {#each $cart as item (item.id)}
-                    <div transition:fade>
-                        <CartItem product={item} />
-                    </div>
+                {#each $cart as item}
+                    {#key item.id}
+                        <div transition:fade>
+                            <CartItem product={item} />
+                        </div>
+                    {/key}
                 {/each}
             </div>
 
@@ -383,14 +399,7 @@
                 <div class="flex justify-between">
                     <div class="text-xs">Total</div>
                     <b>
-                        <!--{$cart-->
-                        <!--    .reduce((total, item) => {-->
-                        <!--        const unitPrice = $isPrixResto ? item.pricing.price : item.pricing.priceTaxIn;-->
-                        <!--        const itemTotal = unitPrice * item.quantity;-->
-                        <!--        const agencyTotal = item.pricing.agencyFeeWTaxes * item.quantity;-->
-                        <!--        return total + itemTotal + agencyTotal;-->
-                        <!--    }, 0)-->
-                        <!--    .toFixed(2)} $-->
+                        <b>${total.toFixed(2)}</b>
                     </b>
                 </div>
                 <div class="text-xs">Frais d’agence et taxes incluses</div>
@@ -400,11 +409,7 @@
                         <div class="flex justify-between">
                             <div class="text-xs">Montant chargé maintenant</div>
                             <b>
-                                <!--{$cart-->
-                                <!--    .reduce((total, item) => {-->
-                                <!--        return total + item.pricing.agencyFeeWTaxes * item.quantity;-->
-                                <!--    }, 0)-->
-                                <!--    .toFixed(2)} $-->
+                                <b>${agencyAndTaxesTotal.toFixed(2)}</b>
                             </b>
                         </div>
                         <div class="text-xs">*La différence sera chargée au moment de la cueillette</div>

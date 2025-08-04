@@ -8,7 +8,7 @@
     import { setSupabase } from '$lib/supabase/client';
 
     export let data: PageData;
-    console.log('data', data);
+    // console.log('data', data);
     setSupabase(data.supabase);
 
     let prevPath = '';

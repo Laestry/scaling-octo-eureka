@@ -3,7 +3,7 @@
     import ProductCard from './products/ProductCard.svelte';
 
     export let data: PageData;
-    $: console.log('data', data);
+    // $: console.log('data', data);
     let products = data.products.data;
 
     let sizeSequence1 = ['m', 's', 'l', 'm', 'l', 'm', 's', 'm'];
@@ -41,7 +41,7 @@
             class="card__row items-start flex lg:gap-x-[16px] gap-x-[10px] md:gap-x-[11px] gap-y-[20px] lg:mb-[39px] mb-[20px] flex-wrap"
         >
             {#each products as product, i (product.id)}
-                <ProductCard {product} size={sizeSequence1[i % sizeSequence1.length]} main={true} />
+                <ProductCard {product} size={sizeSequence1[i % sizeSequence1.length]} />
             {/each}
         </div>
 
@@ -55,7 +55,7 @@
         >
             {#each products as product, i (product.id)}
                 {#if i < 4}
-                    <ProductCard {product} size={sizeSequence2[i % sizeSequence2.length]} main={true} />
+                    <ProductCard {product} size={sizeSequence2[i % sizeSequence2.length]} />
                 {/if}
             {/each}
         </div>

@@ -1,7 +1,7 @@
 <script lang="ts">
     import { getCategory, priceFormat } from '../product/[slug]/utils';
     import { cart, getItemQuantityStore } from '$lib/cart';
-    import { goto } from '$app/navigation';
+    import { afterNavigate, goto } from '$app/navigation';
     import { fade } from 'svelte/transition';
     import Minus from '$lib/icons/Minus.svelte';
     import Plus from '$lib/icons/Plus.svelte';
@@ -28,152 +28,163 @@
         img = getImage();
     }
 
-    const itemQuantity = getItemQuantityStore(product.id);
+    const itemQuantity = getItemQuantityStore(product.selectedBatchId);
 
-    $: selectedBatch = product.alcohol_batches?.find((b) => b.id === product.selected_batch_id) ?? null;
+    let selectedBatch;
+    let isMounted = false;
+    afterNavigate(() => {
+        console.log('cartitem afterNavigate ', product, product.selectedBatchId);
+        isMounted = true;
+        selectedBatch = product.alcohol_batches?.find((b) => b.id === product.selectedBatchId) ?? null;
+    });
 </script>
 
-<div class="lg:flex hidden h-[142px] border-b border-wblue mb-[11px]">
-    <button
-        class="flex justify-end h-full w-[106px] ml-8"
-        on:click={() => {
-            goto(`/product/${product.slug}`);
-        }}
-    >
-        <div class="absolute">
-            <button
-                class="hover:translate-y-0.5 transition-transform rotate-45 text-5xl"
-                style="line-height: 24px"
-                on:click|preventDefault|stopPropagation={() => cart.removeCompletely(product.id)}
-            >
-                +
-            </button>
-        </div>
-        <img class="bg-no-repeat object-cover bg-center img" src={img} alt="Wine" />
-    </button>
+{#if isMounted && selectedBatch}
+    <div class="lg:flex hidden h-[142px] border-b border-wblue mb-[11px]">
+        <button
+            class="flex justify-end h-full w-[106px] ml-8"
+            on:click={() => {
+                goto(`/product/${product.slug}`);
+            }}
+        >
+            <div class="absolute">
+                <button
+                    class="hover:translate-y-0.5 transition-transform rotate-45 text-5xl"
+                    style="line-height: 24px"
+                    on:click|preventDefault|stopPropagation={() => cart.removeCompletely(product.selectedBatchId)}
+                >
+                    +
+                </button>
+            </div>
+            <img class="bg-no-repeat object-cover bg-center img" src={img} alt="Wine" />
+        </button>
 
-    <div class="max-w-[326px] flex-1 my-4 flex items-end ml-[54px] border-r border-wblue">
-        <div>
-            <b>{product.name}</b>
-            <div>{product.parties?.display_name ?? ''}</div>
-            <div>{selectedBatch.vintage ?? ''}</div>
+        <div class="max-w-[326px] flex-1 my-4 flex items-end ml-[54px] border-r border-wblue">
+            <div>
+                <b>{product.name}</b>
+                <div>{product.parties?.display_name ?? ''}</div>
+                <div>{selectedBatch?.vintage ?? ''}</div>
+            </div>
         </div>
-    </div>
 
-    <div class="max-w-[190px] flex-1 my-4 flex pl-[16px] border-r border-wred">
-        <div>
-            <div class="text-xs mb-[20px] mt-[9px]">Format</div>
-            <div>{product.uvc} x {product.volume}</div>
+        <div class="max-w-[190px] flex-1 my-4 flex pl-[16px] border-r border-wred">
+            <div>
+                <div class="text-xs mb-[20px] mt-[9px]">Format</div>
+                <div>{product.uvc} x {product.volume}</div>
+            </div>
         </div>
-    </div>
 
-    <div class="max-w-[290px] flex-1 my-4 flex justify-end pr-[79px] border-r border-wpink">
-        <div class="mt-[9px] flex flex-col items-end">
-            <div class="text-xs mb-[12px]">Bouteilles ({product.uvc}/caisse)</div>
-            <div class="flex items-center w-fit h-fit mr-[2px]">
-                <p class="product-table-counter__value ml-[2px]">{$itemQuantity * product.uvc}</p>
-                <div class="flex flex-col justify-center items-center">
-                    <button class="abutton product-table-counter__button" on:click={() => cart.add(product)}>
-                        <Plus />
-                    </button>
-                    <button
-                        class="abutton product-table-counter__button {$itemQuantity > 1 ? '' : '!text-gray-300'}"
-                        on:click={() => {
-                            if ($itemQuantity > 1) cart.remove(product.id);
-                        }}
-                    >
-                        <Minus />
-                    </button>
+        <div class="max-w-[290px] flex-1 my-4 flex justify-end pr-[79px] border-r border-wpink">
+            <div class="mt-[9px] flex flex-col items-end">
+                <div class="text-xs mb-[12px]">Bouteilles ({product.uvc}/caisse)</div>
+                <div class="flex items-center w-fit h-fit mr-[2px]">
+                    <p class="product-table-counter__value ml-[2px]">{$itemQuantity * product.uvc}</p>
+                    <div class="flex flex-col justify-center items-center">
+                        <button
+                            class="abutton product-table-counter__button"
+                            on:click={() => cart.add(product, selectedBatch.id)}
+                        >
+                            <Plus />
+                        </button>
+                        <button
+                            class="abutton product-table-counter__button {$itemQuantity > 1 ? '' : '!text-gray-300'}"
+                            on:click={() => {
+                                if ($itemQuantity > 1) cart.remove(product.id, selectedBatch.id);
+                            }}
+                        >
+                            <Minus />
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
+
+        <div class="max-w-[192px] flex-1 w-full my-4 flex items-center justify-end pr-1.5">
+            <div>{((Number(itemQuantity) || 1) * Number(selectedBatch?.price)).toFixed(2)} $</div>
+        </div>
     </div>
 
-    <div class="max-w-[192px] flex-1 w-full my-4 flex items-center justify-end pr-1.5">
-        <div>{((Number(itemQuantity) || 1) * Number(selectedBatch.price)).toFixed(2)} $</div>
-    </div>
-</div>
-
-<!--mobile cart-->
-<div class="cartProduct lg:hidden flex" transition:fade|global>
-    <button
-        class="flex justify-end"
-        on:click={() => {
-            goto(`/product/${product.slug}`);
-        }}
-    >
-        <div class="absolute">
-            <button
-                class="rotate-45 text-5xl"
-                style="line-height: 24px"
-                on:click|preventDefault|stopPropagation={() => cart.removeCompletely(product.id)}
-            >
-                +
-            </button>
-        </div>
-        <img class="bg-no-repeat object-cover bg-center img mb-[7px]" src={img} alt="Wine" />
-    </button>
-    <a href="/product/{product.slug}" class="flex justify-between w-full">
-        <div class="flex flex-col w-full product-name" style="width: calc(100% - 100px)">
-            <div class="description">
-                <div>{getCategory(product)}</div>
+    <!--mobile cart-->
+    <div class="cartProduct lg:hidden flex" transition:fade|global>
+        <button
+            class="flex justify-end"
+            on:click={() => {
+                goto(`/product/${product.slug}`);
+            }}
+        >
+            <div class="absolute">
+                <button
+                    class="rotate-45 text-5xl"
+                    style="line-height: 24px"
+                    on:click|preventDefault|stopPropagation={() => cart.removeCompletely(product.selectedBatchId)}
+                >
+                    +
+                </button>
             </div>
-        </div>
-        <div class="flex flex-col items-end">
-            <div class="product-price">
-                {$priceFormat(
-                    { price: selectedBatch.price, price_tax_in: selectedBatch.price_tax_in, uvc: product.uvc },
-                    true,
-                    { none: true }
-                )}
+            <img class="bg-no-repeat object-cover bg-center img mb-[7px]" src={img} alt="Wine" />
+        </button>
+        <a href="/product/{product.slug}" class="flex justify-between w-full">
+            <div class="flex flex-col w-full product-name" style="width: calc(100% - 100px)">
+                <div class="description">
+                    <div>{getCategory(product)}</div>
+                </div>
             </div>
-            <div class="product-price {product.uvc > 1 ? '' : 'text-transparent'}">
-                {$priceFormat(
-                    { price: selectedBatch.price, price_tax_in: selectedBatch.price_tax_in, uvc: product.uvc },
-                    false,
-                    { none: true }
-                )}
+            <div class="flex flex-col items-end">
+                <div class="product-price">
+                    {$priceFormat(
+                        { price: selectedBatch?.price, price_tax_in: selectedBatch?.price_tax_in, uvc: product.uvc },
+                        true,
+                        { none: true }
+                    )}
+                </div>
+                <div class="product-price {product.uvc > 1 ? '' : 'text-transparent'}">
+                    {$priceFormat(
+                        { price: selectedBatch?.price, price_tax_in: selectedBatch?.price_tax_in, uvc: product.uvc },
+                        false,
+                        { none: true }
+                    )}
+                </div>
             </div>
-        </div>
-    </a>
-
-    <a href="/product/{product.slug}" class="flex flex-col items-start justify-start w-full product-name">
-        <b class="truncate w-full">{product.name || '-'}</b>
-        <div class="w-full flex">
-            <div class="truncate" style="max-width: calc(100% - 37px)">{product.parties?.display_name ?? ''}</div>
-            <span>
-                {#if product.parties?.display_name && selectedBatch.vintage},
-                {/if}
-                {selectedBatch.vintage ?? ''}
-            </span>
-        </div>
-    </a>
-    <div class="flex justify-between items-end w-full">
-        <a href="/product/{product.slug}" class="product-name description">
-            {product.uvc} <span class="lowercase">x</span>
-            {product.lblFormat}
         </a>
 
-        <div class="flex items-center w-fit h-fit self-end">
-            <button
-                class="abutton product-table-counter__button {$itemQuantity > 1 ? '' : 'text-gray-300'}"
-                style="line-height: 16px"
-                on:click={() => {
-                    if ($itemQuantity > 1) cart.remove(product.id);
-                }}
-                >-
-            </button>
+        <a href="/product/{product.slug}" class="flex flex-col items-start justify-start w-full product-name">
+            <b class="truncate w-full">{product.name || '-'}</b>
+            <div class="w-full flex">
+                <div class="truncate" style="max-width: calc(100% - 37px)">{product.parties?.display_name ?? ''}</div>
+                <span>
+                    {#if product.parties?.display_name && selectedBatch?.vintage},
+                    {/if}
+                    {selectedBatch?.vintage ?? ''}
+                </span>
+            </div>
+        </a>
+        <div class="flex justify-between items-end w-full">
+            <a href="/product/{product.slug}" class="product-name description">
+                {product.uvc} <span class="lowercase">x</span>
+                {product.lblFormat}
+            </a>
 
-            <p class="product-table-counter__value">{$itemQuantity * product.uvc}</p>
-            <button
-                class="abutton product-table-counter__button"
-                style="line-height: 16px"
-                on:click={() => cart.add(product)}
-                >+
-            </button>
+            <div class="flex items-center w-fit h-fit self-end">
+                <button
+                    class="abutton product-table-counter__button {$itemQuantity > 1 ? '' : 'text-gray-300'}"
+                    style="line-height: 16px"
+                    on:click={() => {
+                        if ($itemQuantity > 1) cart.remove(product.id);
+                    }}
+                    >-
+                </button>
+
+                <p class="product-table-counter__value">{$itemQuantity * product.uvc}</p>
+                <button
+                    class="abutton product-table-counter__button"
+                    style="line-height: 16px"
+                    on:click={() => cart.add(product, selectedBatch.id)}
+                    >+
+                </button>
+            </div>
         </div>
     </div>
-</div>
+{/if}
 
 <style lang="scss">
     .product-table-counter__button {

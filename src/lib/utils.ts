@@ -54,3 +54,50 @@ export function teleport(node, name) {
 export const delay = (delayInms) => {
     return new Promise((resolve) => setTimeout(resolve, delayInms));
 };
+
+/** tax stacking: GST 5%, then QST 9.975% on (amount + GST) */
+function applyTaxes(amount: number): number {
+    const gst = amount * 0.05;
+    const qst = (amount + gst) * 0.09975;
+    return gst + qst;
+}
+
+function getSelectedBatch(item: any) {
+    if (!item || !Array.isArray(item.alcohol_batches)) return undefined;
+    return item.alcohol_batches.find((b: any) => String(b.id) === String(item.selectedBatchId));
+}
+
+/** base price with its taxes */
+export function baseWithTaxes(item: any, isPrixResto: boolean) {
+    const batch = getSelectedBatch(item);
+    if (!batch) return 0;
+    const basePrice = isPrixResto ? batch.price_tax_in : batch.price;
+    return basePrice + applyTaxes(basePrice);
+}
+
+/** agency fee (raw) and with its taxes */
+export function agencyFeeWithTaxes(item: any, isPrixResto: boolean) {
+    const batch = getSelectedBatch(item);
+    if (!batch) return 0;
+    const basePrice = isPrixResto ? batch.price_tax_in : batch.price;
+
+    let agencyRaw = 0;
+    if (batch.agency_fee_is_percentage) {
+        agencyRaw = ((batch.agency_fee_percentage ?? 0) / 100) * basePrice;
+    } else {
+        agencyRaw = batch.agency_fee_net ?? 0;
+    }
+
+    return agencyRaw + applyTaxes(agencyRaw);
+}
+
+/** totals for a single item (per unit) */
+export function totalsPerUnit(item: any, isPrixResto: boolean) {
+    const baseWithTax = baseWithTaxes(item, isPrixResto);
+    const agencyWithTax = agencyFeeWithTaxes(item, isPrixResto);
+    return {
+        baseWithTaxes: baseWithTax,
+        agencyWithTaxes: agencyWithTax,
+        lineTotal: baseWithTax + agencyWithTax
+    };
+}

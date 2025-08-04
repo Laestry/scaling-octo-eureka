@@ -6,6 +6,5 @@ export async function load({ locals, url }) {
         .gt('alcohol_batches.quantity', 0)
         .order('sell_before_date', { referencedTable: 'alcohol_batches', ascending: false });
 
-    console.log('data');
     return { data };
 }
