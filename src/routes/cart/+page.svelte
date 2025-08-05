@@ -155,7 +155,7 @@
         }
     }
 
-    let isFinalize = true;
+    let isFinalize = false;
     let emailAccount: string;
     let emailAccountInput: Input;
     let existingAccount;
