@@ -12,6 +12,7 @@
     import { supabase } from '$lib/supabase/client';
     import { isPrixResto } from '$lib/store';
     import { totalsPerUnit } from '$lib/utils';
+    import { page } from '$app/stores';
 
     // Log the cart for debugging
 
@@ -19,6 +20,8 @@
     let options;
 
     onMount(async () => {
+        console.log('url', $page.url.origin);
+        console.log('url2');
         const { data, error } = await supabase.schema('cms_saq').from('saq_branches').select('*');
         options = data.map((x) => ({ value: x.id, label: `${x.city}, ${x.address}` }));
         // console.log('branches', options);
@@ -130,7 +133,8 @@
                             email: formData.email,
                             phone: formData.phone
                         }
-                    }
+                    },
+                    returnUrl: $page.url.origin
                 })
             });
             if (!res.ok) {
