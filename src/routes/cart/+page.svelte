@@ -73,6 +73,7 @@
     let errorMessage = '';
     let formEl;
 
+    let loading = false;
     async function handleSubmit() {
         let selectedBatches = $cart.map((i) => ({
             id: parseInt(i.selectedBatchId),
@@ -112,6 +113,7 @@
             errorMessage = 'Le formulaire contient des erreurs.';
         }
         let res;
+        loading = true;
         try {
             res = await fetch('api/submit-order', {
                 method: 'POST',
@@ -152,6 +154,8 @@
             errorMessage = 'Une erreur réseau est survenue. Veuillez réessayer plus tard.';
             // optionally bail out or re-throw
             return;
+        } finally {
+            loading = false;
         }
     }
 
@@ -430,6 +434,7 @@
                 </button>
                 <button
                     class="abutton bg-wred text-white text-base w-full md:max-w-[271px] rounded-3xl"
+                    disabled={loading}
                     on:click={() => {
                         if (isFinalize) handleSubmit();
                         else {

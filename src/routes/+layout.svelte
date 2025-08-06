@@ -18,7 +18,11 @@
 
     navigating.subscribe((n) => {
         if (n) {
-            phase = 'start';
+            const from = n.from?.url.pathname || '';
+            const to = n.to?.url.pathname || '';
+            if (from === '/cart' && to === '/cart') {
+                return; // no animation
+            }
 
             prevPath = n.from?.url.pathname || '';
             currentPath = n.to?.url.pathname || '';
@@ -32,6 +36,8 @@
             } else {
                 isRight = true;
             }
+
+            phase = 'start';
         } else {
             phase = 'end';
         }

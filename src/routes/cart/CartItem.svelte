@@ -32,14 +32,14 @@
     $: selectedBatch = product.alcohol_batches?.find((b) => b.id == product.selectedBatchId) ?? null;
     let isMounted = false;
     afterNavigate(() => {
-        console.log('cartitem afterNavigate ', product, product.selectedBatchId);
+        // console.log('cartitem afterNavigate ', product, product.selectedBatchId);
         selectedBatch = product.alcohol_batches?.find((b) => b.id == product.selectedBatchId) ?? null;
 
         isMounted = true;
     });
 
     onMount(() => {
-        console.log('cartitem onMount ', product, product.selectedBatchId);
+        // console.log('cartitem onMount ', product, product.selectedBatchId);
         selectedBatch = product.alcohol_batches?.find((b) => b.id == product.selectedBatchId) ?? null;
 
         isMounted = true;
