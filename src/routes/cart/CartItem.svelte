@@ -129,7 +129,7 @@
     </div>
 
     <!--mobile cart-->
-    <div class="cartProduct lg:hidden flex" transition:fade|global>
+    <div class="cartProduct lg:hidden flex" transition:fade>
         <button
             class="flex justify-end"
             on:click={() => {

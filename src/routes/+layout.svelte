@@ -8,46 +8,47 @@
     import { setSupabase } from '$lib/supabase/client';
 
     export let data: PageData;
-    // console.log('data', data);
     setSupabase(data.supabase);
 
     let prevPath = '';
     let currentPath = $page.url.pathname;
     let isRight = true;
-    let phase: 'idle' | 'start' | 'end' = 'idle';
+
+    /* NEW */
+    let animate = true; // flip to false for the paths we want to skip
 
     navigating.subscribe((n) => {
         if (n) {
             const from = n.from?.url.pathname || '';
             const to = n.to?.url.pathname || '';
-            if (from === '/cart' && to === '/cart') {
-                return; // no animation
+
+            // ———————————————————————————————
+            // paths that should NOT animate
+            // ———————————————————————————————
+            if (from === '/cart' && (to === '/cart' || to === '/')) {
+                animate = false; // 👈 skip fly
+            } else {
+                animate = true; // default: animate
             }
 
-            prevPath = n.from?.url.pathname || '';
-            currentPath = n.to?.url.pathname || '';
-            if (
+            prevPath = from;
+            currentPath = to;
+
+            isRight =
                 (prevPath === '/' && currentPath === '/associes') ||
                 (prevPath === '/associes' && currentPath === '/vision') ||
                 (prevPath === '/' && currentPath === '/vision') ||
                 (prevPath === '/cart' && currentPath === '/')
-            ) {
-                isRight = false;
-            } else {
-                isRight = true;
-            }
-
-            phase = 'start';
-        } else {
-            phase = 'end';
+                    ? false
+                    : true;
         }
     });
 </script>
 
-<div style="max-width: 100vw; background-color: #F6F1F2" class="pb-[53px]">
+<div style="max-width:100vw;background-color:#F6F1F2" class="pb-[53px]">
     <Header />
-
-    {#key `${currentPath}::${phase}`}
+    {#key currentPath}
+        <!-- with fly transition -->
         <div
             in:fly={isRight ? { x: -200, duration: 500, delay: 1500 } : { x: 200, duration: 500, delay: 1500 }}
             out:fly={isRight ? { x: 200, duration: 1200 } : { x: -200, duration: 1200 }}
@@ -56,4 +57,5 @@
         </div>
     {/key}
 </div>
+
 <Footer />
