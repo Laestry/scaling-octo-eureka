@@ -82,10 +82,7 @@
         position: relative;
         line-height: 150%;
     }
-    .filter-header:hover {
-        border-color: #2d63b0;
-        color: #2d63b0;
-    }
+
     .filter-list {
         display: flex;
         flex-direction: column;
