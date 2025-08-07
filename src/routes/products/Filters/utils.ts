@@ -123,7 +123,7 @@ export async function fetchFilteredProductsForAlcohol(
         .select('*, alcohol_batches!inner(*), parties!inner(display_name), alcohol_website!inner(slug)', {
             count: 'exact'
         })
-        .gt('alcohol_batches.quantity', 0)
+        .gt('alcohol_batches.calculated_quantity', 0)
         .gt('alcohol_batches.price', 0)
         .gt('alcohol_batches.price_tax_in', 0)
         .not('alcohol_website.slug', 'is', null);

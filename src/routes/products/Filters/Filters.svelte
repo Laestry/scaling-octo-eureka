@@ -12,7 +12,7 @@
     export let categories: any[] = [];
     export let selectedFilters: TFilters;
 
-    type FilterGroupName = 'category' | 'region' | 'vintage' | 'format' | 'producer';
+    type FilterGroupName = 'category' | 'region' | 'vintage' | 'format' | 'producer' | 'uvc';
 
     type DisplayFilter = {
         name: FilterGroupName;
@@ -26,7 +26,8 @@
         region: 'Région',
         vintage: 'Millésime',
         format: 'Format',
-        producer: 'Producteur'
+        producer: 'Producteur',
+        uvc: 'Case'
     };
 
     function buildDisplayFilters(rawCats: any[] = []): DisplayFilter[] {
@@ -74,6 +75,12 @@
                 groupKey = 'producer';
                 groupName = 'producer';
                 order = 5;
+            } else if (orgType === 'uvc') {
+                // cat.value is just the plain case-size string, e.g. "6", "12", "24"
+                label = `${cat.value}`; // what the user will see in the dropdown
+                groupKey = 'uvc';
+                groupName = 'uvc';
+                order = 6; // after format, before producer (tweak if you prefer)
             } else {
                 return;
             }
@@ -158,7 +165,7 @@
         const sp = $page.url.searchParams;
 
         // clear the short keys first
-        ['p', 'r', 'v', 'f', 'cat', 'pr', 's', 'q', 't'].forEach((k) => sp.delete(k));
+        ['p', 'r', 'v', 'f', 'cat', 'u', 'pr', 's', 'q', 't'].forEach((k) => sp.delete(k));
 
         // producer ids -> p
         if (selectedFilters.producer) {
@@ -182,6 +189,11 @@
         if (selectedFilters.format) {
             const arr = Array.isArray(selectedFilters.format) ? selectedFilters.format : [selectedFilters.format];
             appendArrayParam(sp, 'f', arr.map(String));
+        }
+
+        if (selectedFilters.uvc) {
+            const arr = Array.isArray(selectedFilters.uvc) ? selectedFilters.uvc : [selectedFilters.uvc];
+            appendArrayParam(sp, 'u', arr.map(String)); // u = uvc / “unités par caisse”
         }
 
         if (selectedFilters.category) {

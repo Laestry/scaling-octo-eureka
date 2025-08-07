@@ -21,13 +21,21 @@
     // SELECT OLDEST BATCH (same logic as in the card)
     function getOldestBatch(): any | null {
         if (!product?.alcohol_batches || !Array.isArray(product.alcohol_batches)) return null;
-        const valid = product.alcohol_batches.filter((b) => !b.is_archived && b.quantity > 0);
+
+        // only keep non-archived batches with available stock AND calculated_quantity > 0
+        const valid = product.alcohol_batches.filter(
+            (b) => !b.is_archived && b.quantity > 0 && b.calculated_quantity > 0
+        );
         if (!valid.length) return null;
+
+        // sort by earliest sell_before_date
         valid.sort((a, b) => {
             const aT = a.sell_before_date ? new Date(a.sell_before_date).getTime() : Infinity;
             const bT = b.sell_before_date ? new Date(b.sell_before_date).getTime() : Infinity;
             return aT - bT;
         });
+        console.log('selected batch', valid[0]);
+
         return valid[0];
     }
     let selectedBatch;
@@ -232,7 +240,7 @@
                                 </button>
                                 <button
                                     class="product-table__button abutton"
-                                    on:click={() => cart.add(product, selectedBatch.id)}
+                                    on:click={() => cart.add(product, selectedBatch.id, in_cart)}
                                 >
                                     Ajouter au panier
                                 </button>

@@ -45,13 +45,10 @@ export async function load({ locals, url }) {
         if (!category.length) category = undefined;
     }
 
-    // uvc (long key, optional)
-    const uvcArr = params
-        .getAll('uvc')
-        .map((v) => Number(v))
-        .filter((n) => !isNaN(n));
-    const uvc = uvcArr.length ? (uvcArr.length === 1 ? uvcArr[0] : uvcArr) : undefined;
-
+    // uvc (short key: u) — must match the component’s appendArrayParam(sp,'u',…)
+    const uvcRaw = params.getAll('u');
+    const uvcNums = uvcRaw.map((v) => Number(v)).filter((n) => !isNaN(n));
+    const uvc = uvcNums.length ? (uvcNums.length === 1 ? uvcNums[0] : uvcNums) : undefined;
     // priceRange (short key: pr)
     const pr = params.get('pr');
     const priceRange = pr === 'low' || pr === 'mid' || pr === 'high' ? pr : undefined;
