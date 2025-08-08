@@ -24,7 +24,7 @@
         console.log('url2');
         const { data, error } = await supabase.schema('cms_saq').from('saq_branches').select('*');
         options = data.map((x) => ({ value: x.id, label: `${x.city}, ${x.address}` }));
-        // console.log('branches', options);
+        console.log('branches', options);
         console.log('cart', $cart);
     });
 
@@ -37,7 +37,7 @@
     let postalCodeInput: Input;
     let phoneInput: Input;
     let emailInput: Input;
-    let saqSelect: Select;
+    let saqSelect: any;
 
     const formSchema = {
         $schema: 'https://json-schema.org/draft/2019-09/schema',
@@ -122,7 +122,7 @@
                     organizationId: 2,
                     items: selectedBatches,
                     customer: {
-                        saq_store_id: saqSelect.value,
+                        saq_store_id: saqSelect,
                         // saq_number: '', // add if needed
                         billing_address: {
                             street: formData.address,
@@ -376,7 +376,7 @@
                     {#if options}
                         <Select
                             fontSize="16px"
-                            bind:this={saqSelect}
+                            bind:value={saqSelect}
                             class="w-full lg:max-w-[464px] !border-wblue "
                             inputClass="!text-wblack !placeholder-wblue"
                             {options}

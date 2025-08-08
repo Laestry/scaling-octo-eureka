@@ -27,6 +27,7 @@
     export let validate = false;
     export let fontSize: string = '12px';
     export let multiple = false;
+    export let value: string | number | undefined;
 
     let isOpen = false;
     let userInput = '';
@@ -34,21 +35,21 @@
 
     // Convert passed options to a unified Option[] array.
     // Add an originalIndex property so we can restore order.
-    const parsedOptions: Option[] =
+    let parsedOptions: Option[] = [];
+    $: parsedOptions =
+        Array.isArray(options) && options.length > 0
+            ? typeof (options as any)[0] === 'string' || typeof (options as any)[0] === 'number'
+                ? (options as (string | number)[]).map((opt, i) => ({ value: opt, label: opt, originalIndex: i }))
+                : (options as Option[]).map((opt, i) => ({ ...opt, originalIndex: i }))
+            : [];
+
+    let isSimpleOptions = false;
+    $: isSimpleOptions =
         Array.isArray(options) &&
         options.length > 0 &&
-        (typeof options[0] === 'string' || typeof options[0] === 'number')
-            ? (options as (string | number)[]).map((opt, i) => ({ value: opt, label: opt, originalIndex: i }))
-            : (options as Option[]).map((opt, i) => ({ ...opt, originalIndex: i }));
+        (typeof (options as any)[0] === 'string' || typeof (options as any)[0] === 'number');
 
-    // Flag to indicate if the passed options were simple (string or number).
-    const isSimpleOptions =
-        parsedOptions.length > 0 &&
-        (typeof parsedOptions[0].label === 'string' || typeof parsedOptions[0].label === 'number') &&
-        parsedOptions.every((opt) => typeof opt.label === 'string' || typeof opt.label === 'number');
-
-    // Start with all options visible.
-    let optionsFiltered: Option[] = [...parsedOptions];
+    $: optionsFiltered = [...parsedOptions]; // (optional) refresh when options change
 
     // Create a reactive sorted list that puts selected options at the top.
     $: sortedOptions = optionsFiltered.slice().sort((a, b) => {
@@ -148,10 +149,13 @@
             }
             handleValidate();
             // Keep the dropdown open for multiple selection.
+            value = isSimpleOptions ? (opt.label as any) : (opt.value as any);
+
             dispatch('change', { selected });
         } else {
             // Single selection behavior.
             inputValue = String(opt.label);
+            value = isSimpleOptions ? (opt.label as any) : (opt.value as any);
             selected = isSimpleOptions ? opt.label : opt;
             handleValidate();
             isOpen = false;
