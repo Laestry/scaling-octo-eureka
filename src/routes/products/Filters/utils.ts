@@ -90,29 +90,29 @@ interface FetchOpts {
  */
 export async function fetchFilteredProductsForAlcohol(
     supabaseClient: typeof supabase,
-    selected: TFilters,
+    selected: Partial<TFilters> = {},
     opts: FetchOpts
 ) {
-    const producer = selected.producer ? parseMaybeJson<RawProducer>(selected.producer) : null;
-    const region = selected.region ? parseMaybeJson<RawRegion>(selected.region) : null;
+    const producer = selected?.producer ? parseMaybeJson<RawProducer>(selected?.producer) : null;
+    const region = selected?.region ? parseMaybeJson<RawRegion>(selected?.region) : null;
 
     const categoryArr: RawCategory[] = [];
-    if (selected.category) {
-        const raw = Array.isArray(selected.category) ? selected.category : [selected.category];
+    if (selected?.category) {
+        const raw = Array.isArray(selected?.category) ? selected?.category : [selected?.category];
         raw.forEach((c) => {
             const parsed = parseMaybeJson<RawCategory>(c);
             if (parsed) categoryArr.push(parsed);
         });
     }
 
-    const format = selected.format ? parseMaybeJson<RawFormat>(selected.format) : null;
+    const format = selected?.format ? parseMaybeJson<RawFormat>(selected?.format) : null;
 
     const vintageArr: number[] = [];
-    if (selected.vintage) {
-        if (Array.isArray(selected.vintage)) {
-            vintageArr.push(...selected.vintage);
+    if (selected?.vintage) {
+        if (Array.isArray(selected?.vintage)) {
+            vintageArr.push(...selected?.vintage);
         } else {
-            vintageArr.push(selected.vintage);
+            vintageArr.push(selected?.vintage);
         }
     }
 
@@ -168,24 +168,24 @@ export async function fetchFilteredProductsForAlcohol(
     }
 
     // nameSearch: partial match on name
-    if (selected.nameSearch) {
-        query = query.ilike('name', `%${selected.nameSearch}%`);
+    if (selected?.nameSearch) {
+        query = query.ilike('name', `%${selected?.nameSearch}%`);
     }
 
     // tag: naive inclusion, adapt depending on your schema (e.g., jsonb array, text array)
-    if (selected.tag) {
+    if (selected?.tag) {
         // If tags is a text column containing comma-separated or similar:
-        query = query.ilike('tags', `%${selected.tag}%`);
-        // If tags is a proper array column you might use: query = query.contains('tags', [selected.tag]);
+        query = query.ilike('tags', `%${selected?.tag}%`);
+        // If tags is a proper array column you might use: query = query.contains('tags', [selected?.tag]);
     }
 
     // priceRange
-    if (selected.priceRange) {
-        if (selected.priceRange === 'low') {
+    if (selected?.priceRange) {
+        if (selected?.priceRange === 'low') {
             query = query.gte('alcohol_batches.price', 20).lte('alcohol_batches.price', 30);
-        } else if (selected.priceRange === 'mid') {
+        } else if (selected?.priceRange === 'mid') {
             query = query.gte('alcohol_batches.price', 30).lte('alcohol_batches.price', 40);
-        } else if (selected.priceRange === 'high') {
+        } else if (selected?.priceRange === 'high') {
             query = query.gte('alcohol_batches.price', 40);
         }
     }
