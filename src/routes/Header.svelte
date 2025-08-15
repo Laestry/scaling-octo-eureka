@@ -132,10 +132,10 @@
                     <a
                         class="abutton"
                         style="color: var(--dynamic-color);"
-                        href="/associes"
+                        href="/associés"
                         class:active={backdrop === 'associes'}
                     >
-                        Associes
+                        Associés
                     </a>
                     <a
                         class="abutton"
@@ -161,7 +161,7 @@
     <div
         class="backdrops"
         class:backdrops--1={backdrop === 'main'}
-        class:backdrops--2={backdrop === 'associes'}
+        class:backdrops--2={backdrop === 'associés'}
         class:backdrops--3={backdrop === 'vision'}
     >
         <div
@@ -194,7 +194,7 @@
                         href="/associes"
                         class:active={backdrop === 'associes'}
                     >
-                        Associes
+                        Associés
                     </a>
                     <a
                         class="abutton header-links"

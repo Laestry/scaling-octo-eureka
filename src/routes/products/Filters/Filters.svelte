@@ -64,8 +64,8 @@
         // Custom mapping for renaming and ordering.
         // key: original type, value: { customName: string, order: number }
         const orderMap: Record<string, { customName: string; order: number }> = {
-            originRegion: { customName: 'Regions', order: 1 },
-            providerName: { customName: 'Producteurs', order: 2 },
+            originRegion: { customName: 'Region', order: 1 },
+            providerName: { customName: 'Producteur', order: 2 },
             specificCategory: { customName: 'Charactère', order: 3 },
             uvc: { customName: 'Bouteilles (X/caisse)', order: 4 },
             lblFormat: { customName: 'Format', order: 5 },
@@ -168,7 +168,6 @@
 <div class="mt-15 flex flex-col lg:gap-4 md:gap-3 gap-[20px]">
     <div class="flex justify-between">
         <div class="flex gap-1 items-center w-full">
-            <button class="all-button abutton text-" on:click={clearAllFilters}>Voir tout</button>
             <label class="search md:flex hidden">
                 <div class="search__button">
                     <IconSearch />
@@ -176,7 +175,8 @@
                 <input type="text" class="search__input" bind:value={selectedFilters.nameSearch} />
             </label>
         </div>
-        <div class="flex gap-1 items-center">
+        <div class="flex gap-4 items-center">
+            <button class="all-button abutton text-" on:click={clearAllFilters}>Liste complète</button>
             <label class="checkbox">
                 <input type="checkbox" class="checkbox__input" bind:checked={$isPrixResto} />
                 <span class="checkbox__text"> {$isPrixResto ? 'Prix Resto' : 'Prix Perso'}</span>
@@ -308,6 +308,35 @@
         @media (max-width: 760px) {
             width: 147px;
         }
+    }
+
+    :global(.cusselect input) {
+        color: #181C1C !important;
+    }
+
+    :global(.cusselect input::placeholder) {
+        color: #181C1C !important;
+    }
+
+    :global(.cusselect .select-options__item) {
+        color: #181C1C !important;
+    }
+
+    :global(.cusselect .text) {
+        color: #181C1C !important;
+    }
+
+    :global(.cusselect .select-options__item span) {
+        color: #181C1C !important;
+    }
+
+    :global(.cusselect *) {
+        color: #181C1C !important;
+    }
+
+    /* Override any Tailwind text-wblue classes */
+    :global(.cusselect .text-wblue) {
+        color: #181C1C !important;
     }
 
     .icon {

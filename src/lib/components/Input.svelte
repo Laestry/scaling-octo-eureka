@@ -44,7 +44,7 @@
         line-height: 150%;
     }
     input::placeholder {
-        color: var(--blue);
+        color: var(--black);
     }
     .error {
         color: red;

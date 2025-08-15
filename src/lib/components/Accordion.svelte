@@ -44,6 +44,6 @@
 
 <style lang="scss">
     .active {
-        color: var(--blue);
+        color: #4a5568;
     }
 </style>

@@ -93,12 +93,12 @@
         }
 
         &__input:checked ~ &__box {
-            background: var(--blue);
+            background: #4a5568;
         }
 
         &__input:checked ~ &__box > &__box-inner {
             left: 22px;
-            color: var(--blue);
+            color: #4a5568;
 
             :global(svg:last-child) {
                 opacity: 0;
@@ -132,7 +132,7 @@
                 }
 
                 .checkbox__input:not(:disabled):checked ~ .checkbox__box {
-                    background: var(--blue);
+                    background: #4a5568;
                 }
             }
         }

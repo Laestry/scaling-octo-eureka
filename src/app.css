@@ -206,6 +206,52 @@ h4 {
     --color-05: #2d63b0;
 }
 
+/* Nuclear override to prevent ANY blue colors in Select components */
+.cusselect *, 
+.cusselect input,
+.cusselect input:focus,
+.cusselect input:active,
+.cusselect .select-options__item,
+.cusselect .select-options__item *,
+.cusselect .text,
+.cusselect span {
+    color: #181C1C !important;
+}
+
+.cusselect input::placeholder {
+    color: #181C1C !important;
+}
+
+/* Override any possible Tailwind utility classes */
+.cusselect .text-blue-500,
+.cusselect .text-blue-600,
+.cusselect .text-wblue,
+.cusselect [class*="text-blue"],
+.cusselect [class*="text-wblue"] {
+    color: #181C1C !important;
+}
+
+/* Remove blue outlines and borders */
+.cusselect,
+.cusselect *,
+.cusselect input,
+.cusselect input:focus,
+.cusselect input:focus-visible,
+.cusselect .select-options,
+.cusselect .select-options__item {
+    outline: none !important;
+    border-color: #181C1C !important;
+    box-shadow: none !important;
+}
+
+/* Override any blue border classes */
+.cusselect [class*="border-blue"],
+.cusselect [class*="border-wblue"],
+.cusselect .border-wblue,
+.cusselect .border-blue-500 {
+    border-color: #181C1C !important;
+}
+
 .icon {
     width: auto;
     height: 100%;

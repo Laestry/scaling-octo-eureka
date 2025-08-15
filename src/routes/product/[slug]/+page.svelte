@@ -284,7 +284,7 @@
         --svrollbar-track-opacity: 1;
 
         --svrollbar-thumb-width: 9px;
-        --svrollbar-thumb-background: var(--blue);
+        --svrollbar-thumb-background: #6b7280;
         --svrollbar-thumb-opacity: 0.5;
     }
 
@@ -294,7 +294,7 @@
 
     .product-table {
         font-size: 16px;
-        border-top: 1px solid var(--blue);
+        border-top: 1px solid #6b7280;
         border-bottom: 1px solid var(--black);
         @media (max-width: 1136px) {
             font-size: 11px;

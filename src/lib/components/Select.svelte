@@ -199,18 +199,12 @@
 <div
     bind:this={wrapperElement}
     class="flex bg-white border-t {$$props.class}"
-    style="--font-size: {fontSize}; font-size: var(--font-size);"
+    style="--font-size: {fontSize}; font-size: var(--font-size); border-color: #181C1C !important; outline: none !important;"
 >
     <input
         autocomplete="none"
-        class="text {multiple
-            ? Array.isArray(selected) && selected.length > 0
-                ? 'text-wblue'
-                : 'text-wblack'
-            : selected
-              ? 'text-wblue'
-              : 'text-wblack'} {inputClass}"
-        style="width: calc(100% - 21px);"
+        class="text {inputClass}"
+        style="width: calc(100% - 21px); color: #181C1C !important;"
         bind:value={inputValue}
         {placeholder}
         {disabled}
@@ -247,7 +241,7 @@
                 </button>
                 {#each sortedOptions as opt, index}
                     <button
-                        class="select-options__item text {selectedStates[index] ? 'text-wblue' : ''}"
+                        class="select-options__item text"
                         type="button"
                         on:click={() => selectOption(opt)}
                     >
@@ -274,7 +268,7 @@
 <style lang="scss">
     :global(.simplebar-scrollbar::before) {
         min-height: 50px !important;
-        background-color: var(--blue);
+        background-color: #181C1C;
     }
 
     .error {
@@ -286,7 +280,7 @@
         transform: rotate(0deg);
         transform-origin: center;
         transition: transform 0.2s ease-in-out;
-        stroke: var(--black);
+        stroke: #181C1C;
     }
 
     .line.rotate {
@@ -295,10 +289,23 @@
 
     input {
         padding: 3px 8px 9px 8px;
+        color: #181C1C !important;
+        outline: none !important;
+        border: none !important;
+        box-shadow: none !important;
+    }
+
+    input:focus,
+    input:focus-visible,
+    input:active {
+        outline: none !important;
+        border: none !important;
+        box-shadow: none !important;
+        color: #181C1C !important;
     }
 
     input::placeholder {
-        color: var(--black);
+        color: #181C1C !important;
     }
 
     .select-options {
@@ -323,8 +330,9 @@
             justify-content: space-between;
             align-items: center;
             transition: background 0.2s;
+            color: #181C1C !important;
             &:hover {
-                color: var(--pink);
+                color: #DA5899 !important;
             }
         }
     }
