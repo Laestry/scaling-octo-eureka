@@ -107,11 +107,9 @@
             </div>
 
             <div>
-                <div
-                    class="mt-[12px] flex items-end
-                        lg:w-[560px] md:w-[394px] h-full"
-                >
-                    <h1 class="lg:text-[42px] text-2xl">{product.name}</h1>
+                <div class="flex flex-col items-start lg:w-[560px] md:w-[394px] h-full mt-[12px]">
+                    <h1 class="product-name-header w-[560px] h-[41px] flex-shrink-0">{product.name}</h1>
+                    <h2 class="product-name-subheader w-[560px] h-[69px] flex-shrink-0">{product.name}</h2>
                 </div>
 
                 <div class="flex flex-col lg:w-[464px] md:w-[380px] h-full">
@@ -380,5 +378,21 @@
         flex-shrink: 0;
         color: #1e1e1e;
         text-align: center;
+    }
+    .product-name-header {
+        color: var(--WARD-RED, #f15a38);
+        font-family: 'Riposte';
+        font-size: 32px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 42px; /* 131.25% */
+    }
+    .product-name-subheader {
+        color: var(--WARD-BLACK, #181C1C);
+        font-family: 'Riposte';
+        font-size: 32px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
     }
 </style>
