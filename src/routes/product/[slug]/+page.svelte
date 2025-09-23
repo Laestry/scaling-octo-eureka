@@ -10,8 +10,9 @@
     import { Svroller } from 'svrollbar';
     import { fade } from 'svelte/transition';
     import { onMount, tick } from 'svelte';
-    import { getSpecificCategoryLabel } from '../../products/Filters/utils';
+    import { getSpecificCategoryLabel } from '../../vins/Filters/utils';
     import { afterNavigate } from '$app/navigation';
+    import WaitlistForm from '$lib/components/WaitlistForm.svelte';
 
     export let data: PageData;
     console.log('data', data);
@@ -41,19 +42,11 @@
     let selectedBatch;
     $: if (product) selectedBatch = getOldestBatch();
 
-    // Format "Acheter avant" based on sell_before_date
-    function formatSellBeforeDate(sellBefore: string | null | undefined): string {
-        if (!sellBefore) return '';
-        const d = new Date(sellBefore);
-        const now = new Date();
-        const months = (d.getFullYear() - now.getFullYear()) * 12 + (d.getMonth() - now.getMonth());
-        if (months < 0) return 'Expiré';
-        return `Acheter avant ${months} mois, ${d.getFullYear()}`;
-    }
 
     let currentSlide = 0;
     let expand_description = false;
     let expand_question = false;
+    let showWaitlistForm = false;
 
     let in_cart = 1;
     $: maxCases = selectedBatch ? Math.floor(selectedBatch.calculated_quantity / product.uvc) : 0;
@@ -92,6 +85,53 @@
     onMount(async () => {
         console.log('product data', data, selectedBatch);
     });
+
+    function toggleWaitlistForm() {
+        showWaitlistForm = !showWaitlistForm;
+    }
+
+    async function handleWaitlistSubmit(event) {
+        const { firstName, lastName, email } = event.detail;
+
+        try {
+            // TODO: Replace with actual API call
+            console.log('Waitlist submission:', {
+                firstName,
+                lastName,
+                email,
+                productId: product.id,
+                productName: product.name
+            });
+
+            // For now, just show success and close modal
+            alert(`Merci ${firstName}! Nous vous contacterons dès que ${product.name} sera disponible.`);
+            showWaitlistForm = false;
+
+            // TODO: Implement actual API call
+            // const response = await fetch('/api/waitlist', {
+            //     method: 'POST',
+            //     headers: { 'Content-Type': 'application/json' },
+            //     body: JSON.stringify({
+            //         firstName,
+            //         lastName,
+            //         email,
+            //         productId: product.id,
+            //         productName: product.name
+            //     })
+            // });
+            //
+            // if (response.ok) {
+            //     alert(`Merci ${firstName}! Nous vous contacterons dès que ${product.name} sera disponible.`);
+            //     showWaitlistForm = false;
+            // } else {
+            //     throw new Error('Failed to submit');
+            // }
+
+        } catch (error) {
+            console.error('Waitlist submission error:', error);
+            alert('Erreur lors de l\'inscription. Veuillez réessayer.');
+        }
+    }
 </script>
 
 <div
@@ -141,10 +181,10 @@
                     class="mt-[12px] flex items-end
                         lg:w-[560px] md:w-[394px] h-full"
                 >
-                    <h1 class="lg:text-[42px] text-2xl">{product.name}</h1>
+                    <h1 class="product-name lg:text-[42px] text-2xl">{product.name}</h1>
                 </div>
 
-                <div class="flex flex-col lg:w-[464px] md:w-[380px] h-full">
+                <div class="flex flex-col lg:w-[560px] md:w-[380px] h-full">
                     <!--description-->
                     <div class="product-description mt-4 h-[141px] w-full pr-[15px]">
                         <Svroller width="100%" height="100%" margin={{ right: -15 }} alwaysVisible>
@@ -168,7 +208,7 @@
                                 </p>
                                 <div class="flex items-center flex-1">
                                     <div class="w-fit">
-                                        <b class="font-bold">{providerName}</b>
+                                        <b class="font-normal">{providerName}</b>
                                         <br />
                                         {product.name ?? ''}
                                         <br />
@@ -234,15 +274,12 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="flex flex-col gap-2 md:mt-0 mt-6">
-                                <button class="product-table__button product-table__button--favorite abutton">
-                                    Liste d’attente
-                                </button>
+                            <div class="flex flex-col justify-center md:mt-0 mt-6">
                                 <button
-                                    class="product-table__button abutton"
-                                    on:click={() => cart.add(product, selectedBatch.id, in_cart)}
+                                    class="product-table__button product-table__button--favorite abutton mt-[20px]"
+                                    on:click={toggleWaitlistForm}
                                 >
-                                    Ajouter au panier
+                                    Liste d'attente
                                 </button>
                             </div>
                             <p class="absolute text-[16px] bg-[#F6F1F2] text-[#DE6643] bottom-[-12px] pr-1">*</p>
@@ -304,7 +341,24 @@
     </div>
 </div>
 
+<!-- Waitlist Modal -->
+{#if showWaitlistForm}
+    <WaitlistForm
+        on:submit={handleWaitlistSubmit}
+        on:decline={toggleWaitlistForm}
+        on:close={toggleWaitlistForm}
+    />
+{/if}
+
 <style lang="scss">
+    .product-name {
+        color: var(--WARD-RED, #F15A38);
+        font-family: Riposte;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 42px;
+    }
+
     @media (max-width: 1136px) {
     }
     @media (max-width: 760px) {
@@ -334,6 +388,10 @@
 
     .product-description button {
         color: var(--red);
+    }
+
+    .product-description :global(*) {
+        font-weight: normal !important;
     }
 
     .product-table {
@@ -369,7 +427,7 @@
         background: #2d63b0;
     }
     .product-table__button--favorite {
-        background: var(--WARD-RED, #f15a38);
+        background: #F15A38 !important;
     }
     .product-table__count {
         font-size: 16px;

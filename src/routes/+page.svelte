@@ -1,6 +1,6 @@
 <script lang="ts">
     import type { PageData } from './$types';
-    import ProductCard from './products/ProductCard.svelte';
+    import ProductCard from './vins/ProductCard.svelte';
 
     export let data: PageData;
     // $: console.log('data', data);
@@ -26,13 +26,7 @@
     <div class="flex mx-auto flex-col min-h-[90vh] lg:w-[1136px] md:w-[760px] w-[300px]">
         <div class="justify-between md:flex-row flex-col-reverse flex md:mt-[134px] gap-[20px] my-[80px] md:mb-[137px]">
             <div class="h3 description max-w-[844px] text-color1">
-                Lorem ipsum dolor sit amet consectetur. Leo justo enim et in. Aliquam at feugiat tortor purus quis eu
-                ultrices quis tincidunt. Tellus integer egestas lectus ac.
-            </div>
-            <div class="flex gap-[14px]">
-                <div class=" w-[15px] h-[15px] min-w-[15px] rounded-full bg-color1"></div>
-                <div class=" w-[15px] h-[15px] min-w-[15px] rounded-full bg-colorPurple"></div>
-                <div class=" w-[15px] h-[15px] min-w-[15px] rounded-full bg-colorBlue"></div>
+            Bienvenue chez Ward & Associés. Agence indépendante basée à Montréal, spécialisée en vins naturels, vivants et libres. On explore, on partage, et on boit avec intention.
             </div>
         </div>
 
@@ -60,7 +54,7 @@
             {/each}
         </div>
         <!--
-        <a href="/products" class="isMain-page-button self-end">
+        <a href="/vins" class="isMain-page-button self-end">
             Encore plus <span class="text-color5">+</span>
         </a> -->
     </div>

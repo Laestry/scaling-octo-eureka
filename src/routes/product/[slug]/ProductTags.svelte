@@ -17,29 +17,29 @@
 
     // Producer
     $: producerHref = product?.parties
-        ? `/products?p=${j({ id: product.parties.id, name: product.parties.display_name })}`
+        ? `/vins?p=${j({ id: product.parties.id, name: product.parties.display_name })}`
         : undefined;
 
     // Region
     $: regionHref =
         product?.country_id != null || product?.region_name != null
-            ? `/products?r=${j({ country_id: product.country_id, region_name: product.region_name })}`
+            ? `/vins?r=${j({ country_id: product.country_id, region_name: product.region_name })}`
             : undefined;
 
     // Category / specificCategory
     $: categoryHref =
         product?.category != null && product?.specific_category != null
-            ? `/products?cat=${product.category}_${product.specific_category}`
+            ? `/vins?cat=${product.category}_${product.specific_category}`
             : undefined;
 
     // Format / volume
     $: formatHref =
         product?.volume != null || product?.format != null
-            ? `/products?f=${j({ volume: product.volume, format: product.format })}`
+            ? `/vins?f=${j({ volume: product.volume, format: product.format })}`
             : undefined;
 
     // Vintage
-    $: vintageHref = product?.vintage ? `/products?v=${product.vintage}` : undefined;
+    $: vintageHref = product?.vintage ? `/vins?v=${product.vintage}` : undefined;
 </script>
 
 <div class="flex justify-between md:flex-row flex-col md:gap-0 gap-2.5 {$$props.class}">

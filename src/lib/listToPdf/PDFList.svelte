@@ -74,7 +74,7 @@
     @font-face {
         font-family: 'Riposte';
         src: url('/fonts/Riposte-Bold.otf') format('opentype');
-        font-weight: bold;
+        font-weight: normal;
         font-style: normal;
         font-display: swap;
     }

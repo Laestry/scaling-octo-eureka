@@ -22,7 +22,7 @@
             </div>
             <div class="about__col">
                 <p class="about__title">
-                    Petite phrase cute pour introduire la team ci-bas. And hint at your great work culture too!
+                    Nos vins sont issus d'une viticulture respectueuse et de vinifications sans artifice. Des cuvées sincères, parfois imprévisibles, toujours choisies pour leur énergie et leur intégrité.
                 </p>
                 <p class="about__text">
                     Lorem ipsum dolor sit amet consectetur. Leo justo enim et in. Aliquam at feugiat tortor purus quis

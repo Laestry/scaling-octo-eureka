@@ -427,7 +427,7 @@
 
             <div class="flex flex-wrap gap-2.5 justify-between md:mt-[58px] mt-6">
                 <button
-                    on:click={() => goto('/products')}
+                    on:click={() => goto('/vins')}
                     class="abutton bg-wblue text-white text-base w-full md:max-w-[271px] rounded-3xl"
                 >
                     Continuer mes achats

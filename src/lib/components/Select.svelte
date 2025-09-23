@@ -14,7 +14,7 @@
     export let disabled = false;
     // For multiple selection, selected will be an array or undefined.
     export let selected: Option | string | number | (Option | string | number)[] | undefined = undefined;
-    export let status:
+    export const status:
         | 'enabled'
         | 'invalid'
         | 'success'
@@ -209,13 +209,7 @@
 >
     <input
         autocomplete="none"
-        class="text {multiple
-            ? Array.isArray(selected) && selected.length > 0
-                ? 'text-wblue'
-                : 'text-wblack'
-            : selected
-              ? 'text-wblue'
-              : 'text-wblack'} {inputClass}"
+        class="text text-wblack {inputClass}"
         style="width: calc(100% - 21px);"
         bind:value={inputValue}
         {placeholder}
@@ -253,7 +247,7 @@
                 </button>
                 {#each sortedOptions as opt, index}
                     <button
-                        class="select-options__item text {selectedStates[index] ? 'text-wblue' : ''}"
+                        class="select-options__item text"
                         type="button"
                         on:click={() => selectOption(opt)}
                     >
@@ -280,7 +274,7 @@
 <style lang="scss">
     :global(.simplebar-scrollbar::before) {
         min-height: 50px !important;
-        background-color: var(--blue);
+        background-color: #ccc;
     }
 
     .error {
@@ -329,8 +323,20 @@
             justify-content: space-between;
             align-items: center;
             transition: background 0.2s;
+            color: #000;
+            outline: none;
             &:hover {
-                color: var(--pink);
+                color: #333;
+                background-color: #f5f5f5 !important;
+            }
+            &:focus {
+                background-color: #f5f5f5 !important;
+                color: #333;
+                outline: none;
+            }
+            &:active {
+                background-color: #e0e0e0 !important;
+                color: #333;
             }
         }
     }

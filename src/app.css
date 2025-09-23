@@ -184,6 +184,47 @@ h4 {
     }
 }
 
+/* Prevent any blue highlighting on focus/selection */
+*:focus {
+    outline: none !important;
+}
+
+button:focus,
+input:focus,
+select:focus {
+    box-shadow: none !important;
+    border-color: #666666 !important;
+}
+
+/* Override browser defaults */
+option:checked,
+option:selected {
+    background-color: #f5f5f5 !important;
+    color: #333 !important;
+}
+
+/* Remove any blue highlighting from select components */
+.select-options__item:focus,
+.select-options__item:active,
+.select-options__item[data-selected="true"] {
+    background-color: #f5f5f5 !important;
+    color: #333 !important;
+    box-shadow: none !important;
+    outline: none !important;
+}
+
+/* Override any SimpleBar blue colors */
+.simplebar-scrollbar::before,
+.simplebar-track .simplebar-scrollbar::before {
+    background-color: #ccc !important;
+}
+
+/* Remove blue from any focus rings */
+*[class*="ring-blue"],
+*[class*="focus:ring-blue"] {
+    --tw-ring-color: rgb(102 102 102) !important;
+}
+
 :root {
     /* Color styles */
     --blue: #3777BC;

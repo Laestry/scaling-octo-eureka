@@ -103,7 +103,7 @@
         <a class="abutton !w-fit circle {$totalItems > 0 ? '!bg-wred !text-white' : ''}" href="/cart">
             {$totalItems}
         </a>
-        <a class="abutton circle" href="/products">
+        <a class="abutton circle" href="/vins">
             <div class="h-3.5 w-3.5">
                 <IconSearch />
             </div>
@@ -135,7 +135,7 @@
                         href="/associes"
                         class:active={backdrop === 'associes'}
                     >
-                        Associes
+                        Associés
                     </a>
                     <a
                         class="abutton"
@@ -148,8 +148,8 @@
                     <a
                         class="abutton"
                         style="color: var(--dynamic-color);"
-                        href="/products"
-                        class:active={$page.url.pathname === '/products'}
+                        href="/vins"
+                        class:active={$page.url.pathname === '/vins'}
                     >
                         Vins
                     </a>
@@ -194,7 +194,7 @@
                         href="/associes"
                         class:active={backdrop === 'associes'}
                     >
-                        Associes
+                        Associés
                     </a>
                     <a
                         class="abutton header-links"
@@ -207,8 +207,8 @@
                     <a
                         class="abutton header-links"
                         style="color: var(--dynamic-color);"
-                        href="/products"
-                        class:active={$page.url.pathname === '/products'}
+                        href="/vins"
+                        class:active={$page.url.pathname === '/vins'}
                     >
                         Vins
                     </a>
@@ -217,9 +217,15 @@
         </div>
 
         {#if backdrop}
-            <a href="/" class="backdrop backdrop--1" />
-            <a href="/associes" class="backdrop backdrop--2" />
-            <a href="/vision" class="backdrop backdrop--3" />
+            <a href="/" class="backdrop backdrop--1" aria-label="Go to home page">
+                <span class="sr-only">Home</span>
+            </a>
+            <a href="/associes" class="backdrop backdrop--2" aria-label="Go to associates page">
+                <span class="sr-only">Associés</span>
+            </a>
+            <a href="/vision" class="backdrop backdrop--3" aria-label="Go to vision page">
+                <span class="sr-only">Vision</span>
+            </a>
         {/if}
     </div>
 {/if}
@@ -365,5 +371,17 @@
         .backdrops:not(:is(.backdrops--1, .backdrops--2, .backdrops--3)) {
             height: 130px;
         }
+    }
+
+    .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
     }
 </style>

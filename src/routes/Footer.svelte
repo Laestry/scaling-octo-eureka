@@ -1,4 +1,5 @@
 <script lang="ts">
+    import WardAssociesLogo from '$lib/icons/WardAssociesLogo.svelte';
     let selected: string;
 </script>
 
@@ -6,7 +7,9 @@
     class="flex flex-col justify-center items-center w-full bg-color1
            md:pt-[106px] md:pb-[48px] md:px-1 px-4"
 >
-    <img class="h-[107px]" src="/images/Ward%20&%20Associes.svg" alt="Ward & Associes" />
+    <div class="h-[107px] max-w-[1137px] w-full">
+        <WardAssociesLogo fillColor="var(--WARD-BLACK, #181C1C)" shadowColor="rgba(0, 0, 0, 0.20)" />
+    </div>
 
     <div class="md:mt-[104px] max-w-[1137px] w-full flex flex-wrap items-start footer">
         <img class="md:inline hidden" width="69px" height="53px" src="/logo.svg" alt="logo" />
@@ -118,24 +121,12 @@
         color: white;
     }
 
-    input[data-autocompleted] {
-        background-color: transparent !important;
-    }
-
     input:-webkit-autofill,
     input:-webkit-autofill:focus {
         transition:
             background-color 0s 0s,
             color 0s 0s;
         transition-delay: calc(infinity * 1s);
-    }
-
-    .footer__link {
-        @apply leading-[15px] h-[24px] flex items-center justify-center;
-        color: #fff;
-        border: 1px solid #fff;
-        border-radius: 12px;
-        font-weight: 400;
     }
     .footer {
         font-family: 'Riposte', sans-serif;

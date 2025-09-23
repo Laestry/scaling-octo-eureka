@@ -8,9 +8,7 @@
 <div class="w-full flex flex-col mx-auto lg:max-w-[1212px] px-[38px] md:max-w-[836px] max-w-[376px] vision">
     <p class="vision__suptitle">Une vision centrée sur la vie</p>
     <p class="vision__title">
-        We place human values at the heart of our experience and in the origin of the import leo justo enim et in. Lorem
-        ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt labore et dolore magna
-        aliqua. Ut enim minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+        Pour nous, le vin naturel n’est pas une mode. C’est une manière d’être — attentive à la nature, à l’humain, à ce qui se passe entre les deux. Nous travaillons avec des vigneron·ne·s qui cultivent avec respect et interviennent le moins possible à la cave, laissant le vin parler de lui-même..
     </p>
     <div class="vision__row">
         <div class="vision__inner-row">

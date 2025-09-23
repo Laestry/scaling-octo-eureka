@@ -1,4 +1,4 @@
-import { fetchFilteredProductsForAlcohol } from './products/Filters/utils';
+import { fetchFilteredProductsForAlcohol } from './vins/Filters/utils';
 
 export async function load({ locals }) {
     let products = await fetchFilteredProductsForAlcohol(locals.supabase, null, {
