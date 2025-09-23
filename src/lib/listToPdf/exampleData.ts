@@ -369,7 +369,7 @@ export const exampleData = [
         name: 'Rebela Rosa',
         shortDescription: 'Slovakia, Rebela Rosa, Slobodne',
         fullDescription:
-            '<p>Cépage : <span style="color: rgb(0, 0, 0);">Frankovka 50%, Cabernet Sauvignon 50%</span></p><p>Appellation : Trnava</p><p>Alcool: 12,5% d\'alcool</p><p>SO2 total: NSA - No Sulphites Added</p><p>Average Age of Vines:<span style="color: rgba(0, 0, 0, 0.7);">&nbsp;10-35 years</span></p><p>Terroir : <span style="color: rgba(0, 0, 0, 0.7);">loess, calcium</span></p><p>Vinif : direct press, fermentation in clay tinajas, élevage in ovoids, no fining, no filtration</p><p><br></p><p>Facts: </p>',
+            '<p>Cépage : <span style="color: rgb(0, 0, 0);">Frankovka 50%, Cabernet Sauvignon 50%</span></p><p>Appellation : Trnava</p><p>Alcool: 12,5% d\'alcool</p><p>SO2 total: NSA - No Sulphites Added</p><p>Terroir : <span style="color: rgba(0, 0, 0, 0.7);">loess, calcium</span></p><p>Vinif : direct press, fermentation in clay tinajas, élevage in ovoids, no fining, no filtration</p><p><br></p><p>Facts: </p>',
         providerName: 'Slobodne vinarstvo, s.r.o.',
         alcohol: 0.125,
         lblFormat: '750ml',
@@ -402,7 +402,7 @@ export const exampleData = [
         name: 'Otthon # 1',
         shortDescription: 'Màtra, Otthon #1, Karner',
         fullDescription:
-            "<p>Cépage : Blaufrankisch</p><p>Appellation : Matra</p><p>Alcool: 13.8 % d'alcool</p><p>SO2 total: Sans ajout de sulfites</p><p>Average Age of Vines:<span style=\"color: rgba(0, 0, 0, 0.7);\">&nbsp;? years</span></p><p>Terroir : Les sols sont un mélange d'andésite, de tuf rhyolite, de loam noir riche en humus et d'argile. Le Mont Kékestető bloque les vents froids du nord, il y a une exposition directe au sud, et il y a une grande circulation d'air toute l'année. Il n'y a pas de produits chimiques absorbables, il ne laboure que rarement, et pulvérise des traitements organiques 1 à 2 fois par an au maximum. Parfois, il n'y a aucune pulvérisation pendant la saison de croissance.</p><p>Vinif : Fanni admet qu'au début, ils ont essayé de créer un type de vin glouglou plus facile, mais étant donné leur agriculture, le site, le raisin et leur cave, c'était pratiquement impossible. Ils ne voulaient pas vendanger plus tôt au détriment de la maturité, ils ne voulaient pas macérer moins que nécessaire, et il fallait plus de contact avec les lies pour la stabilité. Ainsi, après deux semaines de macération, un élevage de 50 % en barrique et de 50 % en cuve plastique, le vin a été mis en bouteille sans être filtré et sans aucune adjonction. Ils n'utilisent pas de pompes, pas d'acier inoxydable, et mettent en bouteille par gravité. C'est le Kékfrankos sous un angle hongrois unique.</p><p><br></p><p>Facts: Otthon = maison</p>",
+            "<p>Cépage : Blaufrankisch</p><p>Appellation : Matra</p><p>Alcool: 13.8 % d'alcool</p><p>SO2 total: Sans ajout de sulfites</p><p>Terroir : Les sols sont un mélange d'andésite, de tuf rhyolite, de loam noir riche en humus et d'argile. Le Mont Kékestető bloque les vents froids du nord, il y a une exposition directe au sud, et il y a une grande circulation d'air toute l'année. Il n'y a pas de produits chimiques absorbables, il ne laboure que rarement, et pulvérise des traitements organiques 1 à 2 fois par an au maximum. Parfois, il n'y a aucune pulvérisation pendant la saison de croissance.</p><p>Vinif : Fanni admet qu'au début, ils ont essayé de créer un type de vin glouglou plus facile, mais étant donné leur agriculture, le site, le raisin et leur cave, c'était pratiquement impossible. Ils ne voulaient pas vendanger plus tôt au détriment de la maturité, ils ne voulaient pas macérer moins que nécessaire, et il fallait plus de contact avec les lies pour la stabilité. Ainsi, après deux semaines de macération, un élevage de 50 % en barrique et de 50 % en cuve plastique, le vin a été mis en bouteille sans être filtré et sans aucune adjonction. Ils n'utilisent pas de pompes, pas d'acier inoxydable, et mettent en bouteille par gravité. C'est le Kékfrankos sous un angle hongrois unique.</p><p><br></p><p>Facts: Otthon = maison</p>",
         providerName: 'Karner Gabor',
         alcohol: 0.1358,
         lblFormat: '750ml',
@@ -925,7 +925,7 @@ export const exampleData = [
         name: 'Pet - Nat Rosé',
         shortDescription: 'Slovaquie, Pet - Nat Rosé, Strekov 1075',
         fullDescription:
-            '<p>Appellation: Pohronska pahorkatina</p><p>Terroir: Top soil made of clay and loam, marine sediments with sandstone and limestone veins underneath. Deeper soil layers consist of yellow and blue-gray clay</p><p>Cépages: 100% Merlot</p><p>Âge des vignes:</p><p>Vinification:</p><p>% alcool : 13.5</p>',
+            '<p>Appellation: Pohronska pahorkatina</p><p>Terroir: Top soil made of clay and loam, marine sediments with sandstone and limestone veins underneath. Deeper soil layers consist of yellow and blue-gray clay</p><p>Cépages: 100% Merlot</p>Âge des vignes:<p>Vinification:</p><p>% alcool : 13.5</p>',
         providerName: 'Strekov 1075',
         alcohol: 0.135,
         lblFormat: '750ml',
@@ -2405,7 +2405,7 @@ export const exampleData = [
         name: 'Youngster Blanc',
         shortDescription: 'Milan Nestarec, Youngster Blanc, Moravia du Sud',
         fullDescription:
-            '<p>Riesling, Neuberger, Pinot Gris</p><p>Total Production: 6000 bottles</p><p>Age of Vines: 19 years</p><p>Yield: 35 hl/ha</p><p>Soil: Loess, clay, loam</p><p>Vinification Notes: The grapes are hand-harvested and destemmed. The juice ferments in 2000-liter stainless steel tanks. The wine ferments for about 2 months, with occasional pigeage and indigenous yeast fermentation. Elevage takes place in the same tanks for about 2 months. The wine is bottled unfiltered, unfined, and with zero sulfur added.</p>',
+            '<p>Riesling, Neuberger, Pinot Gris</p><p>Total Production: 6000 bottles</p><p>Yield: 35 hl/ha</p><p>Soil: Loess, clay, loam</p><p>Vinification Notes: The grapes are hand-harvested and destemmed. The juice ferments in 2000-liter stainless steel tanks. The wine ferments for about 2 months, with occasional pigeage and indigenous yeast fermentation. Elevage takes place in the same tanks for about 2 months. The wine is bottled unfiltered, unfined, and with zero sulfur added.</p>',
         providerName: 'Milan Nestarec',
         alcohol: 0.12,
         lblFormat: '750ml',
@@ -4607,7 +4607,7 @@ export const exampleData = [
         name: 'Ritual',
         shortDescription: 'Slovaquie, Ritual, Naboso',
         fullDescription:
-            '<p>Cépage : Blaufrankisch</p><p>Appellation : Petites Carpates</p><p>Alcool: 3,5% d\'alcool</p><p>SO2 total: 37mg/l</p><p>Average Age of Vines:<span style="color: rgba(0, 0, 0, 0.7);">&nbsp;35-46 years</span></p><p>Terroir : Climat Continental. Le substrat Géologique est principalement composé de cône de déjection de rivières des Carpates. Le sol de surface est composé de sable limoneux, de structure moyenne, avec du loess en périphérie.</p><p>Vinif : 21 jours de macération et un an en barriques.</p><p><br></p><p>Facts: Rituál est le nom de notre Blaufränkisch parce que nous pensons qu\'il faut le célébrer.&nbsp;</p>',
+            '<p>Cépage : Blaufrankisch</p><p>Appellation : Petites Carpates</p><p>Alcool: 3,5% d\'alcool</p><p>SO2 total: 37mg/l</p><p>Terroir : Climat Continental. Le substrat Géologique est principalement composé de cône de déjection de rivières des Carpates. Le sol de surface est composé de sable limoneux, de structure moyenne, avec du loess en périphérie.</p><p>Vinif : 21 jours de macération et un an en barriques.</p><p><br></p><p>Facts: Rituál est le nom de notre Blaufränkisch parce que nous pensons qu\'il faut le célébrer.&nbsp;</p>',
         providerName: 'Naboso',
         alcohol: 0.13,
         lblFormat: '750ml',
@@ -4772,7 +4772,7 @@ export const exampleData = [
         name: 'pArtisan Cru rouge',
         shortDescription: 'Slovaquie, pArtisan Cru rouge, Slobodne',
         fullDescription:
-            '<p>Cépage : <span style="color: rgb(0, 0, 0);">Frankovka 40%, Cabernet Sauvignon 40%, Alibernet 20%</span></p><p>Appellation : Trnava</p><p>Alcool: 12 % d\'alcool</p><p>SO2 total: LOW mg/l</p><p>Average Age of Vines:<span style="color: rgba(0, 0, 0, 0.7);">&nbsp;10-35 years</span></p><p>Terroir : <span style="color: rgba(0, 0, 0, 0.7);">loess, calcium</span></p><p>Vinif : Macération de 3 à 4 semaines, long élevage barrique et bouteille!</p><p>Dégust:</p><p><br></p><p>Facts: </p>',
+            '<p>Cépage : <span style="color: rgb(0, 0, 0);">Frankovka 40%, Cabernet Sauvignon 40%, Alibernet 20%</span></p><p>Appellation : Trnava</p><p>Alcool: 12 % d\'alcool</p><p>SO2 total: LOW mg/l</p><p>Terroir : <span style="color: rgba(0, 0, 0, 0.7);">loess, calcium</span></p><p>Vinif : Macération de 3 à 4 semaines, long élevage barrique et bouteille!</p><p>Dégust:</p><p><br></p><p>Facts: </p>',
         providerName: 'Slobodne vinarstvo, s.r.o.',
         alcohol: 0.12,
         lblFormat: '750ml',
@@ -5460,7 +5460,7 @@ export const exampleData = [
         name: 'Veltlina',
         shortDescription: 'Trnava, Veltlina, Slobodne',
         fullDescription:
-            '<p>Cépage : Vetliner</p><p>Appellation : Trnava</p><p>Alcool: 12,5% d\'alcool</p><p>SO2 total: LOW mg/l</p><p>Average Age of Vines:<span style="color: rgba(0, 0, 0, 0.7);">&nbsp;10-35 years</span></p><p>Terroir : <span style="color: rgba(0, 0, 0, 0.7);">loess, calcium</span></p><p>Vinif : Macération de 7 jours, fermentation spontanée dans des cuves en ciment avec des levures indigènes.</p><p><br></p><p>Zemianske Sady est un domaine familial qui produit du vin à Hlohovec depuis 1912. À ses débuts, le domaine était principalement une exploitation de tabac qui produisait également des vins vendus localement et appréciés par la scène artistique de Prague. En raison de la guerre et des conflits politiques, le domaine a cessé de produire jusqu\'en 1997, date à laquelle les quatrième et cinquième générations ont repris le flambeau.</p><p><br></p><p>Les vignobles ont été replantés et la cave reconstruite, et en 2010, le premier millésime sous le nom de Slobodné Vinárstvo a vu le jour. En 2016, ils ont commencé à cultiver leurs 17 hectares dans le respect de l\'environnement et sont devenus membres de la plus ancienne association d\'agriculteurs biodynamiques d\'Autriche.</p>',
+            '<p>Cépage : Vetliner</p><p>Appellation : Trnava</p><p>Alcool: 12,5% d\'alcool</p><p>SO2 total: LOW mg/l</p><p>Terroir : <span style="color: rgba(0, 0, 0, 0.7);">loess, calcium</span></p><p>Vinif : Macération de 7 jours, fermentation spontanée dans des cuves en ciment avec des levures indigènes.</p><p><br></p><p>Zemianske Sady est un domaine familial qui produit du vin à Hlohovec depuis 1912. À ses débuts, le domaine était principalement une exploitation de tabac qui produisait également des vins vendus localement et appréciés par la scène artistique de Prague. En raison de la guerre et des conflits politiques, le domaine a cessé de produire jusqu\'en 1997, date à laquelle les quatrième et cinquième générations ont repris le flambeau.</p><p><br></p><p>Les vignobles ont été replantés et la cave reconstruite, et en 2010, le premier millésime sous le nom de Slobodné Vinárstvo a vu le jour. En 2016, ils ont commencé à cultiver leurs 17 hectares dans le respect de l\'environnement et sont devenus membres de la plus ancienne association d\'agriculteurs biodynamiques d\'Autriche.</p>',
         providerName: 'Slobodne vinarstvo, s.r.o.',
         alcohol: 0.12,
         lblFormat: '750ml',
@@ -7064,7 +7064,7 @@ export const exampleData = [
         name: 'Tavasz',
         shortDescription: 'Matra, Tavasz, Karner',
         fullDescription:
-            "<p>Cépage : Blaufrankisch</p><p>Appellation : Matra</p><p>Alcool: 13.5 % d'alcool</p><p>SO2 total: Sans ajout de sulfites</p><p>Average Age of Vines:<span style=\"color: rgba(0, 0, 0, 0.7);\">&nbsp;60 years</span></p><p>Terroir : Les sols sont un mélange d'andésite, de tuf rhyolite, de loam noir riche en humus et d'argile. Le Mont Kékestető bloque les vents froids du nord, il y a une exposition directe au sud, et il y a une grande circulation d'air toute l'année. Il n'y a pas de produits chimiques absorbables, il ne laboure que rarement, et pulvérise des traitements organiques 1 à 2 fois par an au maximum. Parfois, il n'y a aucune pulvérisation pendant la saison de croissance.</p><p>Vinif : Les vignes de Tavasz ont plus de 60 ans, sont orientées vers l'ouest et plantées dans des sols forestiers argileux et lourds. Le 2017 a passé 2 semaines sur les peaux puis 1,5 an dans 500L de chêne hongrois. Mis en bouteille sans collage et sans filtration par gravité avec zéro ajout, ils omettent également les pompes et l'acier inoxydable</p><p><br></p><p>Facts: </p>",
+            "<p>Cépage : Blaufrankisch</p><p>Appellation : Matra</p><p>Alcool: 13.5 % d'alcool</p><p>SO2 total: Sans ajout de sulfites</p><p>Terroir : Les sols sont un mélange d'andésite, de tuf rhyolite, de loam noir riche en humus et d'argile. Le Mont Kékestető bloque les vents froids du nord, il y a une exposition directe au sud, et il y a une grande circulation d'air toute l'année. Il n'y a pas de produits chimiques absorbables, il ne laboure que rarement, et pulvérise des traitements organiques 1 à 2 fois par an au maximum. Parfois, il n'y a aucune pulvérisation pendant la saison de croissance.</p><p>Vinif : Les vignes de Tavasz ont plus de 60 ans, sont orientées vers l'ouest et plantées dans des sols forestiers argileux et lourds. Le 2017 a passé 2 semaines sur les peaux puis 1,5 an dans 500L de chêne hongrois. Mis en bouteille sans collage et sans filtration par gravité avec zéro ajout, ils omettent également les pompes et l'acier inoxydable</p><p><br></p><p>Facts: </p>",
         providerName: 'Karner Gabor',
         alcohol: 0.135,
         lblFormat: '750ml',
@@ -8148,7 +8148,7 @@ export const exampleData = [
         name: 'MAGNUM Spolu',
         shortDescription: 'Slovaquie, MAG Spolu, Naboso',
         fullDescription:
-            '<p>Cépages : Welschriesling, Blaufränkisch, Müller-Thurgau, Riesling</p><p>Appellation : Petites Carpates</p><p>Alcool: 12% d\'alcool</p><p>SO2 total: 45 mg/l</p><p>Average Age of Vines:<span style="color: rgba(0, 0, 0, 0.7);">&nbsp;33-46 years</span></p><p>Terroir : Climat Continental. Le substrat Géologique est principalement composé de cône de déjection de rivières des Carpates. Le sol de surface est composé de sable limoneux, de structure moyenne, avec du loess en périphérie.</p><p><br></p><p>Vinification : 14 jours de macération et un and en barriques de chênes et acacia</p><p><br></p><p>Spolu signifie "ensemble", des variétés blanches et rouges ensemble</p>',
+            '<p>Cépages : Welschriesling, Blaufränkisch, Müller-Thurgau, Riesling</p><p>Appellation : Petites Carpates</p><p>Alcool: 12% d\'alcool</p><p>SO2 total: 45 mg/l</p><p>Terroir : Climat Continental. Le substrat Géologique est principalement composé de cône de déjection de rivières des Carpates. Le sol de surface est composé de sable limoneux, de structure moyenne, avec du loess en périphérie.</p><p><br></p><p>Vinification : 14 jours de macération et un and en barriques de chênes et acacia</p><p><br></p><p>Spolu signifie "ensemble", des variétés blanches et rouges ensemble</p>',
         providerName: 'Naboso',
         alcohol: 0.12,
         lblFormat: '1500ml',
@@ -8672,7 +8672,7 @@ export const exampleData = [
         name: 'pArtisan Cru White',
         shortDescription: 'Slovaquie, pArtisan Cru White, Slobodne',
         fullDescription:
-            "<p>Cépage : Riesling, du Sauvignon Blanc et du Tramin</p><p>Appellation : Trnava</p><p>Alcool: 11 % d'alcool</p><p>SO2 total: LOW mg/l</p><p>Average Age of Vines:<span style=\"color: rgba(0, 0, 0, 0.7);\">&nbsp;10-35 years</span></p><p>Terroir : <span style=\"color: rgba(0, 0, 0, 0.7);\">loess, calcium</span></p><p>Vinif : De plus, avec ce vin, ils ont réussi à boucler la boucle de leur \"terroir\" en le faisant vieillir dans des fûts de chêne neufs provenant de leurs propres arbres situés à proximité du vignoble, fabriqués pour eux par le tonnelier morave Fryzelka. Dans ces derniers, chaque partie du vin repose séparément pendant 2 ans sur des lies fines, puis on procède à l'assemblage - la recherche de l'assemblage idéal.</p><p>Dégust: Un vin délicat, élégant et nettement complexe, dont l'idée ne manque pas d'acidité vive et de caractère mûr.&nbsp;Des arômes rappelant les limes, les pêches blanches, la citronnelle, la camomille et la crème de vanille, tout simplement un bonheur à déguster.</p><p><br></p><p>Zemianske Sady est un domaine familial qui produit du vin à Hlohovec depuis 1912. À ses débuts, le domaine était principalement une exploitation de tabac qui produisait également des vins vendus localement et appréciés par la scène artistique de Prague. En raison de la guerre et des conflits politiques, le domaine a cessé de produire jusqu'en 1997, date à laquelle les quatrième et cinquième générations ont repris le flambeau.</p><p><br></p><p>Les vignobles ont été replantés et la cave reconstruite, et en 2010, le premier millésime sous le nom de Slobodné Vinárstvo a vu le jour. En 2016, ils ont commencé à cultiver leurs 17 hectares dans le respect de l'environnement et sont devenus membres de la plus ancienne association d'agriculteurs biodynamiques d'Autriche.</p><p><br></p>",
+            "<p>Cépage : Riesling, du Sauvignon Blanc et du Tramin</p><p>Appellation : Trnava</p><p>Alcool: 11 % d'alcool</p><p>SO2 total: LOW mg/l</p><p><p>Terroir : <span style=\"color: rgba(0, 0, 0, 0.7);\">loess, calcium</span></p><p>Vinif : De plus, avec ce vin, ils ont réussi à boucler la boucle de leur \"terroir\" en le faisant vieillir dans des fûts de chêne neufs provenant de leurs propres arbres situés à proximité du vignoble, fabriqués pour eux par le tonnelier morave Fryzelka. Dans ces derniers, chaque partie du vin repose séparément pendant 2 ans sur des lies fines, puis on procède à l'assemblage - la recherche de l'assemblage idéal.</p><p>Dégust: Un vin délicat, élégant et nettement complexe, dont l'idée ne manque pas d'acidité vive et de caractère mûr.&nbsp;Des arômes rappelant les limes, les pêches blanches, la citronnelle, la camomille et la crème de vanille, tout simplement un bonheur à déguster.</p><p><br></p><p>Zemianske Sady est un domaine familial qui produit du vin à Hlohovec depuis 1912. À ses débuts, le domaine était principalement une exploitation de tabac qui produisait également des vins vendus localement et appréciés par la scène artistique de Prague. En raison de la guerre et des conflits politiques, le domaine a cessé de produire jusqu'en 1997, date à laquelle les quatrième et cinquième générations ont repris le flambeau.</p><p><br></p><p>Les vignobles ont été replantés et la cave reconstruite, et en 2010, le premier millésime sous le nom de Slobodné Vinárstvo a vu le jour. En 2016, ils ont commencé à cultiver leurs 17 hectares dans le respect de l'environnement et sont devenus membres de la plus ancienne association d'agriculteurs biodynamiques d'Autriche.</p><p><br></p>",
         providerName: 'Slobodne vinarstvo, s.r.o.',
         alcohol: 0.11,
         lblFormat: '750ml',
@@ -8903,7 +8903,7 @@ export const exampleData = [
         name: 'Hopera',
         shortDescription: 'Slobodne, Hopera, Slovaquie',
         fullDescription:
-            '<p>Cépage :  Veltliner, Sauvignon et Wild hops</p><p>Appellation : Trnava</p><p>Alcool: 10,5% d\'alcool (2021)</p><p>SO2 total: NSA - No Sulphites Added</p><p>Average Age of Vines:<span style="color: rgba(0, 0, 0, 0.7);">&nbsp;10-35 years</span></p><p>Terroir : <span style="color: rgba(0, 0, 0, 0.7);">loess, calcium</span></p><p>Vinif : Cet assemblage de Grüner et de Sauvignon passe une semaine sur ses peaux, puis deux semaines à macérer avec du houblon sauvage récolté dans leur propre forêt. Il s\'agit bien d\'un "vin", mais il présente un caractère houblonné et herbacé unique. Léger, frais, délicieux (c\'est un vin tranquille).</p><p><br></p><p>Facts: </p>',
+            '<p>Cépage :  Veltliner, Sauvignon et Wild hops</p><p>Appellation : Trnava</p><p>Alcool: 10,5% d\'alcool (2021)</p><p>SO2 total: NSA - No Sulphites Added</p><p>Terroir : <span style="color: rgba(0, 0, 0, 0.7);">loess, calcium</span></p><p>Vinif : Cet assemblage de Grüner et de Sauvignon passe une semaine sur ses peaux, puis deux semaines à macérer avec du houblon sauvage récolté dans leur propre forêt. Il s\'agit bien d\'un "vin", mais il présente un caractère houblonné et herbacé unique. Léger, frais, délicieux (c\'est un vin tranquille).</p><p><br></p><p>Facts: </p>',
         providerName: 'Slobodne vinarstvo, s.r.o.',
         alcohol: 20.21,
         lblFormat: '750ml',
@@ -9134,7 +9134,7 @@ export const exampleData = [
         name: 'MAGNUM Ritual',
         shortDescription: 'Slovaquie, MAG Ritual, Naboso',
         fullDescription:
-            '<p>Cépage : Blaufrankisch</p><p>Appellation : Petites Carpates</p><p>Alcool: 3,5% d\'alcool</p><p>SO2 total: 37mg/l</p><p>Average Age of Vines:<span style="color: rgba(0, 0, 0, 0.7);">&nbsp;35-46 years</span></p><p>Terroir : Climat Continental. Le substrat Géologique est principalement composé de cône de déjection de rivières des Carpates. Le sol de surface est composé de sable limoneux, de structure moyenne, avec du loess en périphérie.</p><p>Vinif : 21 jours de macération et un an en barriques.</p><p><br></p><p>Facts: Rituál est le nom de notre Blaufränkisch parce que nous pensons qu\'il faut le célébrer.&nbsp;</p>',
+            '<p>Cépage : Blaufrankisch</p><p>Appellation : Petites Carpates</p><p>Alcool: 3,5% d\'alcool</p><p>SO2 total: 37mg/l</p><p>Terroir : Climat Continental. Le substrat Géologique est principalement composé de cône de déjection de rivières des Carpates. Le sol de surface est composé de sable limoneux, de structure moyenne, avec du loess en périphérie.</p><p>Vinif : 21 jours de macération et un an en barriques.</p><p><br></p><p>Facts: Rituál est le nom de notre Blaufränkisch parce que nous pensons qu\'il faut le célébrer.&nbsp;</p>',
         providerName: 'Naboso',
         alcohol: 0.13,
         lblFormat: '1500ml',
@@ -9560,7 +9560,7 @@ export const exampleData = [
         name: 'Devina',
         shortDescription: 'Trnava, Devina, Slobodne',
         fullDescription:
-            '<p>Cépage : Devin ( un croisement entre le Roter Veltliner et le Gewurztraminer,)</p><p>Appellation : Trnava</p><p>Alcool: 12,5% d\'alcool</p><p>SO2 total: LOW mg/l</p><p>Average Age of Vines:<span style="color: rgba(0, 0, 0, 0.7);">&nbsp;10-35 years</span></p><p>Terroir : <span style="color: rgba(0, 0, 0, 0.7);">loess, calcium</span></p><p>Vinif : Fermenté de façon semi-carbonique avec 10 jours sur les peaux dans l\'ovoïde, un récipient poreux en forme d\'œuf qui permet la micro-oxydation</p><p>Dégust: Il est juteux, texturé et aromatique - zeste de mandarine, limonade, yaourt à la pêche, eau minérale suisse, amande amère et un soupçon de fleur d\'oranger avec une finale de basilic thaï et de fenouil cru.</p><p><br></p><p>Facts: </p>',
+            '<p>Cépage : Devin ( un croisement entre le Roter Veltliner et le Gewurztraminer,)</p><p>Appellation : Trnava</p><p>Alcool: 12,5% d\'alcool</p><p>SO2 total: LOW mg/l</p><p>Terroir : <span style="color: rgba(0, 0, 0, 0.7);">loess, calcium</span></p><p>Vinif : Fermenté de façon semi-carbonique avec 10 jours sur les peaux dans l\'ovoïde, un récipient poreux en forme d\'œuf qui permet la micro-oxydation</p><p>Dégust: Il est juteux, texturé et aromatique - zeste de mandarine, limonade, yaourt à la pêche, eau minérale suisse, amande amère et un soupçon de fleur d\'oranger avec une finale de basilic thaï et de fenouil cru.</p><p><br></p><p>Facts: </p>',
         providerName: 'Slobodne vinarstvo, s.r.o.',
         alcohol: 0.1,
         lblFormat: '750ml',
@@ -11666,7 +11666,7 @@ export const exampleData = [
         name: 'Youngster Rouge',
         shortDescription: 'Milan Nestarec, Youngster Rouge, Moravia du Sud',
         fullDescription:
-            '<p>Zweigelt, Cabernet Sauvignon, Dornfelder</p><p>Total Production: 6000 bottles</p><p>Age of Vines: 19 years</p><p>Yield: 35 hl/ha</p><p>Soil: Loess, clay, loam</p><p>Vinification Notes: The grapes are hand-harvested and destemmed. The juice ferments in 2000-liter stainless steel tanks. The wine ferments for about 2 months, with occasional pigeage and indigenous yeast fermentation. Elevage takes place in the same tanks for about 2 months. The wine is bottled unfiltered, unfined, and with zero sulfur added.</p>',
+            '<p>Zweigelt, Cabernet Sauvignon, Dornfelder</p><p>Total Production: 6000 bottles</p><p>Yield: 35 hl/ha</p><p>Soil: Loess, clay, loam</p><p>Vinification Notes: The grapes are hand-harvested and destemmed. The juice ferments in 2000-liter stainless steel tanks. The wine ferments for about 2 months, with occasional pigeage and indigenous yeast fermentation. Elevage takes place in the same tanks for about 2 months. The wine is bottled unfiltered, unfined, and with zero sulfur added.</p>',
         providerName: 'Milan Nestarec',
         alcohol: 0.12,
         lblFormat: '750ml',
@@ -11995,7 +11995,7 @@ export const exampleData = [
         name: 'Don Zsolt',
         shortDescription: 'Slovaquie, Don Zsolt, Strekov 1075',
         fullDescription:
-            '<p>Appellation: Pohronska pahorkatina</p><p>Terroir: Top soil made of clay and loam, marine sediments with sandstone and limestone veins underneath. Deeper soil layers consist of yellow and blue-gray clay</p><p>Cépages: 100% Riesling</p><p>Âge des vignes: 10 ans</p><p>Vinification: The grapes are hand-harvested then destemmed. The wine ferments for about 40 days without temperature control in stainless steel tanks. Just before it finishes fermentation, it is moved into bottles under crown cap to finish as a pet-nat. Undisorged, zero additions.</p><p>% alcool : 12.5</p><p>When Zsolt tried to make Riesling in the past, it would always end up with some residual sugar. So starting in 2013, he decided to bottle the wine as a pet-nat. He figures probably something similar happened to Dom Perignon, thus the tongue-in-cheek name Don Zsolt.</p>',
+            '<p>Appellation: Pohronska pahorkatina</p><p>Terroir: Top soil made of clay and loam, marine sediments with sandstone and limestone veins underneath. Deeper soil layers consist of yellow and blue-gray clay</p><p>Cépages: 100% Riesling</p>Âge des vignes: 10 ans<p>Vinification: The grapes are hand-harvested then destemmed. The wine ferments for about 40 days without temperature control in stainless steel tanks. Just before it finishes fermentation, it is moved into bottles under crown cap to finish as a pet-nat. Undisorged, zero additions.</p><p>% alcool : 12.5</p><p>When Zsolt tried to make Riesling in the past, it would always end up with some residual sugar. So starting in 2013, he decided to bottle the wine as a pet-nat. He figures probably something similar happened to Dom Perignon, thus the tongue-in-cheek name Don Zsolt.</p>',
         providerName: 'Strekov 1075',
         alcohol: 0.125,
         lblFormat: '750ml',
@@ -12258,7 +12258,7 @@ export const exampleData = [
         name: 'Alter Nativa',
         shortDescription: 'Slovaquie, Alter Nativa, Slobodne',
         fullDescription:
-            '<p>Cépage : Blaufrankisch</p><p>Appellation : Trnava</p><p>Alcool: 13 % d\'alcool (2017)</p><p>SO2 total: LOW mg/l</p><p>Average Age of Vines:<span style="color: rgba(0, 0, 0, 0.7);">&nbsp;10-35 years</span></p><p>Terroir : <span style="color: rgba(0, 0, 0, 0.7);">loess, calcium</span></p><p>Vinif : Macération de 3 a 4 semaines, puis long élevage barriques de 18 mois. Embouteillé sans filtration, ni collage. Long élevage bouteille</p><p>Dégust: </p><p><br></p><p>Zemianske Sady est un domaine familial qui produit du vin à Hlohovec depuis 1912. À ses débuts, le domaine était principalement une exploitation de tabac qui produisait également des vins vendus localement et appréciés par la scène artistique de Prague. En raison de la guerre et des conflits politiques, le domaine a cessé de produire jusqu\'en 1997, date à laquelle les quatrième et cinquième générations ont repris le flambeau.</p><p><br></p><p>Les vignobles ont été replantés et la cave reconstruite, et en 2010, le premier millésime sous le nom de Slobodné Vinárstvo a vu le jour. En 2016, ils ont commencé à cultiver leurs 17 hectares dans le respect de l\'environnement et sont devenus membres de la plus ancienne association d\'agriculteurs biodynamiques d\'Autriche.</p><p><br></p>',
+            '<p>Cépage : Blaufrankisch</p><p>Appellation : Trnava</p><p>Alcool: 13 % d\'alcool (2017)</p><p>SO2 total: LOW mg/l</p><p>Terroir : <span style="color: rgba(0, 0, 0, 0.7);">loess, calcium</span></p><p>Vinif : Macération de 3 a 4 semaines, puis long élevage barriques de 18 mois. Embouteillé sans filtration, ni collage. Long élevage bouteille</p><p>Dégust: </p><p><br></p><p>Zemianske Sady est un domaine familial qui produit du vin à Hlohovec depuis 1912. À ses débuts, le domaine était principalement une exploitation de tabac qui produisait également des vins vendus localement et appréciés par la scène artistique de Prague. En raison de la guerre et des conflits politiques, le domaine a cessé de produire jusqu\'en 1997, date à laquelle les quatrième et cinquième générations ont repris le flambeau.</p><p><br></p><p>Les vignobles ont été replantés et la cave reconstruite, et en 2010, le premier millésime sous le nom de Slobodné Vinárstvo a vu le jour. En 2016, ils ont commencé à cultiver leurs 17 hectares dans le respect de l\'environnement et sont devenus membres de la plus ancienne association d\'agriculteurs biodynamiques d\'Autriche.</p><p><br></p>',
         providerName: 'Slobodne vinarstvo, s.r.o.',
         alcohol: 0.13,
         lblFormat: '750ml',
@@ -12851,7 +12851,7 @@ export const exampleData = [
         name: 'Doma',
         shortDescription: 'Slovaquie, Doma, Naboso',
         fullDescription:
-            '<p>Cépages : Welschriesling, Müller-Thurgau, Grüner Veltliner, Red Sylvaner</p><p>Appellation : Petites Carpates</p><p>Alcool: 12,5% d\'alcool</p><p>SO2 total: 38 mg/l</p><p>Average Age of Vines:<span style="color: rgba(0, 0, 0, 0.7);">&nbsp;33 years</span></p><p>Terroir : Climat Continental. Le substrat Géologique est principalement composé de cône de déjection de rivières des Carpates. Le sol de surface est composé de sable limoneux, de structure moyenne, avec du loess en périphérie.</p><p>Vinification: 14 jours de macération et un and en barriques de chênes et acacia</p><p>Doma signifie "à la maison".</p><p><br></p>',
+            '<p>Cépages : Welschriesling, Müller-Thurgau, Grüner Veltliner, Red Sylvaner</p><p>Appellation : Petites Carpates</p><p>Alcool: 12,5% d\'alcool</p><p>SO2 total: 38 mg/l</p><p>Terroir : Climat Continental. Le substrat Géologique est principalement composé de cône de déjection de rivières des Carpates. Le sol de surface est composé de sable limoneux, de structure moyenne, avec du loess en périphérie.</p><p>Vinification: 14 jours de macération et un and en barriques de chênes et acacia</p><p>Doma signifie "à la maison".</p><p><br></p>',
         providerName: 'Naboso',
         alcohol: 0.125,
         lblFormat: '750ml',
@@ -13572,7 +13572,7 @@ export const exampleData = [
         name: 'Interval 106',
         shortDescription: 'Trnava, Interval 106, Slobodne',
         fullDescription:
-            '<p>Cépage : Riesling</p><p>Appellation : Trnava</p><p>Alcool: 12,5% d\'alcool</p><p>SO2 total: LOW mg/l</p><p>Average Age of Vines:<span style="color: rgba(0, 0, 0, 0.7);">&nbsp;10-35 years</span></p><p>Terroir : <span style="color: rgba(0, 0, 0, 0.7);">loess, calcium</span></p><p>Vinif : élevage oak + ovoid, pas de macération.</p><p><br></p><p>Facts: 106ème vendange chez Slobodne ... Interval 106</p>',
+            '<p>Cépage : Riesling</p><p>Appellation : Trnava</p><p>Alcool: 12,5% d\'alcool</p><p>SO2 total: LOW mg/l</p><p>Terroir : <span style="color: rgba(0, 0, 0, 0.7);">loess, calcium</span></p><p>Vinif : élevage oak + ovoid, pas de macération.</p><p><br></p><p>Facts: 106ème vendange chez Slobodne ... Interval 106</p>',
         providerName: 'Slobodne vinarstvo, s.r.o.',
         alcohol: 0.12,
         lblFormat: '750ml',
@@ -14226,7 +14226,7 @@ export const exampleData = [
         name: 'Spolu',
         shortDescription: 'Slovakie, Spolu, Naboso',
         fullDescription:
-            '<p>Cépages : 40% Blaufränkisch, 30% Rieslig, 30% Grüner Veltliner</p><p>Appellation : Petites Carpates</p><p>Alcool: 12% d\'alcool</p><p>SO2 total: 45 mg/l</p><p>Average Age of Vines:<span style="color: rgba(0, 0, 0, 0.7);">&nbsp;33-46 years</span></p><p>Terroir : Climat Continental. Le substrat Géologique est principalement composé de cône de déjection de rivières des Carpates. Le sol de surface est composé de sable limoneux, de structure moyenne, avec du loess en périphérie.</p><p><br></p><p>Vinification : 14 jours de macération et un and en barriques de chênes et acacia</p><p><br></p><p> Spolu signifie "ensemble" : des variétés blanches et rouges ensemble.&nbsp;</p>',
+            '<p>Cépages : 40% Blaufränkisch, 30% Rieslig, 30% Grüner Veltliner</p><p>Appellation : Petites Carpates</p><p>Alcool: 12% d\'alcool</p><p>SO2 total: 45 mg/l</p><p>Terroir : Climat Continental. Le substrat Géologique est principalement composé de cône de déjection de rivières des Carpates. Le sol de surface est composé de sable limoneux, de structure moyenne, avec du loess en périphérie.</p><p><br></p><p>Vinification : 14 jours de macération et un and en barriques de chênes et acacia</p><p><br></p><p> Spolu signifie "ensemble" : des variétés blanches et rouges ensemble.&nbsp;</p>',
         providerName: 'Naboso',
         alcohol: 0.12,
         lblFormat: '750ml',
@@ -14358,7 +14358,7 @@ export const exampleData = [
         name: 'Youngster Rosé',
         shortDescription: 'Milan Nestarec, Youngster Rosé, Moravia du Sud',
         fullDescription:
-            '<p>Rosé (direct press)- Pinot Noir, Blaufrankisch, Zweigelt</p><p>Total Production: 6000 bottles</p><p>Age of Vines: 19 years</p><p>Yield: 35 hl/ha</p><p>Soil: Loess, clay, loam</p><p>Vinification Notes: The grapes are hand-harvested and destemmed. The juice ferments in 2000-liter stainless steel tanks. The wine ferments for about 2 months, with occasional pigeage and indigenous yeast fermentation. Elevage takes place in the same tanks for about 2 months. The wine is bottled unfiltered, unfined, and with zero sulfur added.</p>',
+            '<p>Rosé (direct press)- Pinot Noir, Blaufrankisch, Zweigelt</p><p>Total Production: 6000 bottles</p><p>Yield: 35 hl/ha</p><p>Soil: Loess, clay, loam</p><p>Vinification Notes: The grapes are hand-harvested and destemmed. The juice ferments in 2000-liter stainless steel tanks. The wine ferments for about 2 months, with occasional pigeage and indigenous yeast fermentation. Elevage takes place in the same tanks for about 2 months. The wine is bottled unfiltered, unfined, and with zero sulfur added.</p>',
         providerName: 'Milan Nestarec',
         alcohol: 0.12,
         lblFormat: '750ml',
@@ -17499,7 +17499,7 @@ export const exampleData = [
         name: 'Portugal',
         shortDescription: '',
         fullDescription:
-            '<p>Appellation: Pohronska pahorkatina</p><p>Terroir: Top soil made of clay and loam, marine sediments with sandstone and limestone veins underneath. Deeper soil layers consist of yellow and blue-gray clay</p><p>Cépages: 100% Blauer portugieser</p><p>Âge des vignes: 6 ans</p><p>Vinification: Grapes are hand-harvested and destemmed. The juice is fermented in open casks for about 15 days, punched down by hand. The wine is aged in 220-liter barrels for about 3 months. The wine is bottled unfined and unfiltered under crown cap, with zero addition of sulfur.</p><p>% alcool : 12.5</p><p>Smoky, herbal, funky and red-fruited wine!</p>',
+            '<p>Appellation: Pohronska pahorkatina</p><p>Terroir: Top soil made of clay and loam, marine sediments with sandstone and limestone veins underneath. Deeper soil layers consist of yellow and blue-gray clay</p><p>Cépages: 100% Blauer portugieser</p>Âge des vignes: 6 ans<p>Vinification: Grapes are hand-harvested and destemmed. The juice is fermented in open casks for about 15 days, punched down by hand. The wine is aged in 220-liter barrels for about 3 months. The wine is bottled unfined and unfiltered under crown cap, with zero addition of sulfur.</p><p>% alcool : 12.5</p><p>Smoky, herbal, funky and red-fruited wine!</p>',
         providerName: 'Strekov 1075',
         alcohol: 0.125,
         lblFormat: '750ml',

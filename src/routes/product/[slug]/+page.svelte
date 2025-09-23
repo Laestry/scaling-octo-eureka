@@ -183,6 +183,11 @@
                 >
                     <h1 class="product-name lg:text-[42px] text-2xl">{product.name}</h1>
                 </div>
+                <div class="product-description mt-4 w-full h-auto pr-[15px]
+                            md:w-[560px] md:h-[69px] md:flex-shrink-0">
+                  <!-- content -->
+                  <p class="tasting-note">Robe rouge cerise brillante. Bulle fine et élégante formant une couronne...</p>
+                </div>
 
                 <div class="flex flex-col lg:w-[560px] md:w-[380px] h-full">
                     <!--description-->
@@ -208,7 +213,7 @@
                                 </p>
                                 <div class="flex items-center flex-1">
                                     <div class="w-fit">
-                                        <b class="font-normal">{providerName}</b>
+                                        <b class="font-normal,  color: var(--WARD-BLACK, #181C1C);">{providerName}</b>
                                         <br />
                                         {product.name ?? ''}
                                         <br />
@@ -354,6 +359,7 @@
     .product-name {
         color: var(--WARD-RED, #F15A38);
         font-family: Riposte;
+        font-size: 32px;
         font-style: normal;
         font-weight: 400;
         line-height: 42px;
@@ -384,6 +390,19 @@
         justify-content: flex-start;
 
         overflow-y: auto;
+    }
+
+    .tasting-note {
+      position: sticky;
+      top: 0;                           // sticks to top of viewport
+      margin-top: 50px;                 // initial gap from the element above
+      color: var(--WARD-BLACK, #181C1C);
+      font-family: Riposte, sans-serif;
+      font-size: 32px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: normal;
+      z-index: 1000;
     }
 
     .product-description button {
@@ -427,7 +446,7 @@
         background: #2d63b0;
     }
     .product-table__button--favorite {
-        background: #F15A38 !important;
+        background: #2d63b0 !important;
     }
     .product-table__count {
         font-size: 16px;
