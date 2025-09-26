@@ -52,7 +52,7 @@
 
 <style lang="scss">
     :global(.productTable:not(:has(th:hover)):has(tr:hover) tr:not(:hover)) {
-        filter: blur(1px);
+        filter: blur(0.8px);
     }
 
     :global(.productRow tr) {
