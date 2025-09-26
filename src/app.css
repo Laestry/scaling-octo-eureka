@@ -2,6 +2,26 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Custom blue dot cursor - hide default cursor when blue dot is shown */
+.cursor-blue-dot {
+    cursor: none !important;
+}
+
+/* Hide cursor on all child elements too */
+.cursor-blue-dot * {
+    cursor: none !important;
+}
+
+/* Hide default cursor on all clickable elements */
+button, 
+.abutton,
+a[href],
+input[type="button"],
+input[type="submit"],
+[role="button"] {
+    cursor: none !important;
+}
+
 @font-face {
     font-family: 'Riposte';
     src: url('/fonts/Riposte-Regular.otf');

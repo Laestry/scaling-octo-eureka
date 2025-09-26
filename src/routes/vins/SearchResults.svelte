@@ -27,7 +27,7 @@
                 <th class="w-[40px]" />
             </tr>
             {#each searchResults.edges as { node: product }}
-                <tr on:click={() => navigateToProduct(product.id)} class="cursor-pointer">
+                <tr on:click={() => navigateToProduct(product.id)} class="cursor-blue-dot">
                     <td class="!p-0 flex items-center justify-center">
                         <img height="24" src="/icons/searchzoomin.svg" alt="" />
                     </td>

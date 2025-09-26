@@ -4,6 +4,7 @@
     import { fly } from 'svelte/transition';
     import Footer from './Footer.svelte';
     import Header from './Header.svelte';
+    import BlueDotCursor from '$lib/BlueDotCursor.svelte';
     import type { PageData } from './$types';
     import { setSupabase } from '$lib/supabase/client';
 
@@ -59,3 +60,4 @@
 </div>
 
 <Footer />
+<BlueDotCursor />

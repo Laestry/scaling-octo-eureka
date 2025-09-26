@@ -14,7 +14,7 @@
     p-[10px]"
 >
     <button
-        class="flex justify-between items-center w-full text-wred cursor-pointer
+        class="flex justify-between items-center w-full text-wred cursor-blue-dot
         lg:text-xl md:text-lg text-base
         lg:h-[21px] md:h-[24px] h-[20px]"
         class:active={!closed}

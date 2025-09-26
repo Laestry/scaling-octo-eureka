@@ -68,7 +68,7 @@
 </script>
 
 {#if isMain}
-    <div class="product {size}">
+    <div class="product {size} cursor-blue-dot">
         <a href="/src/routes/vin/{product.website_slug ?? 'noslug'}">
             <img class="bg-no-repeat object-cover bg-center img" src={img} alt="Wine" />
         </a>
@@ -121,7 +121,7 @@
         </div>
     </div>
 {:else}
-    <div class="product {size}">
+    <div class="product {size} cursor-blue-dot">
         <a href="/src/routes/vin/{product.website_slug ?? 'noslug'}">
             <img class="bg-no-repeat object-cover bg-center img mb-[15px]" src={img} alt="Wine" />
         </a>

@@ -5,7 +5,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Development Commands
 
 ### Build and Development
-- **Start dev server**: `npm run dev` (runs on port 3173)
+- **Start dev server**: `npm run dev` (runs on port 3000, with Node.js debugging and 16GB memory allocation)
 - **Build for production**: `npm run build`
 - **Package manager**: Uses `pnpm` (check `pnpm-lock.yaml`)
 

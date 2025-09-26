@@ -7,6 +7,9 @@ module.exports = {
             lg: '1162px'
         },
         extend: {
+            cursor: {
+                'blue-dot': "url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgdmlld0JveD0iMCAwIDE2IDE2Ij48Y2lyY2xlIGN4PSI4IiBjeT0iOCIgcj0iMyIgZmlsbD0iIzM3NzdiYyIvPjwvc3ZnPg==') 8 8, pointer"
+            },
             colors: {
                 wred: '#F15A38',
                 wblue: '#3777BC',
