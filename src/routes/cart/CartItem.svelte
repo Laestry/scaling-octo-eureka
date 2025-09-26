@@ -7,21 +7,12 @@
     import Plus from '$lib/icons/Plus.svelte';
     import { onMount } from 'svelte';
 
-    export let product;
+    export let product; // alcohol_view row + { selectedBatchId: string|number }
 
     const images = new Array(8).fill('').map((_, i) => `/images/example_wines/${i + 1}.jpg`);
-    function getRandomNumber() {
-        const n1 = parseInt(product.sku);
-        if (!Number.isNaN(n1)) {
-            return n1;
-        }
-        const n2 = product.external_id.split('').find((x) => !Number.isNaN(parseInt(x))) || '0';
-        return parseInt(n2);
-    }
     function getImage() {
         const n = Math.floor(Math.random() * images.length);
-        const i = n % images.length;
-        return images[i]!;
+        return images[n % images.length]!;
     }
     let img = '';
     $: {
@@ -29,42 +20,61 @@
         img = getImage();
     }
 
-    $: selectedBatch = product.alcohol_batches?.find((b) => b.id == product.selectedBatchId) ?? null;
+    // Build a pseudo-batch from the view when we only have oldest_* fields
+    function asViewBatch(p: any) {
+        if (!p) return null;
+        return p.oldest_batch_id == null
+            ? null
+            : {
+                  id: p.oldest_batch_id,
+                  vintage: p.oldest_vintage,
+                  price: p.oldest_price,
+                  price_tax_in: p.oldest_price_tax_in,
+                  calculated_quantity: p.oldest_calculated_quantity
+              };
+    }
+
+    // selected batch resolution:
+    // 1) if the product carries an inlined list (legacy), try to find by selectedBatchId
+    // 2) else fall back to the view's oldest_* batch, but only if ids match selectedBatchId
+    $: selectedBatch =
+        product?.alcohol_batches?.find?.((b: any) => String(b.id) === String(product?.selectedBatchId)) ??
+        (String(product?.oldest_batch_id) === String(product?.selectedBatchId) ? asViewBatch(product) : null);
+
     let isMounted = false;
     afterNavigate(() => {
-        // console.log('cartitem afterNavigate ', vin, vin.selectedBatchId);
-        selectedBatch = product.alcohol_batches?.find((b) => b.id == product.selectedBatchId) ?? null;
-
+        selectedBatch =
+            product?.alcohol_batches?.find?.((b: any) => String(b.id) === String(product?.selectedBatchId)) ??
+            (String(product?.oldest_batch_id) === String(product?.selectedBatchId) ? asViewBatch(product) : null);
         isMounted = true;
     });
-
     onMount(() => {
-        // console.log('cartitem onMount ', vin, vin.selectedBatchId);
-        selectedBatch = product.alcohol_batches?.find((b) => b.id == product.selectedBatchId) ?? null;
-
+        selectedBatch =
+            product?.alcohol_batches?.find?.((b: any) => String(b.id) === String(product?.selectedBatchId)) ??
+            (String(product?.oldest_batch_id) === String(product?.selectedBatchId) ? asViewBatch(product) : null);
         isMounted = true;
     });
 
     $: maxCases = (() => {
         if (!selectedBatch) return 0;
-        const availableBottles = selectedBatch.calculated_quantity ?? selectedBatch.quantity ?? 0;
+        const availableBottles =
+            selectedBatch.calculated_quantity ?? selectedBatch.quantity ?? product?.oldest_calculated_quantity ?? 0;
         return product.uvc > 0 ? Math.floor(availableBottles / product.uvc) : 0;
     })();
 
-    $: isAtLimit = $itemQuantity >= maxCases;
     let itemQuantity = getItemQuantityStore(product.selectedBatchId);
-
     $: if (selectedBatch) itemQuantity = getItemQuantityStore(product.selectedBatchId);
+    $: isAtLimit = $itemQuantity >= maxCases;
+
+    function goToProduct() {
+        const slug = product?.website_slug ?? 'noslug';
+        goto(`/product/${slug}`);
+    }
 </script>
 
 {#if isMounted && selectedBatch}
     <div class="lg:flex hidden h-[142px] border-b border-wblue mb-[11px]">
-        <button
-            class="flex justify-end h-full w-[106px] ml-8"
-            on:click={() => {
-                goto(`/product/${product.slug}`);
-            }}
-        >
+        <button class="flex justify-end h-full w-[106px] ml-8" on:click={goToProduct}>
             <div class="absolute">
                 <button
                     class="hover:translate-y-0.5 transition-transform rotate-45 text-5xl"
@@ -80,7 +90,7 @@
         <div class="max-w-[326px] flex-1 my-4 flex items-end ml-[54px] border-r border-wblue">
             <div>
                 <b>{product.name}</b>
-                <div>{product.parties?.display_name ?? ''}</div>
+                <div>{product.provider_display_name ?? ''}</div>
                 <div>{selectedBatch?.vintage ?? ''}</div>
             </div>
         </div>
@@ -110,8 +120,9 @@
                             <Plus />
                         </button>
                         <button
-                            class="abutton product-table-counter__button
-                                {$itemQuantity > 1 ? '' : '!text-gray-300 cursor-not-allowed'}"
+                            class="abutton product-table-counter__button {$itemQuantity > 1
+                                ? ''
+                                : '!text-gray-300 cursor-not-allowed'}"
                             on:click={() => {
                                 if ($itemQuantity > 1) cart.remove(selectedBatch.id);
                             }}
@@ -124,18 +135,13 @@
         </div>
 
         <div class="max-w-[192px] flex-1 w-full my-4 flex items-center justify-end pr-1.5">
-            <div>{((Number(itemQuantity) || 1) * Number(selectedBatch?.price)).toFixed(2)} $</div>
+            <div>{((Number($itemQuantity) || 1) * Number(selectedBatch?.price ?? 0)).toFixed(2)} $</div>
         </div>
     </div>
 
-    <!--mobile cart-->
+    <!-- mobile -->
     <div class="cartProduct lg:hidden flex" transition:fade>
-        <button
-            class="flex justify-end"
-            on:click={() => {
-                goto(`/product/${product.slug}`);
-            }}
-        >
+        <button class="flex justify-end" on:click={goToProduct}>
             <div class="absolute">
                 <button
                     class="rotate-45 text-5xl"
@@ -147,7 +153,8 @@
             </div>
             <img class="bg-no-repeat object-cover bg-center img mb-[7px]" src={img} alt="Wine" />
         </button>
-        <a href="/src/routes/vin/{product.slug}" class="flex justify-between w-full">
+
+        <a href="/product/{product.website_slug}" class="flex justify-between w-full">
             <div class="flex flex-col w-full product-name" style="width: calc(100% - 100px)">
                 <div class="description">
                     <div>{getCategory(product)}</div>
@@ -171,21 +178,20 @@
             </div>
         </a>
 
-        <a href="/src/routes/vin/{product.slug}" class="flex flex-col items-start justify-start w-full product-name">
+        <a href="/product/{product.website_slug}" class="flex flex-col items-start justify-start w-full product-name">
             <b class="truncate w-full">{product.name || '-'}</b>
             <div class="w-full flex">
-                <div class="truncate" style="max-width: calc(100% - 37px)">{product.parties?.display_name ?? ''}</div>
-                <span>
-                    {#if product.parties?.display_name && selectedBatch?.vintage},
-                    {/if}
-                    {selectedBatch?.vintage ?? ''}
-                </span>
+                <div class="truncate" style="max-width: calc(100% - 37px)">{product.provider_display_name ?? ''}</div>
+                <span
+                    >{#if product.provider_display_name && selectedBatch?.vintage},{/if}{selectedBatch?.vintage ??
+                        ''}</span
+                >
             </div>
         </a>
         <div class="flex justify-between items-end w-full">
-            <a href="/src/routes/vin/{product.slug}" class="product-name description">
+            <a href="/product/{product.website_slug}" class="product-name description">
                 {product.uvc} <span class="lowercase">x</span>
-                {product.lblFormat}
+                {product.volume}
             </a>
 
             <div class="flex items-center w-fit h-fit self-end">
@@ -193,7 +199,7 @@
                     class="abutton product-table-counter__button {$itemQuantity > 1 ? '' : '!text-gray-300'}"
                     style="line-height: 16px"
                     on:click={() => {
-                        if ($itemQuantity > 1) cart.remove(product.id);
+                        if ($itemQuantity > 1) cart.remove(selectedBatch.id);
                     }}
                     >-
                 </button>
@@ -227,19 +233,17 @@
         font-size: 16px;
         font-style: normal;
         font-weight: 400;
-        line-height: 120%; /* 19.2px */
+        line-height: 120%;
     }
-
     .product-table__count {
         color: #1e1e1e;
         font-family: 'Riposte';
         font-size: 16px;
         font-style: normal;
         font-weight: 400;
-        line-height: 120%; /* 19.2px */
+        line-height: 120%;
     }
     .product-table-counter {
-        //margin-top: 14px;
         display: flex;
         gap: 5px;
         align-items: center;
@@ -254,215 +258,22 @@
         font-size: 16px;
         font-style: normal;
         font-weight: 400;
-        line-height: 120%; /* 19.2px */
+        line-height: 120%;
         border-radius: 12px;
         background: #2d63b0;
         width: 78px;
         height: 24px;
-
-        @media (max-width: 1162px) {
-            font-size: 14px;
-            width: 40px;
-            height: 18px;
-        }
-        @media (max-width: 767px) {
-            font-size: 12px;
-            width: 38px;
-            height: 16px;
-        }
     }
-
     .product {
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
-
-        &.s {
-            max-width: 176px;
-            @media (max-width: 1162px) {
-                width: 118px;
-                height: 224px;
-            }
-            @media (max-width: 767px) {
-                width: 94px;
-                height: auto;
-            }
-
-            .img {
-                width: 176px;
-                height: 243px;
-                @media (max-width: 1162px) {
-                    width: 118px;
-                    height: 156px;
-                }
-                @media (max-width: 767px) {
-                    width: 94px;
-                    height: 125px;
-                }
-            }
-        }
-        &.m {
-            width: 272px;
-            @media (max-width: 1162px) {
-                width: 181px;
-                height: 283px;
-            }
-            @media (max-width: 767px) {
-                width: 145px;
-                height: auto;
-            }
-
-            .img {
-                width: 272px;
-                height: 376px;
-                @media (max-width: 1162px) {
-                    width: 181px;
-                    height: 241px;
-                }
-                @media (max-width: 767px) {
-                    width: 145px;
-                    height: 193px;
-                }
-            }
-        }
-        &.l {
-            width: 368px;
-            @media (max-width: 1162px) {
-                width: 245px;
-                height: 370px;
-            }
-            @media (max-width: 767px) {
-                width: 196px;
-                height: auto;
-            }
-
-            .img {
-                width: 368px;
-                height: 505px;
-                @media (max-width: 1162px) {
-                    width: 245px;
-                    height: 328px;
-                }
-                @media (max-width: 767px) {
-                    width: 196px;
-                    height: 262px;
-                }
-            }
-        }
-        &.v {
-            width: 272px;
-            height: 486px;
-            @media (max-width: 1162px) {
-                width: 181px;
-                height: 354px;
-            }
-            @media (max-width: 767px) {
-                width: 196px;
-                height: auto;
-            }
-
-            .img {
-                width: 368px;
-                height: 362px;
-                @media (max-width: 1162px) {
-                    width: 245px;
-                    height: 328px;
-                }
-                @media (max-width: 767px) {
-                    width: 196px;
-                    height: 262px;
-                }
-            }
-        }
-
-        .product-name {
-            font-family: 'Riposte', sans-serif;
-            font-size: 12px;
-            font-style: normal;
-            font-weight: 400;
-            line-height: 150%; /* 18px */
-            text-transform: capitalize;
-
-            b {
-                font-weight: 700;
-            }
-
-            @media (max-width: 1162px) {
-                font-size: 11px;
-            }
-        }
-
-        .product-price {
-            font-family: 'Riposte', sans-serif;
-            font-size: 14px;
-            font-style: normal;
-            font-weight: 700;
-            line-height: 150%; /* 18px */
-            text-transform: capitalize;
-
-            @media (max-width: 1162px) {
-                font-size: 11px;
-            }
-        }
     }
-
     .cartProduct {
         flex-direction: column;
         align-items: center;
         justify-content: center;
-
         width: 272px;
-        @media (max-width: 1162px) {
-            width: 181px;
-            height: 350px;
-        }
-        @media (max-width: 767px) {
-            width: 145px;
-            height: auto;
-        }
-
-        .img {
-            width: 272px;
-            height: 376px;
-            @media (max-width: 1162px) {
-                width: 181px;
-                height: 241px;
-            }
-            @media (max-width: 767px) {
-                width: 145px;
-                height: 193px;
-            }
-        }
-
-        .product-name {
-            font-family: 'Riposte', sans-serif;
-            font-size: 12px;
-            font-style: normal;
-            font-weight: 400;
-            line-height: 150%; /* 18px */
-            text-transform: capitalize;
-
-            b {
-                font-weight: 700;
-            }
-
-            @media (max-width: 1162px) {
-                font-size: 11px;
-            }
-        }
-
-        .product-price {
-            font-family: 'Riposte', sans-serif;
-            font-size: 14px;
-            font-style: normal;
-            font-weight: 700;
-            line-height: 150%; /* 18px */
-            text-transform: capitalize;
-
-            @media (max-width: 1162px) {
-                font-size: 11px;
-            }
-        }
     }
 </style>

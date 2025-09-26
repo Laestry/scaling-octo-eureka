@@ -3,19 +3,16 @@
     import { priceFormat, getCategory } from '../vin/[slug]/utils';
     import { cart, getItemQuantityStore } from '$lib/cart';
     import { fly, fade } from 'svelte/transition';
-    import { createEventDispatcher } from 'svelte';
     import Plus from '$lib/icons/Plus.svelte';
     import { getOldestBatch } from './utils';
 
     export let product: any;
     export let isPDF = false;
 
-    const dispatcher = createEventDispatcher();
-
     // images
     const images = new Array(8).fill('').map((_, i) => `/images/example_wines/${i + 1}.jpg`);
     function getRandomNumber() {
-        const n1 = parseInt(product?.sku);
+        const n1 = parseInt(product?.sku); // sku may not exist in view, falls back to id
         return !Number.isNaN(n1)
             ? n1
             : typeof product?.id === 'number'
@@ -62,12 +59,24 @@
     }
 
     function handleClick() {
-        const slug = product?.alcohol_website?.[0]?.slug ?? 'noslug';
+        const slug = product?.website_slug ?? 'noslug';
         goto(`/product/${slug}`);
     }
 
-    // batches and cart integration (Supabase shape)
-    $: selectedBatch = getOldestBatch(product);
+    // view -> pseudo-batch fallback
+    function asViewBatch(p: any) {
+        if (p?.oldest_batch_id == null) return null;
+        return {
+            id: p.oldest_batch_id,
+            vintage: p.oldest_vintage,
+            price: p.oldest_price,
+            price_tax_in: p.oldest_price_tax_in,
+            calculated_quantity: p.oldest_calculated_quantity
+        };
+    }
+
+    // batches and cart integration
+    $: selectedBatch = getOldestBatch(product) ?? asViewBatch(product);
 
     let itemQuantity;
     $: if (selectedBatch) {
@@ -94,14 +103,9 @@
 
     let animations: { id: number }[] = [];
 
-    // display helpers
-    const providerName = product?.parties?.display_name ?? '';
-    $: region = (() => {
-        const r = product?.region?.trim?.() || product?.originRegion?.trim?.() || '';
-        const c = product?.originCountry?.trim?.() || '';
-        if (r && c) return `${r}, ${c}`;
-        return r || c || '-';
-    })();
+    // display helpers from view
+    const providerName = product?.provider_display_name ?? '';
+    $: region = product?.region_name?.trim?.() || '-';
 </script>
 
 <tr
