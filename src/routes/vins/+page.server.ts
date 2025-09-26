@@ -1,4 +1,4 @@
-import type { TFilters, FetchOpts } from '$lib/models/general';
+import type { TFilters } from '$lib/models/general';
 import { fetchFilteredProductsForAlcohol } from './Filters/utils';
 
 export async function load({ locals, url }) {
@@ -82,7 +82,7 @@ export async function load({ locals, url }) {
         limit: PAGE_SIZE,
         offset: 0,
         sorting: selectedFilters.sorting
-    } as FetchOpts);
+    });
 
     // categories list (for buildDisplayFilters)
     const categoriesPromise = locals.supabase.schema('cms_saq').from('alcohol_categories').select('*');

@@ -84,9 +84,8 @@ interface FetchOpts {
 }
 
 /**
- * Builds and executes the Supabase query for your `cms_saq.alcohol` table,
- * applying the selected filters (producer, region, categories, format, vintage,
- * nameSearch, tag, priceRange, sorting) and the existing joins / constraints.
+ * Query `cms_saq.alcohol_view` instead of base tables.
+ * Mirrors the old filters/sorting using view columns.
  */
 export async function fetchFilteredProductsForAlcohol(
     supabaseClient: typeof supabase,
@@ -109,109 +108,84 @@ export async function fetchFilteredProductsForAlcohol(
 
     const vintageArr: number[] = [];
     if (selected?.vintage) {
-        if (Array.isArray(selected?.vintage)) {
-            vintageArr.push(...selected?.vintage);
-        } else {
-            vintageArr.push(selected?.vintage);
-        }
+        if (Array.isArray(selected?.vintage)) vintageArr.push(...selected?.vintage);
+        else vintageArr.push(selected?.vintage);
     }
 
-    // base query with joins and quantity constraint
     let query = supabaseClient
         .schema('cms_saq')
-        .from('alcohol')
-        .select('*, alcohol_batches!inner(*), parties!inner(display_name), alcohol_website!inner(slug)', {
-            count: 'exact'
-        })
-        .gt('alcohol_batches.calculated_quantity', 0)
-        .gt('alcohol_batches.price', 0)
-        .gt('alcohol_batches.price_tax_in', 0)
-        .not('alcohol_website.slug', 'is', null);
-    // producer filter: assumes alcohol table has producer_id column
+        .from('alcohol_view')
+        .select('*', { count: 'exact' })
+        .gt('oldest_price', 0)
+        .gt('oldest_price_tax_in', 0)
+        .not('website_slug', 'is', null);
+
+    // producer
     if (producer?.id != null) {
         query = query.eq('provider_id', producer.id);
     }
 
-    // region filter: example assumes columns region_country_id and region_name exist
+    // region
     if (region) {
-        if (region.country_id != null) {
-            query = query.eq('country_id', region.country_id);
-        }
-        if (region.region_name) {
-            query = query.eq('region_name', region.region_name);
-        }
+        if (region.country_id != null) query = query.eq('country_id', region.country_id);
+        if (region.region_name) query = query.eq('region_name', region.region_name);
     }
 
-    // category: OR of (category & specificCategory) pairs
+    // category OR of pairs
     if (categoryArr.length) {
         const validPairs = categoryArr
             .filter((c) => c?.category != null && c?.specificCategory != null)
             .map((c) => `and(category.eq.${c.category},specific_category.eq.${c.specificCategory})`);
-        if (validPairs.length) {
-            query = query.or(validPairs.join(','));
-        }
+        if (validPairs.length) query = query.or(validPairs.join(','));
     }
 
-    // format filter
+    // format
     if (format) {
-        if (format.format != null) {
-            query = query.eq('format', format.format);
-        }
-        if (format.volume != null) {
-            query = query.eq('volume', format.volume);
-        }
+        if (format.format != null) query = query.eq('format', format.format);
+        if (format.volume != null) query = query.eq('volume', format.volume);
     }
 
-    // vintage filter
+    // vintage: any overlap with available vintages
     if (vintageArr.length) {
-        query = query.in('alcohol_batches.vintage', vintageArr);
+        query = query.overlaps('vintages', vintageArr);
     }
 
-    // nameSearch: partial match on name
+    // name
     if (selected?.nameSearch) {
         query = query.ilike('name', `%${selected?.nameSearch}%`);
     }
 
-    // tag: naive inclusion, adapt depending on your schema (e.g., jsonb array, text array)
+    // tag
     if (selected?.tag) {
-        // If tags is a text column containing comma-separated or similar:
+        // keep as ilike unless tags is a proper array and you prefer `.contains`
         query = query.ilike('tags', `%${selected?.tag}%`);
-        // If tags is a proper array column you might use: query = query.contains('tags', [selected?.tag]);
     }
 
-    // priceRange
+    // price range on oldest_price
     if (selected?.priceRange) {
-        if (selected?.priceRange === 'low') {
-            query = query.gte('alcohol_batches.price', 20).lte('alcohol_batches.price', 30);
-        } else if (selected?.priceRange === 'mid') {
-            query = query.gte('alcohol_batches.price', 30).lte('alcohol_batches.price', 40);
-        } else if (selected?.priceRange === 'high') {
-            query = query.gte('alcohol_batches.price', 40);
-        }
+        if (selected?.priceRange === 'low') query = query.gte('oldest_price', 20).lte('oldest_price', 30);
+        else if (selected?.priceRange === 'mid') query = query.gte('oldest_price', 30).lte('oldest_price', 40);
+        else if (selected?.priceRange === 'high') query = query.gte('oldest_price', 40);
     }
 
     // sorting
     if (opts.sorting) {
         if (opts.sorting === 'Prix croissant') {
-            query = query.order('price', { referencedTable: 'alcohol_batches', ascending: true });
+            query = query.order('oldest_price', { ascending: true });
         } else if (opts.sorting === 'Prix décroissant') {
-            query = query.order('price', { referencedTable: 'alcohol_batches', ascending: false });
+            query = query.order('oldest_price', { ascending: false });
         } else if (opts.sorting === 'Alphabétique') {
             query = query.order('name', { ascending: true });
         } else {
-            query = query.order('sell_before_date', {
-                referencedTable: 'alcohol_batches',
-                ascending: false
-            });
+            query = query.order('oldest_sell_before_date', { ascending: false });
         }
     } else {
-        query = query.order('sell_before_date', {
-            referencedTable: 'alcohol_batches',
-            ascending: false
-        });
+        query = query
+            .order('oldest_sell_before_date', { ascending: true })
+            .order('total_quantity', { ascending: false });
     }
 
-    // range / pagination
+    // pagination
     query = query.range(opts.offset, opts.offset + opts.limit - 1);
 
     return await query;

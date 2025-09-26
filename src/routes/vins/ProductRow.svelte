@@ -1,6 +1,6 @@
 <script lang="ts">
     import { goto } from '$app/navigation';
-    import { priceFormat, getCategory } from '../product/[slug]/utils';
+    import { priceFormat, getCategory } from '../vin/[slug]/utils';
     import { cart, getItemQuantityStore } from '$lib/cart';
     import { fly, fade } from 'svelte/transition';
     import { createEventDispatcher } from 'svelte';

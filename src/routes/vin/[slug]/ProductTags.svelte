@@ -55,11 +55,11 @@
         {/if}
 
         <!--{#if categoryHref}-->
-        <!--    <a href={categoryHref}>{product.specificCategory}</a>-->
+        <!--    <a href={categoryHref}>{vin.specificCategory}</a>-->
         <!--{/if}-->
 
         <!--        {#if formatHref}-->
-        <!--            <a href={formatHref}>{product.lblFormat}</a>-->
+        <!--            <a href={formatHref}>{vin.lblFormat}</a>-->
         <!--        {/if}-->
 
         {#if vintageHref}

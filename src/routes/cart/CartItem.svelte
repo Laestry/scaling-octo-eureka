@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { getCategory, priceFormat } from '../product/[slug]/utils';
+    import { getCategory, priceFormat } from '../vin/[slug]/utils';
     import { cart, getItemQuantityStore } from '$lib/cart';
     import { afterNavigate, goto } from '$app/navigation';
     import { fade } from 'svelte/transition';
@@ -32,14 +32,14 @@
     $: selectedBatch = product.alcohol_batches?.find((b) => b.id == product.selectedBatchId) ?? null;
     let isMounted = false;
     afterNavigate(() => {
-        // console.log('cartitem afterNavigate ', product, product.selectedBatchId);
+        // console.log('cartitem afterNavigate ', vin, vin.selectedBatchId);
         selectedBatch = product.alcohol_batches?.find((b) => b.id == product.selectedBatchId) ?? null;
 
         isMounted = true;
     });
 
     onMount(() => {
-        // console.log('cartitem onMount ', product, product.selectedBatchId);
+        // console.log('cartitem onMount ', vin, vin.selectedBatchId);
         selectedBatch = product.alcohol_batches?.find((b) => b.id == product.selectedBatchId) ?? null;
 
         isMounted = true;
@@ -147,7 +147,7 @@
             </div>
             <img class="bg-no-repeat object-cover bg-center img mb-[7px]" src={img} alt="Wine" />
         </button>
-        <a href="/product/{product.slug}" class="flex justify-between w-full">
+        <a href="/src/routes/vin/{product.slug}" class="flex justify-between w-full">
             <div class="flex flex-col w-full product-name" style="width: calc(100% - 100px)">
                 <div class="description">
                     <div>{getCategory(product)}</div>
@@ -171,7 +171,7 @@
             </div>
         </a>
 
-        <a href="/product/{product.slug}" class="flex flex-col items-start justify-start w-full product-name">
+        <a href="/src/routes/vin/{product.slug}" class="flex flex-col items-start justify-start w-full product-name">
             <b class="truncate w-full">{product.name || '-'}</b>
             <div class="w-full flex">
                 <div class="truncate" style="max-width: calc(100% - 37px)">{product.parties?.display_name ?? ''}</div>
@@ -183,7 +183,7 @@
             </div>
         </a>
         <div class="flex justify-between items-end w-full">
-            <a href="/product/{product.slug}" class="product-name description">
+            <a href="/src/routes/vin/{product.slug}" class="product-name description">
                 {product.uvc} <span class="lowercase">x</span>
                 {product.lblFormat}
             </a>

@@ -1,6 +1,6 @@
-<!--src/routes/vins/ProductCard.svelte-->
+<!-- src/routes/vins/ProductCard.svelte -->
 <script lang="ts">
-    import { getCategory, priceFormat } from '../product/[slug]/utils';
+    import { getCategory, priceFormat } from '../vin/[slug]/utils';
     import { cart, getItemQuantityStore } from '$lib/cart';
     import { fly } from 'svelte/transition';
     import Plus from '$lib/icons/Plus.svelte';
@@ -10,11 +10,10 @@
     export let size: 's' | 'm' | 'l' | 'v' = 's';
     export let isMain = false;
 
-    // IMAGE SELECTION (unchanged)
     const images = new Array(8).fill('').map((_, i) => `/images/example_wines/${i + 1}.jpg`);
     function getRandomNumber() {
-        const n1 = parseInt(product.sku);
-        return !Number.isNaN(n1) ? n1 : typeof product.id === 'number' ? product.id : parseInt(String(product.id)) || 0;
+        const n1 = typeof product.id === 'number' ? product.id : parseInt(String(product.id)) || 0;
+        return n1;
     }
     function getImage() {
         const n = getRandomNumber();
@@ -26,13 +25,21 @@
         img = getImage();
     }
 
-    // CART ANIMATION
     let animations: { id: number }[] = [];
 
-    // keep this up to date if product changes
-    $: selectedBatch = getOldestBatch(product);
-    let itemQuantity;
+    function asViewBatch(p: any) {
+        if (p?.oldest_batch_id == null) return null;
+        return {
+            id: p.oldest_batch_id,
+            vintage: p.oldest_vintage,
+            price: p.oldest_price,
+            price_tax_in: p.oldest_price_tax_in,
+            calculated_quantity: p.oldest_calculated_quantity
+        };
+    }
 
+    $: selectedBatch = getOldestBatch(product) ?? asViewBatch(product);
+    let itemQuantity;
     $: if (selectedBatch) {
         itemQuantity = getItemQuantityStore(selectedBatch.id);
     }
@@ -40,11 +47,7 @@
     function handleAdd() {
         if (!selectedBatch) return;
         if ($itemQuantity >= maxCases) return;
-
-        console.log('ProductCard handleAdd', selectedBatch.id, $itemQuantity, maxCases);
-        console.log(product, selectedBatch.id);
         cart.add(product, selectedBatch.id);
-
         const id = Date.now();
         const duration = 600;
         animations = [...animations, { id }];
@@ -53,8 +56,7 @@
         }, duration + 200);
     }
 
-    // FALLBACK FOR PROVIDER NAME
-    const providerName = product.parties?.display_name ?? '';
+    const providerName = product.provider_display_name ?? '';
 
     $: maxCases = (() => {
         if (!selectedBatch) return 0;
@@ -62,18 +64,17 @@
         return product.uvc > 0 ? Math.floor(availableBottles / product.uvc) : 0;
     })();
 
-    // whether we've hit the limit already
     $: isAtLimit = $itemQuantity >= maxCases;
 </script>
 
 {#if isMain}
     <div class="product {size}">
-        <a href="/product/{product.alcohol_website[0]?.slug ?? 'noslug'}">
+        <a href="/src/routes/vin/{product.website_slug ?? 'noslug'}">
             <img class="bg-no-repeat object-cover bg-center img" src={img} alt="Wine" />
         </a>
         <div class="flex justify-between mt-[7px] w-full">
             <a
-                href="/product/{product.alcohol_website[0]?.slug ?? 'noslug'}"
+                href="/src/routes/vin/{product.website_slug ?? 'noslug'}"
                 class="flex flex-col uppercase w-full product-name"
                 style="width: calc(100% - 100px)"
             >
@@ -121,10 +122,10 @@
     </div>
 {:else}
     <div class="product {size}">
-        <a href="/product/{product.alcohol_website[0]?.slug ?? 'noslug'}">
+        <a href="/src/routes/vin/{product.website_slug ?? 'noslug'}">
             <img class="bg-no-repeat object-cover bg-center img mb-[15px]" src={img} alt="Wine" />
         </a>
-        <a href="/product/{product.alcohol_website[0]?.slug ?? 'noslug'}" class="flex justify-between w-full">
+        <a href="/src/routes/vin/{product.website_slug ?? 'noslug'}" class="flex justify-between w-full">
             <div class="flex flex-col w-full product-name" style="width: calc(100% - 100px)">
                 <div class="description">
                     <div>{getCategory(product)}</div>
@@ -155,21 +156,20 @@
             </div>
         </a>
         <a
-            href="/product/{product.alcohol_website[0]?.slug ?? 'noslug'}"
+            href="/src/routes/vin/{product.website_slug ?? 'noslug'}"
             class="flex flex-col items-start justify-start w-full product-name"
         >
             <b class="truncate w-full">{product.name || '-'}</b>
             <div class="w-full flex">
                 <div class="truncate" style="max-width: calc(100% - 37px)">{providerName}</div>
                 <span>
-                    {#if providerName && selectedBatch?.vintage},
-                    {/if}
+                    {#if providerName && selectedBatch?.vintage},{/if}
                     {selectedBatch?.vintage ?? ''}
                 </span>
             </div>
         </a>
         <div class="flex justify-between items-end w-full">
-            <a href="/product/{product.alcohol_website[0]?.slug ?? 'noslug'}" class="product-name description">
+            <a href="/src/routes/vin/{product.website_slug ?? 'noslug'}" class="product-name description">
                 {product.uvc} <span class="lowercase">x</span>
                 {product.volume}
             </a>

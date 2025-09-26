@@ -5,7 +5,7 @@
     export let products;
     export let prixResto = false;
 
-    // Compute region for a given product.
+    // Compute region for a given vin.
     function getRegion(product: any): string {
         const r = product.originRegion?.trim() || '';
         const c = product.originCountry?.trim() || '';

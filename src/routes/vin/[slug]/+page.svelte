@@ -42,7 +42,6 @@
     let selectedBatch;
     $: if (product) selectedBatch = getOldestBatch();
 
-
     let currentSlide = 0;
     let expand_description = false;
     let expand_question = false;
@@ -83,7 +82,7 @@
     $: if (product && product?.parties) providerName = product?.parties?.display_name ?? '';
 
     onMount(async () => {
-        console.log('product data', data, selectedBatch);
+        console.log('vin data', data, selectedBatch);
     });
 
     function toggleWaitlistForm() {
@@ -115,21 +114,20 @@
             //         firstName,
             //         lastName,
             //         email,
-            //         productId: product.id,
-            //         productName: product.name
+            //         productId: vin.id,
+            //         productName: vin.name
             //     })
             // });
             //
             // if (response.ok) {
-            //     alert(`Merci ${firstName}! Nous vous contacterons dès que ${product.name} sera disponible.`);
+            //     alert(`Merci ${firstName}! Nous vous contacterons dès que ${vin.name} sera disponible.`);
             //     showWaitlistForm = false;
             // } else {
             //     throw new Error('Failed to submit');
             // }
-
         } catch (error) {
             console.error('Waitlist submission error:', error);
-            alert('Erreur lors de l\'inscription. Veuillez réessayer.');
+            alert("Erreur lors de l'inscription. Veuillez réessayer.");
         }
     }
 </script>
@@ -176,24 +174,28 @@
                 </button>
             </div>
 
-            <div>
+            <div class="lg:w-[560px] md:w-[394px]">
                 <div
                     class="mt-[12px] flex items-end
-                        lg:w-[560px] md:w-[394px] h-full"
+                         h-full"
                 >
                     <h1 class="product-name lg:text-[42px] text-2xl">{product.name}</h1>
                 </div>
-                <div class="product-description mt-4 w-full h-auto pr-[15px]
-                            md:w-[560px] md:h-[69px] md:flex-shrink-0">
-                  <!-- content -->
-                  <p class="tasting-note">Robe rouge cerise brillante. Bulle fine et élégante formant une couronne...</p>
+                <div
+                    class="product-description mt-[10px] w-full h-auto pr-[15px]
+                             md:flex-shrink-0"
+                >
+                    <!-- content -->
+                    <p class="tasting-note">
+                        {product.alcohol_website[0].short_description_french ?? 'La courte description va ici'}
+                    </p>
                 </div>
 
                 <div class="flex flex-col lg:w-[560px] md:w-[380px] h-full">
                     <!--description-->
                     <div class="product-description mt-4 h-[141px] w-full pr-[15px]">
                         <Svroller width="100%" height="100%" margin={{ right: -15 }} alwaysVisible>
-                            {@html JSON.parse(product.alcohol_website[0].description_french).fr}
+                            {@html product.alcohol_website[0].description_french ?? 'La description va ici'}
                             <!--                            <button on:click={() => (expand_description = !expand_description)}>-->
                             <!--                                {expand_description ? '-' : '+'}-->
                             <!--                            </button>-->
@@ -213,11 +215,11 @@
                                 </p>
                                 <div class="flex items-center flex-1">
                                     <div class="w-fit">
-                                        <b class="font-normal,  color: var(--WARD-BLACK, #181C1C);">{providerName}</b>
+                                        <b class="font-normal, color: var(--WARD-BLACK, #181C1C);">{providerName}</b>
                                         <br />
                                         {product.name ?? ''}
                                         <br />
-                                        {product.vintage}
+                                        {product.vintage ?? ''}
                                         <br />
                                         {product.uvc} x {product.format}{product.unit === 1 ? 'L' : 'ml'}
                                     </div>
@@ -328,18 +330,18 @@
     </div>
 
     <div class="mt-[20px] flex flex-col lg:gap-[22px] gap-[10px]">
-        <!--{#if product.providerName}-->
+        <!--{#if vin.providerName}-->
         <!--    <Accordion title="Du même producteur">-->
         <!--        {#each sameProducerProducts as producerProduct}-->
-        <!--            <ProductCard product={producerProduct} size="m" />-->
+        <!--            <ProductCard vin={producerProduct} size="m" />-->
         <!--        {/each}-->
         <!--    </Accordion>-->
         <!--{/if}-->
 
-        <!--{#if product.originRegion}-->
+        <!--{#if vin.originRegion}-->
         <!--    <Accordion title="De la même région">-->
         <!--        {#each sameRegionProducts as regionProduct}-->
-        <!--            <ProductCard product={regionProduct} size="m" />-->
+        <!--            <ProductCard vin={regionProduct} size="m" />-->
         <!--        {/each}-->
         <!--    </Accordion>-->
         <!--{/if}-->
@@ -348,16 +350,12 @@
 
 <!-- Waitlist Modal -->
 {#if showWaitlistForm}
-    <WaitlistForm
-        on:submit={handleWaitlistSubmit}
-        on:decline={toggleWaitlistForm}
-        on:close={toggleWaitlistForm}
-    />
+    <WaitlistForm on:submit={handleWaitlistSubmit} on:decline={toggleWaitlistForm} on:close={toggleWaitlistForm} />
 {/if}
 
 <style lang="scss">
     .product-name {
-        color: var(--WARD-RED, #F15A38);
+        color: var(--WARD-RED, #f15a38);
         font-family: Riposte;
         font-size: 32px;
         font-style: normal;
@@ -393,16 +391,13 @@
     }
 
     .tasting-note {
-      position: sticky;
-      top: 0;                           // sticks to top of viewport
-      margin-top: 50px;                 // initial gap from the element above
-      color: var(--WARD-BLACK, #181C1C);
-      font-family: Riposte, sans-serif;
-      font-size: 32px;
-      font-style: normal;
-      font-weight: 400;
-      line-height: normal;
-      z-index: 1000;
+        color: var(--WARD-BLACK, #181c1c);
+        font-family: Riposte, sans-serif;
+        font-size: 32px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+        z-index: 1000;
     }
 
     .product-description button {

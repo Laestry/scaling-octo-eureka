@@ -1,7 +1,7 @@
 import { writable, derived, type Writable } from 'svelte/store';
 import type { AlcoholProduct } from '$lib/models/pocketbase';
 
-// Cart entry is keyed by selectedBatchId; batch implies the parent product.
+// Cart entry is keyed by selectedBatchId; batch implies the parent vin.
 type CartProduct = AlcoholProduct & { quantity: number; selectedBatchId: string };
 type Cart = CartProduct[];
 
@@ -47,7 +47,7 @@ export function createCart(): CartStore {
                 const existingIndex = cart.findIndex((ci) => String(ci.selectedBatchId) === batchId);
                 const existing = existingIndex !== -1 ? cart[existingIndex] : undefined;
 
-                // find the selected batch on the product
+                // find the selected batch on the vin
                 const batch: any = (item as any).alcohol_batches?.find((b: any) => String(b.id) === batchId);
                 if (!batch) {
                     console.warn(`Selected batch ${batchId} not found on item`, item);
