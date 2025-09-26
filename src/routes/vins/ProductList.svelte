@@ -1,14 +1,11 @@
+<!--src/routes/vins/ProductList.svelte-->
 <script lang="ts">
     import { fade } from 'svelte/transition';
-    import { goto } from '$app/navigation';
-    import { priceFormat } from '../product/[slug]/utils';
-    import { IconArrow1 } from '$lib/icons';
     import type { AlcoholProduct } from '$lib/models/pocketbase';
     import { isPrixResto } from '$lib/store';
     import ProductRow from './ProductRow.svelte';
 
     export let isPDF = false;
-
     export let products: AlcoholProduct[];
 </script>
 
@@ -55,7 +52,7 @@
 
 <style lang="scss">
     :global(.productTable:not(:has(th:hover)):has(tr:hover) tr:not(:hover)) {
-        filter: blur(2px);
+        filter: blur(1px);
     }
 
     :global(.productRow tr) {

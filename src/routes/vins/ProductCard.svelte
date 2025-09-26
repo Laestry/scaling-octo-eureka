@@ -1,9 +1,10 @@
+<!--src/routes/vins/ProductCard.svelte-->
 <script lang="ts">
     import { getCategory, priceFormat } from '../product/[slug]/utils';
     import { cart, getItemQuantityStore } from '$lib/cart';
     import { fly } from 'svelte/transition';
-    // import type { AlcoholProduct, AlcoholBatch } from '$lib/models/pocketbase';
     import Plus from '$lib/icons/Plus.svelte';
+    import { getOldestBatch } from './utils';
 
     export let product: any;
     export let size: 's' | 'm' | 'l' | 'v' = 's';
@@ -28,20 +29,8 @@
     // CART ANIMATION
     let animations: { id: number }[] = [];
 
-    // SELECT OLDEST BATCH
-    function getOldestBatch(): any | null {
-        return (
-            product.alcohol_batches
-                ?.filter((b) => !b.is_archived && b.quantity > 0 && b.calculated_quantity > 0)
-                .sort((a, b) => {
-                    const aT = a.sell_before_date ? new Date(a.sell_before_date).getTime() : Infinity;
-                    const bT = b.sell_before_date ? new Date(b.sell_before_date).getTime() : Infinity;
-                    return aT - bT;
-                })[0] ?? null
-        );
-    }
     // keep this up to date if product changes
-    $: selectedBatch = getOldestBatch();
+    $: selectedBatch = getOldestBatch(product);
     let itemQuantity;
 
     $: if (selectedBatch) {
@@ -69,7 +58,7 @@
 
     $: maxCases = (() => {
         if (!selectedBatch) return 0;
-        const availableBottles = selectedBatch.calculated_quantity ?? selectedBatch.quantity ?? 0;
+        const availableBottles = selectedBatch.calculated_quantity ?? 0;
         return product.uvc > 0 ? Math.floor(availableBottles / product.uvc) : 0;
     })();
 

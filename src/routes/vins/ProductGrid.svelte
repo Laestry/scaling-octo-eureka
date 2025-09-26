@@ -1,3 +1,4 @@
+<!--src/routes/vins/ProductGrid.svelte-->
 <script lang="ts">
     import ProductCard from './ProductCard.svelte';
     import { fade } from 'svelte/transition';

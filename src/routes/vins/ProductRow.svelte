@@ -1,118 +1,109 @@
 <script lang="ts">
     import { goto } from '$app/navigation';
-    import { priceFormat } from '../product/[slug]/utils';
+    import { priceFormat, getCategory } from '../product/[slug]/utils';
     import { cart, getItemQuantityStore } from '$lib/cart';
     import { fly, fade } from 'svelte/transition';
     import { createEventDispatcher } from 'svelte';
     import Plus from '$lib/icons/Plus.svelte';
+    import { getOldestBatch } from './utils';
+
     export let product: any;
     export let isPDF = false;
 
     const dispatcher = createEventDispatcher();
 
-    // Create an array of example image paths.
+    // images
     const images = new Array(8).fill('').map((_, i) => `/images/example_wines/${i + 1}.jpg`);
-
-    // Return a number based on product properties.
     function getRandomNumber() {
-        const n1 = parseInt(product.sku);
-        if (!Number.isNaN(n1)) {
-            return n1;
-        }
-        const n2 = product.uuid.split('').find((x) => !Number.isNaN(parseInt(x))) || '0';
-        return parseInt(n2);
+        const n1 = parseInt(product?.sku);
+        return !Number.isNaN(n1)
+            ? n1
+            : typeof product?.id === 'number'
+              ? product.id
+              : parseInt(String(product?.id)) || 0;
     }
-
-    // Determine the image using the random number.
     function getImage() {
         const n = getRandomNumber();
-        const i = n % images.length;
-        return images[i]!;
+        return images[n % images.length]!;
     }
 
-    // Instead of loading the image immediately, we'll use a delayed variable.
     let delayedImage = '';
-    let loadImageTimer: NodeJS.Timeout;
-
-    // Preload the image and set a flag when it's loaded.
+    let loadImageTimer: ReturnType<typeof setTimeout>;
     let imgLoaded = false;
     $: if (delayedImage) {
         imgLoaded = false;
         const imageLoader = new Image();
         imageLoader.src = delayedImage;
-        imageLoader.onload = () => {
-            imgLoaded = true;
-        };
+        imageLoader.onload = () => (imgLoaded = true);
     }
 
-    // Mouse position state relative to the row.
+    // hover image positioning
     let mouseX = 0;
     let mouseY = 0;
     let hovered = false;
-
     function handleMouseMove(e: MouseEvent) {
         const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
-        // Get the raw mouse x position relative to the row.
-        const rawX = e.clientX - rect.left;
-        // Assume the plus button cell is 40px wide + the half of the image.
         const plusButtonWidth = 90;
-        // Calculate the maximum allowed x coordinate.
         const safeMax = rect.width - plusButtonWidth;
-        // Clamp the x coordinate so it doesn't exceed safeMax.
+        const rawX = e.clientX - rect.left;
         mouseX = rawX > safeMax ? safeMax : rawX;
         mouseY = e.clientY - rect.top;
     }
-
     function handleMouseEnter(e: MouseEvent) {
         hovered = true;
-        handleMouseMove(e); // update mouse position on enter
-        // Start a timer to load the image after 300ms.
-        loadImageTimer = setTimeout(() => {
-            delayedImage = getImage();
-        }, 0);
+        handleMouseMove(e);
+        loadImageTimer = setTimeout(() => (delayedImage = getImage()), 0);
     }
-
-    function handleMouseLeave(e: MouseEvent) {
+    function handleMouseLeave() {
         hovered = false;
-        // Cancel the image load timer if hover ends too soon.
         clearTimeout(loadImageTimer);
         delayedImage = '';
         imgLoaded = false;
     }
 
     function handleClick() {
-        goto(`/product/${product.slug}`);
+        const slug = product?.alcohol_website?.[0]?.slug ?? 'noslug';
+        goto(`/product/${slug}`);
     }
 
+    // batches and cart integration (Supabase shape)
+    $: selectedBatch = getOldestBatch(product);
+
+    let itemQuantity;
+    $: if (selectedBatch) {
+        itemQuantity = getItemQuantityStore(selectedBatch.id);
+    }
+
+    $: maxCases = (() => {
+        if (!selectedBatch) return 0;
+        const availableBottles = selectedBatch.calculated_quantity ?? 0;
+        return product?.uvc > 0 ? Math.floor(availableBottles / product.uvc) : 0;
+    })();
+
     function handleAdd() {
-        cart.add(product);
+        if (!selectedBatch) return;
+        if ($itemQuantity >= maxCases) return;
+        cart.add(product, selectedBatch.id);
+
         const id = Date.now();
         animations = [...animations, { id }];
         setTimeout(() => {
-            animations = animations.filter((anim) => anim.id !== id);
+            animations = animations.filter((a) => a.id !== id);
         }, 600);
     }
 
-    const itemQuantity = getItemQuantityStore(product.id);
     let animations: { id: number }[] = [];
 
-    let region = '';
-    $: {
-        const r = product.originRegion?.trim() || '';
-        const c = product.originCountry?.trim() || '';
-        if (r && c) {
-            region = `${r}, ${c}`;
-        } else if (r) {
-            region = r;
-        } else if (c) {
-            region = c;
-        } else {
-            region = '-';
-        }
-    }
+    // display helpers
+    const providerName = product?.parties?.display_name ?? '';
+    $: region = (() => {
+        const r = product?.region?.trim?.() || product?.originRegion?.trim?.() || '';
+        const c = product?.originCountry?.trim?.() || '';
+        if (r && c) return `${r}, ${c}`;
+        return r || c || '-';
+    })();
 </script>
 
-<!-- Attach only the custom click handler (plus mouse events for hover) -->
 <tr
     on:mouseenter={handleMouseEnter}
     on:mouseleave={handleMouseLeave}
@@ -120,26 +111,35 @@
     on:click={handleClick}
     class="relative cursor-pointer border-y border-[#181C1C33] {$$props['class']}"
 >
-    <td>{region || '-'}</td>
-    <td>{product.providerName || '-'}</td>
-    <td class="truncate">{product.name || '-'}</td>
-    <td>{product.vintage || '-'}</td>
-    <td class="capitalize">{product.specificCategory || '-'}</td>
-    <td>{product.uvc} x {product.lblFormat}</td>
+    <td>{region}</td>
+    <td>{providerName || '-'}</td>
+    <td class="truncate">{product?.name || '-'}</td>
+    <td>{selectedBatch?.vintage ?? '-'}</td>
+    <td class="capitalize">{getCategory(product) || '-'}</td>
+    <td>{product?.uvc} x {product?.volume}</td>
     <td class="text-right pr-[5px]">
-        {$priceFormat(product)}
-        <br />
-        <span class="text-[#949494] {product.uvc === 1 ? 'invisible' : ''}">
-            {$priceFormat(product, false)}
-        </span>
+        {#if selectedBatch}
+            {$priceFormat({ price: selectedBatch.price, price_tax_in: selectedBatch.price_tax_in, uvc: product.uvc })}
+            <br />
+            <span class="text-[#949494] {product?.uvc === 1 ? 'invisible' : ''}">
+                {$priceFormat(
+                    { price: selectedBatch.price, price_tax_in: selectedBatch.price_tax_in, uvc: product.uvc },
+                    false
+                )}
+            </span>
+        {:else}
+            —
+        {/if}
     </td>
 
     {#if !isPDF}
         <td class="text-wblue">
             <button
-                class="abutton w-full h-full"
+                class="abutton w-full h-full {$itemQuantity >= maxCases ? 'opacity-50 cursor-not-allowed' : ''}"
                 style="padding: 18px 16px 17px 12px"
                 on:click|stopPropagation={handleAdd}
+                disabled={$itemQuantity >= maxCases}
+                aria-label="Add to cart"
             >
                 <Plus />
             </button>
@@ -162,7 +162,7 @@
                 </div>
             {/each}
             {#if !isPDF}
-                <img transition:fade={{ duration: 300 }} src={delayedImage} alt={product.name} />
+                <img transition:fade={{ duration: 300 }} src={delayedImage} alt={product?.name} />
             {/if}
         </div>
     {/if}
@@ -172,7 +172,6 @@
     tr.relative:hover {
         background-color: #da58994d;
     }
-
     tr.relative {
         position: relative;
     }
