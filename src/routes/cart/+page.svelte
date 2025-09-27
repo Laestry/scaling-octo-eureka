@@ -20,8 +20,6 @@
     let options;
 
     onMount(async () => {
-        console.log('url', $page.url.origin);
-        console.log('url2');
         const { data, error } = await supabase.schema('cms_saq').from('saq_branches').select('*');
         options = data.map((x) => ({ value: x.id, label: `${x.city}, ${x.address}` }));
         console.log('branches', options);
