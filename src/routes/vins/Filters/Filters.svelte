@@ -1,3 +1,4 @@
+<!--src/routes/vins/Filters/Filters.svelte-->
 <script lang="ts">
     import { IconSearch, IconDownload, IconList, IconGrid } from '$lib/icons';
     import Select from '$lib/components/Select.svelte';
@@ -11,6 +12,7 @@
 
     export let categories: any[] = [];
     export let selectedFilters: TFilters;
+    export let nameSearch: string;
 
     type FilterGroupName = 'category' | 'region' | 'vintage' | 'format' | 'producer';
 
@@ -26,7 +28,7 @@
         region: 'Région',
         vintage: 'Millésime',
         format: 'Format',
-        producer: 'Producteur',
+        producer: 'Producteur'
     };
 
     function buildDisplayFilters(rawCats: any[] = []): DisplayFilter[] {
@@ -214,8 +216,8 @@
         }
 
         // nameSearch -> q
-        if (selectedFilters.nameSearch) {
-            sp.set('q', selectedFilters.nameSearch);
+        if (nameSearch) {
+            sp.set('q', nameSearch);
         }
 
         // tag -> t
@@ -264,10 +266,10 @@
         return JSON.stringify(na) === JSON.stringify(nb);
     }
 
-    $: console.log('selectedByGroup', selectedByGroup);
-    $: console.log('selectedValuesByGroup', selectedValuesByGroup);
-    $: console.log('selectedFilters', selectedFilters);
-    $: console.log('filters', filters);
+    // $: console.log('selectedByGroup', selectedByGroup);
+    // $: console.log('selectedValuesByGroup', selectedValuesByGroup);
+    // $: console.log('selectedFilters', selectedFilters);
+    // $: console.log('filters', filters);
 
     // 2. selectedLabelsByGroup: for binding into the <Select> (labels)
     $: selectedLabelsByGroup = filters.reduce(
@@ -319,7 +321,7 @@
                 <div class="search__button">
                     <IconSearch />
                 </div>
-                <input type="text" class="search__input" bind:value={selectedFilters.nameSearch} />
+                <input type="text" class="search__input" bind:value={nameSearch} />
             </label>
         </div>
         <div class="flex gap-1 items-center">
