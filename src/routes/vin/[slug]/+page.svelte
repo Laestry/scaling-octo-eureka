@@ -154,6 +154,7 @@
                 <button
                     class="absolute z-[1] left-0 bottom-0 lg:w-[271px] lg:h-[375px] md:w-[181px] md:h-[241px] w-[94px] h-[125px]"
                     class:z-[4]={currentSlide === 0}
+                    on:mouseenter={() => (currentSlide = 0)}
                     on:click={() => (currentSlide = 0)}
                 >
                     <img class="object-cover w-full h-full" src={img1} alt="Wine" />
@@ -161,6 +162,7 @@
                 <button
                     class="absolute z-[2] md:left-[12px] left-[6px] bottom-0 lg:w-[450px] lg:h-[591px] md:w-[247px] md:h-[439px] w-[196px] h-[262px]"
                     class:z-[4]={currentSlide === 2}
+                    on:mouseenter={() => (currentSlide = 2)}
                     on:click={() => (currentSlide = 2)}
                 >
                     <img class="object-cover w-full h-full" src={img2} alt="Wine" />
@@ -168,6 +170,7 @@
                 <button
                     class="absolute z-[3] md:left-[12px] left-[99px] bottom-0 lg:w-[374px] lg:h-[639px] md:w-[300px] md:h-[401px] w-[181px] h-[240px]"
                     class:z-[4]={currentSlide === 1}
+                    on:mouseenter={() => (currentSlide = 1)}
                     on:click={() => (currentSlide = 1)}
                 >
                     <img class="object-cover w-full h-full" src={img} alt="Wine" />
@@ -187,7 +190,7 @@
                 >
                     <!-- content -->
                     <p class="tasting-note">
-                        {product.alcohol_website[0].short_description_french ?? 'La courte description va ici'}
+                        {product.alcohol_website[0].subtitle_french ?? 'La courte description va ici'}
                     </p>
                 </div>
 
@@ -217,7 +220,7 @@
                                     <div class="w-fit">
                                         <b class="font-normal, color: var(--WARD-BLACK, #181C1C);">{providerName}</b>
                                         <br />
-                                        {product.name ?? ''}
+                                        <span class="text-wpink">{product.name ?? ''}</span>
                                         <br />
                                         {product.vintage ?? ''}
                                         <br />

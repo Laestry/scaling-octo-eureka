@@ -72,7 +72,7 @@
 
 <style lang="scss">
     .tags a {
-        text-transform: uppercase;
+        text-transform: capitalize;
         white-space: nowrap;
     }
     .productTag a {
