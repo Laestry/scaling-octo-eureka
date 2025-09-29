@@ -29,23 +29,28 @@
         nameSearch: undefined,
         tag: undefined
     };
+    let nameSearch = '';
 
     // Pagination state
     let currentPage = 2;
     let isLoading = false;
     let sentinel: HTMLDivElement;
 
+    function withNameSearch(f: TFilters, q: string) {
+        const trimmed = q?.trim();
+        return trimmed ? { ...f, nameSearch: trimmed } : { ...f, nameSearch: undefined };
+    }
+
     async function loadMoreProducts() {
         if (isLoading || !hasMore) return;
         isLoading = true;
-        console.log('selectedFilters', selectedFilters);
 
         try {
             const {
                 data: newProducts,
                 count,
                 error
-            } = await fetchFilteredProductsForAlcohol(supabase, selectedFilters, {
+            } = await fetchFilteredProductsForAlcohol(supabase, withNameSearch(selectedFilters, nameSearch), {
                 limit: PAGE_SIZE,
                 offset: loaded,
                 sorting: selectedFilters.sorting
@@ -78,14 +83,22 @@
         }
     }
 
-    let skipTwice = 0;
+    // debounce for nameSearch only
+    let nsTimer: ReturnType<typeof setTimeout> | null = null;
+    $: if (nameSearch !== undefined) {
+        if (nsTimer) clearTimeout(nsTimer);
+        nsTimer = setTimeout(() => updateProducts(), 420);
+    }
+
+    let skipCounter = 0;
     $: if (selectedFilters) updateProducts();
     async function updateProducts(reset = false) {
-        if (skipTwice !== 2 && !reset) {
-            skipTwice++;
+        if (!reset && skipCounter < 3) {
+            skipCounter++;
             console.log('No filters applied.');
             return;
         }
+
         currentPage = 1;
         hasMore = true;
         products = [];
@@ -127,7 +140,12 @@
 <svelte:window bind:outerWidth />
 
 <div class="lg:mt-[56px] md:mt-[40px] mt-[80px]">
-    <Filters categories={data.categories.data} bind:selectedFilters on:resetFilters={() => updateProducts(true)} />
+    <Filters
+        categories={data.categories.data}
+        bind:selectedFilters
+        bind:nameSearch
+        on:resetFilters={() => updateProducts(true)}
+    />
     {#if isLoading && products.length === 0}
         loading wines
     {:else if products.length === 0}

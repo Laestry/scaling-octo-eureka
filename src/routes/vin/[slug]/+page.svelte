@@ -3,7 +3,7 @@
     import { getCategory, priceFormat } from './utils';
     import Accordion from '$lib/components/Accordion.svelte';
     import ProductTags from './ProductTags.svelte';
-    import { cart } from '$lib/cart';
+    import { cart, getItemQuantityStore } from '$lib/cart';
     import Plus from '$lib/icons/Plus.svelte';
     import Minus from '$lib/icons/Minus.svelte';
     import type { AlcoholProduct } from '$lib/models/pocketbase';
@@ -46,30 +46,19 @@
     let expand_description = false;
     let expand_question = false;
     let showWaitlistForm = false;
-
-    let in_cart = 1;
+    let itemQuantity;
+    $: if (selectedBatch) {
+        itemQuantity = getItemQuantityStore(selectedBatch.id);
+    }
     $: maxCases = selectedBatch ? Math.floor(selectedBatch.calculated_quantity / product.uvc) : 0;
+    $: isAtLimit = $itemQuantity >= maxCases;
 
-    // 2. Ensure in_cart is always between 1 and maxCases (or 0 if no stock)
-    $: {
-        if (maxCases === 0) {
-            in_cart = 0;
-        } else if (in_cart < 1) {
-            in_cart = 1;
-        } else if (in_cart > maxCases) {
-            in_cart = maxCases;
-        }
+    function handleAdd() {
+        if (!selectedBatch) return;
+        if ($itemQuantity >= maxCases) return;
+        cart.add(product, selectedBatch.id);
     }
 
-    function add() {
-        // never go above maxCases
-        in_cart = Math.min(in_cart + 1, maxCases);
-    }
-
-    function remove() {
-        // never go below 1 (unless there's no stock)
-        in_cart = Math.max(in_cart - 1, maxCases > 0 ? 1 : 0);
-    }
     const img1 = '/images/example_wines/SHOP PAGE/Product Shot - stack.png';
     const img = '/images/example_wines/SHOP PAGE/9x1' + '6 Product Shot - stack.png';
     const img2 = '/images/example_wines/SHOP PAGE/In-situ Product Shot - stack.png';
@@ -154,6 +143,7 @@
                 <button
                     class="absolute z-[1] left-0 bottom-0 lg:w-[271px] lg:h-[375px] md:w-[181px] md:h-[241px] w-[94px] h-[125px]"
                     class:z-[4]={currentSlide === 0}
+                    on:mouseenter={() => (currentSlide = 0)}
                     on:click={() => (currentSlide = 0)}
                 >
                     <img class="object-cover w-full h-full" src={img1} alt="Wine" />
@@ -161,6 +151,7 @@
                 <button
                     class="absolute z-[2] md:left-[12px] left-[6px] bottom-0 lg:w-[450px] lg:h-[591px] md:w-[247px] md:h-[439px] w-[196px] h-[262px]"
                     class:z-[4]={currentSlide === 2}
+                    on:mouseenter={() => (currentSlide = 2)}
                     on:click={() => (currentSlide = 2)}
                 >
                     <img class="object-cover w-full h-full" src={img2} alt="Wine" />
@@ -168,6 +159,7 @@
                 <button
                     class="absolute z-[3] md:left-[12px] left-[99px] bottom-0 lg:w-[374px] lg:h-[639px] md:w-[300px] md:h-[401px] w-[181px] h-[240px]"
                     class:z-[4]={currentSlide === 1}
+                    on:mouseenter={() => (currentSlide = 1)}
                     on:click={() => (currentSlide = 1)}
                 >
                     <img class="object-cover w-full h-full" src={img} alt="Wine" />
@@ -187,7 +179,7 @@
                 >
                     <!-- content -->
                     <p class="tasting-note">
-                        {product.alcohol_website[0].short_description_french ?? 'La courte description va ici'}
+                        {product.alcohol_website[0].subtitle_french ?? 'La courte description va ici'}
                     </p>
                 </div>
 
@@ -196,9 +188,6 @@
                     <div class="product-description mt-4 h-[141px] w-full pr-[15px]">
                         <Svroller width="100%" height="100%" margin={{ right: -15 }} alwaysVisible>
                             {@html product.alcohol_website[0].description_french ?? 'La description va ici'}
-                            <!--                            <button on:click={() => (expand_description = !expand_description)}>-->
-                            <!--                                {expand_description ? '-' : '+'}-->
-                            <!--                            </button>-->
                         </Svroller>
                     </div>
 
@@ -217,7 +206,7 @@
                                     <div class="w-fit">
                                         <b class="font-normal, color: var(--WARD-BLACK, #181C1C);">{providerName}</b>
                                         <br />
-                                        {product.name ?? ''}
+                                        <span class="text-wpink">{product.name ?? ''}</span>
                                         <br />
                                         {product.vintage ?? ''}
                                         <br />
@@ -261,34 +250,34 @@
                         </div>
 
                         <!--                        add products-->
-                        <div
-                            class="flex md:flex-row flex-col pt-4 pb-8 relative justify-between border-b-[1px] border-b-[#DE6643]"
-                        >
-                            <div class="flex md:flex-col flex-row md:items-start items-center gap-2">
-                                <p class="product-table__count">Bouteilles ({product.uvc}/caisse)</p>
-                                <div class="product-table-counter">
-                                    <p class="product-table-counter__value">{in_cart * product.uvc}</p>
-                                    <div class="md:flex flex-col contents">
-                                        <button
-                                            class="abutton product-table-counter__button order-[-1]"
-                                            on:click={() => add()}
-                                        >
-                                            <Plus />
-                                        </button>
-                                        <button class="abutton product-table-counter__button" on:click={() => remove()}>
-                                            <Minus />
-                                        </button>
-                                    </div>
+                        <div class=" mt-4 pb-8 relative border-b-[1px] border-b-[#DE6643]">
+                            <div class="items-center flex flex-row justify-between flex-wrap">
+                                <div class="text-xs md:w-full w-fit md:mb-4">
+                                    Bouteilles ({product.uvc}/caisse)
                                 </div>
+                                <div class="text-xs product-table-counter__value">{$itemQuantity * product.uvc}</div>
+                                {#if selectedBatch.calculated_quantity}
+                                    <button
+                                        disabled={isAtLimit}
+                                        class="product-table__button abutton md:mt-0 mt-7 lg:mr-[192px]"
+                                        on:click={handleAdd}
+                                    >
+                                        {#if !isAtLimit}
+                                            Ajouter au panier
+                                        {:else}
+                                            Rupture de stock
+                                        {/if}
+                                    </button>
+                                {:else}
+                                    <button
+                                        class="product-table__button product-table__button--favorite abutton md:mt-0 mt-7"
+                                        on:click={toggleWaitlistForm}
+                                    >
+                                        Liste d'attente
+                                    </button>
+                                {/if}
                             </div>
-                            <div class="flex flex-col justify-center md:mt-0 mt-6">
-                                <button
-                                    class="product-table__button product-table__button--favorite abutton mt-[20px]"
-                                    on:click={toggleWaitlistForm}
-                                >
-                                    Liste d'attente
-                                </button>
-                            </div>
+
                             <p class="absolute text-[16px] bg-[#F6F1F2] text-[#DE6643] bottom-[-12px] pr-1">*</p>
                         </div>
 
@@ -424,7 +413,7 @@
 
     .product-table__button {
         border-radius: 12px;
-        background: rgba(45, 99, 176, 0.5);
+        background: var(--blue);
         width: 176px;
         height: 24px;
         display: flex;
@@ -437,6 +426,11 @@
             font-size: 12px;
         }
     }
+
+    .product-table__button:disabled {
+        background: var(--content---secondary) !important;
+    }
+
     .product-table__button:last-child {
         background: #2d63b0;
     }

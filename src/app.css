@@ -37,19 +37,22 @@ input[type="submit"],
     font-display: swap;
 }
 
-.abutton {
+/* default */
+.abutton { /* no transition by default */ }
+
+/* interactive only if enabled */
+.abutton:not(:disabled) {
     transition: all 0.2s ease;
 }
-
-.abutton:hover {
+.abutton:not(:disabled):hover {
     filter: brightness(1.1);
     transform: translateY(-2px);
 }
-
-.abutton:active {
+.abutton:not(:disabled):active {
     filter: brightness(0.9);
     transform: translateY(1px);
 }
+
 
 html {
     scroll-behavior: smooth;
@@ -251,6 +254,11 @@ option:selected {
     --red: #F15A38;
     --pink: #DA5899;
     --black: #181C1C;
+
+    --WARD-BLUE: #3777BC;
+    --WARD-RED: #F15A38;
+    --WARD-PINK: #DA5899;
+    --WARD-BLACK: #181C1C;
 
     --primary: #0d99ff;
     --secondary: #bde3ff;

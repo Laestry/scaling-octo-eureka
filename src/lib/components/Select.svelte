@@ -27,7 +27,7 @@
     export let validate = false;
     export let fontSize: string = '12px';
     export let multiple = false;
-    export let value: string | number | undefined;
+    export let value: string | number | undefined = undefined;
 
     let isOpen = false;
     let userInput = '';
@@ -246,11 +246,7 @@
                     {defaultOption}
                 </button>
                 {#each sortedOptions as opt, index}
-                    <button
-                        class="select-options__item text"
-                        type="button"
-                        on:click={() => selectOption(opt)}
-                    >
+                    <button class="select-options__item text" type="button" on:click={() => selectOption(opt)}>
                         <span>{opt.label}</span>
                         {#if multiple && selectedStates[index]}
                             <svg

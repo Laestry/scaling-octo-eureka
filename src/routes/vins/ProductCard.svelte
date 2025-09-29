@@ -69,12 +69,12 @@
 
 {#if isMain}
     <div class="product {size} cursor-blue-dot">
-        <a href="/src/routes/vin/{product.website_slug ?? 'noslug'}">
+        <a href="/vin/{product.website_slug ?? 'noslug'}">
             <img class="bg-no-repeat object-cover bg-center img" src={img} alt="Wine" />
         </a>
         <div class="flex justify-between mt-[7px] w-full">
             <a
-                href="/src/routes/vin/{product.website_slug ?? 'noslug'}"
+                href="/vin/{product.website_slug ?? 'noslug'}"
                 class="flex flex-col uppercase w-full product-name"
                 style="width: calc(100% - 100px)"
             >
@@ -122,10 +122,10 @@
     </div>
 {:else}
     <div class="product {size} cursor-blue-dot">
-        <a href="/src/routes/vin/{product.website_slug ?? 'noslug'}">
+        <a href="/vin/{product.website_slug ?? 'noslug'}">
             <img class="bg-no-repeat object-cover bg-center img mb-[15px]" src={img} alt="Wine" />
         </a>
-        <a href="/src/routes/vin/{product.website_slug ?? 'noslug'}" class="flex justify-between w-full">
+        <a href="/vin/{product.website_slug ?? 'noslug'}" class="flex justify-between w-full">
             <div class="flex flex-col w-full product-name" style="width: calc(100% - 100px)">
                 <div class="description">
                     <div>{getCategory(product)}</div>
@@ -156,7 +156,7 @@
             </div>
         </a>
         <a
-            href="/src/routes/vin/{product.website_slug ?? 'noslug'}"
+            href="/vin/{product.website_slug ?? 'noslug'}"
             class="flex flex-col items-start justify-start w-full product-name"
         >
             <b class="truncate w-full">{product.name || '-'}</b>
@@ -169,7 +169,7 @@
             </div>
         </a>
         <div class="flex justify-between items-end w-full">
-            <a href="/src/routes/vin/{product.website_slug ?? 'noslug'}" class="product-name description">
+            <a href="/vin/{product.website_slug ?? 'noslug'}" class="product-name description">
                 {product.uvc} <span class="lowercase">x</span>
                 {product.volume}
             </a>
