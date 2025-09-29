@@ -40,8 +40,7 @@
         </div>
 
         <div class="description2 lg:mt-[113px] lg:mb-[180px] my-[80px] text-color1">
-            We place human values at the heart of our experience and in the origin of the importLeo justo enim et in.
-            Aliquam at feugiat tortor purus quis eu ultrices quis tincidunt.
+            Nos vins sont issus d’une viticulture respectueuse et de vinifications sans artifice. Des cuvées sincères, parfois imprévisibles, toujours choisies pour leur énergie et leur intégrité.
         </div>
 
         <div
@@ -62,8 +61,8 @@
         <div class="lg:max-w-[1212px] px-[38px] md:max-w-[836px] max-w-[376px] mx-auto container">
             <button class="instablock__button">@wardetassocies</button>
             <p class="instablock__title">
-                Never miss a drop. <br />
-                Follow us and find out about tasting events, parties, drops, team and winemakers.
+                → Suivez-nous sur <br />
+                Ne passez pas à côté. Suivez-nous pour les arrivages qui comptent, les dégustations qui bousculent, et les vigneron·ne·s qui font bouger les lignes.
             </p>
         </div>
     </div>
