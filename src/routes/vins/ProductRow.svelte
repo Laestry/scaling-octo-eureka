@@ -60,7 +60,7 @@
 
     function handleClick() {
         const slug = product?.website_slug ?? 'noslug';
-        goto(`/product/${slug}`);
+        goto(`/vin/${slug}`);
     }
 
     // view -> pseudo-batch fallback

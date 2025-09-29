@@ -68,7 +68,7 @@
 
     function goToProduct() {
         const slug = product?.website_slug ?? 'noslug';
-        goto(`/product/${slug}`);
+        goto(`/vin/${slug}`);
     }
 </script>
 
@@ -154,7 +154,7 @@
             <img class="bg-no-repeat object-cover bg-center img mb-[7px]" src={img} alt="Wine" />
         </button>
 
-        <a href="/product/{product.website_slug}" class="flex justify-between w-full">
+        <a href="/vin/{product.website_slug}" class="flex justify-between w-full">
             <div class="flex flex-col w-full product-name" style="width: calc(100% - 100px)">
                 <div class="description">
                     <div>{getCategory(product)}</div>
@@ -178,7 +178,7 @@
             </div>
         </a>
 
-        <a href="/product/{product.website_slug}" class="flex flex-col items-start justify-start w-full product-name">
+        <a href="/vin/{product.website_slug}" class="flex flex-col items-start justify-start w-full product-name">
             <b class="truncate w-full">{product.name || '-'}</b>
             <div class="w-full flex">
                 <div class="truncate" style="max-width: calc(100% - 37px)">{product.provider_display_name ?? ''}</div>
@@ -189,7 +189,7 @@
             </div>
         </a>
         <div class="flex justify-between items-end w-full">
-            <a href="/product/{product.website_slug}" class="product-name description">
+            <a href="/vin/{product.website_slug}" class="product-name description">
                 {product.uvc} <span class="lowercase">x</span>
                 {product.volume}
             </a>
