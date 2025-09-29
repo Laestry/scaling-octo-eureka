@@ -8,7 +8,8 @@
 <div class="w-full flex flex-col mx-auto lg:max-w-[1212px] px-[38px] md:max-w-[836px] max-w-[376px] vision">
     <p class="vision__suptitle">Une vision centrée sur la vie</p>
     <p class="vision__title">
-        Pour nous, le vin naturel n’est pas une mode. C’est une manière d’être — attentive à la nature, à l’humain, à ce qui se passe entre les deux. Nous travaillons avec des vigneron·ne·s qui cultivent avec respect et interviennent le moins possible à la cave, laissant le vin parler de lui-même..
+        Pour nous, le vin naturel n’est pas une mode. C’est une manière d’être — attentive à la nature, à l’humain, à ce qui se passe entre les deux. Nous travaillons avec des vigneron·ne·s qui cultivent avec respect et interviennent le moins possible à la cave, laissant le vin parler de lui-même.<br />
+        On aime les choses complexes — dans le verre comme dans la vie. Les vins qu’on importe sont parfois imprévisibles, souvent poétiques, toujours vivants. Cela demande de rester curieux·se, souple, et prêt·e à être surpris·e.
     </p>
     <div class="vision__row">
         <div class="vision__inner-row">
@@ -24,52 +25,44 @@
         <p class="vision-list__title">Éternel étudiants</p>
         <div class="vision-list__row">
             <p class="vision-list__text">
-                Lorem ipsum dolor sit amet consectetur. Leo justo enim et in. Aliquam at feugiat tortor purus quis eu
-                ultrices quis tincidunt. Tellus integer egestas lectus ac. <br />
-                Lorem ipsum dolor sit amet consectetur. Leo justo enim et in. Aliquam at feugiat tortor purus quis eu ultrices
-                quis tincidunt. Tellus integer egestas lectus ac.
+                On apprend tous les jours, au contact direct des vigneron·ne·s que l’on suit de près. Leurs choix, leurs gestes, leurs doutes — on les observe, on les questionne pour mieux les comprendre.<br />
+                Cette proximité nourrit notre regard et affine notre manière de parler du vin. Être curieux·se, c’est aussi savoir reconnaître la complexité d’un savoir vivant.
             </p>
             <div class="vision-list__col">
                 <div class="vision-list__item">
                     <p class="vision-list__item-title">— Zéro, zéro</p>
                     <p class="vision-list__item-text">
-                        Lorem ipsum dolor sit amet consectetur. Leo justo enim et in. Aliquam at feugiat tortor purus
-                        quis eu ultrices quis tincidunt. Tellus integer egestas lectus ac.
+                        Un vin sans intrants ni manipulations : zéro sulfites ajoutés, zéro intervention. Le vin s’exprime seul, avec tout ce que cela implique de vivant, vibrant… et parfois déstabilisant.
                     </p>
                 </div>
                 <div class="vision-list__item">
-                    <p class="vision-list__item-title">— Zéro, zéro</p>
+                    <p class="vision-list__item-title">— Fermentation spontanée</p>
                     <p class="vision-list__item-text">
-                        Lorem ipsum dolor sit amet consectetur. Leo justo enim et in. Aliquam at feugiat tortor purus
-                        quis eu ultrices quis tincidunt. Tellus integer egestas lectus ac.
+                        Aucune levure industrielle. La fermentation démarre naturellement grâce aux levures indigènes présentes sur les raisins et dans la cave. Cela donne des vins plus imprévisibles, mais souvent plus profonds.
                     </p>
                 </div>
                 <div class="vision-list__item">
-                    <p class="vision-list__item-title">— Zéro, zéro</p>
+                    <p class="vision-list__item-title">— Sans filtration</p>
                     <p class="vision-list__item-text">
-                        Lorem ipsum dolor sit amet consectetur. Leo justo enim et in. Aliquam at feugiat tortor purus
-                        quis eu ultrices quis tincidunt. Tellus integer egestas lectus ac.
+                        On ne filtre pas le vin avant la mise en bouteille. Cela peut laisser un léger trouble, mais permet de préserver texture, matière, et expression aromatique maximale.
                     </p>
                 </div>
                 <div class="vision-list__item">
-                    <p class="vision-list__item-title">— Zéro, zéro</p>
+                    <p class="vision-list__item-title">— Agriculture biologique</p>
                     <p class="vision-list__item-text">
-                        Lorem ipsum dolor sit amet consectetur. Leo justo enim et in. Aliquam at feugiat tortor purus
-                        quis eu ultrices quis tincidunt. Tellus integer egestas lectus ac.
+                        Pas de pesticides de synthèse. Une attention portée à la vie des sols, à la biodiversité, et à l’équilibre de la vigne. La base d’un vin naturel.
                     </p>
                 </div>
                 <div class="vision-list__item">
-                    <p class="vision-list__item-title">— Zéro, zéro</p>
+                    <p class="vision-list__item-title">— Macération</p>
                     <p class="vision-list__item-text">
-                        Lorem ipsum dolor sit amet consectetur. Leo justo enim et in. Aliquam at feugiat tortor purus
-                        quis eu ultrices quis tincidunt. Tellus integer egestas lectus ac.
+                        Antioxydant et antiseptique utilisé dans la plupart des vins. Les vins naturels en utilisent très peu, voire pas du tout — une question d’équilibre, pas d’idéologie.
                     </p>
                 </div>
                 <div class="vision-list__item">
-                    <p class="vision-list__item-title">— Zéro, zéro</p>
+                    <p class="vision-list__item-title">— SO₂ / Sulfites</p>
                     <p class="vision-list__item-text">
-                        Lorem ipsum dolor sit amet consectetur. Leo justo enim et in. Aliquam at feugiat tortor purus
-                        quis eu ultrices quis tincidunt. Tellus integer egestas lectus ac.
+                        Contact prolongé entre le jus et les peaux du raisin. Utilisé pour les rouges… et certains blancs, qu’on appelle alors “vins orange”. Texture, couleur, caractère garantis.
                     </p>
                 </div>
             </div>

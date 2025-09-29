@@ -208,6 +208,12 @@
         font-weight: 400;
         line-height: 120%; /* 19.2px */
     }
+    
+    /* Plus button hover effect - change from blue to pink */
+    button:hover {
+        color: #DA5899 !important; /* Pink color */
+        transition: color 0.2s ease;
+    }
     .product-table-counter {
         //margin-top: 14px;
         display: flex;
