@@ -1,25 +1,23 @@
 <script lang="ts">
     import type { PageData } from './$types';
     import { getCategory, priceFormat } from './utils';
-    import Accordion from '$lib/components/Accordion.svelte';
     import ProductTags from './ProductTags.svelte';
-    import { cart, getItemQuantityStore } from '$lib/cart';
-    import Plus from '$lib/icons/Plus.svelte';
-    import Minus from '$lib/icons/Minus.svelte';
-    import type { AlcoholProduct } from '$lib/models/pocketbase';
+    import { type AlcoholProduct, cart, getItemQuantityStore } from '$lib/cart';
     import { Svroller } from 'svrollbar';
     import { fade } from 'svelte/transition';
-    import { onMount, tick } from 'svelte';
-    import { getSpecificCategoryLabel } from '../../vins/Filters/utils';
-    import { afterNavigate } from '$app/navigation';
+    import { onMount } from 'svelte';
     import WaitlistForm from '$lib/components/WaitlistForm.svelte';
+    import { supabase } from '$lib/supabase/client';
+    import Accordion from '$lib/components/Accordion.svelte';
+    import ProductCard from '../../vins/ProductCard.svelte';
 
+    //#region props_and_data
     export let data: PageData;
     console.log('data', data);
-    let product: AlcoholProduct;
     $: product = data.product;
+    //#endregion props_and_data
 
-    // SELECT OLDEST BATCH (same logic as in the card)
+    //#region SELECT OLDEST BATCH
     function getOldestBatch(): any | null {
         if (!product?.alcohol_batches || !Array.isArray(product.alcohol_batches)) return null;
 
@@ -42,38 +40,36 @@
     let selectedBatch;
     $: if (product) selectedBatch = getOldestBatch();
 
-    let currentSlide = 0;
-    let expand_description = false;
-    let expand_question = false;
-    let showWaitlistForm = false;
     let itemQuantity;
     $: if (selectedBatch) {
         itemQuantity = getItemQuantityStore(selectedBatch.id);
     }
     $: maxCases = selectedBatch ? Math.floor(selectedBatch.calculated_quantity / product.uvc) : 0;
     $: isAtLimit = $itemQuantity >= maxCases;
+    //#endregion batch_selection
 
+    //#region ui_state
+    let currentSlide = 0;
+    let expand_description = false;
+    let expand_question = false;
+    let showWaitlistForm = false;
+    //#endregion ui_state
+
+    //#region cart_handlers
     function handleAdd() {
         if (!selectedBatch) return;
         if ($itemQuantity >= maxCases) return;
         cart.add(product, selectedBatch.id);
     }
+    //#endregion cart_handlers
 
+    //#region images
     const img1 = '/images/example_wines/SHOP PAGE/Product Shot - stack.png';
     const img = '/images/example_wines/SHOP PAGE/9x1' + '6 Product Shot - stack.png';
     const img2 = '/images/example_wines/SHOP PAGE/In-situ Product Shot - stack.png';
+    //#endregion images
 
-    let sameProducerProducts: AlcoholProduct[] = [];
-    let sameRegionProducts: AlcoholProduct[] = [];
-
-    // PROVIDER NAME (fallback)
-    let providerName = '';
-    $: if (product && product?.parties) providerName = product?.parties?.display_name ?? '';
-
-    onMount(async () => {
-        console.log('vin data', data, selectedBatch);
-    });
-
+    //#region waitlist_handlers
     function toggleWaitlistForm() {
         showWaitlistForm = !showWaitlistForm;
     }
@@ -119,6 +115,80 @@
             alert("Erreur lors de l'inscription. Veuillez réessayer.");
         }
     }
+    //#endregion waitlist_handlers
+
+    //#region related_products
+    let sameProducerProducts: AlcoholProduct[] = [];
+    let sameRegionProducts: AlcoholProduct[] = [];
+    //#endregion related_products
+
+    //#region onMount
+    onMount(async () => {
+        console.log('vin data', data, selectedBatch);
+
+        const requestString = `
+            id,
+            website_slug,
+            name,
+            category,
+            specific_category,
+            provider_display_name,
+            uvc,
+            volume,
+            format,
+            unit,
+            oldest_batch_id,
+            oldest_vintage,
+            oldest_price,
+            oldest_price_tax_in,
+            oldest_calculated_quantity
+            `;
+
+        let queryRegion = supabase
+            .schema('cms_saq')
+            .from('alcohol_view')
+            .select(requestString)
+            .gt('oldest_price', 0)
+            .gt('oldest_price_tax_in', 0)
+            .eq('region_name', product.region_name)
+            .neq('id', product.id)
+            .order('oldest_sell_before_date', { ascending: true })
+            .order('total_quantity', { ascending: false })
+            .limit(4);
+
+        let queryCountry = supabase
+            .schema('cms_saq')
+            .from('alcohol_view')
+            .select(requestString)
+            .gt('oldest_price', 0)
+            .gt('oldest_price_tax_in', 0)
+            .eq('country_id', product.country_id)
+            .neq('id', product.id)
+            .order('oldest_sell_before_date', { ascending: true })
+            .order('total_quantity', { ascending: false })
+            .limit(4);
+
+        let queryParties = supabase
+            .schema('cms_saq')
+            .from('alcohol_view')
+            .select(requestString)
+            .gt('oldest_price', 0)
+            .gt('oldest_price_tax_in', 0)
+            .eq('provider_id', product.parties?.id)
+            .neq('id', product.id)
+            .order('oldest_sell_before_date', { ascending: true })
+            .order('total_quantity', { ascending: false })
+            .limit(4);
+
+        const queryResponses = await Promise.all([queryRegion, queryCountry, queryParties]);
+        console.log('query responses', queryResponses);
+        const [regionResponse, countryResponse, partiesResponse] = queryResponses;
+        sameRegionProducts = [...(regionResponse.data ?? []), ...(countryResponse.data ?? [])].slice(0, 3);
+        sameProducerProducts = partiesResponse.data;
+
+        console.log('related products', sameProducerProducts, sameRegionProducts);
+    });
+    //#endregion
 </script>
 
 <div
@@ -133,7 +203,7 @@
                    lg:ml-[472px] md:ml-[318px]"
         />
         <div class="md:flex-row flex-col flex gap-x-[10px] mt-[10px] items-start">
-            <!--images-->
+            <!--region images-->
             <div
                 class="relative
                 lg:w-[462px] md:w-[308px] w-[280px]
@@ -165,34 +235,37 @@
                     <img class="object-cover w-full h-full" src={img} alt="Wine" />
                 </button>
             </div>
+            <!--endregion-->
 
             <div class="lg:w-[560px] md:w-[394px]">
-                <div
-                    class="mt-[12px] flex items-end
-                         h-full"
-                >
+                <!--region title-->
+                <div class="mt-[12px] flex items-end h-full">
                     <h1 class="product-name lg:text-[42px] text-2xl">{product.name}</h1>
                 </div>
+                <!--endregion-->
+
+                <!--region subtitle-->
                 <div
                     class="product-description mt-[10px] w-full h-auto pr-[15px]
                              md:flex-shrink-0"
                 >
-                    <!-- content -->
                     <p class="tasting-note">
                         {product.alcohol_website[0].subtitle_french ?? 'La courte description va ici'}
                     </p>
                 </div>
+                <!--endregion-->
 
                 <div class="flex flex-col lg:w-[560px] md:w-[380px] h-full">
-                    <!--description-->
+                    <!--region description-->
                     <div class="product-description mt-4 h-[141px] w-full pr-[15px]">
                         <Svroller width="100%" height="100%" margin={{ right: -15 }} alwaysVisible>
                             {@html product.alcohol_website[0].description_french ?? 'La description va ici'}
                         </Svroller>
                     </div>
+                    <!--endregion-->
 
                     <div class="w-full mt-4">
-                        <!--                    facts block-->
+                        <!--region facts block-->
                         <div class="flex product-table lg:h-[141px] h-[104px]">
                             <!--                            left-->
                             <div
@@ -204,7 +277,9 @@
                                 </p>
                                 <div class="flex items-center flex-1">
                                     <div class="w-fit">
-                                        <b class="font-normal, color: var(--WARD-BLACK, #181C1C);">{providerName}</b>
+                                        <b class="font-normal, color: var(--WARD-BLACK, #181C1C);"
+                                            >{product?.parties?.display_name}</b
+                                        >
                                         <br />
                                         <span class="text-wpink">{product.name ?? ''}</span>
                                         <br />
@@ -248,8 +323,9 @@
                                 </div>
                             </div>
                         </div>
+                        <!--endregion-->
 
-                        <!--                        add products-->
+                        <!--region add products-->
                         <div class=" mt-4 pb-8 relative border-b-[1px] border-b-[#DE6643]">
                             <div class="items-center flex flex-row justify-between flex-wrap">
                                 <div class="text-xs md:w-full w-fit md:mb-4">
@@ -280,8 +356,9 @@
 
                             <p class="absolute text-[16px] bg-[#F6F1F2] text-[#DE6643] bottom-[-12px] pr-1">*</p>
                         </div>
+                        <!--endregion-->
 
-                        <!--                        question-->
+                        <!--region question-->
                         <button
                             on:click={() => (expand_description = !expand_description)}
                             class="abutton flex justify-between w-full lg:text-base text-xs mt-2"
@@ -312,32 +389,34 @@
                                 Questions? <a href="mailto:info@wardetassocies.com">Ecrivez-nous</a>.
                             </div>
                         {/if}
+                        <!--endregion-->
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
+    <!--region  suggestions-->
     <div class="mt-[20px] flex flex-col lg:gap-[22px] gap-[10px]">
-        <!--{#if vin.providerName}-->
-        <!--    <Accordion title="Du même producteur">-->
-        <!--        {#each sameProducerProducts as producerProduct}-->
-        <!--            <ProductCard vin={producerProduct} size="m" />-->
-        <!--        {/each}-->
-        <!--    </Accordion>-->
-        <!--{/if}-->
+        {#if sameProducerProducts && sameProducerProducts.length > 0}
+            <Accordion title="Du même producteur">
+                {#each sameProducerProducts as producerProduct}
+                    <ProductCard product={producerProduct} size="m" />
+                {/each}
+            </Accordion>
+        {/if}
 
-        <!--{#if vin.originRegion}-->
-        <!--    <Accordion title="De la même région">-->
-        <!--        {#each sameRegionProducts as regionProduct}-->
-        <!--            <ProductCard vin={regionProduct} size="m" />-->
-        <!--        {/each}-->
-        <!--    </Accordion>-->
-        <!--{/if}-->
+        {#if sameRegionProducts && sameRegionProducts.length > 0}
+            <Accordion title="De la même région">
+                {#each sameRegionProducts as regionProduct}
+                    <ProductCard product={regionProduct} size="m" />
+                {/each}
+            </Accordion>
+        {/if}
     </div>
+    <!--endregion-->
 </div>
 
-<!-- Waitlist Modal -->
 {#if showWaitlistForm}
     <WaitlistForm on:submit={handleWaitlistSubmit} on:decline={toggleWaitlistForm} on:close={toggleWaitlistForm} />
 {/if}
