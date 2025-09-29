@@ -1,5 +1,6 @@
 <script lang="ts">
     import type { AlcoholProduct } from '$lib/models/pocketbase';
+    import { getCategory } from './utils.js';
 
     // helper to URI-encode JSON values exactly the way the filters expect
     const j = (o: any) => encodeURIComponent(typeof o === 'string' ? o : JSON.stringify(o));
@@ -54,13 +55,9 @@
             <a href={regionHref}>{product.originRegion}</a>
         {/if}
 
-        <!--{#if categoryHref}-->
-        <!--    <a href={categoryHref}>{vin.specificCategory}</a>-->
-        <!--{/if}-->
-
-        <!--        {#if formatHref}-->
-        <!--            <a href={formatHref}>{vin.lblFormat}</a>-->
-        <!--        {/if}-->
+        {#if categoryHref}
+            <a href={categoryHref}>{getCategory(product)}</a>
+        {/if}
 
         {#if vintageHref}
             <a href={vintageHref}>{product.vintage}</a>
