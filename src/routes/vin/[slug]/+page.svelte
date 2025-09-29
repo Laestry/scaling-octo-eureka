@@ -255,7 +255,7 @@
                                 <div class="text-xs md:w-full w-fit md:mb-4">
                                     Bouteilles ({product.uvc}/caisse)
                                 </div>
-                                <div class="text-xs product-table-counter__value">{$itemQuantity}</div>
+                                <div class="text-xs product-table-counter__value">{$itemQuantity * product.uvc}</div>
                                 {#if selectedBatch.calculated_quantity}
                                     <button
                                         disabled={isAtLimit}
