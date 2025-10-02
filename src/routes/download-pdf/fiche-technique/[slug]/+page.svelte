@@ -8,7 +8,6 @@
     $: product = data.product;
     let selectedBatch;
     $: if (product) selectedBatch = getOldestBatch(product);
-    // onMount(async () => {});
 </script>
 
 <div>

@@ -1,6 +1,8 @@
 <!--src/routes/download-pdf/+layout.svelte-->
 <script>
     import WardAssociesLogo from '$lib/icons/WardAssociesLogo.svelte';
+    import { page } from '$app/stores';
+    import { onMount, tick } from 'svelte';
 
     function formatDateTime(date = new Date()) {
         const d = date.getDate().toString().padStart(2, '0');
@@ -22,8 +24,12 @@
 
         if (document.fonts?.ready) await document.fonts.ready;
 
+        let fileName = $page.url.pathname.includes('fiche-technique')
+            ? 'ward&associés-' + $page.params.slug
+            : 'ward&associés-vins';
+
         const opt = {
-            filename: 'page.pdf',
+            filename: fileName + '.pdf',
             margin: 0,
             image: { type: 'jpeg', quality: 1 }, // was png
             html2canvas: {
@@ -48,6 +54,12 @@
             })
             .save();
     }
+
+    onMount(async () => {
+        await tick();
+        await handleGetPDF();
+        window.close();
+    });
 </script>
 
 <button on:click={handleGetPDF} class="text-black underline !cursor-pointer">Download as PDF</button>
