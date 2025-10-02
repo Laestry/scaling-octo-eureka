@@ -24,19 +24,18 @@
 
         const opt = {
             filename: 'page.pdf',
-            margin: 0, // html2pdf margin
-            image: { type: 'jpeg', quality: 0.95 },
+            margin: 0,
+            image: { type: 'jpeg', quality: 1 }, // was png
             html2canvas: {
-                scale: 2,
+                scale: 5, // was 3–4
                 useCORS: true,
                 logging: false,
-                scrollY: 0,
                 scrollX: 0,
+                scrollY: 0,
                 windowWidth: 816,
                 windowHeight: 1056
             },
-            jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait', compress: true },
-            pagebreak: { mode: ['avoid-all', 'css'] } // drop 'legacy'
+            jsPDF: { unit: 'pt', format: 'letter', orientation: 'portrait', compress: true } // enable compression
         };
 
         await html2pdf()
@@ -51,19 +50,19 @@
     }
 </script>
 
-<button on:click={handleGetPDF}>test</button>
+<button on:click={handleGetPDF} class="text-black underline !cursor-pointer">Download as PDF</button>
 
 <div class="min-h-screen w-full bg-gray-100 print:bg-white overflow-x-scroll">
     <div class="sheet flex flex-col justify-between">
         <slot />
         <div class="flex justify-between">
-            <div class="h-[153px] w-[1632px]">
+            <div class="h-[49.0px] w-[522.0px]">
                 <WardAssociesLogo fillColor="var(--WARD-BLACK, #181C1C)" shadowColor="rgba(0, 0, 0, 0.20)" />
             </div>
 
             <div class="self-end">
                 <div class="address">1217 Saint-Zotique Est, Montréal, Qc. H2S 1N6 <br />info@wardetassocies.com</div>
-                <div class="date mt-[50px]">
+                <div class="date mt-[16.07px]">
                     {formatDateTime()}
                 </div>
             </div>
@@ -74,19 +73,18 @@
 <style>
     .sheet {
         transform-origin: 0 0;
-        height: 3300px;
-        width: 2550px;
+        height: 1056px; /* 3300 → 1056 */
+        width: 816px; /* 2550 → 816  */
         background: #fff;
-        padding: 150px 85px 146px 150px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+        padding: 48px 27.2px 46.72px 48px; /* 150 85 146 150 */
+        box-shadow: 0 3.2px 9.6px rgba(0, 0, 0, 0.12); /* 0 10 30 */
     }
 
     .address {
         font-family: Riposte;
         font-weight: 400;
         font-style: Regular;
-        font-size: 14px;
-        leading-trim: NONE;
+        font-size: 4.48px; /* 14 → 4.48 */
         line-height: 100%;
         letter-spacing: 0%;
     }
@@ -95,8 +93,7 @@
         font-family: Riposte;
         font-weight: 400;
         font-style: Regular;
-        font-size: 24px;
-        leading-trim: NONE;
+        font-size: 7.68px; /* 24 → 7.68 */
         line-height: 100%;
         letter-spacing: 0%;
     }

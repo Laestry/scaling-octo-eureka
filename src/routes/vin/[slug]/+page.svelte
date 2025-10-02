@@ -10,6 +10,7 @@
     import { supabase } from '$lib/supabase/client';
     import Accordion from '$lib/components/Accordion.svelte';
     import ProductCard from '../../vins/ProductCard.svelte';
+    import { getOldestBatch } from '$lib/fullProduct/utils';
 
     //#region props_and_data
     export let data: PageData;
@@ -18,27 +19,9 @@
     //#endregion props_and_data
 
     //#region SELECT OLDEST BATCH
-    function getOldestBatch(): any | null {
-        if (!product?.alcohol_batches || !Array.isArray(product.alcohol_batches)) return null;
 
-        // only keep non-archived batches with available stock AND calculated_quantity > 0
-        const valid = product.alcohol_batches.filter(
-            (b) => !b.is_archived && b.quantity > 0 && b.calculated_quantity > 0
-        );
-        if (!valid.length) return null;
-
-        // sort by earliest sell_before_date
-        valid.sort((a, b) => {
-            const aT = a.sell_before_date ? new Date(a.sell_before_date).getTime() : Infinity;
-            const bT = b.sell_before_date ? new Date(b.sell_before_date).getTime() : Infinity;
-            return aT - bT;
-        });
-        console.log('selected batch', valid[0]);
-
-        return valid[0];
-    }
     let selectedBatch;
-    $: if (product) selectedBatch = getOldestBatch();
+    $: if (product) selectedBatch = getOldestBatch(product);
 
     let itemQuantity;
     $: if (selectedBatch) {
