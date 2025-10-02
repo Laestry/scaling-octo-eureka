@@ -367,7 +367,9 @@
             href={$isPrixResto
                 ? 'https://ward.pockethost.io/api/files/pbc_30851581/93ej7tuns0916g5/products_resto_03b592zlit.pdf'
                 : 'https://ward.pockethost.io/api/files/pbc_30851581/93ej7tuns0916g5/products_perso_qucjutpys2.pdf'}
-            download={$isPrixResto ? 'wardetassocies-prix-resto.pdf' : 'wardetassocies-prix-perso.pdf'}
+            download={$isPrixResto
+                ? 'wardetassocies-prix-resto.download-pdf'
+                : 'wardetassocies-prix-perso.download-pdf'}
             class="md:rounded-none rounded-full button-view button-view--link"
             target="_blank"
         >
@@ -430,7 +432,9 @@
             href={$isPrixResto
                 ? 'https://ward.pockethost.io/api/files/pbc_30851581/93ej7tuns0916g5/products_resto_03b592zlit.pdf'
                 : 'https://ward.pockethost.io/api/files/pbc_30851581/93ej7tuns0916g5/products_perso_qucjutpys2.pdf'}
-            download={$isPrixResto ? 'wardetassocies-prix-resto.pdf' : 'wardetassocies-prix-perso.pdf'}
+            download={$isPrixResto
+                ? 'wardetassocies-prix-resto.download-pdf'
+                : 'wardetassocies-prix-perso.download-pdf'}
             target="_blank"
             class="md:rounded-none rounded-full button-view button-view--link"
         >

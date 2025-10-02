@@ -87,15 +87,19 @@
         uploadingFiles = true;
         try {
             // Generate the PDF as a Blob.
-            const pdfBlobPrixResto = await generatePDFFromId('prixResto', 'productsResto.pdf');
-            const pdfBlobPrixPerso = await generatePDFFromId('prixPerso', 'productsPerso.pdf');
+            const pdfBlobPrixResto = await generatePDFFromId('prixResto', 'productsResto.download-pdf');
+            const pdfBlobPrixPerso = await generatePDFFromId('prixPerso', 'productsPerso.download-pdf');
 
             // Create a File instance from the Blob.
-            const pdfFileResto = new File([pdfBlobPrixResto], 'productsResto.pdf', { type: 'application/pdf' });
-            const pdfFilePerso = new File([pdfBlobPrixPerso], 'productsPerso.pdf', { type: 'application/pdf' });
+            const pdfFileResto = new File([pdfBlobPrixResto], 'productsResto.download-pdf', {
+                type: 'application/download-pdf'
+            });
+            const pdfFilePerso = new File([pdfBlobPrixPerso], 'productsPerso.download-pdf', {
+                type: 'application/download-pdf'
+            });
 
             // Upload the file to PocketBase.
-            // Adjust 'pdf' (collection), '93ej7tuns0916g5' (record ID), and 'file' (field name) as needed.
+            // Adjust 'download-pdf' (collection), '93ej7tuns0916g5' (record ID), and 'file' (field name) as needed.
             const updatedRecord = await pb
                 .collection('pdf')
                 .update('93ej7tuns0916g5', { prix_resto: pdfFileResto, prix_perso: pdfFilePerso });

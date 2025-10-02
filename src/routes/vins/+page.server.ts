@@ -45,7 +45,7 @@ export async function load({ locals, url }) {
         if (!category.length) category = undefined;
     }
 
-    // uvc (short key: u) — must match the component’s appendArrayParam(sp,'u',…)
+    // uvc (short key: u) — must match the Page’s appendArrayParam(sp,'u',…)
     const uvcRaw = params.getAll('u');
     const uvcNums = uvcRaw.map((v) => Number(v)).filter((n) => !isNaN(n));
     const uvc = uvcNums.length ? (uvcNums.length === 1 ? uvcNums[0] : uvcNums) : undefined;
