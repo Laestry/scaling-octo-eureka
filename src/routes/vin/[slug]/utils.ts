@@ -130,3 +130,30 @@ export function getCategory(product: any): string {
 
     return catItem.label;
 }
+
+export function sellBeforeDate(dateInput: Date | string | number): string {
+    const d = new Date(dateInput);
+    if (Number.isNaN(d.getTime())) throw new Error('Invalid date');
+
+    const mois = [
+        'janvier',
+        'février',
+        'mars',
+        'avril',
+        'mai',
+        'juin',
+        'juillet',
+        'août',
+        'septembre',
+        'octobre',
+        'novembre',
+        'décembre'
+    ];
+
+    const dd = String(d.getDate()).padStart(2, '0');
+    const month = mois[d.getMonth()];
+    const y = d.getFullYear();
+    const yyyy = String(y);
+
+    return `${dd} ${month}, ${yyyy}`;
+}

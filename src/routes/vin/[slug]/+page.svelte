@@ -1,6 +1,6 @@
 <script lang="ts">
     import type { PageData } from './$types';
-    import { getCategory, priceFormat } from './utils';
+    import { getCategory, priceFormat, sellBeforeDate } from './utils';
     import ProductTags from './ProductTags.svelte';
     import { type AlcoholProduct, cart, getItemQuantityStore } from '$lib/cart';
     import { Svroller } from 'svrollbar';
@@ -301,8 +301,9 @@
                                     </b>
                                 </div>
 
-                                <div class="flex flex-1 items-center justify-end">
-                                    Acheter avant <br /> JJ mois, 20XX
+                                <div class="flex flex-1 items-center justify-end text-end">
+                                    Acheter avant <br />
+                                    {sellBeforeDate(selectedBatch.sell_before_date)}
                                 </div>
                             </div>
                         </div>
