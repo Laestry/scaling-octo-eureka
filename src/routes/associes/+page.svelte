@@ -1,32 +1,38 @@
 <script lang="ts">
     import Carousel from '$lib/components/Carousel.svelte';
-    import { IconLogo, IconArrow1, IconArrow2 } from '$lib/icons';
+    import { IconLogo, IconArrow2 } from '$lib/icons';
 
-    let associes = new Array(20).fill(undefined).map(() => ({
-        winemaker: 'Nom, Prénom',
-        country: 'France',
-        region: 'Champagne',
-        flag: '/images/germany-flag.svg'
-    }));
+    export let data;
+    console.log('data', data);
+    let associes = data.suppliers;
     let carouselIndex = 0;
 </script>
 
 <div class="about">
     <div class="container">
-        <div class="about__row">
-            <div class="about__col">
-                <div class="about__logo">
-                    <IconLogo></IconLogo>
-                </div>
-                <p class="about__text">Nos producteurs</p>
-            </div>
-            <div class="about__col">
-                <p class="about__title">
-                    Nos vins sont issus d'une viticulture respectueuse et de vinifications sans artifice. Des cuvées sincères, parfois imprévisibles, toujours choisies pour leur énergie et leur intégrité.
+        <div class="">
+            <div class="flex lg:gap-[156px] md:gap-[93px] gap-[24px]">
+                <IconLogo
+                    class="lg:w-[132px] md:w-[100px] w-[80px]
+                flex-shrink-0"
+                />
+                <p
+                    class="about__title
+                    lg:w-[845px] md:w-[567px] w-[196px]"
+                >
+                    Voici les visages derrière les bouteilles. Notre équipe, c’est un collectif vivant : vigneron·ne·s,
+                    partenaires et sommeliers qui collaborent avec nous chaque jour.
                 </p>
-                <p class="about__text">
-                    Lorem ipsum dolor sit amet consectetur. Leo justo enim et in. Aliquam at feugiat tortor purus quis
-                    eu ultrices quis tincidunt.
+            </div>
+            <div
+                class="flex
+                lg:gap-[58px] md:gap-[12px] gap-0
+                 lg:mt-[51px] mt-[40px]"
+            >
+                <p class="about__text lg:w-fit md:w-[181px] w-[104px]">Nos producteurs</p>
+                <p class="about__text lg:w-[560px] md:w-[375px]">
+                    Nos vigneron·ne·s sont le cœur battant de notre agence. On les choisit pour leur vision, leur
+                    sincérité, et la profondeur de leurs vins.
                 </p>
             </div>
         </div>
@@ -60,35 +66,20 @@
             <table class="about-table">
                 <thead class="about-table__header">
                     <tr>
-                        <th class="about-table__title">
-                            Vignerons
-                            <button>
-                                <IconArrow1></IconArrow1>
-                            </button>
-                        </th>
-                        <th class="about-table__title">
-                            Pays
-                            <button>
-                                <IconArrow1></IconArrow1>
-                            </button>
-                        </th>
-                        <th class="about-table__title">
-                            Région
-                            <button>
-                                <IconArrow1></IconArrow1>
-                            </button>
-                        </th>
+                        <th class="about-table__title"> Vignerons </th>
+                        <th class="about-table__title"> Pays </th>
+                        <th class="about-table__title"> Région </th>
                     </tr>
                 </thead>
                 <tbody class="about-table__body">
                     {#each associes as associe}
                         <tr>
-                            <td class="about-table__data">{associe.winemaker}</td>
+                            <td class="about-table__data">{associe.usual_name}</td>
                             <td class="about-table__data">
-                                <span>{associe.country}</span>
-                                <img src={associe.flag} alt="" />
+                                <span>{associe.country_fr ?? ''}</span>
+                                {associe.flag ?? ''}
                             </td>
-                            <td class="about-table__data">{associe.region}</td>
+                            <td class="about-table__data">{associe.region_name ?? ''}</td>
                         </tr>
                     {/each}
                 </tbody>
@@ -102,8 +93,8 @@
         <div class="agency__row">
             <p class="agency__title">L’agence</p>
             <p class="agency__text">
-                Lorem ipsum dolor sit amet consectetur. Leo justo enim et in. Aliquam at feugiat tortor purus quis eu
-                ultrices quis tincidunt.
+                Ward & Associés, c’est un écosystème à part : une équipe curieuse, engagée, qui carbure à la confiance
+                (et à de très bonnes playlists).
             </p>
         </div>
         <div class="agency__images">
@@ -140,7 +131,8 @@
         <div class="command__row">
             <p class="command__title">@wardetassocies</p>
             <p class="command__text">
-                Suivez l’équipe — de l’agence, aux vignobles. On vous promets de belles histoires pour vous donner soif.
+                Suivez l’équipe — de l’agence aux vignobles, ici et partout dans le monde. Des histoires passionnantes,
+                des moments forts, et toujours une bonne raison d’avoir soif.
             </p>
         </div>
         <div class="command__images command__images--pc">
@@ -186,7 +178,11 @@
 <div class="bars">
     <div class="container">
         <div class="bars__row">
-            <p class="bars__title">Bars à Vins</p>
+            <div>
+                <p class="bars__title">Vinvinvin</p>
+                <a target="_blank" href="https://www.instagram.com/barvinvinvin" class="text-wblue">@barvinvinvin</a>
+            </div>
+
             <div class="bars__controlls">
                 <button class="bars__button bars__button--prev" on:click={() => carouselIndex--}>
                     <IconArrow2></IconArrow2>
@@ -199,29 +195,24 @@
         <Carousel
             slides={[
                 {
-                    src: '/images/associes-img-13.jpg',
-                    name: 'Vinvinvin',
-                    url: '@lienversIG'
+                    src: 'https://scontent-atl3-1.cdninstagram.com/v/t51.82787-15/559168258_18145147384418831_1253050978144655134_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=103&ig_cache_key=MzczNDYzMDkxMzAwODU2OTgzMQ%3D%3D.3-ccb1-7&ccb=1-7&_nc_sid=58cdad&efg=eyJ2ZW5jb2RlX3RhZyI6InhwaWRzLjE0NDB4MTkxOS5zZHIuQzMifQ%3D%3D&_nc_ohc=8e2m8tDYzdEQ7kNvwHTwZlY&_nc_oc=AdmKzRY22JervJoOc8WZeMZvdulwjwm5sLxHYMN26qufQiH9VhKCPeNNKDDevAXz_xM&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent-atl3-1.cdninstagram.com&_nc_gid=-uL7Z5NfFqxo0e8KIS4dlA&oh=00_AfeVayVxR4e9R_x1uLymRjg7Hh_PZrTBOgRaEabFkZfp0Q&oe=68E5DD6B',
+                    name: 'Nouveautés ⚡️💧'
                 },
                 {
-                    src: '/images/associes-img-14.jpg',
-                    name: 'Vinvinvin',
-                    url: '@lienversIG'
+                    src: 'https://scontent-atl3-2.cdninstagram.com/v/t51.82787-15/542862192_18142816735418831_5704153725087812167_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=104&ig_cache_key=MzcxNzk4MDAwMTIyNTc0MDk1Ng%3D%3D.3-ccb1-7&ccb=1-7&_nc_sid=58cdad&efg=eyJ2ZW5jb2RlX3RhZyI6InhwaWRzLjE0NDB4MTgwMC5zZHIuQzMifQ%3D%3D&_nc_ohc=1G75Rf_cGkYQ7kNvwGMhwiv&_nc_oc=AdmKsW3p6t2zC8dH9lqA-wb0mn2TTVEGrrgvqrTlYAiWyCwEH4vWXKucht7XaIRBFeM&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent-atl3-2.cdninstagram.com&_nc_gid=-uL7Z5NfFqxo0e8KIS4dlA&oh=00_AfeziUvE_XjnFGNnMvHAAvunjpfj13gi8n20bsn7kRUrww&oe=68E5B7B4',
+                    name: `@drinksfarm @zamalekmontreal @rhubarbalade`
                 },
                 {
-                    src: '/images/associes-img-15.jpg',
-                    name: 'Vinvinvin',
-                    url: '@lienversIG'
+                    src: 'https://scontent-atl3-3.cdninstagram.com/v/t51.82787-15/539637202_18141733015418831_5563948629792029042_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=108&ig_cache_key=MzcwOTI4MTg5NjA5NTYzMzYyMQ%3D%3D.3-ccb1-7&ccb=1-7&_nc_sid=58cdad&efg=eyJ2ZW5jb2RlX3RhZyI6InhwaWRzLjE0NDB4MTQ0MC5zZHIuQzMifQ%3D%3D&_nc_ohc=rBl24xkw-0oQ7kNvwEvgzkG&_nc_oc=AdnXcKj3paGEmkkmwcB2ZoWseCCKGwjkrZjiNoXPdXSIxrVchckM5ZZXzNdeRHebzBM&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent-atl3-3.cdninstagram.com&_nc_gid=-uL7Z5NfFqxo0e8KIS4dlA&oh=00_Afd5VxdmodwSY2Cn6P0jtNcWD4sCQpy4QhJ1HDvHNHYMVg&oe=68E5ECC2',
+                    name: 'Les nouveautés de la semaine sont la 🏎️'
                 },
                 {
-                    src: '/images/associes-img-13.jpg',
-                    name: 'Vinvinvin',
-                    url: '@lienversIG'
+                    src: 'https://scontent-atl3-3.cdninstagram.com/v/t51.82787-15/537408753_18141091201418831_5405523669079807884_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=108&ig_cache_key=MzcwNDIzMDQ4OTI4MTE4ODczOA%3D%3D.3-ccb1-7&ccb=1-7&_nc_sid=58cdad&efg=eyJ2ZW5jb2RlX3RhZyI6InhwaWRzLjE0NDB4MTkxNy5zZHIuQzMifQ%3D%3D&_nc_ohc=1tzp-1Oosn8Q7kNvwFOAk6d&_nc_oc=Adm40gGtJEOZrSZzqQYArDYxIvbe8Ehja0ZYyXJcDkENWdABE5Ifyx7IVTAEHatrUgA&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent-atl3-3.cdninstagram.com&_nc_gid=WfPI0X7r2VO9dg2r4ZtJxA&oh=00_AfdrJ4HfPCx2kzcS2SBaSpNyj-vY2xN5Oq7-jJpPjzTWXQ&oe=68E5C967',
+                    name: 'Fait beau, on a des nouveaux vins, à tantôt 😎'
                 },
                 {
-                    src: '/images/associes-img-14.jpg',
-                    name: 'Vinvinvin',
-                    url: '@lienversIG'
+                    src: 'https://scontent-atl3-3.cdninstagram.com/v/t51.82787-15/522696338_18138357070418831_1109640068674030612_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=110&ig_cache_key=MzY4MzIyNzU3Mzg2NzE5MDUxOA%3D%3D.3-ccb1-7&ccb=1-7&_nc_sid=58cdad&efg=eyJ2ZW5jb2RlX3RhZyI6InhwaWRzLjE0NDB4MTkxOC5zZHIuQzMifQ%3D%3D&_nc_ohc=jbhCYsmX_3QQ7kNvwHpkIio&_nc_oc=Adl4HfQVBCr4VhlBEr1cNMmOpIFxjylQlWS0Q82QGK-jF0CZajatKB7Ph-BHwm8-M1A&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent-atl3-3.cdninstagram.com&_nc_gid=WfPI0X7r2VO9dg2r4ZtJxA&oh=00_AfdeYf_fHe9F8Rwj1ldHGubXfqnF5BFjwQva1APY8_etsg&oe=68E5D034',
+                    name: 'cuisine ouverte 7/7 jusqu’à 23h00 gnumgnumgnum🌝'
                 }
             ]}
             bind:current={carouselIndex}
@@ -230,18 +221,15 @@
             <div class="bars__image">
                 <img src={item.src} alt="" />
                 <p class="bars__caption">
-                    <b>{item.name}</b>
-                    <br />
-                    <a href={item.url}>{item.url}</a>
+                    <b>{@html item.name}</b>
                 </p>
             </div>
         </Carousel>
         <div class="bars__footer">
-            <p class="bars__small-title">Experience our wines around the city.</p>
+            <p class="bars__small-title">Découvrez nos vins à travers la ville.</p>
             <p class="bars__text">
-                Who would we be without our effervescent wine bars and mind blowing restaurants? Lorem ipsum dolor sit
-                amet consectetur. Leo justo enim et in. Aliquam at feugiat tortor purus quis eu ultrices quis tincidunt.
-                Tellus integer egestas lectus.Lorem ipsum dolor sit amet consectetur.
+                Que serions-nous sans les bars à vins électrisants et les restos renversants de notre ville ? Ces lieux
+                donnent vie à nos bouteilles — un verre à la fois.
             </p>
         </div>
     </div>
@@ -290,21 +278,22 @@
         &__image {
             display: flex;
             flex-direction: column;
+            align-items: start;
             gap: 8px;
             //padding-right: 16px;
             img {
                 display: block;
-                width: 100%;
-                height: 100%;
+                width: 369px;
+                height: 504px;
                 object-fit: cover;
             }
         }
         &__caption {
+            width: 369px;
             color: #181c1c;
             font-size: 14px;
             font-style: normal;
             line-height: 150%; /* 21px */
-            text-transform: capitalize;
             a {
                 color: #3777bc;
             }
@@ -352,7 +341,7 @@
             font-weight: 500;
             line-height: 30px;
             letter-spacing: -0.176px;
-            margin-top: 21px;
+            margin-top: 18px;
         }
         &__text {
             color: #f6f1f2;
@@ -733,6 +722,15 @@
                 font-size: 20px;
                 line-height: 120%;
             }
+            &__image {
+                img {
+                    width: 245px;
+                    height: 328px;
+                }
+            }
+            &__caption {
+                width: 245px;
+            }
         }
     }
     @media (max-width: 679px) {
@@ -934,6 +932,15 @@
             &__text {
                 font-size: 18px;
                 line-height: 120%;
+            }
+            &__image {
+                img {
+                    width: 145px;
+                    height: 193px;
+                }
+            }
+            &__caption {
+                width: 145px;
             }
         }
     }

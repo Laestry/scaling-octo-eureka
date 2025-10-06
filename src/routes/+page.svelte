@@ -26,7 +26,8 @@
     <div class="flex mx-auto flex-col min-h-[90vh] lg:w-[1136px] md:w-[760px] w-[300px]">
         <div class="justify-between md:flex-row flex-col-reverse flex md:mt-[134px] gap-[20px] my-[80px] md:mb-[137px]">
             <div class="h3 description max-w-[844px] text-color1">
-            Bienvenue chez Ward & Associés. Agence indépendante basée à Montréal, spécialisée en vins naturels, vivants et libres. On explore, on partage, et on boit avec intention.
+                Bienvenue chez Ward & Associés. Agence indépendante basée à Montréal, spécialisée en vins naturels,
+                vivants et libres. On explore, on partage, et on boit avec intention.
             </div>
         </div>
 
@@ -40,7 +41,8 @@
         </div>
 
         <div class="description2 lg:mt-[113px] lg:mb-[180px] my-[80px] text-color1">
-            Nos vins sont issus d’une viticulture respectueuse et de vinifications sans artifice. Des cuvées sincères, parfois imprévisibles, toujours choisies pour leur énergie et leur intégrité.
+            Nos vins sont issus d’une viticulture respectueuse et de vinifications sans artifice. Des cuvées sincères,
+            parfois imprévisibles, toujours choisies pour leur énergie et leur intégrité.
         </div>
 
         <div
@@ -59,10 +61,12 @@
     </div>
     <div class="instablock">
         <div class="lg:max-w-[1212px] px-[38px] md:max-w-[836px] max-w-[376px] mx-auto container">
-            <button class="instablock__button">@wardetassocies</button>
             <p class="instablock__title">
-                → Suivez-nous sur <br />
-                Ne passez pas à côté. Suivez-nous pour les arrivages qui comptent, les dégustations qui bousculent, et les vigneron·ne·s qui font bouger les lignes.
+                Ne passez pas à côté. Suivez-nous pour les arrivages qui comptent, les dégustations qui bousculent, et
+                les vigneron·ne·s qui font bouger les lignes. <br />
+                → Suivez-nous sur
+                <br />
+                <button class="instablock__button">@wardetassocies</button>
             </p>
         </div>
     </div>

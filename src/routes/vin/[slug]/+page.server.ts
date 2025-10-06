@@ -6,6 +6,7 @@ export async function load({ locals, params }) {
         .from('alcohol')
         .select('*,alcohol_batches(*),alcohol_website!inner(*),parties(*)')
         .eq('alcohol_website.slug', params.slug)
+        .eq('organization_id', 2)
         .single();
 
     if (serror) {

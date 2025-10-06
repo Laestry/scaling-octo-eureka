@@ -116,6 +116,7 @@ export async function fetchFilteredProductsForAlcohol(
         .schema('cms_saq')
         .from('alcohol_view')
         .select('*', { count: 'exact' })
+        .eq('organization_id', 2)
         .gt('oldest_price', 0)
         .gt('oldest_price_tax_in', 0)
         .not('website_slug', 'is', null);

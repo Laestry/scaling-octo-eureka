@@ -54,6 +54,7 @@
         isSubmitting = true;
 
         try {
+            handleWaitlistSubmit;
             dispatch('submit', {
                 firstName: firstName.trim(),
                 lastName: lastName.trim(),
@@ -84,6 +85,48 @@
     $: if (firstName) errors.firstName = '';
     $: if (lastName) errors.lastName = '';
     $: if (email) errors.email = '';
+
+    async function handleWaitlistSubmit(event) {
+        const { firstName, lastName, email } = event.detail;
+
+        try {
+            // TODO: Replace with actual API call
+            console.log('Waitlist submission:', {
+                firstName,
+                lastName,
+                email,
+                productId: product.id,
+                productName: product.name
+            });
+
+            // For now, just show success and close modal
+            alert(`Merci ${firstName}! Nous vous contacterons dès que ${product.name} sera disponible.`);
+            showWaitlistForm = false;
+
+            // TODO: Implement actual API call
+            // const response = await fetch('/api/waitlist', {
+            //     method: 'POST',
+            //     headers: { 'Content-Type': 'application/json' },
+            //     body: JSON.stringify({
+            //         firstName,
+            //         lastName,
+            //         email,
+            //         productId: vin.id,
+            //         productName: vin.name
+            //     })
+            // });
+            //
+            // if (response.ok) {
+            //     alert(`Merci ${firstName}! Nous vous contacterons dès que ${vin.name} sera disponible.`);
+            //     showWaitlistForm = false;
+            // } else {
+            //     throw new Error('Failed to submit');
+            // }
+        } catch (error) {
+            console.error('Waitlist submission error:', error);
+            alert("Erreur lors de l'inscription. Veuillez réessayer.");
+        }
+    }
 </script>
 
 <!-- Modal overlay -->
