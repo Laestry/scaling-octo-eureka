@@ -17,7 +17,7 @@
 
     /* NEW */
     let animate = true; // flip to false for the paths we want to skip
-    $: isFicheTechnique = currentPath.includes('fiche-technique');
+    $: isDownloadPDF = currentPath.includes('download-pdf');
     navigating.subscribe((n) => {
         if (n) {
             const from = n.from?.url.pathname || '';
@@ -46,7 +46,7 @@
     });
 </script>
 
-{#if !isFicheTechnique}
+{#if !isDownloadPDF}
     <div style="max-width:100vw; background-color:#F6F1F2" class="pb-[53px]">
         <Header />
         {#key currentPath}

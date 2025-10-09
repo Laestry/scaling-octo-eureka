@@ -113,7 +113,7 @@
     on:mouseleave={handleMouseLeave}
     on:mousemove={handleMouseMove}
     on:click={handleClick}
-    class="relative border-y border-[#181C1C33] cursor-blue-dot {$$props['class']}"
+    class="relative border-b border-[#181C1C33] cursor-blue-dot {$$props['class']}"
 >
     <td>{region}</td>
     <td>{providerName || '-'}</td>

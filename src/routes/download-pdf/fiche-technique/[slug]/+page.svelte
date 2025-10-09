@@ -3,14 +3,31 @@
     import { IconLogoWithName } from '$lib/icons';
     import { getCategory, priceFormat } from '../../../vin/[slug]/utils';
     import { getOldestBatch } from '$lib/fullProduct/utils';
+    import Footer from '../../Footer.svelte';
+    import { onMount, tick } from 'svelte';
+    import { handleGetPDF } from '../../utils';
     export let data;
     console.log('data', data);
     $: product = data.product;
     let selectedBatch;
     $: if (product) selectedBatch = getOldestBatch(product);
+
+    onMount(async () => {
+        await tick();
+        await handleGetPDF(`Ward&Associés ${product.alcohol_website?.[0]?.name} fiche technique`);
+        window.close();
+    });
 </script>
 
-<div>
+<button
+    on:click={() => {
+        handleGetPDF(`Ward&Associés ${product.alcohol_website?.[0]?.name} fiche technique`);
+    }}
+>
+    Download PDF
+</button>
+
+<div id="pdf" class="sheet flex flex-col justify-between h-full">
     <div>
         <div class="w-[112.64px] flex justify-center items-center">
             <IconLogoWithName />
@@ -29,7 +46,7 @@
                                 {product?.parties?.display_name}
                             </b>
                             <br />
-                            {product.name ?? ''}
+                            {product.alcohol_website.name ?? ''}
                             <br />
                             {product.vintage ?? ''}
                             <br />
@@ -66,9 +83,20 @@
             {@html product.alcohol_website?.[0]?.description_french ?? 'La description va ici'}
         </div>
     </div>
+
+    <Footer />
 </div>
 
 <style>
+    .sheet {
+        transform-origin: 0 0;
+        height: 1056px; /* 3300 → 1056 */
+        width: 816px; /* 2550 → 816  */
+        background: #fff;
+        padding: 48px 27.2px 46.72px 48px; /* 150 85 146 150 */
+        box-shadow: 0 3.2px 9.6px rgba(0, 0, 0, 0.12); /* 0 10 30 */
+    }
+
     .title {
         font-family: Riposte;
         font-weight: 400;

@@ -1,53 +1,53 @@
 <!--src/routes/vins/ProductList.svelte-->
 <script lang="ts">
     import { fade } from 'svelte/transition';
-    import type { AlcoholProduct } from '$lib/models/pocketbase';
     import { isPrixResto } from '$lib/store';
     import ProductRow from './ProductRow.svelte';
+    import type { AlcoholProduct } from '$lib/cart';
+    import { onMount } from 'svelte';
 
     export let isPDF = false;
     export let products: AlcoholProduct[];
+
+    let wrap: HTMLDivElement;
+    const SCALE = 0.656934;
+    onMount(() => {
+        if (!isPDF) return;
+        // measure unscaled height then set a scaled placeholder height
+        const h = wrap.scrollHeight;
+        wrap.style.height = `${h * SCALE}px`;
+    });
 </script>
 
-<div id="pdfContent" in:fade class="mt-[32px] productTable {$$props['class']}">
-    <table class="">
-        <tr>
-            <th class="w-[151px]">
-                Region
-                <!--                <IconArrow1/>-->
-            </th>
-            <th class="w-[193px]">
-                Vigneron
-                <!--                <IconArrow1/>-->
-            </th>
-            <th class="w-[289px]">
-                Vin
-                <!--                <IconArrow1/>-->
-            </th>
-            <th class="w-[94px]">
-                Mil.
-                <!--                <IconArrow1/>-->
-            </th>
-            <th class="w-[98px]">
-                Type
-                <!--                <IconArrow1/>-->
-            </th>
-            <th class="w-[96px]">
-                Format
-                <!--                <IconArrow1/>-->
-            </th>
-            <th class="w-[175px] !text-end !pr-[5px]" style="font-family: 'Riposte', 'serif'">
-                $ {$isPrixResto ? 'Resto' : 'Perso'}
-            </th>
-            {#if !isPDF}
-                <th class="w-[40px]" />
-            {/if}
-        </tr>
+<div bind:this={wrap} class="relative" style={`${isPDF ? 'position:relative; overflow:hidden;' : ''}`}>
+    <div
+        id="pdfContent"
+        in:fade
+        class=" productTable {$$props['class']}"
+        class:mt-[32px]={!isPDF}
+        style={`${isPDF ? 'transform:scale(0.656934); transform-origin:0 0; width:1096px;' : ''}`}
+    >
+        <table class="">
+            <tr class="border-b border-[#181C1C33]">
+                <th class="w-[151px]"> Region </th>
+                <th class="w-[193px]"> Vigneron </th>
+                <th class="w-[289px]"> Vin </th>
+                <th class="w-[94px]"> Mil. </th>
+                <th class="w-[98px]"> Type </th>
+                <th class="w-[96px]"> Format </th>
+                <th class="w-[175px] !text-end !pr-[5px]" style="font-family: 'Riposte', 'serif'">
+                    $ {$isPrixResto ? 'Resto' : 'Perso'}
+                </th>
+                {#if !isPDF}
+                    <th class="w-[40px]" />
+                {/if}
+            </tr>
 
-        {#each products as product}
-            <ProductRow {isPDF} {product} class="productRow" />
-        {/each}
-    </table>
+            {#each products as product}
+                <ProductRow {isPDF} {product} class="productRow" />
+            {/each}
+        </table>
+    </div>
 </div>
 
 <style lang="scss">
