@@ -11,11 +11,13 @@
     import Accordion from '$lib/components/Accordion.svelte';
     import ProductCard from '../../vins/ProductCard.svelte';
     import { getOldestBatch } from '$lib/fullProduct/utils';
+    import { getVinImage } from '$lib/utils/images';
+    import { afterNavigate } from '$app/navigation';
 
     //#region props_and_data
     export let data: PageData;
     console.log('data', data);
-    $: product = data.product;
+    let product = data.product;
     //#endregion props_and_data
 
     //#region SELECT OLDEST BATCH
@@ -47,9 +49,9 @@
     //#endregion cart_handlers
 
     //#region images
-    const img1 = '/images/example_wines/SHOP PAGE/Product Shot - stack.png';
-    const img = '/images/example_wines/SHOP PAGE/9x1' + '6 Product Shot - stack.png';
-    const img2 = '/images/example_wines/SHOP PAGE/In-situ Product Shot - stack.png';
+    let img0 = getVinImage(product, 0);
+    let img1 = getVinImage(product, 1);
+    let img2 = getVinImage(product, 2);
     //#endregion images
 
     //#region waitlist_handlers
@@ -65,8 +67,13 @@
     //#endregion related_products
 
     //#region onMount
-    onMount(async () => {
+    afterNavigate(async () => {
         console.log('vin data', data, selectedBatch);
+        product = data.product;
+
+        img0 = getVinImage(product, 0);
+        img1 = getVinImage(product, 1);
+        img2 = getVinImage(product, 2);
 
         const requestString = `
             id,
@@ -83,7 +90,8 @@
             oldest_vintage,
             oldest_price,
             oldest_price_tax_in,
-            oldest_calculated_quantity
+            oldest_calculated_quantity,
+            main_image_file
             `;
 
         let queryRegion = supabase
@@ -158,7 +166,7 @@
                     on:mouseenter={() => (currentSlide = 0)}
                     on:click={() => (currentSlide = 0)}
                 >
-                    <img class="object-cover w-full h-full" src={img1} alt="Wine" />
+                    <img class="object-cover w-full h-full" src={img0} alt="Wine" />
                 </button>
                 <button
                     class="absolute z-[2] md:left-[12px] left-[6px] bottom-0 lg:w-[450px] lg:h-[591px] md:w-[247px] md:h-[439px] w-[196px] h-[262px]"
@@ -174,7 +182,7 @@
                     on:mouseenter={() => (currentSlide = 1)}
                     on:click={() => (currentSlide = 1)}
                 >
-                    <img class="object-cover w-full h-full" src={img} alt="Wine" />
+                    <img class="object-cover w-full h-full" src={img1} alt="Wine" />
                 </button>
             </div>
             <!--endregion-->

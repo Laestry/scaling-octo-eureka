@@ -6,18 +6,14 @@
     import Minus from '$lib/icons/Minus.svelte';
     import Plus from '$lib/icons/Plus.svelte';
     import { onMount } from 'svelte';
+    import { getVinImage } from '$lib/utils/images';
 
     export let product; // alcohol_view row + { selectedBatchId: string|number }
 
-    const images = new Array(8).fill('').map((_, i) => `/images/example_wines/${i + 1}.jpg`);
-    function getImage() {
-        const n = Math.floor(Math.random() * images.length);
-        return images[n % images.length]!;
-    }
     let img = '';
     $: {
         product;
-        img = getImage();
+        img = getVinImage(product, 0);
     }
 
     // Build a pseudo-batch from the view when we only have oldest_* fields
@@ -70,6 +66,12 @@
         const slug = product?.website_slug ?? 'noslug';
         goto(`/vin/${slug}`);
     }
+    let name: string;
+    $: if (product && product.alcohol_website && product.alcohol_website[0]?.name) {
+        name = product.alcohol_website[0]?.name;
+    } else {
+        name = product.name;
+    }
 </script>
 
 {#if isMounted && selectedBatch}
@@ -89,7 +91,7 @@
 
         <div class="max-w-[326px] flex-1 my-4 flex items-end ml-[54px] border-r border-wblue">
             <div>
-                <b>{product.name}</b>
+                <b>{name}</b>
                 <div>{product.provider_display_name ?? ''}</div>
                 <div>{selectedBatch?.vintage ?? ''}</div>
             </div>

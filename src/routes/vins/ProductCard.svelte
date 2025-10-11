@@ -5,7 +5,7 @@
     import { fly } from 'svelte/transition';
     import Plus from '$lib/icons/Plus.svelte';
     import { getOldestBatch } from './utils';
-    import { getImage } from '$lib/utils/images.js';
+    import { getVinsImage } from '$lib/utils/images.js';
 
     export let product: any;
     export let size: 's' | 'm' | 'l' | 'v' = 's';
@@ -14,7 +14,7 @@
     let img = '';
     $: {
         product;
-        img = getImage(product);
+        img = getVinsImage(product);
     }
 
     let animations: { id: number }[] = [];

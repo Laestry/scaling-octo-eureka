@@ -5,7 +5,7 @@
     import { fly, fade } from 'svelte/transition';
     import Plus from '$lib/icons/Plus.svelte';
     import { getOldestBatch } from './utils';
-    import { getImage } from '$lib/utils/images';
+    import { getVinsImage } from '$lib/utils/images';
 
     export let product: any;
     export let isPDF = false;
@@ -35,7 +35,7 @@
     function handleMouseEnter(e: MouseEvent) {
         hovered = true;
         handleMouseMove(e);
-        loadImageTimer = setTimeout(() => (delayedImage = getImage(product)), 0);
+        loadImageTimer = setTimeout(() => (delayedImage = getVinsImage(product)), 0);
     }
     function handleMouseLeave() {
         hovered = false;
