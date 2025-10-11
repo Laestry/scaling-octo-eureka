@@ -5,24 +5,16 @@
     import { fly } from 'svelte/transition';
     import Plus from '$lib/icons/Plus.svelte';
     import { getOldestBatch } from './utils';
+    import { getImage } from '$lib/utils/images.js';
 
     export let product: any;
     export let size: 's' | 'm' | 'l' | 'v' = 's';
     export let isMain = false;
 
-    const images = new Array(8).fill('').map((_, i) => `/images/example_wines/${i + 1}.jpg`);
-    function getRandomNumber() {
-        const n1 = typeof product.id === 'number' ? product.id : parseInt(String(product.id)) || 0;
-        return n1;
-    }
-    function getImage() {
-        const n = getRandomNumber();
-        return images[n % images.length]!;
-    }
     let img = '';
     $: {
         product;
-        img = getImage();
+        img = getImage(product);
     }
 
     let animations: { id: number }[] = [];
@@ -208,10 +200,10 @@
         font-weight: 400;
         line-height: 120%; /* 19.2px */
     }
-    
+
     /* Plus button hover effect - change from blue to pink */
     button:hover {
-        color: #DA5899 !important; /* Pink color */
+        color: #da5899 !important; /* Pink color */
         transition: color 0.2s ease;
     }
     .product-table-counter {
