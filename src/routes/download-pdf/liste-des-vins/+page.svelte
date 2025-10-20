@@ -27,18 +27,18 @@
     onMount(async () => {
         await tick();
         await handleGetPDF(`Ward&Associés liste des vins`);
-        window.close();
+        // window.close();
     });
 </script>
 
-<!--<button-->
-<!--    class="!cursor-pointer"-->
-<!--    on:click={() => {-->
-<!--        handleGetPDF(`Ward&Associés liste des vins`);-->
-<!--    }}-->
-<!--&gt;-->
-<!--    Download PDF-->
-<!--</button>-->
+<button
+    class="!cursor-pointer"
+    on:click={() => {
+        handleGetPDF(`Ward&Associés liste des vins`);
+    }}
+>
+    Download PDF
+</button>
 
 <div id="pdf">
     {#each productsList as p}
@@ -53,7 +53,6 @@
 
 <style>
     .sheet {
-        transform-origin: 0 0;
         height: 1056px; /* 3300 → 1056 */
         width: 816px; /* 2550 → 816  */
         background: #fff;

@@ -151,12 +151,12 @@
     <div class="container">
         <div class="command__row">
             <p class="command__title">@wardetassocies</p>
-            <p class="command__text relative z-50">
-                Suivez l’équipe — de l’agence aux vignobles, ici et partout dans le monde. Des histoires passionnantes,
+            <p class="command__text  ">
+                Suivez l’équipe, de l’agence aux vignobles, ici et partout dans le monde. Des histoires passionnantes,
                 des moments forts, et toujours une bonne raison d’avoir soif.
             </p>
         </div>
-        <div class="command__images relative alg:translate-y-[-174px]">
+        <div class="command__images">
             <div>
                 <div class=" command__images--pc flex lg:gap-4 md:gap-3">
                     <div class="command__image">
@@ -193,7 +193,7 @@
                             let:item
                         >
                             <div class="command__image">
-                                <img  src={item.src} alt="" />
+                                <img src={item.src} alt="" />
                             </div>
                         </Carousel>
                     </div>
@@ -392,7 +392,7 @@
         &__images {
             display: flex;
             gap: 16px;
-            padding: 154px 30px 33px 33px;
+            padding: 36px 30px 36px 33px;
             background: #f15a38;
             position: relative;
             margin-top: 32px;
