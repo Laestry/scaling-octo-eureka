@@ -12,8 +12,13 @@
 </script>
 
 <div class="flex justify-between {$$props.class}">
-    <div class="h-[49.0px] w-[522.0px]">
-        <WardAssociesLogo fillColor="var(--WARD-BLACK, #181C1C)" shadowColor="rgba(0, 0, 0, 0.20)" />
+    <div class="h-[49.0px] w-[522.0px]" style="height: 49px; width: 522px">
+        <WardAssociesLogo
+            width="522px"
+            height="49px"
+            fillColor="var(--WARD-BLACK, #181C1C)"
+            shadowColor="rgba(0, 0, 0, 0.20)"
+        />
     </div>
 
     <div class="self-end">

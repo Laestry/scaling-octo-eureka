@@ -18,11 +18,9 @@ export async function handleGetPDF(fileName) {
             useCORS: true,
             logging: false,
             scrollX: 0,
-            scrollY: 0,
-            windowWidth: 816,
-            windowHeight: 1056
+            scrollY: 0
         },
-        jsPDF: { unit: 'pt', format: 'letter', orientation: 'portrait', compress: true } // enable compression
+        jsPDF: { unit: 'pt', format: 'letter', orientation: 'portrait' } // enable compression
     };
 
     await html2pdf()

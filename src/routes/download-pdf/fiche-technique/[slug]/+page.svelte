@@ -6,6 +6,7 @@
     import Footer from '../../Footer.svelte';
     import { onMount, tick } from 'svelte';
     import { handleGetPDF } from '../../utils';
+    import { getVinImage } from '$lib/utils/images';
     export let data;
     console.log('data', data);
     $: product = data.product;
@@ -15,7 +16,7 @@
     onMount(async () => {
         await tick();
         await handleGetPDF(`Ward&Associés ${product.alcohol_website?.[0]?.name} fiche technique`);
-        // window.close();
+        window.close();
     });
 </script>
 
@@ -34,7 +35,7 @@
         </div>
 
         <div class="flex gap-[13px] h-[170.88px] mt-[50.24px]">
-            <img width="128" height="170.88" src="/images/example_wines/1.jpg" alt="" />
+            <img width="128" height="170.88" src={getVinImage(product, 0)} alt="" />
             <div class="w-[381.44px] h-full flex flex-col justify-between">
                 <div class="title">{product.alcohol_website?.[0]?.name}</div>
 
