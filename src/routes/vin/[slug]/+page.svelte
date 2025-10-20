@@ -150,7 +150,9 @@
         <ProductTags
             {product}
             class="lg:w-[560px] md:w-[442px]
-                   lg:ml-[472px] md:ml-[318px]"
+                   lg:ml-[486px] md:ml-[332px]
+
+                  "
         />
         <div class="md:flex-row flex-col flex gap-x-[10px] mt-[10px] items-start">
             <!--region images-->
@@ -158,6 +160,7 @@
                 class="relative
                 lg:w-[462px] md:w-[308px] w-[280px]
                 lg:h-[639px] md:h-[439px] h-[262px]
+                mr-[14px]
                 "
             >
                 <button
@@ -219,7 +222,7 @@
                         <div class="flex product-table lg:h-[141px] h-[104px]">
                             <!--                            left-->
                             <div
-                                class="flex flex-col border-r-[1px] border-r-[#E859EB]
+                                class="flex flex-col border-r-[1px] border-r-[#DA5899]
                                         lg:w-[380px] md:w-[235px] w-[186px]"
                             >
                                 <p class="border-b border-wred lg:h-[32px] h-[28px] capitalize flex items-center">
@@ -282,7 +285,9 @@
                                 <div class="text-xs md:w-full w-fit md:mb-4">
                                     Bouteilles ({product.uvc}/caisse)
                                 </div>
-                                <div class="text-xs product-table-counter__value">{$itemQuantity * product.uvc}</div>
+                                <div class="text-xs product-table-counter__value">
+                                    {selectedBatch.calculated_quantity > 0 ? $itemQuantity * product.uvc : '/'}
+                                </div>
                                 {#if selectedBatch.calculated_quantity}
                                     <button
                                         disabled={isAtLimit}
