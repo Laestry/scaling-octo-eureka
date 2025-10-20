@@ -1,3 +1,4 @@
+<!--src/routes/associes/+page.svelte-->
 <script lang="ts">
     import Carousel from '$lib/components/Carousel.svelte';
     import { IconLogo, IconArrow2 } from '$lib/icons';
@@ -21,7 +22,12 @@
             src: '/images/associes-img-12.jpg'
         }
     ];
+
+    let show = false;
+    let outerWidth: number;
 </script>
+
+<svelte:window bind:outerWidth />
 
 <div class="about">
     <div class="container">
@@ -145,32 +151,53 @@
     <div class="container">
         <div class="command__row">
             <p class="command__title">@wardetassocies</p>
-            <p class="command__text">
+            <p class="command__text relative z-50">
                 Suivez l’équipe — de l’agence aux vignobles, ici et partout dans le monde. Des histoires passionnantes,
                 des moments forts, et toujours une bonne raison d’avoir soif.
             </p>
         </div>
-        <div class="command__images ">
-            <div class="command__images--pc">
-                <div class="command__image">
-                    <img src="/images/associes-img-09.jpg" alt="" />
-                </div>
-                <div class="command__image">
-                    <img src="/images/associes-img-10.jpg" alt="" />
-                </div>
-                <div class="command__image">
-                    <img src="/images/associes-img-11.jpg" alt="" />
-                </div>
-                <div class="command__image">
-                    <img src="/images/associes-img-12.jpg" alt="" />
-                </div>
-            </div>
-            <div class="command__images--mobile overflow-x-auto">
-                {#each suivezMobileSlideImages as item}
+        <div class="command__images relative alg:translate-y-[-174px]">
+            <div>
+                <div class=" command__images--pc flex lg:gap-4 md:gap-3">
                     <div class="command__image">
-                        <img src={item.src} alt="" />
+                        <img src="/images/associes-img-09.jpg" alt="" />
                     </div>
-                {/each}
+                    <div class="command__image">
+                        <img src="/images/associes-img-10.jpg" alt="" />
+                    </div>
+                    <div class="command__image">
+                        <img src="/images/associes-img-11.jpg" alt="" />
+                    </div>
+                    <div class="command__image">
+                        <img src="/images/associes-img-12.jpg" alt="" />
+                    </div>
+                </div>
+
+                {#if outerWidth <= 679}
+                    <div class="command_carousel">
+                        <Carousel
+                            slides={[
+                                {
+                                    src: '/images/associes-img-09.jpg'
+                                },
+                                {
+                                    src: '/images/associes-img-10.jpg'
+                                },
+                                {
+                                    src: '/images/associes-img-11.jpg'
+                                },
+                                {
+                                    src: '/images/associes-img-12.jpg'
+                                }
+                            ]}
+                            let:item
+                        >
+                            <div class="command__image">
+                                <img  src={item.src} alt="" />
+                            </div>
+                        </Carousel>
+                    </div>
+                {/if}
             </div>
         </div>
     </div>
@@ -235,7 +262,7 @@
                     @barvinvinvin
                 </a>
             </p>
-            <p class="bars__text -mt-[16px]">
+            <p class="bars__text alg:-mt-[16px] amd:-mt-[3px] -mt-[3px]">
                 Que serions-nous sans les bars à vins électrisants et les restos renversants de notre ville ? Ces lieux
                 donnent vie à nos bouteilles — un verre à la fois.
             </p>
@@ -365,7 +392,7 @@
         &__images {
             display: flex;
             gap: 16px;
-            padding: 32px;
+            padding: 154px 30px 33px 33px;
             background: #f15a38;
             position: relative;
             margin-top: 32px;
@@ -709,6 +736,23 @@
             }
             &__text {
                 font-size: 35px;
+            }
+            &__images {
+                padding: 20px 0 30px 20px;
+                .command__image:nth-child(1) img {
+                    width: 181px;
+                    background-repeat: no-repeat;
+                }
+                .command__image:nth-child(2) img {
+                    background-repeat: no-repeat;
+                    width: 118px;
+                }
+                .command__image:nth-child(3) img {
+                    width: 245px;
+                }
+                .command__image:nth-child(4) img {
+                    width: 180px;
+                }
             }
         }
         .bars {

@@ -1,3 +1,4 @@
+<!--Carousel.svelte-->
 <script lang="ts" context="module">
     export type Item = {
         src: string;
@@ -43,7 +44,11 @@
 
 <style lang="scss">
     :global(.slidy .slidy-slide) {
+        gap: 0 !important;
         align-items: flex-start !important;
         justify-content: flex-start;
+    }
+    :global(.slidy) {
+        gap: 0 !important;
     }
 </style>
