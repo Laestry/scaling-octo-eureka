@@ -159,15 +159,14 @@
     </div>
 {:else}
     <div
-        class="backdrops"
+        class="backdrops justify-center"
         class:backdrops--1={backdrop === 'main'}
         class:backdrops--2={backdrop === 'associes'}
         class:backdrops--3={backdrop === 'vision'}
     >
         <div
             class="absolute top-0 left-2/4 translate-x-[-50%] z-10
-
-      flex flex-col lg:h-[176px] items-center lg:w-[1136px] md:w-[680px] w-[300px]"
+                   flex flex-col lg:h-[176px] items-center lg:w-[1136px] md:w-[680px] w-[300px]"
             style="--dynamic-color: {computedColor}; color: var(--dynamic-color);"
         >
             <a id="logo" href="/" class="md:self-center self-start">
@@ -216,17 +215,19 @@
             </div>
         </div>
 
-        {#if backdrop}
-            <a href="/" class="backdrop backdrop--1" aria-label="Go to home page">
-                <span class="sr-only">Home</span>
-            </a>
-            <a href="/associes" class="backdrop backdrop--2" aria-label="Go to associates page">
-                <span class="sr-only">Associés</span>
-            </a>
-            <a href="/vision" class="backdrop backdrop--3" aria-label="Go to vision page">
-                <span class="sr-only">Vision</span>
-            </a>
-        {/if}
+        <div class="m-x-auto">
+            {#if backdrop}
+                <a href="/" class="backdrop backdrop--1" aria-label="Go to home page">
+                    <span class="sr-only">Home</span>
+                </a>
+                <a href="/associes" class="backdrop backdrop--2" aria-label="Go to associates page">
+                    <span class="sr-only">Associés</span>
+                </a>
+                <a href="/vision" class="backdrop backdrop--3" aria-label="Go to vision page">
+                    <span class="sr-only">Vision</span>
+                </a>
+            {/if}
+        </div>
     </div>
 {/if}
 
@@ -305,13 +306,14 @@
         background-image: url('/images/mainbackdrop.png');
         background-size: cover;
         background-repeat: no-repeat;
-        background-position: center bottom;
         position: absolute;
+        margin: auto;
         left: 0;
         top: 0;
         height: 100%;
         transition: 1s ease;
     }
+
     .backdrop--1 {
         transform: translateX(-140px);
         z-index: 3;
@@ -355,6 +357,9 @@
         position: relative;
         height: 772px;
         width: 100%;
+        max-width: 1512px;
+        margin: auto;
+        overflow: hidden;
         @media (max-width: 1162px) {
             height: 545px;
         }

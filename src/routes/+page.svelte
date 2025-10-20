@@ -33,7 +33,8 @@
 
         <div class="title mb-[19px]">Nos vins</div>
         <div
-            class="card__row items-start flex lg:gap-x-[16px] gap-x-[10px] md:gap-x-[11px] gap-y-[20px] lg:mb-[39px] mb-[20px] flex-wrap"
+            class="card__row items-start flex lg:gap-x-[16px] gap-x-[10px] md:gap-x-[11px] lg:mb-[39px] mb-[20px] flex-wrap
+                   lg:gap-y-[50px] md:gap-y-[40px] gap-y-[20px]"
         >
             {#each products as product, i (product.id)}
                 <ProductCard {product} size={sizeSequence1[i % sizeSequence1.length]} />
