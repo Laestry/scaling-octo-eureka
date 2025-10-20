@@ -187,7 +187,7 @@
             </div>
             <!--endregion-->
 
-            <div class="lg:w-[560px] md:w-[394px]">
+            <div class="lg:w-[560px] md:w-[442px]">
                 <!--region title-->
                 <div class="mt-[12px] flex items-end h-full">
                     <h1 class="product-name !capitalize lg:text-[42px] text-2xl">{product.name}</h1>
@@ -205,7 +205,7 @@
                 </div>
                 <!--endregion-->
 
-                <div class="flex flex-col lg:w-[560px] md:w-[380px] h-full">
+                <div class="flex flex-col lg:w-[560px] md:w-[442px] h-full">
                     <!--region description-->
                     <div class="product-description mt-4 h-[141px] w-full pr-[15px]">
                         <Svroller width="100%" height="100%" margin={{ right: -15 }} alwaysVisible>
@@ -220,7 +220,7 @@
                             <!--                            left-->
                             <div
                                 class="flex flex-col border-r-[1px] border-r-[#E859EB]
-                                        lg:w-[279px] md:w-[235px] w-[186px]"
+                                        lg:w-[380px] md:w-[235px] w-[186px]"
                             >
                                 <p class="border-b border-wred lg:h-[32px] h-[28px] capitalize flex items-center">
                                     {product.category && product.specific_category ? getCategory(product) : '-'}
@@ -350,7 +350,7 @@
     <!--region  suggestions-->
     <div class="mt-[20px] flex flex-col lg:gap-[22px] gap-[10px]">
         {#if sameProducerProducts && sameProducerProducts.length > 0}
-            <Accordion title="Du même producteur">
+            <Accordion title="Du même producteur" closed={false}>
                 {#each sameProducerProducts as producerProduct}
                     <ProductCard product={producerProduct} size="m" />
                 {/each}
@@ -358,7 +358,7 @@
         {/if}
 
         {#if sameRegionProducts && sameRegionProducts.length > 0}
-            <Accordion title="De la même région">
+            <Accordion title="De la même région" closed={false}>
                 {#each sameRegionProducts as regionProduct}
                     <ProductCard product={regionProduct} size="m" />
                 {/each}
@@ -373,6 +373,11 @@
 {/if}
 
 <style lang="scss">
+    @media (max-width: 1136px) {
+    }
+    @media (max-width: 760px) {
+    }
+
     .product-name {
         color: var(--WARD-RED, #f15a38);
         font-family: Riposte;
@@ -380,11 +385,6 @@
         font-style: normal;
         font-weight: 400;
         line-height: 42px;
-    }
-
-    @media (max-width: 1136px) {
-    }
-    @media (max-width: 760px) {
     }
 
     .question {
