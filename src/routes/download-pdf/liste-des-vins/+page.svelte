@@ -31,14 +31,14 @@
     });
 </script>
 
-<button
-    class="!cursor-pointer"
-    on:click={() => {
-        handleGetPDF(`Ward&Associés liste des vins`);
-    }}
->
-    Download PDF
-</button>
+<!--<button-->
+<!--    class="!cursor-pointer"-->
+<!--    on:click={() => {-->
+<!--        handleGetPDF(`Ward&Associés liste des vins`);-->
+<!--    }}-->
+<!--&gt;-->
+<!--    Download PDF-->
+<!--</button>-->
 
 <div id="pdf">
     {#each productsList as p}

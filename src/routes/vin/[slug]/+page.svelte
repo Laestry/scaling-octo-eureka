@@ -190,7 +190,7 @@
             <div class="lg:w-[560px] md:w-[394px]">
                 <!--region title-->
                 <div class="mt-[12px] flex items-end h-full">
-                    <h1 class="product-name lg:text-[42px] text-2xl">{product.name}</h1>
+                    <h1 class="product-name !capitalize lg:text-[42px] text-2xl">{product.name}</h1>
                 </div>
                 <!--endregion-->
 

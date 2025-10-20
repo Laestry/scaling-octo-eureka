@@ -341,7 +341,7 @@
             font-style: normal;
             font-weight: 400;
             line-height: 150%; /* 18px */
-            text-transform: capitalize;
+            text-transform: capitalize c;
 
             b {
                 font-weight: 700;
@@ -401,7 +401,7 @@
             font-style: normal;
             font-weight: 400;
             line-height: 150%; /* 18px */
-            text-transform: capitalize;
+            text-transform: capitalize !important;
 
             b {
                 font-weight: 700;

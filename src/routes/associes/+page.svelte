@@ -6,6 +6,21 @@
     console.log('data', data);
     let associes = data.suppliers;
     let carouselIndex = 0;
+
+    let suivezMobileSlideImages = [
+        {
+            src: '/images/associes-img-09.jpg'
+        },
+        {
+            src: '/images/associes-img-10.jpg'
+        },
+        {
+            src: '/images/associes-img-11.jpg'
+        },
+        {
+            src: '/images/associes-img-12.jpg'
+        }
+    ];
 </script>
 
 <div class="about">
@@ -38,7 +53,7 @@
         </div>
         <div class="about__images">
             <div class="about__image">
-                <img src="/images/associes-img-01.jpg" alt="" />
+                <img src="/images/associes/nos-producteurs/associes-img-01.png" alt="" />
                 <p class="about__caption">
                     <b>Bianca & Daniel Schmitt</b> <br /> Country
                 </p>
@@ -135,42 +150,28 @@
                 des moments forts, et toujours une bonne raison d’avoir soif.
             </p>
         </div>
-        <div class="command__images command__images--pc">
-            <div class="command__image">
-                <img src="/images/associes-img-09.jpg" alt="" />
-            </div>
-            <div class="command__image">
-                <img src="/images/associes-img-10.jpg" alt="" />
-            </div>
-            <div class="command__image">
-                <img src="/images/associes-img-11.jpg" alt="" />
-            </div>
-            <div class="command__image">
-                <img src="/images/associes-img-12.jpg" alt="" />
-            </div>
-        </div>
-        <div class="command_carousel command__images--mobile">
-            <Carousel
-                slides={[
-                    {
-                        src: '/images/associes-img-09.jpg'
-                    },
-                    {
-                        src: '/images/associes-img-10.jpg'
-                    },
-                    {
-                        src: '/images/associes-img-11.jpg'
-                    },
-                    {
-                        src: '/images/associes-img-12.jpg'
-                    }
-                ]}
-                let:item
-            >
+        <div class="command__images ">
+            <div class="command__images--pc">
                 <div class="command__image">
-                    <img src={item.src} alt="" />
+                    <img src="/images/associes-img-09.jpg" alt="" />
                 </div>
-            </Carousel>
+                <div class="command__image">
+                    <img src="/images/associes-img-10.jpg" alt="" />
+                </div>
+                <div class="command__image">
+                    <img src="/images/associes-img-11.jpg" alt="" />
+                </div>
+                <div class="command__image">
+                    <img src="/images/associes-img-12.jpg" alt="" />
+                </div>
+            </div>
+            <div class="command__images--mobile overflow-x-auto">
+                {#each suivezMobileSlideImages as item}
+                    <div class="command__image">
+                        <img src={item.src} alt="" />
+                    </div>
+                {/each}
+            </div>
         </div>
     </div>
 </div>
@@ -179,40 +180,43 @@
     <div class="container">
         <div class="bars__row">
             <div>
-                <p class="bars__title">Vinvinvin</p>
-                <a target="_blank" href="https://www.instagram.com/barvinvinvin" class="text-wblue">@barvinvinvin</a>
+                <p class="bars__title">Bars à Vins</p>
             </div>
 
             <div class="bars__controlls">
                 <button class="bars__button bars__button--prev" on:click={() => carouselIndex--}>
-                    <IconArrow2></IconArrow2>
+                    <IconArrow2 />
                 </button>
                 <button class="bars__button bars__button--next" on:click={() => carouselIndex++}>
-                    <IconArrow2></IconArrow2>
+                    <IconArrow2 />
                 </button>
             </div>
         </div>
         <Carousel
             slides={[
                 {
-                    src: 'https://scontent-atl3-1.cdninstagram.com/v/t51.82787-15/559168258_18145147384418831_1253050978144655134_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=103&ig_cache_key=MzczNDYzMDkxMzAwODU2OTgzMQ%3D%3D.3-ccb1-7&ccb=1-7&_nc_sid=58cdad&efg=eyJ2ZW5jb2RlX3RhZyI6InhwaWRzLjE0NDB4MTkxOS5zZHIuQzMifQ%3D%3D&_nc_ohc=8e2m8tDYzdEQ7kNvwHTwZlY&_nc_oc=AdmKzRY22JervJoOc8WZeMZvdulwjwm5sLxHYMN26qufQiH9VhKCPeNNKDDevAXz_xM&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent-atl3-1.cdninstagram.com&_nc_gid=-uL7Z5NfFqxo0e8KIS4dlA&oh=00_AfeVayVxR4e9R_x1uLymRjg7Hh_PZrTBOgRaEabFkZfp0Q&oe=68E5DD6B',
-                    name: 'Nouveautés ⚡️💧'
+                    src: '/images/associes/bars-a-vins/associes-img-13.jpg',
+                    name: ''
                 },
                 {
-                    src: 'https://scontent-atl3-2.cdninstagram.com/v/t51.82787-15/542862192_18142816735418831_5704153725087812167_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=104&ig_cache_key=MzcxNzk4MDAwMTIyNTc0MDk1Ng%3D%3D.3-ccb1-7&ccb=1-7&_nc_sid=58cdad&efg=eyJ2ZW5jb2RlX3RhZyI6InhwaWRzLjE0NDB4MTgwMC5zZHIuQzMifQ%3D%3D&_nc_ohc=1G75Rf_cGkYQ7kNvwGMhwiv&_nc_oc=AdmKsW3p6t2zC8dH9lqA-wb0mn2TTVEGrrgvqrTlYAiWyCwEH4vWXKucht7XaIRBFeM&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent-atl3-2.cdninstagram.com&_nc_gid=-uL7Z5NfFqxo0e8KIS4dlA&oh=00_AfeziUvE_XjnFGNnMvHAAvunjpfj13gi8n20bsn7kRUrww&oe=68E5B7B4',
-                    name: `@drinksfarm @zamalekmontreal @rhubarbalade`
+                    src: '/images/associes/bars-a-vins/associes-img-14.jpg',
+                    name: ``
                 },
                 {
-                    src: 'https://scontent-atl3-3.cdninstagram.com/v/t51.82787-15/539637202_18141733015418831_5563948629792029042_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=108&ig_cache_key=MzcwOTI4MTg5NjA5NTYzMzYyMQ%3D%3D.3-ccb1-7&ccb=1-7&_nc_sid=58cdad&efg=eyJ2ZW5jb2RlX3RhZyI6InhwaWRzLjE0NDB4MTQ0MC5zZHIuQzMifQ%3D%3D&_nc_ohc=rBl24xkw-0oQ7kNvwEvgzkG&_nc_oc=AdnXcKj3paGEmkkmwcB2ZoWseCCKGwjkrZjiNoXPdXSIxrVchckM5ZZXzNdeRHebzBM&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent-atl3-3.cdninstagram.com&_nc_gid=-uL7Z5NfFqxo0e8KIS4dlA&oh=00_Afd5VxdmodwSY2Cn6P0jtNcWD4sCQpy4QhJ1HDvHNHYMVg&oe=68E5ECC2',
-                    name: 'Les nouveautés de la semaine sont la 🏎️'
+                    src: '/images/associes/bars-a-vins/associes-img-15.jpg',
+                    name: ''
                 },
                 {
-                    src: 'https://scontent-atl3-3.cdninstagram.com/v/t51.82787-15/537408753_18141091201418831_5405523669079807884_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=108&ig_cache_key=MzcwNDIzMDQ4OTI4MTE4ODczOA%3D%3D.3-ccb1-7&ccb=1-7&_nc_sid=58cdad&efg=eyJ2ZW5jb2RlX3RhZyI6InhwaWRzLjE0NDB4MTkxNy5zZHIuQzMifQ%3D%3D&_nc_ohc=1tzp-1Oosn8Q7kNvwFOAk6d&_nc_oc=Adm40gGtJEOZrSZzqQYArDYxIvbe8Ehja0ZYyXJcDkENWdABE5Ifyx7IVTAEHatrUgA&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent-atl3-3.cdninstagram.com&_nc_gid=WfPI0X7r2VO9dg2r4ZtJxA&oh=00_AfdrJ4HfPCx2kzcS2SBaSpNyj-vY2xN5Oq7-jJpPjzTWXQ&oe=68E5C967',
-                    name: 'Fait beau, on a des nouveaux vins, à tantôt 😎'
+                    src: '/images/associes/bars-a-vins/associes-img-13.jpg',
+                    name: ''
                 },
                 {
-                    src: 'https://scontent-atl3-3.cdninstagram.com/v/t51.82787-15/522696338_18138357070418831_1109640068674030612_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=110&ig_cache_key=MzY4MzIyNzU3Mzg2NzE5MDUxOA%3D%3D.3-ccb1-7&ccb=1-7&_nc_sid=58cdad&efg=eyJ2ZW5jb2RlX3RhZyI6InhwaWRzLjE0NDB4MTkxOC5zZHIuQzMifQ%3D%3D&_nc_ohc=jbhCYsmX_3QQ7kNvwHpkIio&_nc_oc=Adl4HfQVBCr4VhlBEr1cNMmOpIFxjylQlWS0Q82QGK-jF0CZajatKB7Ph-BHwm8-M1A&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent-atl3-3.cdninstagram.com&_nc_gid=WfPI0X7r2VO9dg2r4ZtJxA&oh=00_AfdeYf_fHe9F8Rwj1ldHGubXfqnF5BFjwQva1APY8_etsg&oe=68E5D034',
-                    name: 'cuisine ouverte 7/7 jusqu’à 23h00 gnumgnumgnum🌝'
+                    src: '/images/associes/bars-a-vins/associes-img-14.jpg',
+                    name: ``
+                },
+                {
+                    src: '/images/associes/bars-a-vins/associes-img-15.jpg',
+                    name: ''
                 }
             ]}
             bind:current={carouselIndex}
@@ -226,8 +230,12 @@
             </div>
         </Carousel>
         <div class="bars__footer">
-            <p class="bars__small-title">Découvrez nos vins à travers la ville.</p>
-            <p class="bars__text">
+            <p class="bars__small-title">
+                Vinvinvin <a target="_blank" href="https://www.instagram.com/barvinvinvin" class="text-wblue">
+                    @barvinvinvin
+                </a>
+            </p>
+            <p class="bars__text -mt-[16px]">
                 Que serions-nous sans les bars à vins électrisants et les restos renversants de notre ville ? Ces lieux
                 donnent vie à nos bouteilles — un verre à la fois.
             </p>
@@ -307,6 +315,9 @@
                 transform: scaleX(-1);
             }
         }
+        &__title {
+            font-size: 30px;
+        }
     }
     .command {
         position: relative;
@@ -362,11 +373,6 @@
             &--mobile {
                 display: none;
             }
-        }
-        &_carousel {
-            background: #f15a38;
-            position: relative;
-            margin-top: 32px;
         }
     }
     .agency {
@@ -890,7 +896,7 @@
             &__images {
                 margin-top: 40px;
                 padding: 11px 18px 20px;
-                flex-direction: column;
+                flex-direction: row;
                 gap: 10px;
                 &--pc {
                     display: none;
@@ -899,12 +905,6 @@
                     display: flex;
                 }
             }
-            // &__controlls {
-            //     display: flex;
-            //     align-items: center;
-            //     gap: 18px;
-            //     margin-left: 250px;
-            // }
             &__image {
                 max-width: 196px !important;
                 min-width: 196px !important;
