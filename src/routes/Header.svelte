@@ -34,19 +34,19 @@
             switch (currentPath) {
                 case '/':
                     backdrop = 'main';
-                    computedColor = '#DE6643';
+                    // computedColor = '#F15A38';
                     break;
                 case '/associes':
                     backdrop = 'associes';
-                    computedColor = '#FFFFFF';
+                    // computedColor = '#FFFFFF';
                     break;
                 case '/vision':
                     backdrop = 'vision';
-                    computedColor = '#FFFFFF';
+                    // computedColor = '#FFFFFF';
                     break;
                 default:
                     backdrop = undefined;
-                    computedColor = '#000000';
+                // computedColor = '#000000';
             }
         }
     }
@@ -75,7 +75,7 @@
     <div
         class="fixed flex justify-end items-center pointer-events-none
         lg:w-[1136px] md:w-[760px] w-[300px]
-        md:mt-8 mt-2.5
+        lg:mt-[65px] md:mt-8 mt-2.5
         md:gap-1 gap-2.5"
         style="z-index: 10000"
     >
@@ -111,9 +111,42 @@
     </div>
 </div>
 
+<div class="lg:flex hidden mx-auto h-[142px] w-[1136px] pl-[10px]">
+    <a id="logo" href="/">
+        <Logo
+            color="var(--red)"
+            class="abutton
+                       w-[112px] h-[85px]
+                       mt-6"
+        />
+    </a>
+
+    <div class="ml-[166px] flex gap-[16px] mt-[57px] justify-between header-products-links">
+        <a
+            class="abutton header-links"
+            style="color: var(--red);"
+            href="/associes"
+            class:active={backdrop === 'associes'}
+        >
+            Associés
+        </a>
+        <a class="abutton header-links" style="color: var(--red);" href="/vision" class:active={backdrop === 'vision'}>
+            Vision
+        </a>
+        <a
+            class="abutton header-links"
+            style="color: var(--red);"
+            href="/vins"
+            class:active={$page.url.pathname === '/vins'}
+        >
+            Vins
+        </a>
+    </div>
+</div>
+
 <!--navlinks-->
 {#if $page.url.pathname === '/cart' || $page.url.pathname.startsWith('/vin')}
-    <div class="w-full flex justify-center">
+    <div class="lg:hidden w-full flex justify-center">
         <div class="lg:w-[1136px] md:w-[760px] w-[300px] flex flex-col md:items-center">
             <a id="logo" href="/">
                 <Logo
@@ -169,7 +202,7 @@
                    flex flex-col lg:h-[176px] items-center lg:w-[1136px] md:w-[680px] w-[300px]"
             style="--dynamic-color: {computedColor}; color: var(--dynamic-color);"
         >
-            <a id="logo" href="/" class="md:self-center self-start">
+            <a id="logo" href="/" class="lg:hidden md:self-center self-start">
                 <Logo
                     color={computedColor}
                     class="abutton
@@ -181,7 +214,7 @@
             </a>
 
             <div
-                class="flex uppercase items-center flex-1
+                class="lg:hidden flex uppercase items-center flex-1
                 lg:h-[96px] h-auto
                 lg:mt-[22px] md:mt-[20px] mt-[20px] mt-[148px]"
                 style="--dynamic-color: {computedColor}; color: var(--dynamic-color);"
