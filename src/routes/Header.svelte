@@ -111,8 +111,9 @@
     </div>
 </div>
 
+<div id="logo"></div>
 <div class="lg:flex hidden mx-auto h-[142px] w-[1136px] pl-[10px]">
-    <a id="logo" href="/">
+    <a href="/">
         <Logo
             color="var(--red)"
             class="abutton
@@ -148,7 +149,7 @@
 {#if $page.url.pathname === '/cart' || $page.url.pathname.startsWith('/vin')}
     <div class="lg:hidden w-full flex justify-center">
         <div class="lg:w-[1136px] md:w-[760px] w-[300px] flex flex-col md:items-center">
-            <a id="logo" href="/">
+            <a href="/">
                 <Logo
                     color={computedColor}
                     class="abutton
@@ -202,7 +203,7 @@
                    flex flex-col lg:h-[176px] items-center lg:w-[1136px] md:w-[680px] w-[300px]"
             style="--dynamic-color: {computedColor}; color: var(--dynamic-color);"
         >
-            <a id="logo" href="/" class="lg:hidden md:self-center self-start">
+            <a href="/" class="lg:hidden md:self-center self-start">
                 <Logo
                     color={computedColor}
                     class="abutton
