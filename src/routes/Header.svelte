@@ -112,37 +112,50 @@
 </div>
 
 <div id="logo"></div>
-<div class="lg:flex hidden mx-auto h-[142px] w-[1136px] pl-[10px]">
-    <a href="/">
-        <Logo
-            color="var(--red)"
-            class="abutton
+<div class="lg:flex flex-col hidden mx-auto w-[1136px]">
+    <div class="flex h-[142px]">
+        <a href="/" class="ml-[10px]">
+            <Logo
+                color="var(--red)"
+                class="abutton
                        w-[112px] h-[85px]
                        mt-6"
-        />
-    </a>
+            />
+        </a>
 
-    <div class="ml-[166px] flex gap-[16px] mt-[57px] justify-between header-products-links">
-        <a
-            class="abutton header-links"
-            style="color: var(--red);"
-            href="/associes"
-            class:active={backdrop === 'associes'}
-        >
-            Associés
-        </a>
-        <a class="abutton header-links" style="color: var(--red);" href="/vision" class:active={backdrop === 'vision'}>
-            Vision
-        </a>
-        <a
-            class="abutton header-links"
-            style="color: var(--red);"
-            href="/vins"
-            class:active={$page.url.pathname === '/vins'}
-        >
-            Vins
-        </a>
+        <div class="ml-[166px] flex gap-[16px] mt-[57px] justify-between header-products-links">
+            <a
+                class="abutton header-links"
+                style="color: var(--red);"
+                href="/associes"
+                class:active={backdrop === 'associes'}
+            >
+                Associés
+            </a>
+            <a
+                class="abutton header-links"
+                style="color: var(--red);"
+                href="/vision"
+                class:active={backdrop === 'vision'}
+            >
+                Vision
+            </a>
+            <a
+                class="abutton header-links"
+                style="color: var(--red);"
+                href="/vins"
+                class:active={$page.url.pathname === '/vins'}
+            >
+                Vins
+            </a>
+        </div>
     </div>
+
+    {#if $page.url.pathname === '/cart'}
+        <div class="header-products-links !text-black w-full border-t border-wblack text-center mb-[105px]">
+            Panier d’achat
+        </div>
+    {/if}
 </div>
 
 <!--navlinks-->

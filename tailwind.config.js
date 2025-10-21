@@ -22,6 +22,7 @@ module.exports = {
                 wblue50: 'rgba(55, 119, 188, 0.5)',
                 wblack20: 'rgba(24, 28, 28, 0.2)',
                 wblack50: 'rgba(24, 28, 28, 0.5)',
+                wblack: 'rgba(24, 28, 28, 1)',
                 wwhite60: 'rgba(246, 241, 242, 0.6)',
                 wred20: 'rgba(241, 90, 56, 0.2)',
                 primary: '#0d99ff',

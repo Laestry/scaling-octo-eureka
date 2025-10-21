@@ -93,7 +93,7 @@
 
         // If any input returns an error (non-empty string), don't submit.
         if (errors.some((valid) => valid === false)) {
-            goto('#logo');
+            goto('#userdata');
 
             errorMessage = 'Veuillez corriger les champs invalides.';
             console.error('Validation errors:', errors);
@@ -224,81 +224,83 @@
     <div class="lg:w-[1136px] md:w-[760px] w-[300px]">
         {#if isFinalize}
             <div transition:fly={{ y: -100, duration: 300 }}>
-                <div class="flex gap-4 w-full mb-4">
-                    <div class="text-base text-nowrap w-[176px]">Votre Courriel</div>
+                <!--region login-->
+                <!--                <div class="flex gap-4 w-full mb-4">-->
+                <!--                    <div class="text-base text-nowrap w-[176px]">Votre Courriel</div>-->
 
-                    <form class="flex flex-1 flex-wrap gap-y-2 gap-x-4">
-                        <div>
-                            <Input
-                                bind:this={emailAccountInput}
-                                bind:value={emailAccount}
-                                type="email"
-                                autocomplete="email"
-                                class="lg:w-[268px] w-full"
-                                placeholder="Courriel"
-                                hint="Courriel valide requis"
-                                validate={{
-                                    type: 'string',
-                                    pattern: '^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$',
-                                    maxLength: 254
-                                }}
-                            />
-                            {#if foundContact || register}
-                                <button class="underline text-wblue text-xs" on:click={() => (register = !register)}>
-                                    I want to check another email
-                                </button>
-                            {/if}
-                        </div>
-                        {#if foundAccount}
-                            <Input
-                                bind:this={passwordAccountInput}
-                                bind:value={passwordAccount}
-                                type="password"
-                                autocomplete="password"
-                                class="lg:max-w-[268px] w-full"
-                                placeholder="Mot de passe"
-                                hint="Mot de passe"
-                                validate={{
-                                    type: 'string',
-                                    pattern: '',
-                                    maxLength: 254
-                                }}
-                            />
-                        {:else if foundContact || register}
-                            <Input
-                                bind:this={passwordAccountInput}
-                                bind:value={passwordAccount}
-                                type="password"
-                                autocomplete="new-password"
-                                class="lg:max-w-[268px] w-full"
-                                placeholder="Nouveau mot de passe"
-                                hint="Mot de passe"
-                                validate={{
-                                    type: 'string',
-                                    pattern: '',
-                                    maxLength: 254
-                                }}
-                            />
-                        {/if}
+                <!--                    <form class="flex flex-1 flex-wrap gap-y-2 gap-x-4">-->
+                <!--                        <div>-->
+                <!--                            <Input-->
+                <!--                                bind:this={emailAccountInput}-->
+                <!--                                bind:value={emailAccount}-->
+                <!--                                type="email"-->
+                <!--                                autocomplete="email"-->
+                <!--                                class="lg:w-[268px] w-full"-->
+                <!--                                placeholder="Courriel"-->
+                <!--                                hint="Courriel valide requis"-->
+                <!--                                validate={{-->
+                <!--                                    type: 'string',-->
+                <!--                                    pattern: '^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$',-->
+                <!--                                    maxLength: 254-->
+                <!--                                }}-->
+                <!--                            />-->
+                <!--                            {#if foundContact || register}-->
+                <!--                                <button class="underline text-wblue text-xs" on:click={() => (register = !register)}>-->
+                <!--                                    I want to check another email-->
+                <!--                                </button>-->
+                <!--                            {/if}-->
+                <!--                        </div>-->
+                <!--                        {#if foundAccount}-->
+                <!--                            <Input-->
+                <!--                                bind:this={passwordAccountInput}-->
+                <!--                                bind:value={passwordAccount}-->
+                <!--                                type="password"-->
+                <!--                                autocomplete="password"-->
+                <!--                                class="lg:max-w-[268px] w-full"-->
+                <!--                                placeholder="Mot de passe"-->
+                <!--                                hint="Mot de passe"-->
+                <!--                                validate={{-->
+                <!--                                    type: 'string',-->
+                <!--                                    pattern: '',-->
+                <!--                                    maxLength: 254-->
+                <!--                                }}-->
+                <!--                            />-->
+                <!--                        {:else if foundContact || register}-->
+                <!--                            <Input-->
+                <!--                                bind:this={passwordAccountInput}-->
+                <!--                                bind:value={passwordAccount}-->
+                <!--                                type="password"-->
+                <!--                                autocomplete="new-password"-->
+                <!--                                class="lg:max-w-[268px] w-full"-->
+                <!--                                placeholder="Nouveau mot de passe"-->
+                <!--                                hint="Mot de passe"-->
+                <!--                                validate={{-->
+                <!--                                    type: 'string',-->
+                <!--                                    pattern: '',-->
+                <!--                                    maxLength: 254-->
+                <!--                                }}-->
+                <!--                            />-->
+                <!--                        {/if}-->
 
-                        <button
-                            on:click={handleCheckForAccount}
-                            class="abutton bg-wred text-white text-base w-fit rounded-3xl px-[6px] h-[32px]"
-                        >
-                            {#if foundContact || register}
-                                Create a new account with us
-                            {:else if foundAccount}
-                                Login
-                            {:else}
-                                Vérifier
-                            {/if}
-                        </button>
-                    </form>
-                </div>
+                <!--                        <button-->
+                <!--                            on:click={handleCheckForAccount}-->
+                <!--                            class="abutton bg-wred text-white text-base w-fit rounded-3xl px-[6px] h-[32px]"-->
+                <!--                        >-->
+                <!--                            {#if foundContact || register}-->
+                <!--                                Create a new account with us-->
+                <!--                            {:else if foundAccount}-->
+                <!--                                Login-->
+                <!--                            {:else}-->
+                <!--                                Vérifier-->
+                <!--                            {/if}-->
+                <!--                        </button>-->
+                <!--                    </form>-->
+                <!--                </div>-->
+                <!--endregion -->
 
                 <hr class=" mb-4 border-wpink" />
 
-                <div class="flex lg:flex-row flex-col w-full md:gap-4 gap-0" bind:this={formEl}>
+                <div id="userdata" class="flex lg:flex-row flex-col w-full md:gap-4 gap-0" bind:this={formEl}>
                     <div class="text-base text-nowrap w-[176px]">Pour la commande</div>
                     <form class="flex flex-1 flex-wrap gap-y-2 gap-x-4">
                         <Input
@@ -437,7 +439,7 @@
                         if (isFinalize) handleSubmit();
                         else {
                             isFinalize = true;
-                            goto('#logo');
+                            goto('#userdata');
                         }
                     }}
                 >
