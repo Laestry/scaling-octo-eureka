@@ -157,7 +157,6 @@
         }
     }
 
-    let isFinalize = false;
     let emailAccount: string;
     let emailAccountInput: Input;
     let existingAccount;
@@ -166,7 +165,7 @@
     let foundContact: boolean = false;
     let checked: boolean = false;
     let checking: boolean = false;
-
+    let isFinalize = false;
     async function handleCheckForAccount() {
         checking = true;
         register = false;
@@ -301,7 +300,7 @@
                 <hr class=" mb-4 border-wpink" />
 
                 <div id="userdata" class="flex lg:flex-row flex-col w-full md:gap-4 gap-0" bind:this={formEl}>
-                    <div class="text-base text-nowrap w-[176px]">Pour la commande</div>
+                    <div class="text-base text-nowrap w-[176px] md:mb-0 mb-2">Pour la commande</div>
                     <form class="flex flex-1 flex-wrap gap-y-2 gap-x-4">
                         <Input
                             placeholder="Prénom"
@@ -329,7 +328,7 @@
                         />
                         <Input
                             placeholder="Ville"
-                            class="lg:max-w-[272px] lg:w-full md:min-w-0 min-w-[300px] flex-1 "
+                            class="lg:max-w-[272px] w-full md:min-w-0 min-w-[300px] flex-1 "
                             bind:this={cityInput}
                             bind:value={formData.city}
                             validate={{ type: 'string', minLength: 1, pattern: '^[\\s\\S]*$' }}
@@ -337,7 +336,7 @@
                         />
                         <Input
                             placeholder="Code postal"
-                            class="lg:max-w-[176px] lg:w-full w-fit md:flex-none flex-1 "
+                            class="lg:max-w-[176px] lg:w-full md:w-fit w-full md:flex-none flex-1 "
                             bind:this={postalCodeInput}
                             bind:value={formData.postalCode}
                             validate={{ type: 'string', minLength: 5, pattern: '^[\\s\\S]*$' }}
@@ -353,7 +352,7 @@
                         />
                         <Input
                             placeholder="Courriel"
-                            class="lg:max-w-[268px] lg:w-full flex-1 "
+                            class="lg:max-w-[268px] w-full flex-1 "
                             bind:this={emailInput}
                             bind:value={formData.email}
                             validate={{
@@ -390,9 +389,9 @@
             </div>
         {/if}
 
-        <hr class={isFinalize ? 'md:mt-[18px] mt-[0px]' : ''} />
+        <hr class="md:block hidden {isFinalize ? 'md:mt-[18px] mt-[0px] ' : ''}" />
         <div class="">
-            <div class="  flex lg:flex-col lg:gap-0 flex-wrap gap-2 justify-between">
+            <div class="  flex lg:flex-col lg:gap-0 flex-wrap md:gap-2 gap-5 justify-between">
                 {#each $cart as item}
                     {#key item.id}
                         <div transition:fade>

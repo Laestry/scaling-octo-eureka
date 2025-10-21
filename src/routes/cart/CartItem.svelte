@@ -142,7 +142,7 @@
     </div>
 
     <!-- mobile -->
-    <div class="cartProduct lg:hidden flex" transition:fade>
+    <div class="cartProduct lg:hidden flex !w-[220px]" transition:fade>
         <button class="flex justify-end" on:click={goToProduct}>
             <div class="absolute">
                 <button
@@ -184,10 +184,9 @@
             <b class="truncate w-full">{product.name || '-'}</b>
             <div class="w-full flex">
                 <div class="truncate" style="max-width: calc(100% - 37px)">{product.provider_display_name ?? ''}</div>
-                <span
-                    >{#if product.provider_display_name && selectedBatch?.vintage},{/if}{selectedBatch?.vintage ??
-                        ''}</span
-                >
+                <span>
+                    {#if product.provider_display_name && selectedBatch?.vintage},{/if}{selectedBatch?.vintage ?? ''}
+                </span>
             </div>
         </a>
         <div class="flex justify-between items-end w-full">
@@ -196,7 +195,7 @@
                 {product.volume}
             </a>
 
-            <div class="flex items-center w-fit h-fit self-end">
+            <div class="flex items-center w-fit h-fit self-end mt-2">
                 <button
                     class="abutton product-table-counter__button {$itemQuantity > 1 ? '' : '!text-gray-300'}"
                     style="line-height: 16px"
@@ -214,7 +213,8 @@
                     style="line-height: 16px"
                     disabled={isAtLimit}
                     on:click={() => cart.add(product, selectedBatch.id)}
-                    >+
+                >
+                    +
                 </button>
             </div>
         </div>
