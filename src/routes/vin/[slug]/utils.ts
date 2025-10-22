@@ -3,21 +3,32 @@ import { derived } from 'svelte/store';
 
 export const priceFormat = derived(isPrixResto, ($isPrixResto) => {
     return function (
-        { price, price_tax_in, uvc }: { price: number; price_tax_in: number; uvc: number },
+        {
+            price,
+            price_tax_in,
+            uvc,
+            isPrixResto
+        }: {
+            price: number;
+            price_tax_in: number;
+            uvc: number;
+            isPrixResto?: boolean;
+        },
         bottle: boolean = true,
         options: { none?: boolean } = {}
     ) {
-        // pick the right one
-        const p = $isPrixResto ? price_tax_in : price;
+        console.log('price:', price, 'price_tax_in:', price_tax_in);
+        const useResto = isPrixResto ?? $isPrixResto;
+        const p = useResto ? price : price_tax_in;
 
         if (options.none) {
             return `${p.toFixed(2)} $`;
         }
 
         if (bottle) {
-            return `${(p / uvc).toFixed(2)} $ / B`;
+            return `${p.toFixed(2)} $ / B`;
         } else {
-            return `${p.toFixed(2)} $ / C`;
+            return `${(p * uvc).toFixed(2)} $ / C`;
         }
     };
 });

@@ -7,6 +7,7 @@
     import { onMount, tick } from 'svelte';
     import { handleGetPDF } from '../../utils';
     import { getVinImage } from '$lib/utils/images';
+    import { isPrixResto } from '$lib/store';
     export let data;
     console.log('data', data);
     $: product = data.product;
@@ -14,9 +15,9 @@
     $: if (product) selectedBatch = getOldestBatch(product);
 
     onMount(async () => {
-        await tick();
-        await handleGetPDF(`Ward&Associés ${product.alcohol_website?.[0]?.name} fiche technique`);
-        window.close();
+        // await tick();
+        // await handleGetPDF(`Ward&Associés ${product.alcohol_website?.[0]?.name} fiche technique`);
+        // window.close();
     });
 </script>
 
@@ -55,12 +56,14 @@
                         </div>
                     </div>
                     <div class="w-[152.64px] flex flex-col items-end pt-[6px]">
+                        <div class="priceTitle">Prix Resto</div>
                         <b>
                             {$priceFormat(
                                 {
                                     price: selectedBatch.price,
                                     price_tax_in: selectedBatch.price_tax_in,
-                                    uvc: product.uvc
+                                    uvc: product.uvc,
+                                    isPrixResto: true
                                 },
                                 true
                             )}
@@ -70,7 +73,31 @@
                                 {
                                     price: selectedBatch.price,
                                     price_tax_in: selectedBatch.price_tax_in,
-                                    uvc: product.uvc
+                                    uvc: product.uvc,
+                                    isPrixResto: true
+                                },
+                                false
+                            )}
+                        </b>
+                        <div class="priceTitle mt-[5px]">Prix Perso</div>
+                        <b>
+                            {$priceFormat(
+                                {
+                                    price: selectedBatch.price,
+                                    price_tax_in: selectedBatch.price_tax_in,
+                                    uvc: product.uvc,
+                                    isPrixResto: false
+                                },
+                                true
+                            )}
+                        </b>
+                        <b>
+                            {$priceFormat(
+                                {
+                                    price: selectedBatch.price,
+                                    price_tax_in: selectedBatch.price_tax_in,
+                                    uvc: product.uvc,
+                                    isPrixResto: false
                                 },
                                 false
                             )}
@@ -114,5 +141,16 @@
         font-size: 11.52px;
         line-height: 120%;
         letter-spacing: 0%;
+    }
+
+    .priceTitle {
+        font-family: Riposte;
+        font-weight: 400;
+        font-style: Regular;
+        font-size: 8px;
+        leading-trim: NONE;
+        line-height: 120%;
+        letter-spacing: 0%;
+        text-align: right;
     }
 </style>
