@@ -34,19 +34,19 @@
             switch (currentPath) {
                 case '/':
                     backdrop = 'main';
-                    // computedColor = '#F15A38';
+                    computedColor = '#F15A38';
                     break;
                 case '/associes':
                     backdrop = 'associes';
-                    // computedColor = '#FFFFFF';
+                    computedColor = '#FFFFFF';
                     break;
                 case '/vision':
                     backdrop = 'vision';
-                    // computedColor = '#FFFFFF';
+                    computedColor = '#FFFFFF';
                     break;
                 default:
                     backdrop = undefined;
-                // computedColor = '#000000';
+                    computedColor = '#000000';
             }
         }
     }

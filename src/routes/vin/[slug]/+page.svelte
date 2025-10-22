@@ -223,7 +223,7 @@
                             <!--                            left-->
                             <div
                                 class="flex flex-col border-r-[1px] border-r-[#DA5899]
-                                        lg:w-[380px] md:w-[235px] w-[186px]"
+                                        lg:w-[380px] md:w-[302px] w-[186px]"
                             >
                                 <p class="border-b border-wred lg:h-[32px] h-[28px] capitalize flex items-center">
                                     {product.category && product.specific_category ? getCategory(product) : '-'}
