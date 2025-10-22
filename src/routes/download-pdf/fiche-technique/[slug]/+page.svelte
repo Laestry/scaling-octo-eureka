@@ -15,9 +15,9 @@
     $: if (product) selectedBatch = getOldestBatch(product);
 
     onMount(async () => {
-        // await tick();
-        // await handleGetPDF(`Ward&Associés ${product.alcohol_website?.[0]?.name} fiche technique`);
-        // window.close();
+        await tick();
+        await handleGetPDF(`Ward&Associés ${product.alcohol_website?.[0]?.name} fiche technique`);
+        window.close();
     });
 </script>
 

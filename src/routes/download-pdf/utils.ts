@@ -23,6 +23,7 @@ export async function handleGetPDF(fileName) {
         jsPDF: { unit: 'pt', format: 'letter', orientation: 'portrait' } // enable compression
     };
 
+    await waitForImages(el);
     await html2pdf()
         .set(opt)
         .from(el)
@@ -32,4 +33,17 @@ export async function handleGetPDF(fileName) {
             if (pdf.getNumberOfPages() > 1) pdf.deletePage(1);
         })
         .save();
+}
+
+async function waitForImages(el) {
+    const imgs = el.querySelectorAll('img');
+    await Promise.all(
+        [...imgs].map((img) =>
+            img.complete
+                ? Promise.resolve()
+                : new Promise((resolve) => {
+                      img.onload = img.onerror = resolve;
+                  })
+        )
+    );
 }
