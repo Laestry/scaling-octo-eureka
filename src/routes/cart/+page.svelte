@@ -89,7 +89,7 @@
         errors.push(postalCodeInput.handleValidate());
         errors.push(phoneInput.handleValidate());
         errors.push(emailInput.handleValidate());
-        // errors.push(saqSelect.handleValidate());
+        errors.push(saqSelect.handleValidate());
 
         // If any input returns an error (non-empty string), don't submit.
         if (errors.some((valid) => valid === false)) {
@@ -165,7 +165,7 @@
     let foundContact: boolean = false;
     let checked: boolean = false;
     let checking: boolean = false;
-    let isFinalize = false;
+    let isFinalize = true;
     async function handleCheckForAccount() {
         checking = true;
         register = false;
@@ -381,6 +381,8 @@
                             {options}
                             placeholder="Choisir votre SAQ"
                             hint="Veuillez sélectionner une succursale SAQ"
+                            validate={{ type: 'string', minLength: 1 }}
+                            bind:this={saqSelect}
                         />
                     {/if}
                 </div>

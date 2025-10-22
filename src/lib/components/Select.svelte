@@ -2,6 +2,7 @@
     import { teleport, clickOutside } from '$lib/utils';
     import SimpleBar from '@woden/svelte-simplebar';
     import { createEventDispatcher } from 'svelte';
+    import { validator } from '@exodus/schemasafe';
 
     // Option type for object options. We add an optional originalIndex.
     type Option = { value: number | string; label: number | string; originalIndex?: number };
@@ -24,7 +25,7 @@
         | 'warning'
         | 'disabled' = 'enabled';
     export let hint: string = '';
-    export let validate = false;
+    export let validate: object | undefined;
     export let fontSize: string = '12px';
     export let multiple = false;
     export let value: string | number | undefined = undefined;
@@ -179,14 +180,15 @@
     }
 
     let error = false;
+    let validateFn;
+    $: if (validate) {
+        validateFn = validator(validate);
+    }
+    // expose validate handler to parent
     export function handleValidate() {
-        if (!validate) return;
-        if (multiple) {
-            error = !selected;
-        } else {
-            error = selected === null || selected === undefined;
-        }
-        console.log('handleValidate', error, selected);
+        const testValue = multiple ? selected : value;
+        error = validateFn ? !validateFn(testValue) : false;
+        return !error;
     }
 
     export let inputClass = '';
@@ -202,35 +204,37 @@
     }
 </script>
 
-<div
-    bind:this={wrapperElement}
-    class="flex bg-white border-t {$$props.class}"
-    style="--font-size: {fontSize}; font-size: var(--font-size);"
->
-    <input
-        autocomplete="none"
-        class="text text-wblack {inputClass}"
-        style="width: calc(100% - 21px);"
-        bind:value={inputValue}
-        {placeholder}
-        {disabled}
-        on:input={handleInput}
-        on:focus={handleOpen}
-        on:click={handleOpen}
-        on:blur={handleValidate}
-    />
-    <div class="m-[6px] w-[9px] h-[9px]">
-        <svg width="9" height="9" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-            <line class:rotate={isOpen} class="line" x1="50" y1="10" x2="50" y2="90" stroke-width="10" />
-            <line class="line" x1="90" y1="50" x2="10" y2="50" stroke-width="10" />
-        </svg>
+<div class="flex-1">
+    <div
+        bind:this={wrapperElement}
+        class="flex bg-white border-t {$$props.class}"
+        style="--font-size: {fontSize}; font-size: var(--font-size);"
+    >
+        <input
+            autocomplete="none"
+            class="text text-wblack {inputClass}"
+            style="width: calc(100% - 21px);"
+            bind:value={inputValue}
+            {placeholder}
+            {disabled}
+            on:input={handleInput}
+            on:focus={handleOpen}
+            on:click={handleOpen}
+            on:blur={handleValidate}
+        />
+        <div class="m-[6px] w-[9px] h-[9px]">
+            <svg width="9" height="9" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <line class:rotate={isOpen} class="line" x1="50" y1="10" x2="50" y2="90" stroke-width="10" />
+                <line class="line" x1="90" y1="50" x2="10" y2="50" stroke-width="10" />
+            </svg>
+        </div>
     </div>
+    {#if error}
+        <div class="error">
+            {hint}
+        </div>
+    {/if}
 </div>
-{#if error}
-    <div class="error">
-        {hint}
-    </div>
-{/if}
 
 {#if isOpen && sortedOptions.length > 0}
     <div
@@ -275,7 +279,7 @@
 
     .error {
         color: red;
-        font-size: 12px;
+        font-size: 12px !important;
     }
 
     .line {
