@@ -22,8 +22,8 @@
     onMount(async () => {
         const { data, error } = await supabase.schema('cms_saq').from('saq_branches').select('*');
         options = data.map((x) => ({ value: x.id, label: `${x.city}, ${x.address}` }));
-        console.log('branches', options);
-        console.log('cart', $cart);
+        // console.log('branches', options);
+        // console.log('cart', $cart);
     });
 
     const items = Array.from({ length: 500 }).map((_, i) => `item ${i}`);
@@ -205,13 +205,13 @@
     // taxes 0.05 0.09975
 
     $: total = $cart.reduce((acc, item) => {
-        const { lineTotal } = totalsPerUnit(item, $isPrixResto);
-        return acc + lineTotal * item.quantity;
+        const { base } = totalsPerUnit(item, $isPrixResto);
+        return acc + base * item.quantity * item.uvc;
     }, 0);
 
     $: agencyAndTaxesTotal = $cart.reduce((acc, item) => {
         const { agencyWithTaxes } = totalsPerUnit(item, $isPrixResto);
-        return acc + agencyWithTaxes * item.quantity;
+        return acc + agencyWithTaxes * item.quantity * item.uvc;
     }, 0);
 </script>
 
@@ -397,7 +397,7 @@
                 {#each $cart as item}
                     {#key item.id}
                         <div transition:fade>
-                            <CartItem product={item} />
+                            <CartItem selectedBatch={item} />
                         </div>
                     {/key}
                 {/each}

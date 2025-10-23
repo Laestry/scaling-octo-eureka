@@ -13,7 +13,7 @@ export function getVinsImage(product) {
 }
 
 export function getVinImage(product, order) {
-    console.log('getVinImage', product);
+    // console.log('getVinImage', product);
     if (
         product.alcohol_website &&
         product.alcohol_website[0].alcohol_images &&

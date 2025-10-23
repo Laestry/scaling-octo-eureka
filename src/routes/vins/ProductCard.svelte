@@ -4,13 +4,13 @@
     import { cart, getItemQuantityStore } from '$lib/cart';
     import { fly } from 'svelte/transition';
     import Plus from '$lib/icons/Plus.svelte';
-    import { getOldestBatch } from './utils';
+    import { getOldestBatch, transformVinsToCartObject } from './utils';
     import { getVinsImage } from '$lib/utils/images.js';
 
     export let product: any;
     export let size: 's' | 'm' | 'l' | 'v' = 's';
     export let isMain = false;
-
+    console.log('product', product);
     let img = '';
     $: {
         product;
@@ -39,7 +39,8 @@
     function handleAdd() {
         if (!selectedBatch) return;
         if ($itemQuantity >= maxCases) return;
-        cart.add(product, selectedBatch.id);
+        const cartItem = transformVinsToCartObject(product);
+        cart.add(cartItem);
         const id = Date.now();
         const duration = 600;
         animations = [...animations, { id }];

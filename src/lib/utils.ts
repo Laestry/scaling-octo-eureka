@@ -69,23 +69,28 @@ function getSelectedBatch(item: any) {
 
 /** base price with its taxes */
 export function baseWithTaxes(item: any, isPrixResto: boolean) {
-    const batch = getSelectedBatch(item);
+    // const batch = getSelectedBatch(item);
+    const batch = item;
     if (!batch) return 0;
-    const basePrice = isPrixResto ? batch.price_tax_in : batch.price;
-    return basePrice + applyTaxes(basePrice);
+    return isPrixResto ? batch.selected_price : batch.selected_price_tax_in;
+    // const basePrice = isPrixResto ? batch.price_tax_in : batch.price;
+    // return basePrice + applyTaxes(basePrice);
 }
 
 /** agency fee (raw) and with its taxes */
 export function agencyFeeWithTaxes(item: any, isPrixResto: boolean) {
-    const batch = getSelectedBatch(item);
+    const batch = item;
+    // const batch = getSelectedBatch(item);
     if (!batch) return 0;
-    const basePrice = isPrixResto ? batch.price_tax_in : batch.price;
+    const basePrice = isPrixResto ? batch.selected_price : batch.selected_price_tax_in;
 
     let agencyRaw = 0;
-    if (batch.agency_fee_is_percentage) {
-        agencyRaw = ((batch.agency_fee_percentage ?? 0) / 100) * basePrice;
+    if (batch.selected_agency_fee_is_percentage !== undefined || batch.selected_agency_fee_percentage !== null) {
+        if (batch.selected_agency_fee_is_percentage)
+            agencyRaw = ((batch.selected_agency_fee_percentage ?? 0) / 100) * basePrice;
+        else agencyRaw = batch.selected_agency_fee_net ?? 0;
     } else {
-        agencyRaw = batch.agency_fee_net ?? 0;
+        agencyRaw = (16 / 100) * basePrice;
     }
 
     return agencyRaw + applyTaxes(agencyRaw);
@@ -93,11 +98,12 @@ export function agencyFeeWithTaxes(item: any, isPrixResto: boolean) {
 
 /** totals for a single item (per unit) */
 export function totalsPerUnit(item: any, isPrixResto: boolean) {
-    const baseWithTax = baseWithTaxes(item, isPrixResto);
+    const base = baseWithTaxes(item, isPrixResto);
     const agencyWithTax = agencyFeeWithTaxes(item, isPrixResto);
+    console.log('totalsPerUnit', item.name, base, agencyWithTax);
     return {
-        baseWithTaxes: baseWithTax,
+        base: base,
         agencyWithTaxes: agencyWithTax,
-        lineTotal: baseWithTax + agencyWithTax
+        lineTotal: base + agencyWithTax
     };
 }

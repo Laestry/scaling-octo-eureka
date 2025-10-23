@@ -1,6 +1,6 @@
 <script lang="ts">
     import type { PageData } from './$types';
-    import { getCategory, priceFormat, sellBeforeDate } from './utils';
+    import { getCategory, priceFormat, sellBeforeDate, transformVinToCartObject } from './utils';
     import ProductTags from './ProductTags.svelte';
     import { type AlcoholProduct, cart, getItemQuantityStore } from '$lib/cart';
     import { Svroller } from 'svrollbar';
@@ -44,7 +44,8 @@
     function handleAdd() {
         if (!selectedBatch) return;
         if ($itemQuantity >= maxCases) return;
-        cart.add(product, selectedBatch.id);
+        const cartItem = transformVinToCartObject(product, selectedBatch.id);
+        cart.add(cartItem);
     }
     //#endregion cart_handlers
 

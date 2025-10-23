@@ -95,7 +95,7 @@
     async function updateProducts(reset = false) {
         if (!reset && skipCounter < 3) {
             skipCounter++;
-            console.log('No filters applied.');
+            // console.log('No filters applied.');
             return;
         }
 

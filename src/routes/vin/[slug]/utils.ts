@@ -17,7 +17,7 @@ export const priceFormat = derived(isPrixResto, ($isPrixResto) => {
         bottle: boolean = true,
         options: { none?: boolean } = {}
     ) {
-        console.log('price:', price, 'price_tax_in:', price_tax_in);
+        // console.log('price:', price, 'price_tax_in:', price_tax_in);
         const useResto = isPrixResto ?? $isPrixResto;
         const p = useResto ? price : price_tax_in;
 
@@ -168,3 +168,71 @@ export function sellBeforeDate(dateInput: Date | string | number): string {
 
     return `${dd} ${month}, ${yyyy}`;
 }
+
+export function transformVinToCartObject(product, selectedBatchId) {
+    // Find the selected batch
+    const selectedBatch = product.alcohol_batches.find((batch) => batch.id === selectedBatchId);
+
+    if (!selectedBatch) {
+        throw new Error(`Batch with id ${selectedBatchId} not found`);
+    }
+
+    // Calculate total quantity across all batches
+    const totalQuantity = product.alcohol_batches?.reduce((sum, batch) => sum + batch.quantity, 0) || 0;
+
+    // Get unique vintages
+    const vintages = [...new Set(product.alcohol_batches?.map((batch) => batch.vintage).filter(Boolean))];
+
+    let mainImage;
+    if (
+        product.alcohol_website?.[0]?.alcohol_images?.[0]?.files?.file_name &&
+        product.alcohol_website?.[0]?.alcohol_images?.[0]?.files?.uuid
+    ) {
+        mainImage =
+            product.alcohol_website?.[0]?.alcohol_images?.[0]?.files?.uuid +
+            '/' +
+            product.alcohol_website?.[0]?.alcohol_images?.[0]?.files?.file_name;
+    } else {
+        mainImage = null;
+    }
+
+    // Transform to cart object format
+    const cartObject = {
+        id: product.id,
+        name: product.name,
+        category: product.category,
+        specific_category: product.specific_category,
+        uvc: product.uvc,
+        format: product.format,
+        unit: product.unit,
+        volume: product.volume,
+        volume_and_format: `${product.volume}${product.unit === 1 ? 'ml' : 'L'}`,
+        organization_id: product.organization_id,
+        provider_id: product.provider_id,
+        country_id: product.country_id,
+        region_name: product.region_name,
+        tags: product.tags,
+        provider_display_name: product.parties?.display_name,
+        batch_count: product.alcohol_batches?.length || 0,
+        total_quantity: totalQuantity,
+        vintages: vintages,
+
+        // Selected batch properties (replacing "oldest" with "selected")
+        selected_batch_id: selectedBatch.id,
+        selected_vintage: selectedBatch.vintage,
+        selected_price: selectedBatch.price,
+        selected_price_tax_in: selectedBatch.price_tax_in,
+        selected_calculated_quantity: selectedBatch.calculated_quantity,
+        selected_sell_before_date: selectedBatch.sell_before_date,
+        selected_agency_fee: selectedBatch.agency_fee,
+        selected_agency_fee_percentage: selectedBatch.agency_fee_percentage,
+        selected_agency_fee_is_percentage: selectedBatch.agency_fee_is_percentage,
+
+        website_slug: product.slug,
+        main_image_file: mainImage || null,
+        updated_at: product.updated_at
+    };
+
+    return cartObject;
+}
+//#endregion cart_handlers

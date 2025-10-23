@@ -86,11 +86,7 @@ function safeLoadCart(): Cart {
 }
 
 type CartStore = Writable<Cart> & {
-    add: (
-        item: AlcoholProduct,
-        selectedBatch: string | number | { id: string | number; calculated_quantity?: number },
-        amount?: number
-    ) => void;
+    add: (item: AlcoholProduct, amount?: number) => void;
     remove: (selectedBatchId: string, amount?: number) => void;
     removeCompletely: (selectedBatchId: string) => void;
     clear: () => void;
@@ -142,16 +138,16 @@ export function createCart(): CartStore {
         set: cartStore.set,
         update: cartStore.update,
 
-        add: (item, selectedBatch, amount = 1) => {
-            const batchId = resolveBatchId(selectedBatch);
-            if (!batchId) throw new Error('selectedBatchId is required to add to cart');
+        add: (cartItem, amount = 1) => {
+            // Use the selectedBatchId that's already in the cartItem
+            const batchId = cartItem.selectedBatchId;
 
             cartStore.update((cart: CartProduct[]) => {
                 const existingIndex = cart.findIndex((ci) => ci.selectedBatchId === batchId);
                 const existing = existingIndex !== -1 ? cart[existingIndex] : undefined;
 
-                const uvc = (item as any)?.uvc > 0 ? (item as any).uvc : 1;
-                const availableBottles = resolveAvailableBottles(item, selectedBatch); // may be undefined
+                const uvc = cartItem.uvc > 0 ? cartItem.uvc : 1;
+                const availableBottles = cartItem.selected_calculated_quantity;
                 const maxCases = availableBottles != null ? Math.floor(availableBottles / uvc) : undefined;
                 const currentCases = existing ? existing.quantity : 0;
 
@@ -167,7 +163,10 @@ export function createCart(): CartStore {
                         i === existingIndex ? { ...ci, quantity: ci.quantity + actualAdd } : ci
                     );
                 } else {
-                    const newEntry: CartProduct = { ...item, selectedBatchId: batchId, quantity: actualAdd };
+                    const newEntry: CartProduct = {
+                        ...cartItem,
+                        quantity: actualAdd
+                    };
                     return [...cart, newEntry];
                 }
             });
