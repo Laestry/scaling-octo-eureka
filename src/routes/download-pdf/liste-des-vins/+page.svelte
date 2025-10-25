@@ -27,7 +27,7 @@
     onMount(async () => {
         await tick();
         await handleGetPDF(`Ward&Associés liste des vins`);
-        window.close();
+        // window.close();
     });
 </script>
 

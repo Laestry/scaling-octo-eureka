@@ -7,7 +7,6 @@
     import { onMount, tick } from 'svelte';
     import { handleGetPDF } from '../../utils';
     import { getVinImage } from '$lib/utils/images';
-    import { isPrixResto } from '$lib/store';
     export let data;
     console.log('data', data);
     $: product = data.product;
@@ -17,7 +16,7 @@
     onMount(async () => {
         await tick();
         await handleGetPDF(`Ward&Associés ${product.alcohol_website?.[0]?.name} fiche technique`);
-        window.close();
+        // window.close();
     });
 </script>
 

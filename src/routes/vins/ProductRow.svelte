@@ -78,7 +78,7 @@
     function handleAdd() {
         if (!selectedBatch) return;
         if ($itemQuantity >= maxCases) return;
-        cart.add(product, selectedBatch.id);
+        cart.add(product);
 
         const id = Date.now();
         animations = [...animations, { id }];

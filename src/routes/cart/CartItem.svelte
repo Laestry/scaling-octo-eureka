@@ -194,7 +194,7 @@
                         : '!text-gray-300 cursor-not-allowed'}"
                     style="line-height: 16px"
                     disabled={isAtLimit}
-                    on:click={() => cart.add(selectedBatch, selectedBatch.selected_batch_id)}
+                    on:click={() => cart.add(selectedBatch)}
                 >
                     +
                 </button>

@@ -36,7 +36,7 @@
     let phoneInput: Input;
     let emailInput: Input;
     let saqSelect: any;
-
+    let saqSelectComponent: any;
     const formSchema = {
         $schema: 'https://json-schema.org/draft/2019-09/schema',
         type: 'object',
@@ -78,6 +78,7 @@
             caseQuantity: i.quantity
         }));
         console.log('cart items', $cart);
+        console.log('saqSelect', saqSelect);
         console.log('selectedBatches', selectedBatches);
 
         // Trigger validation on each input.
@@ -89,7 +90,7 @@
         errors.push(postalCodeInput.handleValidate());
         errors.push(phoneInput.handleValidate());
         errors.push(emailInput.handleValidate());
-        errors.push(saqSelect.handleValidate());
+        errors.push(saqSelectComponent.handleValidate());
 
         // If any input returns an error (non-empty string), don't submit.
         if (errors.some((valid) => valid === false)) {
@@ -381,8 +382,8 @@
                             {options}
                             placeholder="Choisir votre SAQ"
                             hint="Veuillez sélectionner une succursale SAQ"
-                            validate={{ type: 'string', minLength: 1 }}
-                            bind:this={saqSelect}
+                            validate={{ type: ['string', 'number'], minLength: 1 }}
+                            bind:this={saqSelectComponent}
                         />
                     {/if}
                 </div>
