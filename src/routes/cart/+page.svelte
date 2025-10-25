@@ -205,14 +205,20 @@
 
     // taxes 0.05 0.09975
 
+    function round2(value) {
+        return Math.round(value * 100) / 100;
+    }
+
     $: total = $cart.reduce((acc, item) => {
         const { base } = totalsPerUnit(item, $isPrixResto);
-        return acc + base * item.quantity * item.uvc;
+        const unitBase = round2(base);
+        return acc + unitBase * item.quantity * item.uvc;
     }, 0);
 
     $: agencyAndTaxesTotal = $cart.reduce((acc, item) => {
         const { agencyWithTaxes } = totalsPerUnit(item, $isPrixResto);
-        return acc + agencyWithTaxes * item.quantity * item.uvc;
+        const perBottle = round2(agencyWithTaxes);
+        return acc + perBottle * item.quantity * item.uvc;
     }, 0);
 </script>
 

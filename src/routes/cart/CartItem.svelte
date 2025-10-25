@@ -6,6 +6,7 @@
     import Minus from '$lib/icons/Minus.svelte';
     import Plus from '$lib/icons/Plus.svelte';
     import { getVinsImage } from '$lib/utils/images';
+    import { isPrixResto } from '$lib/store';
 
     // cart item with selected_* fields
     export let selectedBatch; // alcohol_view row + cart quantity
@@ -107,7 +108,13 @@
         </div>
 
         <div class="max-w-[192px] flex-1 w-full my-4 flex items-center justify-end pr-1.5">
-            <div>{((Number($itemQuantity) || 1) * Number(selectedBatch?.selected_price ?? 0)).toFixed(2)} $</div>
+            <div>
+                {(
+                    (Number($itemQuantity) || 1) *
+                    Number($isPrixResto ? selectedBatch?.selected_price : (selectedBatch?.selected_price_tax_in ?? 0)) *
+                    selectedBatch?.uvc
+                ).toFixed(2)} $
+            </div>
         </div>
     </div>
 
@@ -134,26 +141,13 @@
             </div>
             <div class="flex flex-col items-end">
                 <div class="product-price">
-                    {$priceFormat(
-                        {
-                            price: selectedBatch?.selected_price,
-                            price_tax_in: selectedBatch?.selected_price_tax_in,
-                            uvc: selectedBatch.uvc
-                        },
-                        true,
-                        { none: true }
-                    )}
-                </div>
-                <div class="product-price {selectedBatch.uvc > 1 ? '' : 'text-transparent'}">
-                    {$priceFormat(
-                        {
-                            price: selectedBatch?.selected_price,
-                            price_tax_in: selectedBatch?.selected_price_tax_in,
-                            uvc: selectedBatch.uvc
-                        },
-                        false,
-                        { none: true }
-                    )}
+                    {(
+                        (Number($itemQuantity) || 1) *
+                        Number(
+                            $isPrixResto ? selectedBatch?.selected_price : (selectedBatch?.selected_price_tax_in ?? 0)
+                        ) *
+                        selectedBatch?.uvc
+                    ).toFixed(2)} $
                 </div>
             </div>
         </a>
