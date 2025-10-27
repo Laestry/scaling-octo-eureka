@@ -76,7 +76,7 @@
 <!--cart and search button-->
 <div id="global-nav" class="w-full flex justify-center">
     <div
-        class="fixed flex justify-end items-center
+        class="fixed flex justify-end items-center pointer-events-none
         lg:w-[1136px] md:w-[760px] w-[300px]
         lg:mt-[65px] md:mt-8 mt-2.5
         md:gap-1 gap-2.5"
@@ -103,7 +103,7 @@
             </a>
         {/if}
 
-        <label class="checkbox">
+        <label class="checkbox pointer-events-auto">
             <input type="checkbox" class="checkbox__input" bind:checked={$isPrixResto} />
             <span class="checkbox__text"> {$isPrixResto ? 'Prix Resto' : 'Prix Perso'}</span>
             <span class="checkbox__box"></span>
