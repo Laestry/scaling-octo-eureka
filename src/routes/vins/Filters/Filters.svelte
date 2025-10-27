@@ -326,11 +326,7 @@
         </div>
         <div class="flex gap-1 items-center">
             <button class="all-button abutton text-" on:click={clearAllFilters}>Liste complète</button>
-            <label class="checkbox">
-                <input type="checkbox" class="checkbox__input" bind:checked={$isPrixResto} />
-                <span class="checkbox__text"> {$isPrixResto ? 'Prix Resto' : 'Prix Perso'}</span>
-                <span class="checkbox__box"></span>
-            </label>
+
             <div class="flex gap-1">
                 <button
                     class="rounded-full w-6 h-6 bg-[#fff] price-button"

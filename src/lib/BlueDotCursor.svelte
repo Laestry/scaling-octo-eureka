@@ -57,7 +57,7 @@
         background: #3777bc;
         border-radius: 50%;
         pointer-events: none;
-        z-index: 9999;
+        z-index: 99990;
         transform: translate(-50%, -50%);
     }
 </style>

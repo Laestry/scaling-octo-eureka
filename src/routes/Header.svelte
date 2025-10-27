@@ -5,6 +5,7 @@
     import { fade } from 'svelte/transition';
     import { totalItems } from '$lib/cart';
     import { onMount } from 'svelte';
+    import { isPrixResto } from '$lib/store';
 
     $: currentPath = $page.url.pathname;
     let prevPath = '';
@@ -68,12 +69,14 @@
             window.removeEventListener('scroll', handleScroll);
         };
     });
+
+    let flag = false;
 </script>
 
 <!--cart and search button-->
-<div class="w-full flex justify-center">
+<div id="global-nav" class="w-full flex justify-center">
     <div
-        class="fixed flex justify-end items-center pointer-events-none
+        class="fixed flex justify-end items-center
         lg:w-[1136px] md:w-[760px] w-[300px]
         lg:mt-[65px] md:mt-8 mt-2.5
         md:gap-1 gap-2.5"
@@ -99,6 +102,12 @@
                 </svg>
             </a>
         {/if}
+
+        <label class="checkbox">
+            <input type="checkbox" class="checkbox__input" bind:checked={$isPrixResto} />
+            <span class="checkbox__text"> {$isPrixResto ? 'Prix Resto' : 'Prix Perso'}</span>
+            <span class="checkbox__box"></span>
+        </label>
 
         <a class="abutton !w-fit circle {$totalItems > 0 ? '!bg-wred !text-white' : ''}" href="/cart">
             {$totalItems}
@@ -279,6 +288,60 @@
 {/if}
 
 <style lang="scss">
+    .checkbox {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        background: white;
+        padding: 5px 8px;
+        border-radius: 64px;
+        position: relative;
+        cursor: pointer;
+        user-select: none;
+        &__input {
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+        }
+        &__text {
+            font-size: 12px;
+            white-space: nowrap;
+            color: #f15a38;
+        }
+        &__box {
+            position: relative;
+            background: white;
+            transition: 0.3s ease;
+            border-radius: 64px;
+            width: 21px;
+            height: 12px;
+            box-sizing: border-box;
+            background: #f15a38;
+            &::before {
+                content: '';
+                width: 10px;
+                height: 10px;
+                background: white;
+                border-radius: 50%;
+                position: absolute;
+                top: 1px;
+                left: 1px;
+                transition: 0.3s ease;
+            }
+        }
+        &__input:checked ~ &__text {
+            text-decoration: none;
+            color: #333;
+        }
+        &__input:checked ~ &__box {
+            background: #333;
+            &::before {
+                left: 10px;
+            }
+        }
+    }
+
     .circle {
         pointer-events: auto;
         padding: 0.25rem;
@@ -370,7 +433,7 @@
     }
     .backdrop--2 {
         transform: translateX(-70px);
-        background-image: url('/images/winefermenting.png');
+        backround-image: url('/images/winefermenting.png');
         z-index: 2;
         @media (max-width: 767px) {
             transform: translateX(0);
@@ -418,10 +481,37 @@
         .backdrops:not(:is(.backdrops--1, .backdrops--2, .backdrops--3)) {
             height: 430px;
         }
+        .checkbox {
+            padding: 5px 8px;
+
+            &__text {
+                font-size: 18px;
+            }
+        }
     }
     @media (max-width: 679px) {
         .backdrops:not(:is(.backdrops--1, .backdrops--2, .backdrops--3)) {
             height: 130px;
+        }
+
+        .checkbox {
+            padding: 9px;
+
+            &__text {
+                font-size: 16px;
+            }
+
+            &__box {
+                margin-top: 4px;
+                transition: 0.3s ease;
+                width: 21px;
+                height: 12px;
+                box-sizing: border-box;
+                &::before {
+                    width: 10px;
+                    height: 10px;
+                }
+            }
         }
     }
 
