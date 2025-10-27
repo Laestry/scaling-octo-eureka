@@ -35,6 +35,7 @@
     let postalCodeInput: Input;
     let phoneInput: Input;
     let emailInput: Input;
+    let saqNumberInput: Input;
     let saqSelect: any;
     let saqSelectComponent: any;
     const formSchema = {
@@ -51,9 +52,15 @@
                 type: 'string',
                 pattern: '^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$',
                 maxLength: 254
+            },
+            saqNumber: {
+                type: 'string',
+                pattern: '^[0-9]{8}$',
+                minLength: 8,
+                maxLength: 8
             }
         },
-        required: ['firstName', 'lastName', 'address', 'city', 'postalCode', 'phone', 'email'],
+        required: ['firstName', 'lastName', 'address', 'city', 'postalCode', 'phone', 'email', 'saqNumber'],
         additionalProperties: false
     };
 
@@ -66,7 +73,8 @@
         city: '',
         postalCode: '',
         phone: '',
-        email: ''
+        email: '',
+        saqNumber: ''
     };
     let errorMessage = '';
     let formEl;
@@ -90,6 +98,9 @@
         errors.push(postalCodeInput.handleValidate());
         errors.push(phoneInput.handleValidate());
         errors.push(emailInput.handleValidate());
+        if ($isPrixResto || formData.saqNumber.length > 0) {
+            errors.push(saqNumberInput.handleValidate());
+        }
         errors.push(saqSelectComponent.handleValidate());
 
         // If any input returns an error (non-empty string), don't submit.
@@ -359,7 +370,7 @@
                         />
                         <Input
                             placeholder="Courriel"
-                            class="lg:max-w-[268px] w-full flex-1 "
+                            class="lg:max-w-[272px] w-full flex-1 "
                             bind:this={emailInput}
                             bind:value={formData.email}
                             validate={{
@@ -374,6 +385,23 @@
                             <Toggle onText="Oui!" offText="Non" />
                         </div>
                     </form>
+                </div>
+
+                <div class="flex md:flex-row flex-col w-full md:gap-4 gap-0 md:mt-[40px] mt-[20px]">
+                    <div class="text-base text-nowrap w-[176px]">No de SAQ</div>
+                    <Input
+                        placeholder={$isPrixResto ? 'No de SAQ (obligatoire)' : 'No de SAQ (optionnel)'}
+                        class="lg:max-w-[272px] w-full flex-1 "
+                        bind:this={saqNumberInput}
+                        bind:value={formData.saqNumber}
+                        validate={{
+                            type: 'string',
+                            pattern: '^[0-9]{8}$',
+                            minLength: 8,
+                            maxLength: 8
+                        }}
+                        hint="Le numéro de SAQ doit contenir 8 chiffres."
+                    />
                 </div>
 
                 <div class="flex md:flex-row flex-col w-full md:gap-4 gap-0 md:mt-[40px] mt-[20px]">
