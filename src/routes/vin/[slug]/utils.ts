@@ -228,7 +228,7 @@ export function transformVinToCartObject(product, selectedBatchId) {
         selected_agency_fee_percentage: selectedBatch.agency_fee_percentage,
         selected_agency_fee_is_percentage: selectedBatch.agency_fee_is_percentage,
 
-        website_slug: product.slug,
+        website_slug: product.alcohol_website[0].slug,
         main_image_file: mainImage || null,
         updated_at: product.updated_at
     };

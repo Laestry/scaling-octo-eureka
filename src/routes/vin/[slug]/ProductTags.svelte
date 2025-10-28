@@ -63,7 +63,11 @@
         {/if}
     </p>
 
-    <a target="_blank" href="/download-pdf/fiche-technique/{product.slug}" class="passport whitespace-nowrap">
+    <a
+        target="_blank"
+        href="/download-pdf/fiche-technique/{product.alcohol_website[0].slug}"
+        class="passport whitespace-nowrap"
+    >
         Fiche technique complète
     </a>
 </div>
