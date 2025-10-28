@@ -89,7 +89,22 @@
         return Object.values(groups)
             .sort((a, b) => a.order - b.order)
             .map((g) => {
-                const deduped = g.options.filter((opt, i, arr) => arr.findIndex((o) => o.value === opt.value) === i);
+                let deduped = g.options.filter((opt, i, arr) => arr.findIndex((o) => o.value === opt.value) === i);
+
+                // sorting rules
+                if (g.name === 'category' || g.name === 'region' || g.name === 'producer') {
+                    deduped = deduped.sort((a, b) => a.label.localeCompare(b.label, 'fr', { sensitivity: 'base' }));
+                } else if (g.name === 'format') {
+                    deduped = deduped.sort((a, b) => {
+                        const parseVol = (str: string) => {
+                            const num = parseFloat(str);
+                            if (str.includes('l')) return num * 1000; // liters → ml
+                            return num;
+                        };
+                        return parseVol(b.label) - parseVol(a.label); // bigger first
+                    });
+                }
+
                 return {
                     name: g.name as FilterGroupName,
                     label: displayNames[g.name as FilterGroupName] ?? g.name,
