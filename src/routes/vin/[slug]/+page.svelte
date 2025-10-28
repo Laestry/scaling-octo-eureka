@@ -50,12 +50,6 @@
     }
     //#endregion cart_handlers
 
-    //#region images
-    let img0 = getVinImage(product, 0);
-    let img1 = getVinImage(product, 1);
-    let img2 = getVinImage(product, 2);
-    //#endregion images
-
     //#region waitlist_handlers
     function toggleWaitlistForm() {
         showWaitlistForm = !showWaitlistForm;
@@ -151,8 +145,8 @@
     <div>
         <ProductTags
             {product}
-            class="lg:w-[560px] md:w-[442px]
-                   lg:ml-[486px] md:ml-[332px]
+            class="lg:w-[558px] md:w-[440px]
+                   lg:ml-[473px] md:ml-[335px]
 
                   "
         />

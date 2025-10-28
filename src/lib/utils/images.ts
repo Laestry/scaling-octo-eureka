@@ -8,8 +8,7 @@ export function getRandomNumber(product) {
 }
 export function getVinsImage(product) {
     if (product.main_image_file) return ALCOHOL_BASE_PATH + product.main_image_file;
-    const n = getRandomNumber(product);
-    return images[n % images.length]!;
+    return '/defaultImages/default-alcohol.png';
 }
 
 export function getVinImage(product, order) {
@@ -23,12 +22,5 @@ export function getVinImage(product, order) {
         return ALCOHOL_BASE_PATH + images[order].files.uuid + '/' + images[order].files.file_name;
     }
 
-    switch (order) {
-        case 0:
-            return '/images/example_wines/SHOP PAGE/Product Shot - stack.png';
-        case 1:
-            return '/images/example_wines/SHOP PAGE/9x16 Product Shot - stack.png';
-        case 2:
-            return '/images/example_wines/SHOP PAGE/In-situ Product Shot - stack.png';
-    }
+    return '/defaultImages/default-alcohol.png';
 }
