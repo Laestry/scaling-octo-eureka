@@ -133,7 +133,7 @@
                     items: selectedBatches,
                     customer: {
                         saq_store_id: saqSelect,
-                        // saq_number: '', // add if needed
+                        saq_number: formData.saqNumber,
                         billing_address: {
                             street: formData.address,
                             city: formData.city,
