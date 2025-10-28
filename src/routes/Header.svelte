@@ -168,7 +168,7 @@
 </div>
 
 <!--navlinks-->
-{#if $page.url.pathname === '/cart' || $page.url.pathname.startsWith('/vin')}
+{#if $page.url.pathname === '/cart' || $page.url.pathname.startsWith('/vin') || $page.url.pathname.startsWith('/success')}
     <div class="lg:hidden w-full flex justify-center">
         <div class="lg:w-[1136px] md:w-[760px] w-[300px] flex flex-col md:items-center">
             <a href="/">
