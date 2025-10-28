@@ -79,7 +79,7 @@
     let errorMessage = '';
     let formEl;
 
-    let loading = false;
+    let loadingHandleSubmit = false;
     async function handleSubmit() {
         let selectedBatches = $cart.map((i) => ({
             id: parseInt(i.selectedBatchId),
@@ -123,7 +123,7 @@
             errorMessage = 'Le formulaire contient des erreurs.';
         }
         let res;
-        loading = true;
+        loadingHandleSubmit = true;
         try {
             res = await fetch('api/submit-order', {
                 method: 'POST',
@@ -165,7 +165,7 @@
             // optionally bail out or re-throw
             return;
         } finally {
-            loading = false;
+            loadingHandleSubmit = false;
         }
     }
 
@@ -469,8 +469,8 @@
                     Continuer mes achats
                 </button>
                 <button
-                    class="abutton bg-wred text-white text-base w-full md:max-w-[271px] rounded-3xl"
-                    disabled={loading}
+                    class="abutton bg-wred text-white w-full md:max-w-[271px] rounded-3xl"
+                    disabled={loadingHandleSubmit}
                     on:click={() => {
                         if (isFinalize) handleSubmit();
                         else {
@@ -479,6 +479,11 @@
                         }
                     }}
                 >
+                    {#if loadingHandleSubmit}
+                        <div class="absolute w-0 h-0 mt-[3px] ml-[7px]">
+                            <div class="circle" />
+                        </div>
+                    {/if}
                     {#if isFinalize}Confirmer la commande{:else}Finaliser ma commande{/if}
                 </button>
             </div>
@@ -487,4 +492,21 @@
 </div>
 
 <style>
+    .circle {
+        width: 13px;
+        height: 13px;
+        border-radius: 50%;
+        background: var(--WARD-BLUE);
+        animation: fade 2s infinite ease-in-out;
+    }
+
+    @keyframes fade {
+        0%,
+        100% {
+            opacity: 0.2;
+        }
+        50% {
+            opacity: 1;
+        }
+    }
 </style>
