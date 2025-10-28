@@ -66,7 +66,7 @@
             <a href="mailto:info@wardetassocies.com">Questions</a>
             <a
                 target="_blank"
-                href="https://www.saq.com/fr/produits?nom_agent_promo=Ward+%26+Associ%C3%A9s%2C+Repr%C3%A9sentants+en+Vin"
+                href="https://www.saq.com/fr/produits?nom_agent_promo=Ward+%26+Associés%2C+Représentants+en+Vin"
             >
                 W& à la SAQ
             </a>
@@ -91,10 +91,10 @@
 
         <!--        socials-->
         <div class="flex flex-col gap-[10px] mt-[11px] ml-[73px] mr-[15px]">
-            <a href="/static" class="">
+            <a href="https://www.instagram.com/wardetassocies/" class="">
                 <img class="h-[16px]" src="/icons/socials/Instagram.svg" alt="Instagram" />
             </a>
-            <a href="/static">
+            <a href="https://www.facebook.com/people/Ward-associ%C3%A9s/100063536502149/">
                 <img class="h-[16px]" src="/icons/socials/Facebook.svg" alt="Facebook" />
             </a>
         </div>
