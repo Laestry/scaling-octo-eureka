@@ -433,7 +433,7 @@
     }
     .backdrop--2 {
         transform: translateX(-70px);
-        backround-image: url('/images/winefermenting.png');
+        background-image: url('/images/winefermenting.png');
         z-index: 2;
         @media (max-width: 767px) {
             transform: translateX(0);
