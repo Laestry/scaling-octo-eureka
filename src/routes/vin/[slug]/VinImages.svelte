@@ -8,7 +8,8 @@
     let hasImages = product.alcohol_website[0].alcohol_images.length > 0;
     let hasOnlyOneImage = product.alcohol_website[0].alcohol_images.length === 1;
 
-    if (hasImages && !hasOnlyOneImage) {
+    if (true) {
+        // if (hasImages && !hasOnlyOneImage) {
         img0 = getVinImage(product, 0);
         img1 = getVinImage(product, 1);
         img2 = getVinImage(product, 2);
@@ -28,7 +29,8 @@
                 mr-[14px]
                 "
 >
-    {#if !hasImages || hasOnlyOneImage}
+    <!--{#if !hasImages || hasOnlyOneImage}-->
+    {#if false}
         <img class="object-cover w-full h-full" src={img0} alt="Wine" />
     {:else}
         <button

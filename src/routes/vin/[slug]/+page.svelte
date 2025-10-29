@@ -67,10 +67,6 @@
         console.log('vin data', data, selectedBatch);
         product = data.product;
 
-        img0 = getVinImage(product, 0);
-        img1 = getVinImage(product, 1);
-        img2 = getVinImage(product, 2);
-
         const requestString = `
             id,
             website_slug,
