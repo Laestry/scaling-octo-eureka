@@ -65,9 +65,9 @@
             <p class="instablock__title">
                 Ne passez pas à côté. Suivez-nous pour les arrivages qui comptent, les dégustations qui bousculent, et
                 les vigneron·ne·s qui font bouger les lignes. <br />
-                → Suivez-nous sur
-                <br />
-                <button class="instablock__button">@wardetassocies</button>
+                <a href="https://www.facebook.com/people/Ward-associ%C3%A9s/100063536502149/">
+                    <button class="instablock__button">@wardetassocies</button>
+                </a>
             </p>
         </div>
     </div>
