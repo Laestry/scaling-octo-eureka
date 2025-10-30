@@ -4,7 +4,7 @@
 </script>
 
 <div
-    class="flex flex-col justify-center items-center w-full bg-color1
+    class="flex flex-col justify-center items-center w-full bg-wred
            md:pt-[106px] md:pb-[48px] md:px-1 px-4"
 >
     <div class="h-[107px] max-w-[1137px] w-full">
