@@ -63,9 +63,12 @@
     <div class="instablock">
         <div class="lg:max-w-[1212px] px-[38px] md:max-w-[836px] max-w-[376px] mx-auto container">
             <p class="instablock__title">
-                Ne passez pas à côté. Suivez-nous pour les arrivages qui comptent, les dégustations qui bousculent, et
-                les vigneron·ne·s qui font bouger les lignes. <br />
-                <a href="https://www.facebook.com/people/Ward-associ%C3%A9s/100063536502149/">
+                Ne passez pas à côté. <a class="underline" href="https://www.instagram.com/wardetassocies"
+                    >Suivez-nous</a
+                >
+                pour les arrivages qui comptent, les dégustations qui bousculent, et les vigneron·ne·s qui font bouger
+                les lignes. <br />
+                <a href="https://www.instagram.com/wardetassocies">
                     <button class="instablock__button">@wardetassocies</button>
                 </a>
             </p>

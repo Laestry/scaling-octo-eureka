@@ -72,8 +72,8 @@
                 lg:h-[661px] md:h-[439px] h-[262px]"
         >
             <button class="flex-1 md:order-1" on:mouseenter={() => (currentSlide = 0)} />
-            <button class="flex-1 lg:order-2 order-3" on:mouseenter={() => (currentSlide = 1)} />
-            <button class="flex-1 lg:order-3 order-2" on:mouseenter={() => (currentSlide = 2)} />
+            <button class=" flex-1 lg:order-2 order-3" on:mouseenter={() => (currentSlide = 1)} />
+            <button class=" flex-1 lg:order-3 order-2" on:mouseenter={() => (currentSlide = 2)} />
         </div>
     </div>
 </div>
