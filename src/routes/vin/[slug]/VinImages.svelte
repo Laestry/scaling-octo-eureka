@@ -64,4 +64,16 @@
             <img class="object-cover w-full h-full" src={img1} alt="Wine" />
         </button>
     {/if}
+
+    <div class="absolute z-10">
+        <div
+            class="relative flex
+                lg:w-[446px] md:w-[308px] w-[280px]
+                lg:h-[661px] md:h-[439px] h-[262px]"
+        >
+            <button class="flex-1 md:order-1" on:mouseenter={() => (currentSlide = 0)} />
+            <button class="flex-1 lg:order-2 order-3" on:mouseenter={() => (currentSlide = 1)} />
+            <button class="flex-1 lg:order-3 order-2" on:mouseenter={() => (currentSlide = 2)} />
+        </div>
+    </div>
 </div>
