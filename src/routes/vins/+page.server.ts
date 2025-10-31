@@ -1,80 +1,9 @@
 import type { TFilters } from '$lib/models/general';
 import { fetchFilteredProductsForAlcohol } from './Filters/utils';
+import { parseFiltersFromUrl } from './utils';
 
 export async function load({ locals, url }) {
-    const params = url.searchParams;
-
-    function getArrayParam(key: string): string[] | undefined {
-        const arr = params.getAll(key);
-        return arr.length ? arr : undefined;
-    }
-
-    // producer (short key: p)
-    const producer = getArrayParam('p');
-
-    // region (short key: r)
-    const region = getArrayParam('r');
-
-    // vintage (short key: v) -> numbers
-    const vintageRaw = params.getAll('v');
-    const vintageNums = vintageRaw.map((v) => Number(v)).filter((n) => !isNaN(n));
-    const vintage = vintageNums.length ? (vintageNums.length === 1 ? vintageNums[0] : vintageNums) : undefined;
-
-    // format (short key: f)
-    const format = getArrayParam('f');
-
-    // category (short key: cat) encoded as "category_specificCategory"
-    let category: string[] | undefined;
-    const catParams = params.getAll('cat');
-    if (catParams.length) {
-        category = catParams
-            .map((c) => {
-                const [catVal, specificVal] = c.split('_');
-                const categoryNum = Number(catVal);
-                const specificNum = Number(specificVal);
-                if (!isNaN(categoryNum) && !isNaN(specificNum)) {
-                    // keep the same shape your fetch util expects: JSON string or object
-                    return JSON.stringify({
-                        category: categoryNum,
-                        specificCategory: specificNum
-                    });
-                }
-                return undefined;
-            })
-            .filter(Boolean) as string[];
-        if (!category.length) category = undefined;
-    }
-
-    // uvc (short key: u) — must match the Page’s appendArrayParam(sp,'u',…)
-    const uvcRaw = params.getAll('u');
-    const uvcNums = uvcRaw.map((v) => Number(v)).filter((n) => !isNaN(n));
-    const uvc = uvcNums.length ? (uvcNums.length === 1 ? uvcNums[0] : uvcNums) : undefined;
-    // priceRange (short key: pr)
-    const pr = params.get('pr');
-    const priceRange = pr === 'low' || pr === 'mid' || pr === 'high' ? pr : undefined;
-
-    // sorting (short key: s) — must match the strings your fetch util expects
-    const s = params.get('s');
-    const sorting = s === 'Prix croissant' || s === 'Prix décroissant' || s === 'Alphabétique' ? s : undefined;
-
-    // nameSearch (q)
-    const nameSearch = params.get('q') || undefined;
-
-    // tag (t)
-    const tag = params.get('t') || undefined;
-
-    const selectedFilters: TFilters = {
-        producer,
-        region,
-        category,
-        uvc,
-        format,
-        vintage,
-        priceRange,
-        sorting,
-        nameSearch,
-        tag
-    };
+    const selectedFilters: TFilters = parseFiltersFromUrl(url);
 
     // fetch filtered products (first page)
     const PAGE_SIZE = 20;

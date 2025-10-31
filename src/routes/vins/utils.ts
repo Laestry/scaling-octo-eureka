@@ -1,3 +1,5 @@
+import type { TFilters } from '$lib/models/general';
+
 export function getOldestBatch(product): any | null {
     return (
         product.alcohol_batches
@@ -53,4 +55,69 @@ export function transformVinsToCartObject(product) {
     };
 
     return cartObject;
+}
+
+export function parseFiltersFromUrl(url: URL): TFilters {
+    const params = url.searchParams;
+
+    const getArrayParam = (key: string): string[] | undefined => {
+        const arr = params.getAll(key);
+        return arr.length ? arr : undefined;
+    };
+
+    const producer = getArrayParam('p');
+    const region = getArrayParam('r');
+
+    // vintage numbers
+    const vintageRaw = params.getAll('v');
+    const vintageNums = vintageRaw.map(Number).filter((n) => !isNaN(n));
+    const vintage = vintageNums.length ? (vintageNums.length === 1 ? vintageNums[0] : vintageNums) : undefined;
+
+    const format = getArrayParam('f');
+
+    // category "category_specificCategory"
+    let category: string[] | undefined;
+    const catParams = params.getAll('cat');
+    if (catParams.length) {
+        category = catParams
+            .map((c) => {
+                const [catVal, specificVal] = c.split('_');
+                const categoryNum = Number(catVal);
+                const specificNum = Number(specificVal);
+                if (!isNaN(categoryNum) && !isNaN(specificNum)) {
+                    return JSON.stringify({
+                        category: categoryNum,
+                        specificCategory: specificNum
+                    });
+                }
+            })
+            .filter(Boolean) as string[];
+        if (!category.length) category = undefined;
+    }
+
+    const uvcRaw = params.getAll('u');
+    const uvcNums = uvcRaw.map(Number).filter((n) => !isNaN(n));
+    const uvc = uvcNums.length === 0 ? undefined : uvcNums.length === 1 ? uvcNums[0] : uvcNums;
+
+    const pr = params.get('pr');
+    const priceRange = pr === 'low' || pr === 'mid' || pr === 'high' ? pr : undefined;
+
+    const s = params.get('s');
+    const sorting = s === 'Prix croissant' || s === 'Prix décroissant' || s === 'Alphabétique' ? s : undefined;
+
+    const nameSearch = params.get('q') || undefined;
+    const tag = params.get('t') || undefined;
+
+    return {
+        producer,
+        region,
+        category,
+        uvc,
+        format,
+        vintage,
+        priceRange,
+        sorting,
+        nameSearch,
+        tag
+    };
 }

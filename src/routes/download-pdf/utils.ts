@@ -30,7 +30,7 @@ export async function handleGetPDF(fileName) {
         .toPdf()
         .get('pdf')
         .then((pdf) => {
-            if (pdf.getNumberOfPages() > 1) pdf.deletePage(1);
+            // if (pdf.getNumberOfPages() > 1) pdf.deletePage(1);
         })
         .save();
 }

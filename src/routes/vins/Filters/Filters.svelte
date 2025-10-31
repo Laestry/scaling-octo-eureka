@@ -163,88 +163,53 @@
     }
 
     let pendingSetParams = false;
-
+    let pdfUrl = `/download-pdf/liste-des-vins`;
     async function setParams() {
-        if (!isMounted) return;
-        if (pendingSetParams) return; // avoid overlapping invocations
+        if (!isMounted || pendingSetParams) return;
         pendingSetParams = true;
-        await tick(); // defer until after initial microtask so router is ready
+        await tick();
 
         const $page = get(page);
-        const sp = $page.url.searchParams;
+        const url = new URL($page.url); // clone first
+        const sp = url.searchParams; // edit this one
 
-        // clear the short keys first
         ['p', 'r', 'v', 'f', 'cat', 'u', 'pr', 's', 'q', 't'].forEach((k) => sp.delete(k));
 
-        // producer ids -> p
         if (selectedFilters.producer) {
-            const arr = Array.isArray(selectedFilters.producer) ? selectedFilters.producer : [selectedFilters.producer];
-            appendArrayParam(sp, 'p', arr.map(String));
+            appendArrayParam(sp, 'p', [selectedFilters.producer].flat().map(String));
         }
-
-        // region names -> r
         if (selectedFilters.region) {
-            const arr = Array.isArray(selectedFilters.region) ? selectedFilters.region : [selectedFilters.region];
-            appendArrayParam(sp, 'r', arr.map(String));
+            appendArrayParam(sp, 'r', [selectedFilters.region].flat().map(String));
         }
-
-        // vintage years -> v
         if (selectedFilters.vintage) {
-            const arr = Array.isArray(selectedFilters.vintage) ? selectedFilters.vintage : [selectedFilters.vintage];
-            appendArrayParam(sp, 'v', arr.map(String));
+            appendArrayParam(sp, 'v', [selectedFilters.vintage].flat().map(String));
         }
-
-        // format volumes -> f
         if (selectedFilters.format) {
-            const arr = Array.isArray(selectedFilters.format) ? selectedFilters.format : [selectedFilters.format];
-            appendArrayParam(sp, 'f', arr.map(String));
+            appendArrayParam(sp, 'f', [selectedFilters.format].flat().map(String));
         }
-
         if (selectedFilters.category) {
-            const arr = Array.isArray(selectedFilters.category) ? selectedFilters.category : [selectedFilters.category];
-
-            arr.forEach((o) => {
-                let parsed: any = o;
-                if (typeof parsed === 'string') {
-                    try {
-                        parsed = JSON.parse(parsed);
-                    } catch {
-                        // leave as is
-                    }
-                }
-                const categoryVal = parsed?.category;
-                const specificCategory = parsed?.specificCategory;
-                if (categoryVal != null && specificCategory != null) {
-                    sp.append('cat', `${categoryVal}_${specificCategory}`);
-                }
+            [selectedFilters.category].flat().forEach((o) => {
+                let parsed = typeof o === 'string' ? JSON.parse(o ?? '{}') : o;
+                const cat = parsed?.category;
+                const specific = parsed?.specificCategory;
+                if (cat && specific) sp.append('cat', `${cat}_${specific}`);
             });
         }
-
-        // priceRange -> pr
-        if (selectedFilters.priceRange) {
-            sp.set('pr', selectedFilters.priceRange);
-        }
-
-        // sorting -> s (you can normalize values if you want shorter tokens)
-        if (selectedFilters.sorting) {
-            sp.set('s', selectedFilters.sorting);
-        }
-
-        // nameSearch -> q
-        if (nameSearch) {
-            sp.set('q', nameSearch);
-        }
-
-        // tag -> t
-        if (selectedFilters.tag) {
-            sp.set('t', selectedFilters.tag);
-        }
+        if (selectedFilters.priceRange) sp.set('pr', selectedFilters.priceRange);
+        if (selectedFilters.sorting) sp.set('s', selectedFilters.sorting);
+        if (nameSearch) sp.set('q', nameSearch);
+        if (selectedFilters.tag) sp.set('t', selectedFilters.tag);
 
         try {
-            replaceState($page.url, $page.state);
-        } catch (error) {
-            console.error(error);
+            // Update router state and visible URL
+            replaceState(url, $page.state);
+            window.history.replaceState($page.state, '', url);
+        } catch (err) {
+            console.error(err);
         }
+
+        pendingSetParams = false;
+        pdfUrl = `/download-pdf/liste-des-vins?${sp.toString()}`;
     }
 
     // group name -> selected label(s)
@@ -439,11 +404,7 @@
         <button class="button-view" class:active={!$isGrid} on:click={() => isGrid.set(false)}>
             <IconList />
         </button>
-        <a
-            href={'download-pdf/liste-des-vins'}
-            target="_blank"
-            class="md:rounded-none rounded-full button-view button-view--link"
-        >
+        <a href={pdfUrl} target="_blank" class="md:rounded-none rounded-full button-view button-view--link">
             <IconDownload />
         </a>
     </div>
