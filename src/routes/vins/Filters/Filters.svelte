@@ -390,6 +390,7 @@
             <p>No filters available.</p>
         {/if}
         <Select
+            hideDefault
             class="cusselect self-end"
             options={['Prix croissant', 'Prix décroissant', 'Alphabétique']}
             placeholder="Trier"

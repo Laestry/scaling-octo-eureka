@@ -29,6 +29,7 @@
     export let fontSize: string = '12px';
     export let multiple = false;
     export let value: string | number | undefined = undefined;
+    export let hideDefault = false;
 
     let isOpen = false;
     let userInput = '';
@@ -54,6 +55,19 @@
 
     // Create a reactive sorted list that puts selected options at the top.
     $: sortedOptions = optionsFiltered.slice().sort((a, b) => {
+        const extractVolume = (label: string | number) => {
+            const match = String(label).match(/([\d.,]+)\s*(ml|l)/i);
+            if (!match) return null;
+            const value = parseFloat(match[1].replace(',', '.'));
+            const unit = match[2].toLowerCase();
+            return unit === 'l' ? value * 1000 : value; // normalize to ml
+        };
+
+        const aVol = extractVolume(a.label);
+        const bVol = extractVolume(b.label);
+
+        if (aVol != null && bVol != null && aVol !== bVol) return aVol - bVol;
+
         const aSelected =
             multiple && Array.isArray(selected)
                 ? (selected as (Option | string | number)[]).some((item) =>
@@ -66,8 +80,8 @@
                       typeof item === 'object' ? item.value === b.value : item === b.label
                   )
                 : false;
+
         if (aSelected === bSelected) {
-            // Preserve original order using originalIndex.
             return (a.originalIndex ?? 0) - (b.originalIndex ?? 0);
         }
         return aSelected ? -1 : 1;
@@ -246,9 +260,11 @@
     >
         <div class="select-options__wrapper svrollbar">
             <SimpleBar style="width:100%; height: fit-content; max-height: 210px" forceVisible={true} autoHide={false}>
-                <button class="select-options__item text" type="button" on:click={selectDefault}>
-                    {defaultOption}
-                </button>
+                {#if hideDefault}
+                    <button class="select-options__item text" type="button" on:click={selectDefault}>
+                        {defaultOption}
+                    </button>
+                {/if}
                 {#each sortedOptions as opt, index}
                     <button class="select-options__item text" type="button" on:click={() => selectOption(opt)}>
                         <span>{opt.label}</span>
