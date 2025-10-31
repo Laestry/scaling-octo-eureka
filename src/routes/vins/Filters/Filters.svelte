@@ -296,7 +296,7 @@
 
 <div class="mt-15 flex flex-col lg:gap-4 md:gap-3 gap-[20px]">
     <div class="flex justify-between">
-        <div class="flex gap-1 items-center w-full">
+        <div class="flex gap-1 items-center md:w-full w-0">
             <label class="search md:flex hidden">
                 <div class="search__button">
                     <IconSearch />
@@ -304,7 +304,7 @@
                 <input type="text" class="search__input" bind:value={nameSearch} />
             </label>
         </div>
-        <div class="flex gap-1 items-center">
+        <div class="flex gap-1 items-center md:w-auto w-full md:justify-normal justify-between">
             <button class="all-button abutton text-" on:click={clearAllFilters}>Liste complète</button>
 
             <div class="flex gap-1">

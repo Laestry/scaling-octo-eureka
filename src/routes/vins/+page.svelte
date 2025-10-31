@@ -139,7 +139,7 @@
 
 <svelte:window bind:outerWidth />
 
-<div class="lg:mt-[56px] md:mt-[40px] mt-[80px]">
+<div class="lg:mt-[56px] md:mt-[40px] mt-[36px]">
     <Filters
         categories={data.categories.data}
         bind:selectedFilters

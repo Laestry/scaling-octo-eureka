@@ -78,7 +78,7 @@
     <div
         class="fixed flex justify-end items-center pointer-events-none
         lg:w-[1136px] md:w-[760px] w-[300px]
-        lg:mt-[65px] md:mt-8 mt-2.5
+        lg:mt-[65px] md:mt-8 mt-5
         md:gap-1 gap-2.5"
         style="z-index: 10000"
     >
@@ -108,14 +108,15 @@
             <span class="checkbox__text"> {$isPrixResto ? 'Prix Resto' : 'Prix Perso'}</span>
             <span class="checkbox__box"></span>
         </label>
+        <div class="md:flex-0 md:hidden block flex-1"></div>
 
-        <a class="abutton !w-fit circle {$totalItems > 0 ? '!bg-wred !text-white' : ''}" href="/cart">
-            {$totalItems}
-        </a>
         <a class="abutton circle" href="/vins">
             <div class="h-3.5 w-3.5">
                 <IconSearch />
             </div>
+        </a>
+        <a class="abutton !w-fit circle {$totalItems > 0 ? '!bg-wred !text-white' : ''}" href="/cart">
+            {$totalItems}
         </a>
     </div>
 </div>
@@ -174,11 +175,11 @@
             <a href="/">
                 <Logo
                     color={computedColor}
-                    class="abutton
+                    class="abutton mx-auto
                        lg:w-[132px] lg:h-[130px]
                        md:w-[83px] md:h-[82px]
-                       w-[43px] h-[33px]
-                       md:mt-0 mt-4"
+                       w-[90px] h-[69px]
+                       md:mt-0 mt-[90px]"
                 />
             </a>
             {#if $page.url.pathname === '/cart'}
@@ -225,21 +226,21 @@
                    flex flex-col lg:h-[176px] items-center lg:w-[1136px] md:w-[680px] w-[300px]"
             style="--dynamic-color: {computedColor}; color: var(--dynamic-color);"
         >
-            <a href="/" class="lg:hidden md:self-center self-start">
+            <a href="/" class="lg:hidden self-center">
                 <Logo
                     color={computedColor}
                     class="abutton
                        lg:w-[132px] lg:h-[130px]
                        md:w-[83px] md:h-[82px]
-                       w-[43px] h-[33px]
-                       md:mt-0 mt-4"
+                       w-[90px] h-[69px]
+                       md:mt-0 mt-[78px]"
                 />
             </a>
 
             <div
                 class="lg:hidden flex uppercase items-center flex-1
                 lg:h-[96px] h-auto
-                lg:mt-[22px] md:mt-[20px] mt-[20px] mt-[148px]"
+                lg:mt-[22px] md:mt-[20px] mt-[55px]"
                 style="--dynamic-color: {computedColor}; color: var(--dynamic-color);"
             >
                 <div class="flex gap-[16px] lg:flex-row flex-col">
@@ -359,9 +360,9 @@
 
         @media (max-width: 767px) {
             border-radius: 24px;
-            height: 42px;
-            width: 42px;
-            min-width: 42px;
+            height: 39px;
+            width: 39px;
+            min-width: 39px;
             font-size: 16px;
         }
     }
@@ -377,13 +378,14 @@
         line-height: 150%;
 
         @media (max-width: 1162px) {
-            font-size: 12px;
+            font-size: 20px;
             height: auto;
             width: auto;
             padding: 0 24px;
         }
 
         @media (max-width: 767px) {
+            padding: 0;
         }
     }
 
