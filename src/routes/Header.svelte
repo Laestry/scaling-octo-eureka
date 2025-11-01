@@ -415,7 +415,7 @@
     //backdrop
     .backdrop {
         width: 100%;
-        background-image: url('/images/mainbackdrop.png');
+        background-image: url('/images/cover/mainbackdropLG.png');
         background-size: cover;
         background-repeat: no-repeat;
         position: absolute;
@@ -431,6 +431,7 @@
         z-index: 3;
         @media (max-width: 767px) {
             transform: translateX(0px);
+            background-position: 50% center;
         }
     }
     .backdrop--2 {
@@ -439,6 +440,7 @@
         z-index: 2;
         @media (max-width: 767px) {
             transform: translateX(0);
+            background-position: 70% center;
         }
     }
     .backdrop--3 {
