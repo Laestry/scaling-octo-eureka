@@ -6,7 +6,9 @@ module.exports = {
             md: '767px',
             lg: '1162px',
             amd: '679px',
-            alg: '1136px'
+            alg: '1136px',
+
+            fmd: '880px'
         },
         extend: {
             cursor: {

@@ -1,6 +1,6 @@
 import { error } from '@sveltejs/kit';
 
-export async function load({ locals, params }) {
+export async function load({ locals }) {
     let { data: suppliers, error: serror } = await locals.supabase
         .schema('cms_saq')
         .from('companies_suppliers_view')

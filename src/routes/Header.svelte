@@ -82,6 +82,12 @@
         md:gap-1 gap-2.5"
         style="z-index: 10000"
     >
+        <label class="checkbox pointer-events-auto">
+            <input type="checkbox" class="checkbox__input" bind:checked={$isPrixResto} />
+            <span class="checkbox__text"> {$isPrixResto ? 'Prix Resto' : 'Prix Perso'}</span>
+            <span class="checkbox__box"></span>
+        </label>
+        <div class="md:flex-0 md:hidden block flex-1"></div>
         {#if showGoBack}
             <a transition:fade class="abutton circle" href="#logo">
                 <svg
@@ -102,14 +108,6 @@
                 </svg>
             </a>
         {/if}
-
-        <label class="checkbox pointer-events-auto">
-            <input type="checkbox" class="checkbox__input" bind:checked={$isPrixResto} />
-            <span class="checkbox__text"> {$isPrixResto ? 'Prix Resto' : 'Prix Perso'}</span>
-            <span class="checkbox__box"></span>
-        </label>
-        <div class="md:flex-0 md:hidden block flex-1"></div>
-
         <a class="abutton circle" href="/vins">
             <div class="h-3.5 w-3.5">
                 <IconSearch />
