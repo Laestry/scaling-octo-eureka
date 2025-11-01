@@ -5,6 +5,7 @@ export async function load({ locals, params }) {
         .schema('cms_saq')
         .from('companies_suppliers_view')
         .select(' usual_name, country_id, region_name, country_fr:country_name->>fr, flag')
+        .order('usual_name', { ascending: true })
         .eq('organization_id', 2);
 
     if (serror) {
