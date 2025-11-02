@@ -13,14 +13,29 @@
     export let categories: any[] = [];
     export let selectedFilters: TFilters;
     export let nameSearch: string;
-
+    export let enabledFacets:EnabledFacets
     type FilterGroupName = 'category' | 'region' | 'vintage' | 'format' | 'producer';
+    type Option = {
+        value: number | string;
+        label: number | string;
+        disabled?: boolean;
+        originalIndex?: number;
+    };
+
+    type EnabledFacets = {
+        producer?: { id: number; name: string }[];
+        region?: { country_id: number | null; region_name: string | null }[];
+        format?: { volume: number | null; format: number | null }[];
+        vintage?: { vintage: number }[];
+    } | null | undefined;
+
 
     type DisplayFilter = {
         name: FilterGroupName;
         label: string; // what you want to show as placeholder
         list: string[];
         rawMap: Record<string, any>;
+        options: { label: string; value: any; disabled?: boolean }[]; // <—
     };
 
     const displayNames: Record<FilterGroupName, string> = {
@@ -31,7 +46,75 @@
         producer: 'Producteur'
     };
 
-    function buildDisplayFilters(rawCats: any[] = []): DisplayFilter[] {
+    function valueAllowedForGroup(
+        group: FilterGroupName,
+        rawValue: any,
+        ef: EnabledFacets
+    ): boolean {
+        if (!ef) return true; // no restriction at all when facets not provided
+
+        const norm = (v: any) => JSON.stringify(v ?? null);
+
+        if (group === 'producer') {
+            // If the group key is absent => no restriction. If present but empty => disable all.
+            if (!('producer' in ef)) return true;
+            const list = ef.producer ?? [];
+            if (list.length === 0) return false;
+            const allowed = list.map((p) => ({ id: p.id }));
+            const candidate =
+                { id: rawValue?.id ?? rawValue?.provider_id ?? rawValue?.value ?? rawValue };
+            return allowed.some((a) => norm(a) === norm(candidate));
+        }
+
+        if (group === 'region') {
+            if (!('region' in ef)) return true;
+            const list = ef.region ?? [];
+            if (list.length === 0) return false;
+            const allowed = list.map((r) => ({
+                country_id: r.country_id ?? null,
+                region_name: r.region_name ?? null
+            }));
+            const candidate = {
+                country_id: rawValue?.country_id ?? null,
+                region_name: rawValue?.region_name ?? null
+            };
+            return allowed.some((a) => norm(a) === norm(candidate));
+        }
+
+        if (group === 'format') {
+            if (!('format' in ef)) return true;
+            const list = ef.format ?? [];
+            if (list.length === 0) return false;
+            const allowed = list.map((f) => ({
+                volume: f.volume ?? null,
+                format: f.format ?? null
+            }));
+            const candidate = {
+                volume: rawValue?.volume ?? null,
+                format: rawValue?.format ?? null
+            };
+            return allowed.some((a) => norm(a) === norm(candidate));
+        }
+
+        if (group === 'vintage') {
+            if (!('vintage' in ef)) return true;
+            const list = ef.vintage ?? [];
+            if (list.length === 0) return false;
+            const allowed = list.map((v) => v.vintage);
+            const candidate = typeof rawValue === 'number'
+                ? rawValue
+                : Number(rawValue?.vintage ?? rawValue);
+            return allowed.includes(candidate);
+        }
+
+        // category not restricted by facets
+        if (group === 'category') return true;
+
+        return true;
+    }
+
+
+    function buildDisplayFilters(rawCats: any[] = [], ef: EnabledFacets) {
         const groups: Record<
             FilterGroupName,
             { name: FilterGroupName; order: number; options: { label: string; value: any }[] }
@@ -41,47 +124,41 @@
             const orgType = cat.type;
             let label: string | null = null;
             let groupKey: FilterGroupName;
-            let groupName: FilterGroupName;
             let order: number;
 
             if (orgType === 'category') {
                 label = getSpecificCategoryLabel(cat.value);
                 if (!label) return;
                 groupKey = 'category';
-                groupName = 'category';
                 order = 1;
             } else if (orgType === 'location') {
                 label = formatLocation(cat.value);
                 if (!label) return;
                 groupKey = 'region';
-                groupName = 'region';
                 order = 2;
             } else if (orgType === 'vintage') {
                 const vintageNum = Number(cat.value);
                 if (!vintageNum) return;
                 label = String(vintageNum);
                 groupKey = 'vintage';
-                groupName = 'vintage';
                 order = 3;
             } else if (orgType === 'volume') {
                 label = formatVolume(cat.value);
                 if (!label) return;
                 groupKey = 'format';
-                groupName = 'format';
                 order = 4;
             } else if (orgType === 'provider') {
                 const parsed = typeof cat.value === 'string' ? JSON.parse(cat.value) : cat.value;
                 label = parsed?.name;
                 if (!label) return;
                 groupKey = 'producer';
-                groupName = 'producer';
                 order = 5;
             } else {
                 return;
             }
 
             if (!groups[groupKey]) {
-                groups[groupKey] = { name: groupName, order, options: [] };
+                groups[groupKey] = { name: groupKey, order, options: [] };
             }
             groups[groupKey].options.push({ label, value: cat.value });
         });
@@ -89,43 +166,53 @@
         return Object.values(groups)
             .sort((a, b) => a.order - b.order)
             .map((g) => {
-                let deduped = g.options.filter((opt, i, arr) => arr.findIndex((o) => o.value === opt.value) === i);
+                let deduped = g.options.filter(
+                    (opt, i, arr) => arr.findIndex((o) => o.value === opt.value) === i
+                );
 
-                // sorting rules
                 if (g.name === 'category' || g.name === 'region' || g.name === 'producer') {
-                    deduped = deduped.sort((a, b) => a.label.localeCompare(b.label, 'fr', { sensitivity: 'base' }));
+                    deduped = deduped.sort((a, b) =>
+                        a.label.localeCompare(b.label as string, 'fr', { sensitivity: 'base' })
+                    );
                 } else if (g.name === 'format') {
-                    deduped = deduped.sort((a, b) => {
-                        const parseVol = (str: string) => {
-                            const num = parseFloat(str);
-                            if (str.includes('l')) return num * 1000; // liters → ml
-                            return num;
-                        };
-                        return parseVol(b.label) - parseVol(a.label); // bigger first
-                    });
+                    const parseVol = (str: string) => {
+                        const num = parseFloat(str);
+                        if (str.includes('l')) return num * 1000;
+                        return num;
+                    };
+                    deduped = deduped.sort(
+                        (a, b) => parseVol(b.label as string) - parseVol(a.label as string)
+                    );
                 }
+
+                const rawMap = Object.fromEntries(
+                    deduped.map((o) => {
+                        let parsed: any = o.value;
+                        if (typeof parsed === 'string') {
+                            try { parsed = JSON.parse(parsed); } catch {}
+                        }
+                        return [o.label, parsed];
+                    })
+                );
+
+                const optionsWithDisabled = deduped.map((o) => {
+                    const raw = rawMap[o.label];
+                    const disabled = !valueAllowedForGroup(g.name as FilterGroupName, raw, ef);
+                    return { label: o.label, value: o.value, disabled };
+                });
 
                 return {
                     name: g.name as FilterGroupName,
                     label: displayNames[g.name as FilterGroupName] ?? g.name,
-                    list: deduped.map((o) => o.label),
-                    rawMap: Object.fromEntries(
-                        deduped.map((o) => {
-                            let parsed: any = o.value;
-                            if (typeof parsed === 'string') {
-                                try {
-                                    parsed = JSON.parse(parsed);
-                                } catch {}
-                            }
-                            return [o.label, parsed];
-                        })
-                    )
+                    rawMap,
+                    options: optionsWithDisabled
                 };
             });
     }
 
+
     // reactive filters derived from raw categories
-    $: filters = buildDisplayFilters(categories);
+    $: filters = buildDisplayFilters(categories, enabledFacets);
 
     const dispatch = createEventDispatcher();
 
@@ -358,16 +445,19 @@
                 <Select
                     multiple
                     class="cusselect"
-                    options={f.list}
+                    options={f.options}
                     placeholder={f.label}
                     defaultOption="Tout afficher"
                     selected={selectedLabelsByGroup[f.name]}
                     on:change={(e) => {
                         const sel = e.detail?.selected;
                         const labels = (() => {
+                            if (e.detail?.selectedLabels) return e.detail.selectedLabels;
                             if (sel == null) return undefined;
-                            if (Array.isArray(sel)) return sel.map(String);
-                            return [String(sel)];
+                            const arr = Array.isArray(sel) ? sel : [sel];
+                            return arr.map((it) =>
+                                typeof it === 'object' && it !== null ? String(it.label ?? it.value) : String(it)
+                            );
                         })();
 
                         const field = f.name;

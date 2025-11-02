@@ -160,7 +160,7 @@
     </div>
 
     {#if $page.url.pathname === '/cart'}
-        <div class="header-products-links !text-black w-full border-t border-wblack text-center mb-[105px]">
+        <div class="header-products-links !text-black w-full border-t border-wblack text-center mb-[105px] text-[24px]">
             Panier d’achat
         </div>
     {/if}

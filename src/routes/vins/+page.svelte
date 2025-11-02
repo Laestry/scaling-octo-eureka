@@ -9,10 +9,11 @@
     import { isGrid } from '$lib/store';
     import { supabase } from '$lib/supabase/client';
     import { fetchFilteredProductsForAlcohol } from './Filters/utils';
-    import WaitlistForm from '$lib/components/WaitlistForm.svelte';
 
     export let data: PageData;
     let products = data.products.data;
+    let enabledFacets: any = data.enabledFacets.data;
+
     let loaded = 20;
     let hasMore = data.products.count > 20;
     const PAGE_SIZE = 20;
@@ -46,18 +47,47 @@
         isLoading = true;
 
         try {
-            const {
-                data: newProducts,
-                count,
-                error
-            } = await fetchFilteredProductsForAlcohol(supabase, withNameSearch(selectedFilters, nameSearch), {
-                limit: PAGE_SIZE,
-                offset: loaded,
-                sorting: selectedFilters.sorting
+            const productsPromise = fetchFilteredProductsForAlcohol(
+                supabase,
+                withNameSearch(selectedFilters, nameSearch),
+                {
+                    limit: PAGE_SIZE,
+                    offset: loaded,
+                    sorting: selectedFilters.sorting
+                }
+            );
+
+            const facetsPromise = supabase.schema('cms_saq').rpc('search_alcohol_facets', {
+                payload: {
+                    organization_id: 2,
+                    limit: 20,
+                    offset: 0,
+                    sorting: selectedFilters.sorting ?? null,
+                    producer: selectedFilters.producer && JSON.parse(String(selectedFilters.producer)),
+                    region: selectedFilters.region && JSON.parse(String(selectedFilters.region)),
+                    category:
+                        selectedFilters.category && JSON.parse(`[${[selectedFilters.category].flat().join(',')}]`),
+                    format: selectedFilters.format && JSON.parse(String(selectedFilters.format)),
+                    vintage: [selectedFilters.vintage].flat().filter(Boolean),
+                    nameSearch: nameSearch || null,
+                    tag: selectedFilters.tag || null,
+                    priceRange: selectedFilters.priceRange || null
+                }
             });
 
-            if (error) {
-                console.error('Error loading more products:', error);
+            const [{ data: newProducts, count, error: productsError }, { data: facets, error: facetsError }] =
+                await Promise.all([productsPromise, facetsPromise]);
+
+            // Update facets regardless of product result; log facet error but don't hard-fail listing.
+            enabledFacets = facets;
+            console.log('selectedFilters', selectedFilters);
+            console.log('search_alcohol_facets', facets, facetsError);
+            if (facetsError) {
+                console.error('Facets error:', facetsError);
+            }
+
+            if (productsError) {
+                console.error('Error loading more products:', productsError);
                 return;
             }
 
@@ -70,14 +100,12 @@
             loaded += newProducts.length;
 
             if (count !== null) {
-                if (loaded >= count) {
-                    hasMore = false;
-                }
+                if (loaded >= count) hasMore = false;
             } else if (newProducts.length < PAGE_SIZE) {
                 hasMore = false;
             }
         } catch (err) {
-            console.error('Error fetching products:', err);
+            console.error('Error fetching products/facets:', err);
         } finally {
             isLoading = false;
         }
@@ -145,6 +173,7 @@
         bind:selectedFilters
         bind:nameSearch
         on:resetFilters={() => updateProducts(true)}
+        {enabledFacets}
     />
     {#if isLoading && products.length === 0}
         loading wines

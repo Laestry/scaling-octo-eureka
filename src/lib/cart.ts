@@ -51,7 +51,7 @@ function isValidCartEntry(x: unknown): x is CartProduct {
     const o = x as UnknownRecord;
 
     // required for cart ops
-    const hasBatch = typeof o.selectedBatchId === 'string' && o.selectedBatchId.length > 0;
+    const hasBatch = typeof o.selected_batch_id === 'number';
     const hasQty = isFiniteInteger(o.quantity) && (o.quantity as number) >= 0;
 
     // minimal product fields your code uses
@@ -140,10 +140,10 @@ export function createCart(): CartStore {
 
         add: (cartItem, amount = 1) => {
             // Use the selectedBatchId that's already in the cartItem
-            const batchId = cartItem.selectedBatchId;
+            const batchId = cartItem.selected_batch_id;
 
             cartStore.update((cart: CartProduct[]) => {
-                const existingIndex = cart.findIndex((ci) => ci.selectedBatchId === batchId);
+                const existingIndex = cart.findIndex((ci) => ci.selected_batch_id === batchId);
                 const existing = existingIndex !== -1 ? cart[existingIndex] : undefined;
 
                 const uvc = cartItem.uvc > 0 ? cartItem.uvc : 1;
@@ -175,7 +175,7 @@ export function createCart(): CartStore {
         remove: (selectedBatchId: string, amount: number = 1) => {
             cartStore.update((cart: CartProduct[]) => {
                 const id = toStrId(selectedBatchId);
-                const index = cart.findIndex((ci) => ci.selectedBatchId === id);
+                const index = cart.findIndex((ci) => ci.selected_batch_id === id);
                 if (index === -1) return cart;
 
                 const ci = cart[index];
@@ -189,7 +189,7 @@ export function createCart(): CartStore {
 
         removeCompletely: (selectedBatchId: string) => {
             const id = toStrId(selectedBatchId);
-            cartStore.update((cart: CartProduct[]) => cart.filter((ci) => ci.selectedBatchId !== id));
+            cartStore.update((cart: CartProduct[]) => cart.filter((ci) => ci.selected_batch_id !== id));
         },
 
         clear: () => {
@@ -212,7 +212,7 @@ export const totalItems = derived(cart, ($cart) =>
 export function getItemQuantityStore(selectedBatchId: string | number) {
     const id = String(selectedBatchId);
     return derived(cart, ($cart) => {
-        const item = $cart.find((i) => String(i.selectedBatchId) === id);
+        const item = $cart.find((i) => String(i.selected_batch_id) === id);
         return item ? item.quantity : 0;
     });
 }

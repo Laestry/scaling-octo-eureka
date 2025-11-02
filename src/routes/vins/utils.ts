@@ -50,7 +50,6 @@ export function transformVinsToCartObject(product) {
         updated_at: product.updated_at,
 
         // Cart specific properties
-        selectedBatchId: product.oldest_batch_id.toString(),
         quantity: 1 // Initial quantity
     };
 

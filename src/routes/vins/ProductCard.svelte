@@ -10,7 +10,7 @@
     export let product: any;
     export let size: 's' | 'm' | 'l' | 'v' = 's';
     export let isMain = false;
-    console.log('product', product);
+    // console.log('product', product);
     let img = '';
     $: {
         product;
@@ -37,9 +37,14 @@
     }
 
     function handleAdd() {
+        console.log('handleAdd', selectedBatch);
         if (!selectedBatch) return;
         if ($itemQuantity >= maxCases) return;
+        console.log('handleAdd', $itemQuantity, maxCases);
+
         const cartItem = transformVinsToCartObject(product);
+        console.log('handleAdd cartItem', cartItem);
+
         cart.add(cartItem);
         const id = Date.now();
         const duration = 600;

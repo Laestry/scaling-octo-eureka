@@ -5,7 +5,12 @@
     import { validator } from '@exodus/schemasafe';
 
     // Option type for object options. We add an optional originalIndex.
-    type Option = { value: number | string; label: number | string; originalIndex?: number };
+    type Option = {
+        value: number | string;
+        label: number | string;
+        originalIndex?: number;
+        disabled?: boolean; // <—
+    };
 
     export let defaultOption = 'All';
     // Accept either an array of Option objects or an array of strings or numbers.
@@ -42,7 +47,7 @@
         Array.isArray(options) && options.length > 0
             ? typeof (options as any)[0] === 'string' || typeof (options as any)[0] === 'number'
                 ? (options as (string | number)[]).map((opt, i) => ({ value: opt, label: opt, originalIndex: i }))
-                : (options as Option[]).map((opt, i) => ({ ...opt, originalIndex: i }))
+                : (options as Option[]).map((opt, i) => ({ ...opt, originalIndex: i, disabled: !!opt.disabled })) // <—
             : [];
 
     let isSimpleOptions = false;
@@ -55,36 +60,33 @@
 
     // Create a reactive sorted list that puts selected options at the top.
     $: sortedOptions = optionsFiltered.slice().sort((a, b) => {
+        // volume-aware ordering you already had
         const extractVolume = (label: string | number) => {
-            const match = String(label).match(/([\d.,]+)\s*(ml|l)/i);
-            if (!match) return null;
-            const value = parseFloat(match[1].replace(',', '.'));
-            const unit = match[2].toLowerCase();
-            return unit === 'l' ? value * 1000 : value; // normalize to ml
+            const m = String(label).match(/([\d.,]+)\s*(ml|l)/i);
+            if (!m) return null;
+            const val = parseFloat(m[1].replace(',', '.'));
+            const unit = m[2].toLowerCase();
+            return unit === 'l' ? val * 1000 : val;
         };
-
         const aVol = extractVolume(a.label);
         const bVol = extractVolume(b.label);
-
         if (aVol != null && bVol != null && aVol !== bVol) return aVol - bVol;
 
-        const aSelected =
+        const isSelected = (opt: Option) =>
             multiple && Array.isArray(selected)
                 ? (selected as (Option | string | number)[]).some((item) =>
-                      typeof item === 'object' ? item.value === a.value : item === a.label
-                  )
-                : false;
-        const bSelected =
-            multiple && Array.isArray(selected)
-                ? (selected as (Option | string | number)[]).some((item) =>
-                      typeof item === 'object' ? item.value === b.value : item === b.label
+                      typeof item === 'object' ? (item as any).value === opt.value : item === opt.label
                   )
                 : false;
 
-        if (aSelected === bSelected) {
-            return (a.originalIndex ?? 0) - (b.originalIndex ?? 0);
-        }
-        return aSelected ? -1 : 1;
+        const aSel = isSelected(a);
+        const bSel = isSelected(b);
+        if (aSel !== bSel) return aSel ? -1 : 1;
+
+        // enabled before disabled
+        if (!!a.disabled !== !!b.disabled) return a.disabled ? 1 : -1; // <—
+
+        return (a.originalIndex ?? 0) - (b.originalIndex ?? 0);
     });
 
     function handleOpen() {
@@ -136,46 +138,52 @@
     });
 
     function selectOption(opt: Option) {
+        if (opt.disabled) return;
+
+        const toLabel = (x: any) => (typeof x === 'object' && x !== null ? String(x.label ?? x.value) : String(x));
+
         if (multiple) {
-            // Ensure selected is an array.
-            if (!Array.isArray(selected)) {
-                selected = [];
-            }
-            // Check if the option is already selected.
-            const index = (selected as (Option | string | number)[]).findIndex((item) =>
-                typeof item === 'object' ? item.value === opt.value : item === opt.label
+            if (!Array.isArray(selected)) selected = [];
+            const idx = (selected as (Option | string | number)[]).findIndex((item) =>
+                typeof item === 'object' ? (item as any).value === opt.value : item === opt.label
             );
-            if (index > -1) {
-                // Remove the option.
-                (selected as (Option | string | number)[]).splice(index, 1);
+
+            if (idx > -1) {
+                (selected as any[]).splice(idx, 1);
             } else {
-                // Add the option.
-                (selected as (Option | string | number)[]).push(isSimpleOptions ? opt.label : opt);
+                (selected as any[]).push(isSimpleOptions ? opt.label : opt);
             }
-            // Update count and assign selected accordingly.
-            const count = (selected as (Option | string | number)[]).length;
+
+            const count = (selected as any[]).length;
             if (count === 0) {
                 selected = undefined;
                 inputValue = '';
             } else {
-                // Trigger reactivity.
-                selected = [...(selected as (Option | string | number)[])];
+                selected = [...(selected as any[])];
                 inputValue = `${placeholder} (${count})`;
             }
+
             handleValidate();
-            // Keep the dropdown open for multiple selection.
             value = isSimpleOptions ? (opt.label as any) : (opt.value as any);
 
-            dispatch('change', { selected });
+            const selectedLabels = Array.isArray(selected)
+                ? (selected as any[]).map(toLabel)
+                : selected
+                  ? [toLabel(selected)]
+                  : [];
+
+            dispatch('change', { selected, selectedLabels });
         } else {
-            // Single selection behavior.
             inputValue = String(opt.label);
             value = isSimpleOptions ? (opt.label as any) : (opt.value as any);
-            selected = isSimpleOptions ? opt.label : opt;
+            selected = isSimpleOptions ? (opt.label as any) : opt;
             handleValidate();
             isOpen = false;
             userInput = '';
-            dispatch('change', { selected });
+
+            const selectedLabels = selected ? [toLabel(selected)] : [];
+
+            dispatch('change', { selected, selectedLabels });
         }
     }
 
@@ -266,7 +274,14 @@
                     </button>
                 {/if}
                 {#each sortedOptions as opt, index}
-                    <button class="select-options__item text" type="button" on:click={() => selectOption(opt)}>
+                    <button
+                        class="select-options__item text"
+                        type="button"
+                        on:click={() => selectOption(opt)}
+                        disabled={opt.disabled}
+                        aria-disabled={opt.disabled}
+                        tabindex={opt.disabled ? -1 : 0}
+                    >
                         <span>{opt.label}</span>
                         {#if multiple && selectedStates[index]}
                             <svg
@@ -288,6 +303,12 @@
 {/if}
 
 <style lang="scss">
+    .select-options__item[disabled] {
+        opacity: 0.5;
+        cursor: not-allowed;
+        pointer-events: none; /* prevents hover/active visuals */
+    }
+
     :global(.simplebar-scrollbar::before) {
         min-height: 50px !important;
         background-color: #ccc;
