@@ -5,15 +5,15 @@
     import { type AlcoholProduct, cart, getItemQuantityStore } from '$lib/cart';
     import { Svroller } from 'svrollbar';
     import { fade } from 'svelte/transition';
-    import { onMount } from 'svelte';
     import WaitlistForm from '$lib/components/WaitlistForm.svelte';
     import { supabase } from '$lib/supabase/client';
     import Accordion from '$lib/components/Accordion.svelte';
     import ProductCard from '../../vins/ProductCard.svelte';
     import { getOldestBatch } from '$lib/fullProduct/utils';
-    import { getVinImage } from '$lib/utils/images';
     import { afterNavigate } from '$app/navigation';
     import VinImages from './VinImages.svelte';
+    import Plus from '$lib/icons/Plus.svelte';
+    import Minus from '$lib/icons/Minus.svelte';
 
     //#region props_and_data
     export let data: PageData;
@@ -34,6 +34,34 @@
     $: isAtLimit = $itemQuantity >= maxCases;
     //#endregion batch_selection
 
+    //#region plus/minus logic
+    let in_cart = 1;
+
+    // how many cases exist in stock for this batch
+    $: maxCases = selectedBatch ? Math.floor(selectedBatch.calculated_quantity / product.uvc) : 0;
+
+    // how many cases are still available to add (stock minus what’s already in the cart)
+    $: availableCases = Math.max(0, maxCases - ($itemQuantity ?? 0));
+
+    // keep in_cart within the allowed range
+    $: {
+        if (availableCases === 0) {
+            in_cart = 0;
+        } else if (in_cart < 1) {
+            in_cart = 1;
+        } else if (in_cart > availableCases) {
+            in_cart = availableCases;
+        }
+    }
+
+    function inc() {
+        if (availableCases > 0) in_cart = Math.min(in_cart + 1, availableCases);
+    }
+    function dec() {
+        if (availableCases > 0) in_cart = Math.max(in_cart - 1, 1);
+    }
+    //#endregion
+
     //#region ui_state
     let currentSlide = 0;
     let expand_description = false;
@@ -44,10 +72,18 @@
     //#region cart_handlers
     function handleAdd() {
         if (!selectedBatch) return;
-        if ($itemQuantity >= maxCases) return;
+        if (availableCases <= 0 || in_cart <= 0) return;
+
         const cartItem = transformVinToCartObject(product, selectedBatch.id);
-        cart.add(cartItem);
+
+        for (let i = 0; i < in_cart; i++) {
+            cart.add(cartItem);
+        }
+
+        // optionally reset to 1 (or 0 if no more available)
+        in_cart = Math.min(1, Math.max(availableCases - in_cart, 0)) === 0 ? 0 : 1;
     }
+
     //#endregion cart_handlers
 
     //#region waitlist_handlers
@@ -244,12 +280,31 @@
                                 <div class="text-xs md:w-full w-fit md:mb-4">
                                     Bouteilles ({product.uvc}/caisse)
                                 </div>
-                                <div class="text-xs product-table-counter__value">
-                                    {selectedBatch.calculated_quantity > 0 ? $itemQuantity * product.uvc : '/'}
+                                <div class="flex gap-1 items-center">
+                                    <div class="text-xs product-table-counter__value">
+                                        {selectedBatch.calculated_quantity > 0 ? in_cart * product.uvc : '/'}
+                                    </div>
+                                    <div class="md:flex flex-col contents">
+                                        <button
+                                            class="abutton product-table-counter__button order-[-1]"
+                                            on:click={inc}
+                                            disabled={availableCases <= 0}
+                                        >
+                                            <Plus />
+                                        </button>
+                                        <button
+                                            class="abutton product-table-counter__button"
+                                            on:click={dec}
+                                            disabled={availableCases <= 0}
+                                        >
+                                            <Minus />
+                                        </button>
+                                    </div>
                                 </div>
+
                                 {#if selectedBatch.calculated_quantity}
                                     <button
-                                        disabled={isAtLimit}
+                                        disabled={availableCases <= 0 || in_cart <= 0}
                                         class="product-table__button abutton md:mt-0 mt-7 lg:mr-[192px]"
                                         on:click={handleAdd}
                                     >
