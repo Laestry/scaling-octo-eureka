@@ -18,11 +18,14 @@
 
     // Declare options; you may type these if needed.
     let options;
-
+    let restoDeliveryOptions = [
+        { label: "Livraison à l'établissement", value: 0 },
+        { label: 'Livraison en succursale', value: 3 }
+    ];
     onMount(async () => {
         const { data, error } = await supabase.schema('cms_saq').from('saq_branches').select('*');
         options = data.map((x) => ({ value: x.id, label: `${x.city}, ${x.address}` }));
-        // console.log('branches', options);
+        console.log('branches', options);
         // console.log('cart', $cart);
     });
 
@@ -38,6 +41,8 @@
     let saqNumberInput: Input;
     let saqSelect: any;
     let saqSelectComponent: any;
+    let deliverTypeSelect: any;
+    let deliverTypeSelectComponent: any;
     const formSchema = {
         $schema: 'https://json-schema.org/draft/2019-09/schema',
         type: 'object',
@@ -101,7 +106,10 @@
         if ($isPrixResto || formData.saqNumber.length > 0) {
             errors.push(saqNumberInput.handleValidate());
         }
-        errors.push(saqSelectComponent.handleValidate());
+        if ($isPrixResto) errors.push(deliverTypeSelectComponent.handleValidate());
+        if (!$isPrixResto) {
+            errors.push(saqSelectComponent.handleValidate());
+        }
 
         // If any input returns an error (non-empty string), don't submit.
         if (errors.some((valid) => valid === false)) {
@@ -132,7 +140,8 @@
                     organizationId: 2,
                     items: selectedBatches,
                     customer: {
-                        saq_store_id: saqSelect,
+                        resto_delivery_type: $isPrixResto ? deliverTypeSelect : undefined,
+                        saq_store_id: !$isPrixResto ? saqSelect : undefined,
                         saq_number: formData.saqNumber,
                         billing_address: {
                             street: formData.address,
@@ -407,7 +416,7 @@
                 <div class="flex md:flex-row flex-col w-full md:gap-4 gap-0 md:mt-[40px] mt-[20px]">
                     <div class="text-base text-nowrap w-[176px]">Pour la cueillette</div>
 
-                    {#if options}
+                    {#if !$isPrixResto && options}
                         <Select
                             fontSize="16px"
                             bind:value={saqSelect}
@@ -418,6 +427,18 @@
                             hint="Veuillez sélectionner une succursale SAQ"
                             validate={{ type: ['string', 'number'], minLength: 1 }}
                             bind:this={saqSelectComponent}
+                        />
+                    {:else if $isPrixResto}
+                        <Select
+                            fontSize="16px"
+                            bind:value={deliverTypeSelect}
+                            class="w-full lg:max-w-[464px] !border-wblue "
+                            inputClass="!text-wblack !placeholder-wblue"
+                            options={restoDeliveryOptions}
+                            placeholder="Type de livraison"
+                            hint="Veuillez sélectionner une type de livraison"
+                            validate={{ type: ['string', 'number'], minLength: 1 }}
+                            bind:this={deliverTypeSelectComponent}
                         />
                     {/if}
                 </div>

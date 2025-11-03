@@ -100,7 +100,7 @@ export function agencyFeeWithTaxes(item: any, isPrixResto: boolean) {
 export function totalsPerUnit(item: any, isPrixResto: boolean) {
     const base = baseWithTaxes(item, isPrixResto);
     const agencyWithTax = agencyFeeWithTaxes(item, isPrixResto);
-    console.log('totalsPerUnit', item.name, base, agencyWithTax);
+    // console.log('totalsPerUnit', item.name, base, agencyWithTax);
     return {
         base: base,
         agencyWithTaxes: agencyWithTax,

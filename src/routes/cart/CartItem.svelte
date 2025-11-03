@@ -26,9 +26,9 @@
         return selectedBatch.uvc > 0 ? Math.floor(availableBottles / selectedBatch.uvc) : 0;
     })();
 
-    // quantity store keyed by selectedBatchId
-    let itemQuantity = getItemQuantityStore(selectedBatch?.selectedBatchId);
-    $: if (selectedBatch) itemQuantity = getItemQuantityStore(selectedBatch.selectedBatchId);
+    // quantity store keyed by selected_batch_id
+    let itemQuantity = getItemQuantityStore(selectedBatch?.selected_batch_id);
+    $: if (selectedBatch) itemQuantity = getItemQuantityStore(selectedBatch.selected_batch_id);
 
     $: isAtLimit = $itemQuantity >= maxCases;
 
@@ -52,7 +52,8 @@
                 <button
                     class="hover:translate-y-0.5 transition-transform rotate-45 text-5xl"
                     style="line-height: 24px"
-                    on:click|preventDefault|stopPropagation={() => cart.removeCompletely(selectedBatch.selectedBatchId)}
+                    on:click|preventDefault|stopPropagation={() =>
+                        cart.removeCompletely(selectedBatch.selected_batch_id)}
                 >
                     +
                 </button>
@@ -125,7 +126,8 @@
                 <button
                     class="rotate-45 text-5xl"
                     style="line-height: 24px"
-                    on:click|preventDefault|stopPropagation={() => cart.removeCompletely(selectedBatch.selectedBatchId)}
+                    on:click|preventDefault|stopPropagation={() =>
+                        cart.removeCompletely(selectedBatch.selected_batch_id)}
                 >
                     +
                 </button>

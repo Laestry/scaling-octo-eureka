@@ -127,7 +127,7 @@ export function createCart(): CartStore {
             return toInt(sel.calculated_quantity);
         }
         const selId = resolveBatchId(sel);
-        if (item?.oldest_batch_id != null && toStrId(item.oldest_batch_id) === selId) {
+        if (item?.oldest_batch_id != null && item.oldest_batch_id === selId) {
             return toInt(item.oldest_calculated_quantity);
         }
         return undefined;
@@ -172,9 +172,9 @@ export function createCart(): CartStore {
             });
         },
 
-        remove: (selectedBatchId: string, amount: number = 1) => {
+        remove: (selected_batch_id: string, amount: number = 1) => {
             cartStore.update((cart: CartProduct[]) => {
-                const id = toStrId(selectedBatchId);
+                const id = selected_batch_id;
                 const index = cart.findIndex((ci) => ci.selected_batch_id === id);
                 if (index === -1) return cart;
 
@@ -187,8 +187,8 @@ export function createCart(): CartStore {
             });
         },
 
-        removeCompletely: (selectedBatchId: string) => {
-            const id = toStrId(selectedBatchId);
+        removeCompletely: (selected_batch_id: string) => {
+            const id = selected_batch_id;
             cartStore.update((cart: CartProduct[]) => cart.filter((ci) => ci.selected_batch_id !== id));
         },
 
