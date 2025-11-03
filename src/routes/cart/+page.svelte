@@ -87,7 +87,7 @@
     let loadingHandleSubmit = false;
     async function handleSubmit() {
         let selectedBatches = $cart.map((i) => ({
-            id: parseInt(i.selectedBatchId),
+            id: parseInt(i.selected_batch_id),
             caseQuantity: i.quantity
         }));
         console.log('cart items', $cart);
