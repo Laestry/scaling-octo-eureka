@@ -467,9 +467,10 @@
     .backdrops {
         display: flex;
         position: relative;
-        height: 772px;
+        //height: 772px;
+        aspect-ratio: 1512 / 772;
         width: 100%;
-        max-width: 1512px;
+        //max-width: 1512px;
         margin: auto;
         overflow: hidden;
         @media (max-width: 1162px) {
