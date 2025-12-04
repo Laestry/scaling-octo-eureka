@@ -13,6 +13,7 @@
     import { isPrixResto } from '$lib/store';
     import { totalsPerUnit } from '$lib/utils';
     import { page } from '$app/stores';
+    import { browser } from '$app/environment';
 
     // Log the cart for debugging
 
@@ -22,12 +23,51 @@
         { label: "Livraison à l'établissement", value: 0 },
         { label: 'Livraison en succursale', value: 3 }
     ];
+
     onMount(async () => {
         const { data, error } = await supabase.schema('cms_saq').from('saq_branches').select('*');
         options = data.map((x) => ({ value: x.id, label: `${x.city}, ${x.address}` }));
         console.log('branches', options);
         // console.log('cart', $cart);
     });
+
+    let cancelHandled = false;
+
+    async function cancelOrder(orderIdParam: string | null) {
+        try {
+            const organizationId = 2; // same org as used when creating the order
+            const body: Record<string, any> = { organizationId };
+            if (orderIdParam) {
+                const parsed = parseInt(orderIdParam, 10);
+                if (!Number.isNaN(parsed)) body.orderId = parsed;
+            }
+
+            const res = await fetch('/api/cancel-external-sales-order', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(body)
+            });
+
+            if (!res.ok) {
+                console.error('Failed to cancel external sales order', await res.text());
+            } else {
+                console.log('External sales order cancelled successfully');
+            }
+        } catch (e) {
+            console.error('Error while cancelling external sales order', e);
+        }
+    }
+
+    $: if (browser && !cancelHandled) {
+        const url = $page.url;
+        const cancelPayment = url.searchParams.get('cancelPayment');
+        const orderIdParam = url.searchParams.get('orderId');
+
+        if (cancelPayment === '1') {
+            cancelHandled = true;
+            cancelOrder(orderIdParam);
+        }
+    }
 
     const items = Array.from({ length: 500 }).map((_, i) => `item ${i}`);
 
