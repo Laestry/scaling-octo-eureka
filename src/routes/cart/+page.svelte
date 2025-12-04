@@ -122,10 +122,24 @@
         saqNumber: ''
     };
     let errorMessage = '';
+    let notifyFr = '';
+    let notifyEn = '';
+    let toastTimer: ReturnType<typeof setTimeout> | undefined;
+
+    $: if (notifyFr) {
+        if (toastTimer) clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => {
+            notifyFr = '';
+            notifyEn = '';
+        }, 3000);
+    }
     let formEl;
 
     let loadingHandleSubmit = false;
     async function handleSubmit() {
+        notifyFr = '';
+        notifyEn = '';
+
         let selectedBatches = $cart.map((i) => ({
             id: parseInt(i.selected_batch_id),
             caseQuantity: i.quantity
@@ -198,9 +212,37 @@
                     returnUrl: $page.url.origin
                 })
             });
+
             if (!res.ok) {
-                // non-2xx status
-                throw new Error(`Server returned ${res.status}`);
+                const text = await res.text();
+
+                let payload: any;
+                try {
+                    payload = JSON.parse(text);
+                } catch {
+                    payload = null;
+                }
+
+                if (payload?.error === 'InvalidBatches') {
+                    // бизнес-ошибка: не хватает вина / неверные партии
+                    notifyFr =
+                        "Certains vins ne sont plus disponibles dans la quantité choisie. Veuillez ajuster votre panier et réessayer.";
+                    notifyEn =
+                        'Some wines are no longer available in the requested quantity. Please adjust your cart and try again.';
+                } else if (payload?.error === 'NetworkError') {
+                    notifyFr =
+                        'Problème de connexion au serveur de commande. Veuillez réessayer plus tard.';
+                    notifyEn =
+                        'Connection problem with the order server. Please try again later.';
+                } else {
+                    notifyFr =
+                        "Une erreur s’est produite lors de la validation de votre commande. Veuillez réessayer ou modifier votre panier.";
+                    notifyEn =
+                        'An error occurred while validating your order. Please try again or adjust your cart.';
+                }
+
+                errorMessage = notifyFr;
+                return;
             }
 
             const data = await res.json();
@@ -210,8 +252,9 @@
             window.location.href = url;
         } catch (err) {
             console.error('Order submission failed:', err);
-            errorMessage = 'Une erreur réseau est survenue. Veuillez réessayer plus tard.';
-            // optionally bail out or re-throw
+            notifyFr = 'Problème de réseau. Veuillez réessayer plus tard.';
+            notifyEn = 'Network problem. Please try again later.';
+            errorMessage = notifyFr;
             return;
         } finally {
             loadingHandleSubmit = false;
@@ -286,8 +329,31 @@
 <!--Vérifier-->
 <!--Si vous avez déjà commandé chez nous, utilisez l’adresse email associée à votre commande.-->
 <!--Sinon, entrez votre email pour créer un nouveau compte. J’ai déjà un compte-->
+{#if notifyFr}
+    <div
+        class="toast-global"
+        role="button"
+        tabindex="0"
+        in:fly={{ x: 200, duration: 250 }}
+        out:fly={{ x: 200, duration: 200 }}
+        on:click={() => {
+            notifyFr = '';
+            notifyEn = '';
+        }}
+        on:keydown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                notifyFr = '';
+                notifyEn = '';
+            }
+        }}
+    >
+        {notifyFr}
+    </div>
+{/if}
+
 <div class="w-full flex justify-center mt-[53px]">
-    <div class="lg:w-[1136px] md:w-[760px] w-[300px]">
+        <div class="lg:w-[1136px] md:w-[760px] w-[300px]">
+
         {#if isFinalize}
             <div transition:fly={{ y: -100, duration: 300 }}>
                 <!--region login-->
@@ -569,5 +635,21 @@
         50% {
             opacity: 1;
         }
+    }
+
+    .toast-global {
+        position: fixed;
+        top: 16px;
+        right: 16px;
+        z-index: 10000;
+        max-width: 260px;
+        padding: 8px 12px;
+        border-radius: 6px;
+        background: rgba(222, 53, 11, 0.98);
+        color: #fff;
+        font-size: 13px;
+        line-height: 1.4;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+        cursor: pointer;
     }
 </style>
