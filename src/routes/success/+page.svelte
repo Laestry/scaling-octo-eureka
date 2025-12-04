@@ -11,12 +11,6 @@
 
         orderId = get(page).url.searchParams.get('orderId');
         console.log('orderId:', orderId);
-        
-
-        if (sessionStorage.getItem('pendingOrderId')) {
-            sessionStorage.removeItem('pendingOrderId');
-            sessionStorage.removeItem('pendingOrderOrgId');
-        }
     });
 </script>
 

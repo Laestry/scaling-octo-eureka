@@ -22,40 +22,11 @@
         { label: "Livraison à l'établissement", value: 0 },
         { label: 'Livraison en succursale', value: 3 }
     ];
-    
     onMount(async () => {
         const { data, error } = await supabase.schema('cms_saq').from('saq_branches').select('*');
         options = data.map((x) => ({ value: x.id, label: `${x.city}, ${x.address}` }));
         console.log('branches', options);
         // console.log('cart', $cart);
-        
-
-        const pendingOrderId = sessionStorage.getItem('pendingOrderId');
-        const pendingOrderOrgId = sessionStorage.getItem('pendingOrderOrgId');
-        
-        if (pendingOrderId && pendingOrderOrgId) {
-            try {
-                const cancelRes = await fetch('api/cancel-order', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        orderId: pendingOrderId,
-                        organizationId: pendingOrderOrgId
-                    })
-                });
-                
-                if (cancelRes.ok) {
-                    sessionStorage.removeItem('pendingOrderId');
-                    sessionStorage.removeItem('pendingOrderOrgId');
-                } else {
-                    sessionStorage.removeItem('pendingOrderId');
-                    sessionStorage.removeItem('pendingOrderOrgId');
-                }
-            } catch (err) {
-                sessionStorage.removeItem('pendingOrderId');
-                sessionStorage.removeItem('pendingOrderOrgId');
-            }
-        }
     });
 
     const items = Array.from({ length: 500 }).map((_, i) => `item ${i}`);
@@ -194,13 +165,7 @@
 
             const data = await res.json();
 
-            const { url, orderId } = JSON.parse(data.body);
-            
-
-            if (orderId) {
-                sessionStorage.setItem('pendingOrderId', String(orderId));
-                sessionStorage.setItem('pendingOrderOrgId', '2');
-            }
+            const { url } = JSON.parse(data.body);
 
             window.location.href = url;
         } catch (err) {
