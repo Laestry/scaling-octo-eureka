@@ -1,72 +1,46 @@
-<script lang="ts">
+<script>
     import { onMount } from 'svelte';
 
     let mouseX = 0;
     let mouseY = 0;
     let isVisible = false;
 
-    function isElementClickable(element: Element | null): boolean {
-        if (!element) return false;
-        
-        // Elements explicitly marked with cursor-blue-dot class
-        if (element.classList?.contains('cursor-blue-dot')) return true;
-        if (element.closest('.cursor-blue-dot')) return true;
-        
-        // Button elements
-        if (element.tagName === 'BUTTON') return true;
-        if (element.closest('button')) return true;
-        
-        // Links with href
-        if (element.tagName === 'A' && element.getAttribute('href')) return true;
-        if (element.closest('a[href]')) return true;
-        
-        // Elements with click handlers
-        if (element.hasAttribute?.('data-clickable')) return true;
-        if (element.closest('[data-clickable]')) return true;
-        
-        // abutton class elements
-        if (element.classList?.contains('abutton')) return true;
-        if (element.closest('.abutton')) return true;
-        
-        // Input buttons
-        if (element.tagName === 'INPUT') {
-            const input = element as HTMLInputElement;
-            if (['button', 'submit'].includes(input.type)) return true;
-        }
-        
-        // Role button
-        if (element.getAttribute('role') === 'button') return true;
-        if (element.closest('[role="button"]')) return true;
-        
-        return false;
-    }
-
     onMount(() => {
-        const handleMouseMove = (e: MouseEvent) => {
+        const handleMouseMove = (e) => {
             mouseX = e.clientX;
             mouseY = e.clientY;
 
-            // Use elementsFromPoint for more accurate element detection
-            // This gets all elements at the cursor position, not just the target
-            const elementsAtPoint = document.elementsFromPoint(e.clientX, e.clientY);
-            
-            // Check each element from top to bottom (most specific first)
-            let clickable = false;
-            for (const element of elementsAtPoint) {
-                if (isElementClickable(element)) {
-                    clickable = true;
-                    break;
-                }
-            }
+            // Show blue dot for all clickable elements
+            const target = e.target;
+            const isClickable =
+                // Elements explicitly marked with cursor-blue-dot class
+                target?.classList?.contains('cursor-blue-dot') ||
+                target?.closest('.cursor-blue-dot') ||
+                // Button elements
+                target?.tagName === 'BUTTON' ||
+                target?.closest('button') ||
+                // Links with href
+                (target?.tagName === 'A' && target?.getAttribute('href')) ||
+                target?.closest('a[href]') ||
+                // Elements with click handlers
+                target?.hasAttribute?.('data-clickable') ||
+                target?.closest('[data-clickable]') ||
+                // abutton class elements
+                target?.classList?.contains('abutton') ||
+                target?.closest('.abutton') ||
+                // Input buttons
+                (target?.tagName === 'INPUT' && ['button', 'submit'].includes(target?.type)) ||
+                // Role button
+                target?.getAttribute('role') === 'button' ||
+                target?.closest('[role="button"]');
 
-            isVisible = clickable;
+            isVisible = !!isClickable;
         };
 
-        // Use capture phase to catch events earlier
-        document.addEventListener('mousemove', handleMouseMove, true);
+        document.addEventListener('mousemove', handleMouseMove);
 
         return () => {
-            document.removeEventListener('mousemove', handleMouseMove, true);
+            document.removeEventListener('mousemove', handleMouseMove);
         };
     });
 </script>

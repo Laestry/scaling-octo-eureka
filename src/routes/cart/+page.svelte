@@ -13,8 +13,6 @@
     import { isPrixResto } from '$lib/store';
     import { totalsPerUnit } from '$lib/utils';
     import { page } from '$app/stores';
-    import ErrorNotification from '$lib/components/ErrorNotification.svelte';
-    import { getErrorMessage } from '$lib/utils/errorMessages';
 
     // Log the cart for debugging
 
@@ -113,8 +111,6 @@
         saqNumber: ''
     };
     let errorMessage = '';
-    let showError = false;
-    let lang: 'fr' | 'en' = 'fr'; // Language selector - will be implemented later
     let formEl;
 
     let loadingHandleSubmit = false;
@@ -147,8 +143,9 @@
         // If any input returns an error (non-empty string), don't submit.
         if (errors.some((valid) => valid === false)) {
             goto('#userdata');
-            errorMessage = getErrorMessage('ValidationError', lang);
-            showError = true;
+
+            errorMessage = 'Veuillez corriger les champs invalides.';
+            console.error('Validation errors:', errors);
             return;
         }
 
@@ -159,8 +156,8 @@
             errorMessage = 'Formulaire valide!';
             // ... proceed with further actions
         } else {
-            errorMessage = getErrorMessage('FormError', lang);
-            showError = true;
+            console.log('Validation errors:', result.errors);
+            errorMessage = 'Le formulaire contient des erreurs.';
         }
         let res;
         loadingHandleSubmit = true;
@@ -191,16 +188,7 @@
                 })
             });
             if (!res.ok) {
-
-                let errorData;
-                try {
-                    errorData = await res.json();
-                } catch (e) {
-                    errorData = { error: 'NetworkError', message: `Server returned ${res.status}` };
-                }
-                
-                errorMessage = getErrorMessage(errorData, lang);
-                showError = true;
+                // non-2xx status
                 throw new Error(`Server returned ${res.status}`);
             }
 
@@ -216,10 +204,9 @@
 
             window.location.href = url;
         } catch (err) {
-            if (!showError) {
-                errorMessage = getErrorMessage('NetworkError', lang);
-                showError = true;
-            }
+            console.error('Order submission failed:', err);
+            errorMessage = 'Une erreur réseau est survenue. Veuillez réessayer plus tard.';
+            // optionally bail out or re-throw
             return;
         } finally {
             loadingHandleSubmit = false;
@@ -289,8 +276,6 @@
         return acc + perBottle * item.quantity * item.uvc;
     }, 0);
 </script>
-
-<ErrorNotification message={errorMessage} visible={showError} {lang} on:close={() => showError = false} />
 
 <!--Courriel-->
 <!--Vérifier-->

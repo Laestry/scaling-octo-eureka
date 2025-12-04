@@ -55,6 +55,7 @@
         "pocketbase": "^0.25.2",
         "simplebar": "^6.3.0",
         "stripe": "^18.3.0",
+        "svelte-toast": "^1.0.0",
         "svrollbar": "^0.12.0"
     }
 }
