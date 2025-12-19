@@ -137,7 +137,6 @@
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    organizationId: 2,
                     items: selectedBatches,
                     customer: {
                         resto_delivery_type: $isPrixResto ? deliverTypeSelect : undefined,
