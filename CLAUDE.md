@@ -5,32 +5,31 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Development Commands
 
 ### Build and Development
-- **Start dev server**: `npm run dev` (runs on port 3000, with Node.js debugging and 16GB memory allocation)
+- **Start dev server**: `npm run dev` (runs on port 3173, with Node.js debugging and 16GB memory allocation)
 - **Build for production**: `npm run build`
 - **Package manager**: Uses `pnpm` (check `pnpm-lock.yaml`)
 
 ### Code Quality
 - **Linting**: `npx eslint .` (ESLint with TypeScript and Svelte support)
 - **Type checking**: `npx svelte-check --tsconfig ./tsconfig.json`
-- **Formatting**: `npx prettier --write .`
+- **Formatting**: `npx prettier --write .` (4-space tabs, 120 character width)
 
-### Database Migration
-- **Run Prisma migration**: `npx prisma migrate dev --name MIGRATION_NAME --schema=./src/lib/server/prisma/schema.prisma`
 
 ## Architecture Overview
 
 ### Framework Stack
 - **Frontend**: SvelteKit with TypeScript
 - **Styling**: Tailwind CSS with custom color palette (wred, wblue, wpink, wblack, wwhite variants)
-- **Database**: PocketBase for primary data storage
-- **Additional Services**: Supabase integration, Stripe for payments, Portaus API for wine inventory
+- **Database**: Supabase for primary data storage with `cms_saq` schema
+- **Additional Services**: PocketBase (secondary), Stripe for payments, Portaus API for wine inventory, jsPDF for PDF generation
 
 ### Key Architecture Patterns
 
 #### Data Layer
-- **PocketBase**: Main database client in `src/lib/pocketbase.ts`
-- **Supabase**: Secondary storage with SSR support via `src/lib/supabase/client.ts`
+- **Supabase**: Primary database with SSR support via `src/lib/supabase/client.ts` using `cms_saq` schema
+- **PocketBase**: Secondary storage client in `src/lib/pocketbase.ts`
 - **API Integration**: Custom Portaus API client in `src/lib/server/portausApi.ts` with JWT authentication
+- **Models**: Type definitions in `src/lib/models/general.ts`
 
 #### State Management
 - **Cart System**: Global cart store in `src/lib/cart.ts` with localStorage persistence
@@ -38,7 +37,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 #### Route Structure
 - **Product Catalog**: `/vins` with advanced filtering and search
-- **Product Details**: `/product/[slug]` with batch-based inventory
+- **Product Details**: `/vin/[slug]` with batch-based inventory
 - **Shopping Cart**: `/cart` with quantity management per batch
 - **Admin Panel**: `/admin` for management functions
 
@@ -56,7 +55,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **Payment Processing**: Stripe integration in `/api/stripe/create-checkout`
 - **Order Management**: Portaus API integration in `/api/submit-order`
 - **Client Management**: Contact verification and creation endpoints
-- **PDF Generation**: Wine list export functionality in `/api/generate-pdf`
+- **PDF Generation**: Wine list export using jsPDF in `/api/generate-pdf`
 
 ### Styling Conventions
 - **Custom Colors**: Ward & Associés brand colors defined in Tailwind config
@@ -64,6 +63,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **Responsive**: Mobile-first with `md` (767px) and `lg` (1162px) breakpoints
 
 ### Environment Configuration
-- **Public Variables**: Database URL and public API keys
-- **Private Variables**: Portaus API credentials, JWT secrets, Stripe keys
+- **Public Variables**: Supabase URL and public API keys
+- **Private Variables**: Portaus API credentials, JWT secrets, Stripe keys, Supabase service role key
 - **Development**: Node.js debugging enabled with increased memory allocation
+- **Environment File**: Uses `.env` with dotenvx for environment variable management

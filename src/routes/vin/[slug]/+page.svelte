@@ -171,7 +171,7 @@
                     class="mt-[12px] flex items-end
                          h-full"
                 >
-                    <h1 class="product-name lg:text-[42px] text-2xl">{product.name}</h1>
+                    <h1 class="product-name text-32 leading-42 text-ward-red mt-6 mb-0">{product.name}</h1>
                 </div>
                 <div
                     class="product-description mt-[10px] w-full h-auto pr-[15px]
@@ -284,16 +284,18 @@
                         <!--                        question-->
                         <button
                             on:click={() => (expand_description = !expand_description)}
-                            class="abutton flex justify-between w-full lg:text-base text-xs mt-2"
+                            class="abutton relative w-full lg:text-base text-xs mt-2"
                         >
-                            <span>
-                                Le prix inclut les taxes et
-                                <span class="text-wblue underline"> le frais d’agent de 16%. </span>
-                            </span>
+                            <div class="flex justify-between items-center">
+                                <span>
+                                    Le prix inclut les taxes et
+                                    <span class="text-wblue underline"> le frais d'agent de 16%. </span>
+                                </span>
 
-                            <span class="text-wred">
-                                {expand_description ? '-' : '+'}
-                            </span>
+                                <span class="text-wred text-2xl relative top-[-4px]">
+                                    {expand_description ? '-' : '+'}
+                                </span>
+                            </div>
                         </button>
                         {#if expand_description}
                             <div transition:fade class="question">
