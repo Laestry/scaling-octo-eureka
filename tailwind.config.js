@@ -4,11 +4,16 @@ module.exports = {
     theme: {
         screens: {
             md: '767px',
-            lg: '1162px'
+            lg: '1162px',
+            amd: '679px',
+            alg: '1136px',
+
+            fmd: '880px'
         },
         extend: {
             cursor: {
-                'blue-dot': "url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgdmlld0JveD0iMCAwIDE2IDE2Ij48Y2lyY2xlIGN4PSI4IiBjeT0iOCIgcj0iMyIgZmlsbD0iIzM3NzdiYyIvPjwvc3ZnPg==') 8 8, pointer"
+                'blue-dot':
+                    "url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgdmlld0JveD0iMCAwIDE2IDE2Ij48Y2lyY2xlIGN4PSI4IiBjeT0iOCIgcj0iMyIgZmlsbD0iIzM3NzdiYyIvPjwvc3ZnPg==') 8 8, pointer"
             },
             colors: {
                 wred: '#F15A38',
@@ -19,6 +24,7 @@ module.exports = {
                 wblue50: 'rgba(55, 119, 188, 0.5)',
                 wblack20: 'rgba(24, 28, 28, 0.2)',
                 wblack50: 'rgba(24, 28, 28, 0.5)',
+                wblack: 'rgba(24, 28, 28, 1)',
                 wwhite60: 'rgba(246, 241, 242, 0.6)',
                 wred20: 'rgba(241, 90, 56, 0.2)',
                 primary: '#0d99ff',

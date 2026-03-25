@@ -1,38 +1,65 @@
+<!--src/routes/associes/+page.svelte-->
 <script lang="ts">
     import Carousel from '$lib/components/Carousel.svelte';
-    import { IconLogo, IconArrow1, IconArrow2 } from '$lib/icons';
+    import { IconLogo, IconArrow2 } from '$lib/icons';
 
-    let associes = new Array(20).fill(undefined).map(() => ({
-        winemaker: 'Nom, Prénom',
-        country: 'France',
-        region: 'Champagne',
-        flag: '/images/germany-flag.svg'
-    }));
+    export let data;
+    console.log('data', data);
+    let associes = data.suppliers;
     let carouselIndex = 0;
+
+    let suivezMobileSlideImages = [
+        {
+            src: '/images/associes-img-09.jpg'
+        },
+        {
+            src: '/images/associes-img-10.jpg'
+        },
+        {
+            src: '/images/associes-img-11.jpg'
+        },
+        {
+            src: '/images/associes-img-12.jpg'
+        }
+    ];
+
+    let show = false;
+    let outerWidth: number;
 </script>
+
+<svelte:window bind:outerWidth />
 
 <div class="about">
     <div class="container">
-        <div class="about__row">
-            <div class="about__col">
-                <div class="about__logo">
-                    <IconLogo></IconLogo>
-                </div>
-                <p class="about__text">Nos producteurs</p>
-            </div>
-            <div class="about__col">
-                <p class="about__title">
-                    Nos vins sont issus d'une viticulture respectueuse et de vinifications sans artifice. Des cuvées sincères, parfois imprévisibles, toujours choisies pour leur énergie et leur intégrité.
+        <div class="">
+            <div class="flex lg:gap-[156px] md:gap-[93px] gap-[24px]">
+                <IconLogo
+                    class="lg:w-[132px] md:w-[100px] w-[80px]
+                flex-shrink-0"
+                />
+                <p
+                    class="about__title
+                    lg:w-[845px] md:w-[567px] w-[196px]"
+                >
+                    Voici les visages derrière les bouteilles. Notre équipe, c’est un collectif vivant : vigneron·ne·s,
+                    partenaires et sommeliers qui collaborent avec nous chaque jour.
                 </p>
-                <p class="about__text">
-                    Lorem ipsum dolor sit amet consectetur. Leo justo enim et in. Aliquam at feugiat tortor purus quis
-                    eu ultrices quis tincidunt.
+            </div>
+            <div
+                class="flex
+                lg:gap-[58px] md:gap-[12px] gap-0
+                 lg:mt-[51px] mt-[40px]"
+            >
+                <p class="about__text lg:w-fit md:w-[181px] w-[104px]">Nos producteurs</p>
+                <p class="about__text lg:w-[560px] md:w-[375px]">
+                    Nos vigneron·ne·s sont le cœur battant de notre agence. On les choisit pour leur vision, leur
+                    sincérité, et la profondeur de leurs vins.
                 </p>
             </div>
         </div>
         <div class="about__images">
             <div class="about__image">
-                <img src="/images/associes-img-01.jpg" alt="" />
+                <img src="/images/associes/nos-producteurs/associes-img-01.png" alt="" />
                 <p class="about__caption">
                     <b>Bianca & Daniel Schmitt</b> <br /> Country
                 </p>
@@ -60,35 +87,20 @@
             <table class="about-table">
                 <thead class="about-table__header">
                     <tr>
-                        <th class="about-table__title">
-                            Vignerons
-                            <button>
-                                <IconArrow1></IconArrow1>
-                            </button>
-                        </th>
-                        <th class="about-table__title">
-                            Pays
-                            <button>
-                                <IconArrow1></IconArrow1>
-                            </button>
-                        </th>
-                        <th class="about-table__title">
-                            Région
-                            <button>
-                                <IconArrow1></IconArrow1>
-                            </button>
-                        </th>
+                        <th class="about-table__title"> Vignerons </th>
+                        <th class="about-table__title"> Pays </th>
+                        <th class="about-table__title"> Région </th>
                     </tr>
                 </thead>
                 <tbody class="about-table__body">
                     {#each associes as associe}
                         <tr>
-                            <td class="about-table__data">{associe.winemaker}</td>
+                            <td class="about-table__data">{associe.usual_name}</td>
                             <td class="about-table__data">
-                                <span>{associe.country}</span>
-                                <img src={associe.flag} alt="" />
+                                <span>{associe.country_fr ?? ''}</span>
+                                {associe.flag ?? ''}
                             </td>
-                            <td class="about-table__data">{associe.region}</td>
+                            <td class="about-table__data">{associe.region_name ?? ''}</td>
                         </tr>
                     {/each}
                 </tbody>
@@ -102,8 +114,8 @@
         <div class="agency__row">
             <p class="agency__title">L’agence</p>
             <p class="agency__text">
-                Lorem ipsum dolor sit amet consectetur. Leo justo enim et in. Aliquam at feugiat tortor purus quis eu
-                ultrices quis tincidunt.
+                Ward & Associés, c’est un écosystème à part : une équipe curieuse, engagée, qui carbure à la confiance
+                (et à de très bonnes playlists).
             </p>
         </div>
         <div class="agency__images">
@@ -139,46 +151,54 @@
     <div class="container">
         <div class="command__row">
             <p class="command__title">@wardetassocies</p>
-            <p class="command__text">
-                Suivez l’équipe — de l’agence, aux vignobles. On vous promets de belles histoires pour vous donner soif.
+            <p class="command__text  ">
+                Suivez l’équipe, de l’agence aux vignobles, ici et partout dans le monde. Des histoires passionnantes,
+                des moments forts, et toujours une bonne raison d’avoir soif.
             </p>
         </div>
-        <div class="command__images command__images--pc">
-            <div class="command__image">
-                <img src="/images/associes-img-09.jpg" alt="" />
-            </div>
-            <div class="command__image">
-                <img src="/images/associes-img-10.jpg" alt="" />
-            </div>
-            <div class="command__image">
-                <img src="/images/associes-img-11.jpg" alt="" />
-            </div>
-            <div class="command__image">
-                <img src="/images/associes-img-12.jpg" alt="" />
-            </div>
-        </div>
-        <div class="command_carousel command__images--mobile">
-            <Carousel
-                slides={[
-                    {
-                        src: '/images/associes-img-09.jpg'
-                    },
-                    {
-                        src: '/images/associes-img-10.jpg'
-                    },
-                    {
-                        src: '/images/associes-img-11.jpg'
-                    },
-                    {
-                        src: '/images/associes-img-12.jpg'
-                    }
-                ]}
-                let:item
-            >
-                <div class="command__image">
-                    <img src={item.src} alt="" />
+        <div class="command__images">
+            <div>
+                <div class=" command__images--pc flex lg:gap-4 md:gap-3">
+                    <div class="command__image">
+                        <img src="/images/associes-img-09.jpg" alt="" />
+                    </div>
+                    <div class="command__image">
+                        <img src="/images/associes-img-10.jpg" alt="" />
+                    </div>
+                    <div class="command__image">
+                        <img src="/images/associes-img-11.jpg" alt="" />
+                    </div>
+                    <div class="command__image">
+                        <img src="/images/associes-img-12.jpg" alt="" />
+                    </div>
                 </div>
-            </Carousel>
+
+                {#if outerWidth <= 679}
+                    <div class="command_carousel">
+                        <Carousel
+                            slides={[
+                                {
+                                    src: '/images/associes-img-09.jpg'
+                                },
+                                {
+                                    src: '/images/associes-img-10.jpg'
+                                },
+                                {
+                                    src: '/images/associes-img-11.jpg'
+                                },
+                                {
+                                    src: '/images/associes-img-12.jpg'
+                                }
+                            ]}
+                            let:item
+                        >
+                            <div class="command__image">
+                                <img src={item.src} alt="" />
+                            </div>
+                        </Carousel>
+                    </div>
+                {/if}
+            </div>
         </div>
     </div>
 </div>
@@ -186,42 +206,44 @@
 <div class="bars">
     <div class="container">
         <div class="bars__row">
-            <p class="bars__title">Bars à Vins</p>
+            <div>
+                <p class="bars__title">Bars à Vins</p>
+            </div>
+
             <div class="bars__controlls">
                 <button class="bars__button bars__button--prev" on:click={() => carouselIndex--}>
-                    <IconArrow2></IconArrow2>
+                    <IconArrow2 />
                 </button>
                 <button class="bars__button bars__button--next" on:click={() => carouselIndex++}>
-                    <IconArrow2></IconArrow2>
+                    <IconArrow2 />
                 </button>
             </div>
         </div>
         <Carousel
             slides={[
                 {
-                    src: '/images/associes-img-13.jpg',
-                    name: 'Vinvinvin',
-                    url: '@lienversIG'
+                    src: '/images/associes/bars-a-vins/associes-img-13.jpg',
+                    name: ''
                 },
                 {
-                    src: '/images/associes-img-14.jpg',
-                    name: 'Vinvinvin',
-                    url: '@lienversIG'
+                    src: '/images/associes/bars-a-vins/associes-img-14.jpg',
+                    name: ``
                 },
                 {
-                    src: '/images/associes-img-15.jpg',
-                    name: 'Vinvinvin',
-                    url: '@lienversIG'
+                    src: '/images/associes/bars-a-vins/associes-img-15.jpg',
+                    name: ''
                 },
                 {
-                    src: '/images/associes-img-13.jpg',
-                    name: 'Vinvinvin',
-                    url: '@lienversIG'
+                    src: '/images/associes/bars-a-vins/associes-img-13.jpg',
+                    name: ''
                 },
                 {
-                    src: '/images/associes-img-14.jpg',
-                    name: 'Vinvinvin',
-                    url: '@lienversIG'
+                    src: '/images/associes/bars-a-vins/associes-img-14.jpg',
+                    name: ``
+                },
+                {
+                    src: '/images/associes/bars-a-vins/associes-img-15.jpg',
+                    name: ''
                 }
             ]}
             bind:current={carouselIndex}
@@ -230,18 +252,19 @@
             <div class="bars__image">
                 <img src={item.src} alt="" />
                 <p class="bars__caption">
-                    <b>{item.name}</b>
-                    <br />
-                    <a href={item.url}>{item.url}</a>
+                    <b>{@html item.name}</b>
                 </p>
             </div>
         </Carousel>
         <div class="bars__footer">
-            <p class="bars__small-title">Experience our wines around the city.</p>
-            <p class="bars__text">
-                Who would we be without our effervescent wine bars and mind blowing restaurants? Lorem ipsum dolor sit
-                amet consectetur. Leo justo enim et in. Aliquam at feugiat tortor purus quis eu ultrices quis tincidunt.
-                Tellus integer egestas lectus.Lorem ipsum dolor sit amet consectetur.
+            <p class="bars__small-title">
+                Vinvinvin <a target="_blank" href="https://www.instagram.com/barvinvinvin" class="text-wblue">
+                    @barvinvinvin
+                </a>
+            </p>
+            <p class="bars__text alg:-mt-[16px] amd:-mt-[3px] -mt-[3px]">
+                Que serions-nous sans les bars à vins électrisants et les restos renversants de notre ville ? Ces lieux
+                donnent vie à nos bouteilles — un verre à la fois.
             </p>
         </div>
     </div>
@@ -290,21 +313,22 @@
         &__image {
             display: flex;
             flex-direction: column;
+            align-items: start;
             gap: 8px;
             //padding-right: 16px;
             img {
                 display: block;
-                width: 100%;
-                height: 100%;
+                width: 369px;
+                height: 504px;
                 object-fit: cover;
             }
         }
         &__caption {
+            width: 369px;
             color: #181c1c;
             font-size: 14px;
             font-style: normal;
             line-height: 150%; /* 21px */
-            text-transform: capitalize;
             a {
                 color: #3777bc;
             }
@@ -317,6 +341,9 @@
                 color: #3777bc;
                 transform: scaleX(-1);
             }
+        }
+        &__title {
+            font-size: 30px;
         }
     }
     .command {
@@ -352,7 +379,7 @@
             font-weight: 500;
             line-height: 30px;
             letter-spacing: -0.176px;
-            margin-top: 21px;
+            margin-top: 18px;
         }
         &__text {
             color: #f6f1f2;
@@ -365,7 +392,7 @@
         &__images {
             display: flex;
             gap: 16px;
-            padding: 32px;
+            padding: 36px 30px 36px 33px;
             background: #f15a38;
             position: relative;
             margin-top: 32px;
@@ -373,11 +400,6 @@
             &--mobile {
                 display: none;
             }
-        }
-        &_carousel {
-            background: #f15a38;
-            position: relative;
-            margin-top: 32px;
         }
     }
     .agency {
@@ -715,6 +737,23 @@
             &__text {
                 font-size: 35px;
             }
+            &__images {
+                padding: 20px 0 30px 20px;
+                .command__image:nth-child(1) img {
+                    width: 181px;
+                    background-repeat: no-repeat;
+                }
+                .command__image:nth-child(2) img {
+                    background-repeat: no-repeat;
+                    width: 118px;
+                }
+                .command__image:nth-child(3) img {
+                    width: 245px;
+                }
+                .command__image:nth-child(4) img {
+                    width: 180px;
+                }
+            }
         }
         .bars {
             margin-top: 80px;
@@ -732,6 +771,15 @@
             &__text {
                 font-size: 20px;
                 line-height: 120%;
+            }
+            &__image {
+                img {
+                    width: 245px;
+                    height: 328px;
+                }
+            }
+            &__caption {
+                width: 245px;
             }
         }
     }
@@ -892,7 +940,7 @@
             &__images {
                 margin-top: 40px;
                 padding: 11px 18px 20px;
-                flex-direction: column;
+                flex-direction: row;
                 gap: 10px;
                 &--pc {
                     display: none;
@@ -901,12 +949,6 @@
                     display: flex;
                 }
             }
-            // &__controlls {
-            //     display: flex;
-            //     align-items: center;
-            //     gap: 18px;
-            //     margin-left: 250px;
-            // }
             &__image {
                 max-width: 196px !important;
                 min-width: 196px !important;
@@ -934,6 +976,15 @@
             &__text {
                 font-size: 18px;
                 line-height: 120%;
+            }
+            &__image {
+                img {
+                    width: 145px;
+                    height: 193px;
+                }
+            }
+            &__caption {
+                width: 145px;
             }
         }
     }

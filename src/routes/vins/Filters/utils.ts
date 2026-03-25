@@ -116,6 +116,7 @@ export async function fetchFilteredProductsForAlcohol(
         .schema('cms_saq')
         .from('alcohol_view')
         .select('*', { count: 'exact' })
+        .eq('organization_id', 2)
         .gt('oldest_price', 0)
         .gt('oldest_price_tax_in', 0)
         .not('website_slug', 'is', null);
@@ -177,7 +178,9 @@ export async function fetchFilteredProductsForAlcohol(
         } else if (opts.sorting === 'Alphabétique') {
             query = query.order('name', { ascending: true });
         } else {
-            query = query.order('oldest_sell_before_date', { ascending: false });
+            query = query
+                .order('oldest_sell_before_date', { ascending: false })
+                .order('total_quantity', { ascending: false });
         }
     } else {
         query = query

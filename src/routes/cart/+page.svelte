@@ -13,18 +13,61 @@
     import { isPrixResto } from '$lib/store';
     import { totalsPerUnit } from '$lib/utils';
     import { page } from '$app/stores';
+    import { browser } from '$app/environment';
 
     // Log the cart for debugging
 
     // Declare options; you may type these if needed.
     let options;
+    let restoDeliveryOptions = [
+        { label: "Livraison à l'établissement", value: 0 },
+        { label: 'Livraison en succursale', value: 3 }
+    ];
 
     onMount(async () => {
         const { data, error } = await supabase.schema('cms_saq').from('saq_branches').select('*');
         options = data.map((x) => ({ value: x.id, label: `${x.city}, ${x.address}` }));
         console.log('branches', options);
-        console.log('cart', $cart);
+        // console.log('cart', $cart);
     });
+
+    let cancelHandled = false;
+
+    async function cancelOrder(orderIdParam: string | null) {
+        try {
+            const organizationId = 2; // same org as used when creating the order
+            const body: Record<string, any> = { organizationId };
+            if (orderIdParam) {
+                const parsed = parseInt(orderIdParam, 10);
+                if (!Number.isNaN(parsed)) body.orderId = parsed;
+            }
+
+            const res = await fetch('/api/cancel-external-sales-order', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(body)
+            });
+
+            if (!res.ok) {
+                console.error('Failed to cancel external sales order', await res.text());
+            } else {
+                console.log('External sales order cancelled successfully');
+            }
+        } catch (e) {
+            console.error('Error while cancelling external sales order', e);
+        }
+    }
+
+    $: if (browser && !cancelHandled) {
+        const url = $page.url;
+        const cancelPayment = url.searchParams.get('cancelPayment');
+        const orderIdParam = url.searchParams.get('orderId');
+
+        if (cancelPayment === '1') {
+            cancelHandled = true;
+            cancelOrder(orderIdParam);
+        }
+    }
 
     const items = Array.from({ length: 500 }).map((_, i) => `item ${i}`);
 
@@ -35,8 +78,11 @@
     let postalCodeInput: Input;
     let phoneInput: Input;
     let emailInput: Input;
+    let saqNumberInput: Input;
     let saqSelect: any;
-
+    let saqSelectComponent: any;
+    let deliverTypeSelect: any;
+    let deliverTypeSelectComponent: any;
     const formSchema = {
         $schema: 'https://json-schema.org/draft/2019-09/schema',
         type: 'object',
@@ -51,9 +97,15 @@
                 type: 'string',
                 pattern: '^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$',
                 maxLength: 254
+            },
+            saqNumber: {
+                type: 'string',
+                pattern: '^[0-9]{8}$',
+                minLength: 8,
+                maxLength: 8
             }
         },
-        required: ['firstName', 'lastName', 'address', 'city', 'postalCode', 'phone', 'email'],
+        required: ['firstName', 'lastName', 'address', 'city', 'postalCode', 'phone', 'email', 'saqNumber'],
         additionalProperties: false
     };
 
@@ -66,18 +118,34 @@
         city: '',
         postalCode: '',
         phone: '',
-        email: ''
+        email: '',
+        saqNumber: ''
     };
     let errorMessage = '';
+    let notifyFr = '';
+    let notifyEn = '';
+    let toastTimer: ReturnType<typeof setTimeout> | undefined;
+
+    $: if (notifyFr) {
+        if (toastTimer) clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => {
+            notifyFr = '';
+            notifyEn = '';
+        }, 3000);
+    }
     let formEl;
 
-    let loading = false;
+    let loadingHandleSubmit = false;
     async function handleSubmit() {
+        notifyFr = '';
+        notifyEn = '';
+
         let selectedBatches = $cart.map((i) => ({
-            id: parseInt(i.selectedBatchId),
+            id: parseInt(i.selected_batch_id),
             caseQuantity: i.quantity
         }));
         console.log('cart items', $cart);
+        console.log('saqSelect', saqSelect);
         console.log('selectedBatches', selectedBatches);
 
         // Trigger validation on each input.
@@ -89,11 +157,17 @@
         errors.push(postalCodeInput.handleValidate());
         errors.push(phoneInput.handleValidate());
         errors.push(emailInput.handleValidate());
-        // errors.push(saqSelect.handleValidate());
+        if ($isPrixResto || formData.saqNumber.length > 0) {
+            errors.push(saqNumberInput.handleValidate());
+        }
+        if ($isPrixResto) errors.push(deliverTypeSelectComponent.handleValidate());
+        if (!$isPrixResto) {
+            errors.push(saqSelectComponent.handleValidate());
+        }
 
         // If any input returns an error (non-empty string), don't submit.
         if (errors.some((valid) => valid === false)) {
-            goto('#logo');
+            goto('#userdata');
 
             errorMessage = 'Veuillez corriger les champs invalides.';
             console.error('Validation errors:', errors);
@@ -111,17 +185,17 @@
             errorMessage = 'Le formulaire contient des erreurs.';
         }
         let res;
-        loading = true;
+        loadingHandleSubmit = true;
         try {
             res = await fetch('api/submit-order', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    organizationId: 2,
                     items: selectedBatches,
                     customer: {
-                        saq_store_id: saqSelect,
-                        // saq_number: '', // add if needed
+                        resto_delivery_type: $isPrixResto ? deliverTypeSelect : undefined,
+                        saq_store_id: !$isPrixResto ? saqSelect : undefined,
+                        saq_number: formData.saqNumber,
                         billing_address: {
                             street: formData.address,
                             city: formData.city,
@@ -137,9 +211,37 @@
                     returnUrl: $page.url.origin
                 })
             });
+
             if (!res.ok) {
-                // non-2xx status
-                throw new Error(`Server returned ${res.status}`);
+                const text = await res.text();
+
+                let payload: any;
+                try {
+                    payload = JSON.parse(text);
+                } catch {
+                    payload = null;
+                }
+
+                if (payload?.error === 'InvalidBatches') {
+                    // бизнес-ошибка: не хватает вина / неверные партии
+                    notifyFr =
+                        "Certains vins ne sont plus disponibles dans la quantité choisie. Veuillez ajuster votre panier et réessayer.";
+                    notifyEn =
+                        'Some wines are no longer available in the requested quantity. Please adjust your cart and try again.';
+                } else if (payload?.error === 'NetworkError') {
+                    notifyFr =
+                        'Problème de connexion au serveur de commande. Veuillez réessayer plus tard.';
+                    notifyEn =
+                        'Connection problem with the order server. Please try again later.';
+                } else {
+                    notifyFr =
+                        "Une erreur s’est produite lors de la validation de votre commande. Veuillez réessayer ou modifier votre panier.";
+                    notifyEn =
+                        'An error occurred while validating your order. Please try again or adjust your cart.';
+                }
+
+                errorMessage = notifyFr;
+                return;
             }
 
             const data = await res.json();
@@ -149,15 +251,15 @@
             window.location.href = url;
         } catch (err) {
             console.error('Order submission failed:', err);
-            errorMessage = 'Une erreur réseau est survenue. Veuillez réessayer plus tard.';
-            // optionally bail out or re-throw
+            notifyFr = 'Problème de réseau. Veuillez réessayer plus tard.';
+            notifyEn = 'Network problem. Please try again later.';
+            errorMessage = notifyFr;
             return;
         } finally {
-            loading = false;
+            loadingHandleSubmit = false;
         }
     }
 
-    let isFinalize = false;
     let emailAccount: string;
     let emailAccountInput: Input;
     let existingAccount;
@@ -166,7 +268,7 @@
     let foundContact: boolean = false;
     let checked: boolean = false;
     let checking: boolean = false;
-
+    let isFinalize = true;
     async function handleCheckForAccount() {
         checking = true;
         register = false;
@@ -205,14 +307,20 @@
 
     // taxes 0.05 0.09975
 
+    function round2(value) {
+        return Math.round(value * 100) / 100;
+    }
+
     $: total = $cart.reduce((acc, item) => {
-        const { lineTotal } = totalsPerUnit(item, $isPrixResto);
-        return acc + lineTotal * item.quantity;
+        const { base } = totalsPerUnit(item, $isPrixResto);
+        const unitBase = round2(base);
+        return acc + unitBase * item.quantity * item.uvc;
     }, 0);
 
     $: agencyAndTaxesTotal = $cart.reduce((acc, item) => {
         const { agencyWithTaxes } = totalsPerUnit(item, $isPrixResto);
-        return acc + agencyWithTaxes * item.quantity;
+        const perBottle = round2(agencyWithTaxes);
+        return acc + perBottle * item.quantity * item.uvc;
     }, 0);
 </script>
 
@@ -220,86 +328,111 @@
 <!--Vérifier-->
 <!--Si vous avez déjà commandé chez nous, utilisez l’adresse email associée à votre commande.-->
 <!--Sinon, entrez votre email pour créer un nouveau compte. J’ai déjà un compte-->
+{#if notifyFr}
+    <div
+        class="toast-global"
+        role="button"
+        tabindex="0"
+        in:fly={{ x: 200, duration: 250 }}
+        out:fly={{ x: 200, duration: 200 }}
+        on:click={() => {
+            notifyFr = '';
+            notifyEn = '';
+        }}
+        on:keydown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                notifyFr = '';
+                notifyEn = '';
+            }
+        }}
+    >
+        {notifyFr}
+    </div>
+{/if}
+
 <div class="w-full flex justify-center mt-[53px]">
-    <div class="lg:w-[1136px] md:w-[760px] w-[300px]">
+        <div class="lg:w-[1136px] md:w-[760px] w-[300px]">
+
         {#if isFinalize}
             <div transition:fly={{ y: -100, duration: 300 }}>
-                <div class="flex gap-4 w-full mb-4">
-                    <div class="text-base text-nowrap w-[176px]">Votre Courriel</div>
+                <!--region login-->
+                <!--                <div class="flex gap-4 w-full mb-4">-->
+                <!--                    <div class="text-base text-nowrap w-[176px]">Votre Courriel</div>-->
 
-                    <form class="flex flex-1 flex-wrap gap-y-2 gap-x-4">
-                        <div>
-                            <Input
-                                bind:this={emailAccountInput}
-                                bind:value={emailAccount}
-                                type="email"
-                                autocomplete="email"
-                                class="lg:w-[268px] w-full"
-                                placeholder="Courriel"
-                                hint="Courriel valide requis"
-                                validate={{
-                                    type: 'string',
-                                    pattern: '^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$',
-                                    maxLength: 254
-                                }}
-                            />
-                            {#if foundContact || register}
-                                <button class="underline text-wblue text-xs" on:click={() => (register = !register)}>
-                                    I want to check another email
-                                </button>
-                            {/if}
-                        </div>
-                        {#if foundAccount}
-                            <Input
-                                bind:this={passwordAccountInput}
-                                bind:value={passwordAccount}
-                                type="password"
-                                autocomplete="password"
-                                class="lg:max-w-[268px] w-full"
-                                placeholder="Mot de passe"
-                                hint="Mot de passe"
-                                validate={{
-                                    type: 'string',
-                                    pattern: '',
-                                    maxLength: 254
-                                }}
-                            />
-                        {:else if foundContact || register}
-                            <Input
-                                bind:this={passwordAccountInput}
-                                bind:value={passwordAccount}
-                                type="password"
-                                autocomplete="new-password"
-                                class="lg:max-w-[268px] w-full"
-                                placeholder="Nouveau mot de passe"
-                                hint="Mot de passe"
-                                validate={{
-                                    type: 'string',
-                                    pattern: '',
-                                    maxLength: 254
-                                }}
-                            />
-                        {/if}
+                <!--                    <form class="flex flex-1 flex-wrap gap-y-2 gap-x-4">-->
+                <!--                        <div>-->
+                <!--                            <Input-->
+                <!--                                bind:this={emailAccountInput}-->
+                <!--                                bind:value={emailAccount}-->
+                <!--                                type="email"-->
+                <!--                                autocomplete="email"-->
+                <!--                                class="lg:w-[268px] w-full"-->
+                <!--                                placeholder="Courriel"-->
+                <!--                                hint="Courriel valide requis"-->
+                <!--                                validate={{-->
+                <!--                                    type: 'string',-->
+                <!--                                    pattern: '^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$',-->
+                <!--                                    maxLength: 254-->
+                <!--                                }}-->
+                <!--                            />-->
+                <!--                            {#if foundContact || register}-->
+                <!--                                <button class="underline text-wblue text-xs" on:click={() => (register = !register)}>-->
+                <!--                                    I want to check another email-->
+                <!--                                </button>-->
+                <!--                            {/if}-->
+                <!--                        </div>-->
+                <!--                        {#if foundAccount}-->
+                <!--                            <Input-->
+                <!--                                bind:this={passwordAccountInput}-->
+                <!--                                bind:value={passwordAccount}-->
+                <!--                                type="password"-->
+                <!--                                autocomplete="password"-->
+                <!--                                class="lg:max-w-[268px] w-full"-->
+                <!--                                placeholder="Mot de passe"-->
+                <!--                                hint="Mot de passe"-->
+                <!--                                validate={{-->
+                <!--                                    type: 'string',-->
+                <!--                                    pattern: '',-->
+                <!--                                    maxLength: 254-->
+                <!--                                }}-->
+                <!--                            />-->
+                <!--                        {:else if foundContact || register}-->
+                <!--                            <Input-->
+                <!--                                bind:this={passwordAccountInput}-->
+                <!--                                bind:value={passwordAccount}-->
+                <!--                                type="password"-->
+                <!--                                autocomplete="new-password"-->
+                <!--                                class="lg:max-w-[268px] w-full"-->
+                <!--                                placeholder="Nouveau mot de passe"-->
+                <!--                                hint="Mot de passe"-->
+                <!--                                validate={{-->
+                <!--                                    type: 'string',-->
+                <!--                                    pattern: '',-->
+                <!--                                    maxLength: 254-->
+                <!--                                }}-->
+                <!--                            />-->
+                <!--                        {/if}-->
 
-                        <button
-                            on:click={handleCheckForAccount}
-                            class="abutton bg-wred text-white text-base w-fit rounded-3xl px-[6px] h-[32px]"
-                        >
-                            {#if foundContact || register}
-                                Create a new account with us
-                            {:else if foundAccount}
-                                Login
-                            {:else}
-                                Vérifier
-                            {/if}
-                        </button>
-                    </form>
-                </div>
+                <!--                        <button-->
+                <!--                            on:click={handleCheckForAccount}-->
+                <!--                            class="abutton bg-wred text-white text-base w-fit rounded-3xl px-[6px] h-[32px]"-->
+                <!--                        >-->
+                <!--                            {#if foundContact || register}-->
+                <!--                                Create a new account with us-->
+                <!--                            {:else if foundAccount}-->
+                <!--                                Login-->
+                <!--                            {:else}-->
+                <!--                                Vérifier-->
+                <!--                            {/if}-->
+                <!--                        </button>-->
+                <!--                    </form>-->
+                <!--                </div>-->
+                <!--endregion -->
 
                 <hr class=" mb-4 border-wpink" />
 
-                <div class="flex lg:flex-row flex-col w-full md:gap-4 gap-0" bind:this={formEl}>
-                    <div class="text-base text-nowrap w-[176px]">Pour la commande</div>
+                <div id="userdata" class="flex lg:flex-row flex-col w-full md:gap-4 gap-0" bind:this={formEl}>
+                    <div class="text-base text-nowrap w-[176px] md:mb-0 mb-2">Pour la commande</div>
                     <form class="flex flex-1 flex-wrap gap-y-2 gap-x-4">
                         <Input
                             placeholder="Prénom"
@@ -327,7 +460,7 @@
                         />
                         <Input
                             placeholder="Ville"
-                            class="lg:max-w-[272px] lg:w-full md:min-w-0 min-w-[300px] flex-1 "
+                            class="lg:max-w-[272px] w-full md:min-w-0 min-w-[300px] flex-1 "
                             bind:this={cityInput}
                             bind:value={formData.city}
                             validate={{ type: 'string', minLength: 1, pattern: '^[\\s\\S]*$' }}
@@ -335,7 +468,7 @@
                         />
                         <Input
                             placeholder="Code postal"
-                            class="lg:max-w-[176px] lg:w-full w-fit md:flex-none flex-1 "
+                            class="lg:max-w-[176px] lg:w-full md:w-fit w-full md:flex-none flex-1 "
                             bind:this={postalCodeInput}
                             bind:value={formData.postalCode}
                             validate={{ type: 'string', minLength: 5, pattern: '^[\\s\\S]*$' }}
@@ -351,7 +484,7 @@
                         />
                         <Input
                             placeholder="Courriel"
-                            class="lg:max-w-[268px] lg:w-full flex-1 "
+                            class="lg:max-w-[272px] w-full flex-1 "
                             bind:this={emailInput}
                             bind:value={formData.email}
                             validate={{
@@ -369,9 +502,26 @@
                 </div>
 
                 <div class="flex md:flex-row flex-col w-full md:gap-4 gap-0 md:mt-[40px] mt-[20px]">
+                    <div class="text-base text-nowrap w-[176px]">No de SAQ</div>
+                    <Input
+                        placeholder={$isPrixResto ? 'No de SAQ (obligatoire)' : 'No de SAQ (optionnel)'}
+                        class="lg:max-w-[272px] w-full flex-1 "
+                        bind:this={saqNumberInput}
+                        bind:value={formData.saqNumber}
+                        validate={{
+                            type: 'string',
+                            pattern: '^[0-9]{8}$',
+                            minLength: 8,
+                            maxLength: 8
+                        }}
+                        hint="Le numéro de SAQ doit contenir 8 chiffres."
+                    />
+                </div>
+
+                <div class="flex md:flex-row flex-col w-full md:gap-4 gap-0 md:mt-[40px] mt-[20px]">
                     <div class="text-base text-nowrap w-[176px]">Pour la cueillette</div>
 
-                    {#if options}
+                    {#if !$isPrixResto && options}
                         <Select
                             fontSize="16px"
                             bind:value={saqSelect}
@@ -380,6 +530,20 @@
                             {options}
                             placeholder="Choisir votre SAQ"
                             hint="Veuillez sélectionner une succursale SAQ"
+                            validate={{ type: ['string', 'number'], minLength: 1 }}
+                            bind:this={saqSelectComponent}
+                        />
+                    {:else if $isPrixResto}
+                        <Select
+                            fontSize="16px"
+                            bind:value={deliverTypeSelect}
+                            class="w-full lg:max-w-[464px] !border-wblue "
+                            inputClass="!text-wblack !placeholder-wblue"
+                            options={restoDeliveryOptions}
+                            placeholder="Type de livraison"
+                            hint="Veuillez sélectionner une type de livraison"
+                            validate={{ type: ['string', 'number'], minLength: 1 }}
+                            bind:this={deliverTypeSelectComponent}
                         />
                     {/if}
                 </div>
@@ -388,13 +552,13 @@
             </div>
         {/if}
 
-        <hr class={isFinalize ? 'md:mt-[18px] mt-[0px]' : ''} />
+        <hr class="md:block hidden {isFinalize ? 'md:mt-[18px] mt-[0px] ' : ''}" />
         <div class="">
-            <div class="  flex lg:flex-col lg:gap-0 flex-wrap gap-2 justify-between">
+            <div class="  flex lg:flex-col lg:gap-0 flex-wrap md:gap-2 gap-5 justify-between">
                 {#each $cart as item}
                     {#key item.id}
                         <div transition:fade>
-                            <CartItem product={item} />
+                            <CartItem selectedBatch={item} />
                         </div>
                     {/key}
                 {/each}
@@ -431,16 +595,21 @@
                     Continuer mes achats
                 </button>
                 <button
-                    class="abutton bg-wred text-white text-base w-full md:max-w-[271px] rounded-3xl"
-                    disabled={loading}
+                    class="abutton bg-wred text-white w-full md:max-w-[271px] rounded-3xl"
+                    disabled={loadingHandleSubmit}
                     on:click={() => {
                         if (isFinalize) handleSubmit();
                         else {
                             isFinalize = true;
-                            goto('#logo');
+                            goto('#userdata');
                         }
                     }}
                 >
+                    {#if loadingHandleSubmit}
+                        <div class="absolute w-0 h-0 mt-[3px] ml-[7px]">
+                            <div class="circle" />
+                        </div>
+                    {/if}
                     {#if isFinalize}Confirmer la commande{:else}Finaliser ma commande{/if}
                 </button>
             </div>
@@ -449,4 +618,37 @@
 </div>
 
 <style>
+    .circle {
+        width: 13px;
+        height: 13px;
+        border-radius: 50%;
+        background: var(--WARD-BLUE);
+        animation: fade 2s infinite ease-in-out;
+    }
+
+    @keyframes fade {
+        0%,
+        100% {
+            opacity: 0.2;
+        }
+        50% {
+            opacity: 1;
+        }
+    }
+
+    .toast-global {
+        position: fixed;
+        top: 16px;
+        right: 16px;
+        z-index: 10000;
+        max-width: 260px;
+        padding: 8px 12px;
+        border-radius: 6px;
+        background: rgba(222, 53, 11, 0.98);
+        color: #fff;
+        font-size: 13px;
+        line-height: 1.4;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+        cursor: pointer;
+    }
 </style>

@@ -63,7 +63,7 @@ async function loadFontFromUrl(
  * @param pdfFilename - The file name for the PDF (used only for naming purposes).
  * @returns A Promise resolving to the PDF Blob.
  */
-export async function generatePDFFromId(elementId: string, pdfFilename: string = 'output.pdf'): Promise<Blob> {
+export async function generatePDFFromId(elementId: string, pdfFilename: string = 'output.download-pdf'): Promise<Blob> {
     const element = document.getElementById(elementId);
     if (!element) {
         console.error(`Element with id "${elementId}" not found.`);

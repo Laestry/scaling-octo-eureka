@@ -2,9 +2,15 @@
     import { teleport, clickOutside } from '$lib/utils';
     import SimpleBar from '@woden/svelte-simplebar';
     import { createEventDispatcher } from 'svelte';
+    import { validator } from '@exodus/schemasafe';
 
     // Option type for object options. We add an optional originalIndex.
-    type Option = { value: number | string; label: number | string; originalIndex?: number };
+    type Option = {
+        value: number | string;
+        label: number | string;
+        originalIndex?: number;
+        disabled?: boolean; // <—
+    };
 
     export let defaultOption = 'All';
     // Accept either an array of Option objects or an array of strings or numbers.
@@ -24,10 +30,11 @@
         | 'warning'
         | 'disabled' = 'enabled';
     export let hint: string = '';
-    export let validate = false;
+    export let validate: object | undefined;
     export let fontSize: string = '12px';
     export let multiple = false;
     export let value: string | number | undefined = undefined;
+    export let hideDefault = false;
 
     let isOpen = false;
     let userInput = '';
@@ -40,7 +47,7 @@
         Array.isArray(options) && options.length > 0
             ? typeof (options as any)[0] === 'string' || typeof (options as any)[0] === 'number'
                 ? (options as (string | number)[]).map((opt, i) => ({ value: opt, label: opt, originalIndex: i }))
-                : (options as Option[]).map((opt, i) => ({ ...opt, originalIndex: i }))
+                : (options as Option[]).map((opt, i) => ({ ...opt, originalIndex: i, disabled: !!opt.disabled })) // <—
             : [];
 
     let isSimpleOptions = false;
@@ -53,23 +60,33 @@
 
     // Create a reactive sorted list that puts selected options at the top.
     $: sortedOptions = optionsFiltered.slice().sort((a, b) => {
-        const aSelected =
+        // volume-aware ordering you already had
+        const extractVolume = (label: string | number) => {
+            const m = String(label).match(/([\d.,]+)\s*(ml|l)/i);
+            if (!m) return null;
+            const val = parseFloat(m[1].replace(',', '.'));
+            const unit = m[2].toLowerCase();
+            return unit === 'l' ? val * 1000 : val;
+        };
+        const aVol = extractVolume(a.label);
+        const bVol = extractVolume(b.label);
+        if (aVol != null && bVol != null && aVol !== bVol) return aVol - bVol;
+
+        const isSelected = (opt: Option) =>
             multiple && Array.isArray(selected)
                 ? (selected as (Option | string | number)[]).some((item) =>
-                      typeof item === 'object' ? item.value === a.value : item === a.label
+                      typeof item === 'object' ? (item as any).value === opt.value : item === opt.label
                   )
                 : false;
-        const bSelected =
-            multiple && Array.isArray(selected)
-                ? (selected as (Option | string | number)[]).some((item) =>
-                      typeof item === 'object' ? item.value === b.value : item === b.label
-                  )
-                : false;
-        if (aSelected === bSelected) {
-            // Preserve original order using originalIndex.
-            return (a.originalIndex ?? 0) - (b.originalIndex ?? 0);
-        }
-        return aSelected ? -1 : 1;
+
+        const aSel = isSelected(a);
+        const bSel = isSelected(b);
+        if (aSel !== bSel) return aSel ? -1 : 1;
+
+        // enabled before disabled
+        if (!!a.disabled !== !!b.disabled) return a.disabled ? 1 : -1; // <—
+
+        return (a.originalIndex ?? 0) - (b.originalIndex ?? 0);
     });
 
     function handleOpen() {
@@ -121,46 +138,52 @@
     });
 
     function selectOption(opt: Option) {
+        if (opt.disabled) return;
+
+        const toLabel = (x: any) => (typeof x === 'object' && x !== null ? String(x.label ?? x.value) : String(x));
+
         if (multiple) {
-            // Ensure selected is an array.
-            if (!Array.isArray(selected)) {
-                selected = [];
-            }
-            // Check if the option is already selected.
-            const index = (selected as (Option | string | number)[]).findIndex((item) =>
-                typeof item === 'object' ? item.value === opt.value : item === opt.label
+            if (!Array.isArray(selected)) selected = [];
+            const idx = (selected as (Option | string | number)[]).findIndex((item) =>
+                typeof item === 'object' ? (item as any).value === opt.value : item === opt.label
             );
-            if (index > -1) {
-                // Remove the option.
-                (selected as (Option | string | number)[]).splice(index, 1);
+
+            if (idx > -1) {
+                (selected as any[]).splice(idx, 1);
             } else {
-                // Add the option.
-                (selected as (Option | string | number)[]).push(isSimpleOptions ? opt.label : opt);
+                (selected as any[]).push(isSimpleOptions ? opt.label : opt);
             }
-            // Update count and assign selected accordingly.
-            const count = (selected as (Option | string | number)[]).length;
+
+            const count = (selected as any[]).length;
             if (count === 0) {
                 selected = undefined;
                 inputValue = '';
             } else {
-                // Trigger reactivity.
-                selected = [...(selected as (Option | string | number)[])];
+                selected = [...(selected as any[])];
                 inputValue = `${placeholder} (${count})`;
             }
+
             handleValidate();
-            // Keep the dropdown open for multiple selection.
             value = isSimpleOptions ? (opt.label as any) : (opt.value as any);
 
-            dispatch('change', { selected });
+            const selectedLabels = Array.isArray(selected)
+                ? (selected as any[]).map(toLabel)
+                : selected
+                  ? [toLabel(selected)]
+                  : [];
+
+            dispatch('change', { selected, selectedLabels });
         } else {
-            // Single selection behavior.
             inputValue = String(opt.label);
             value = isSimpleOptions ? (opt.label as any) : (opt.value as any);
-            selected = isSimpleOptions ? opt.label : opt;
+            selected = isSimpleOptions ? (opt.label as any) : opt;
             handleValidate();
             isOpen = false;
             userInput = '';
-            dispatch('change', { selected });
+
+            const selectedLabels = selected ? [toLabel(selected)] : [];
+
+            dispatch('change', { selected, selectedLabels });
         }
     }
 
@@ -179,14 +202,15 @@
     }
 
     let error = false;
+    let validateFn;
+    $: if (validate) {
+        validateFn = validator(validate);
+    }
+    // expose validate handler to parent
     export function handleValidate() {
-        if (!validate) return;
-        if (multiple) {
-            error = !selected;
-        } else {
-            error = selected === null || selected === undefined;
-        }
-        console.log('handleValidate', error, selected);
+        const testValue = multiple ? selected : value;
+        error = validateFn ? !validateFn(testValue) : false;
+        return !error;
     }
 
     export let inputClass = '';
@@ -202,35 +226,37 @@
     }
 </script>
 
-<div
-    bind:this={wrapperElement}
-    class="flex bg-white border-t {$$props.class}"
-    style="--font-size: {fontSize}; font-size: var(--font-size);"
->
-    <input
-        autocomplete="none"
-        class="text text-wblack {inputClass}"
-        style="width: calc(100% - 21px);"
-        bind:value={inputValue}
-        {placeholder}
-        {disabled}
-        on:input={handleInput}
-        on:focus={handleOpen}
-        on:click={handleOpen}
-        on:blur={handleValidate}
-    />
-    <div class="m-[6px] w-[9px] h-[9px]">
-        <svg width="9" height="9" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-            <line class:rotate={isOpen} class="line" x1="50" y1="10" x2="50" y2="90" stroke-width="10" />
-            <line class="line" x1="90" y1="50" x2="10" y2="50" stroke-width="10" />
-        </svg>
+<div class="flex-1">
+    <div
+        bind:this={wrapperElement}
+        class="flex bg-white border-t {$$props.class}"
+        style="--font-size: {fontSize}; font-size: var(--font-size);"
+    >
+        <input
+            autocomplete="none"
+            class="text text-wblack {inputClass}"
+            style="width: calc(100% - 21px);"
+            bind:value={inputValue}
+            {placeholder}
+            {disabled}
+            on:input={handleInput}
+            on:focus={handleOpen}
+            on:click={handleOpen}
+            on:blur={handleValidate}
+        />
+        <div class="m-[6px] w-[9px] h-[9px]">
+            <svg width="9" height="9" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <line class:rotate={isOpen} class="line" x1="50" y1="10" x2="50" y2="90" stroke-width="10" />
+                <line class="line" x1="90" y1="50" x2="10" y2="50" stroke-width="10" />
+            </svg>
+        </div>
     </div>
+    {#if error}
+        <div class="error">
+            {hint}
+        </div>
+    {/if}
 </div>
-{#if error}
-    <div class="error">
-        {hint}
-    </div>
-{/if}
 
 {#if isOpen && sortedOptions.length > 0}
     <div
@@ -242,11 +268,20 @@
     >
         <div class="select-options__wrapper svrollbar">
             <SimpleBar style="width:100%; height: fit-content; max-height: 210px" forceVisible={true} autoHide={false}>
-                <button class="select-options__item text" type="button" on:click={selectDefault}>
-                    {defaultOption}
-                </button>
+                {#if hideDefault}
+                    <button class="select-options__item text" type="button" on:click={selectDefault}>
+                        {defaultOption}
+                    </button>
+                {/if}
                 {#each sortedOptions as opt, index}
-                    <button class="select-options__item text" type="button" on:click={() => selectOption(opt)}>
+                    <button
+                        class="select-options__item text"
+                        type="button"
+                        on:click={() => selectOption(opt)}
+                        disabled={opt.disabled}
+                        aria-disabled={opt.disabled}
+                        tabindex={opt.disabled ? -1 : 0}
+                    >
                         <span>{opt.label}</span>
                         {#if multiple && selectedStates[index]}
                             <svg
@@ -268,6 +303,12 @@
 {/if}
 
 <style lang="scss">
+    .select-options__item[disabled] {
+        opacity: 0.5;
+        cursor: not-allowed;
+        pointer-events: none; /* prevents hover/active visuals */
+    }
+
     :global(.simplebar-scrollbar::before) {
         min-height: 50px !important;
         background-color: #ccc;
@@ -275,7 +316,7 @@
 
     .error {
         color: red;
-        font-size: 12px;
+        font-size: 12px !important;
     }
 
     .line {

@@ -17,7 +17,7 @@
 
     /* NEW */
     let animate = true; // flip to false for the paths we want to skip
-
+    $: isDownloadPDF = currentPath.includes('download-pdf');
     navigating.subscribe((n) => {
         if (n) {
             const from = n.from?.url.pathname || '';
@@ -46,18 +46,24 @@
     });
 </script>
 
-<div style="max-width:100vw;background-color:#F6F1F2" class="pb-[53px]">
-    <Header />
-    {#key currentPath}
-        <!-- with fly transition -->
-        <div
-            in:fly={isRight ? { x: -200, duration: 500, delay: 1500 } : { x: 200, duration: 500, delay: 1500 }}
-            out:fly={isRight ? { x: 200, duration: 1200 } : { x: -200, duration: 1200 }}
-        >
-            <slot />
+<div class="flex flex-col min-h-screen">
+    {#if !isDownloadPDF}
+        <div style="max-width:100vw; background-color:#F6F1F2" class="pb-[53px] flex-1">
+            <Header />
+            {#key currentPath}
+                <!-- with fly transition -->
+                <div
+                    in:fly={isRight ? { x: -200, duration: 500, delay: 1700 } : { x: 200, duration: 500, delay: 1500 }}
+                    out:fly={isRight ? { x: 200, duration: 1200 } : { x: -200, duration: 1200 }}
+                >
+                    <slot />
+                </div>
+            {/key}
         </div>
-    {/key}
-</div>
 
-<Footer />
-<BlueDotCursor />
+        <Footer />
+        <BlueDotCursor />
+    {:else}
+        <slot />
+    {/if}
+</div>

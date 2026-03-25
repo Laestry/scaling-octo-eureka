@@ -48,12 +48,14 @@
         "@supabase/ssr": "^0.6.1",
         "@woden/svelte-simplebar": "^1.0.0",
         "cross-env": "^7.0.3",
+        "html2pdf.js": "^0.10.0",
         "jsonwebtoken": "^9.0.2",
         "jspdf": "^3.0.1",
         "perfect-scrollbar": "^1.5.6",
         "pocketbase": "^0.25.2",
         "simplebar": "^6.3.0",
         "stripe": "^18.3.0",
+        "svelte-toast": "^1.0.0",
         "svrollbar": "^0.12.0"
     }
 }

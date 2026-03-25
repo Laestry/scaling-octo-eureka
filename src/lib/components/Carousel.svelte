@@ -1,3 +1,4 @@
+<!--Carousel.svelte-->
 <script lang="ts" context="module">
     export type Item = {
         src: string;
@@ -23,31 +24,31 @@
     }
 
     export let slides: T[] = [];
-    export let options: Omit<Partial<SlidyOptions>, 'index' | 'slides'> = {};
+    let options: Omit<Partial<SlidyOptions>, 'index' | 'slides'> = { loop: true, align: 'end' };
     export let current = 0;
 </script>
 
-<div class="wrapper">
-    <Slidy
-        {...default_options}
-        {...options}
-        bind:index={current}
-        counter={false}
-        arrows={false}
-        slides={slides.map((x, i) => ({ ...x, id: x.id ?? i }))}
-        let:item
-    >
-        <div class="item">
-            <slot {item}>
-                <img {...item} />
-            </slot>
-        </div>
-    </Slidy>
-</div>
+<Slidy
+    {...default_options}
+    {...options}
+    bind:index={current}
+    counter={false}
+    arrows={false}
+    slides={slides.map((x, i) => ({ ...x, id: x.id ?? i }))}
+    let:item
+>
+    <slot {item}>
+        <img class="self-start" {...item} />
+    </slot>
+</Slidy>
 
 <style lang="scss">
-    .wrapper {
+    :global(.slidy .slidy-slide) {
+        gap: 0 !important;
+        align-items: flex-start !important;
+        justify-content: flex-start;
     }
-    .item {
+    :global(.slidy) {
+        gap: 0 !important;
     }
 </style>

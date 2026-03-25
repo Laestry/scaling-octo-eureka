@@ -51,7 +51,7 @@ function isValidCartEntry(x: unknown): x is CartProduct {
     const o = x as UnknownRecord;
 
     // required for cart ops
-    const hasBatch = typeof o.selectedBatchId === 'string' && o.selectedBatchId.length > 0;
+    const hasBatch = typeof o.selected_batch_id === 'number';
     const hasQty = isFiniteInteger(o.quantity) && (o.quantity as number) >= 0;
 
     // minimal product fields your code uses
@@ -86,11 +86,7 @@ function safeLoadCart(): Cart {
 }
 
 type CartStore = Writable<Cart> & {
-    add: (
-        item: AlcoholProduct,
-        selectedBatch: string | number | { id: string | number; calculated_quantity?: number },
-        amount?: number
-    ) => void;
+    add: (item: AlcoholProduct, amount?: number) => void;
     remove: (selectedBatchId: string, amount?: number) => void;
     removeCompletely: (selectedBatchId: string) => void;
     clear: () => void;
@@ -131,7 +127,7 @@ export function createCart(): CartStore {
             return toInt(sel.calculated_quantity);
         }
         const selId = resolveBatchId(sel);
-        if (item?.oldest_batch_id != null && toStrId(item.oldest_batch_id) === selId) {
+        if (item?.oldest_batch_id != null && item.oldest_batch_id === selId) {
             return toInt(item.oldest_calculated_quantity);
         }
         return undefined;
@@ -142,16 +138,16 @@ export function createCart(): CartStore {
         set: cartStore.set,
         update: cartStore.update,
 
-        add: (item, selectedBatch, amount = 1) => {
-            const batchId = resolveBatchId(selectedBatch);
-            if (!batchId) throw new Error('selectedBatchId is required to add to cart');
+        add: (cartItem, amount = 1) => {
+            // Use the selectedBatchId that's already in the cartItem
+            const batchId = cartItem.selected_batch_id;
 
             cartStore.update((cart: CartProduct[]) => {
-                const existingIndex = cart.findIndex((ci) => ci.selectedBatchId === batchId);
+                const existingIndex = cart.findIndex((ci) => ci.selected_batch_id === batchId);
                 const existing = existingIndex !== -1 ? cart[existingIndex] : undefined;
 
-                const uvc = (item as any)?.uvc > 0 ? (item as any).uvc : 1;
-                const availableBottles = resolveAvailableBottles(item, selectedBatch); // may be undefined
+                const uvc = cartItem.uvc > 0 ? cartItem.uvc : 1;
+                const availableBottles = cartItem.selected_calculated_quantity;
                 const maxCases = availableBottles != null ? Math.floor(availableBottles / uvc) : undefined;
                 const currentCases = existing ? existing.quantity : 0;
 
@@ -167,16 +163,19 @@ export function createCart(): CartStore {
                         i === existingIndex ? { ...ci, quantity: ci.quantity + actualAdd } : ci
                     );
                 } else {
-                    const newEntry: CartProduct = { ...item, selectedBatchId: batchId, quantity: actualAdd };
+                    const newEntry: CartProduct = {
+                        ...cartItem,
+                        quantity: actualAdd
+                    };
                     return [...cart, newEntry];
                 }
             });
         },
 
-        remove: (selectedBatchId: string, amount: number = 1) => {
+        remove: (selected_batch_id: string, amount: number = 1) => {
             cartStore.update((cart: CartProduct[]) => {
-                const id = toStrId(selectedBatchId);
-                const index = cart.findIndex((ci) => ci.selectedBatchId === id);
+                const id = selected_batch_id;
+                const index = cart.findIndex((ci) => ci.selected_batch_id === id);
                 if (index === -1) return cart;
 
                 const ci = cart[index];
@@ -188,9 +187,9 @@ export function createCart(): CartStore {
             });
         },
 
-        removeCompletely: (selectedBatchId: string) => {
-            const id = toStrId(selectedBatchId);
-            cartStore.update((cart: CartProduct[]) => cart.filter((ci) => ci.selectedBatchId !== id));
+        removeCompletely: (selected_batch_id: string) => {
+            const id = selected_batch_id;
+            cartStore.update((cart: CartProduct[]) => cart.filter((ci) => ci.selected_batch_id !== id));
         },
 
         clear: () => {
@@ -213,7 +212,7 @@ export const totalItems = derived(cart, ($cart) =>
 export function getItemQuantityStore(selectedBatchId: string | number) {
     const id = String(selectedBatchId);
     return derived(cart, ($cart) => {
-        const item = $cart.find((i) => String(i.selectedBatchId) === id);
+        const item = $cart.find((i) => String(i.selected_batch_id) === id);
         return item ? item.quantity : 0;
     });
 }

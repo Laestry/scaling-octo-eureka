@@ -1,10 +1,10 @@
 <script lang="ts">
-    import type { AlcoholProduct } from '$lib/models/pocketbase';
+    import { getCategory } from './utils.js';
 
     // helper to URI-encode JSON values exactly the way the filters expect
     const j = (o: any) => encodeURIComponent(typeof o === 'string' ? o : JSON.stringify(o));
 
-    export let product: AlcoholProduct;
+    export let product;
 
     /* ------------------------------------------------------------------
      * Build links that match the new short-key filter scheme:
@@ -54,20 +54,22 @@
             <a href={regionHref}>{product.originRegion}</a>
         {/if}
 
-        <!--{#if categoryHref}-->
-        <!--    <a href={categoryHref}>{vin.specificCategory}</a>-->
-        <!--{/if}-->
-
-        <!--        {#if formatHref}-->
-        <!--            <a href={formatHref}>{vin.lblFormat}</a>-->
-        <!--        {/if}-->
+        {#if categoryHref}
+            <a href={categoryHref}>{getCategory(product)}</a>
+        {/if}
 
         {#if vintageHref}
-            <a href={vintageHref}>{product.vintage}</a>
+            <a target="_blank" href={vintageHref}>{product.vintage}</a>
         {/if}
     </p>
 
-    <a href="#" class="passport whitespace-nowrap"> Fiche technique complète </a>
+    <a
+        target="_blank"
+        href="/download-pdf/fiche-technique/{product.alcohol_website[0].slug}"
+        class="passport whitespace-nowrap"
+    >
+        Fiche technique complète
+    </a>
 </div>
 
 <style lang="scss">

@@ -13,14 +13,29 @@
     export let categories: any[] = [];
     export let selectedFilters: TFilters;
     export let nameSearch: string;
-
+    export let enabledFacets:EnabledFacets
     type FilterGroupName = 'category' | 'region' | 'vintage' | 'format' | 'producer';
+    type Option = {
+        value: number | string;
+        label: number | string;
+        disabled?: boolean;
+        originalIndex?: number;
+    };
+
+    type EnabledFacets = {
+        producer?: { id: number; name: string }[];
+        region?: { country_id: number | null; region_name: string | null }[];
+        format?: { volume: number | null; format: number | null }[];
+        vintage?: { vintage: number }[];
+    } | null | undefined;
+
 
     type DisplayFilter = {
         name: FilterGroupName;
         label: string; // what you want to show as placeholder
         list: string[];
         rawMap: Record<string, any>;
+        options: { label: string; value: any; disabled?: boolean }[]; // <—
     };
 
     const displayNames: Record<FilterGroupName, string> = {
@@ -31,7 +46,75 @@
         producer: 'Producteur'
     };
 
-    function buildDisplayFilters(rawCats: any[] = []): DisplayFilter[] {
+    function valueAllowedForGroup(
+        group: FilterGroupName,
+        rawValue: any,
+        ef: EnabledFacets
+    ): boolean {
+        if (!ef) return true; // no restriction at all when facets not provided
+
+        const norm = (v: any) => JSON.stringify(v ?? null);
+
+        if (group === 'producer') {
+            // If the group key is absent => no restriction. If present but empty => disable all.
+            if (!('producer' in ef)) return true;
+            const list = ef.producer ?? [];
+            if (list.length === 0) return false;
+            const allowed = list.map((p) => ({ id: p.id }));
+            const candidate =
+                { id: rawValue?.id ?? rawValue?.provider_id ?? rawValue?.value ?? rawValue };
+            return allowed.some((a) => norm(a) === norm(candidate));
+        }
+
+        if (group === 'region') {
+            if (!('region' in ef)) return true;
+            const list = ef.region ?? [];
+            if (list.length === 0) return false;
+            const allowed = list.map((r) => ({
+                country_id: r.country_id ?? null,
+                region_name: r.region_name ?? null
+            }));
+            const candidate = {
+                country_id: rawValue?.country_id ?? null,
+                region_name: rawValue?.region_name ?? null
+            };
+            return allowed.some((a) => norm(a) === norm(candidate));
+        }
+
+        if (group === 'format') {
+            if (!('format' in ef)) return true;
+            const list = ef.format ?? [];
+            if (list.length === 0) return false;
+            const allowed = list.map((f) => ({
+                volume: f.volume ?? null,
+                format: f.format ?? null
+            }));
+            const candidate = {
+                volume: rawValue?.volume ?? null,
+                format: rawValue?.format ?? null
+            };
+            return allowed.some((a) => norm(a) === norm(candidate));
+        }
+
+        if (group === 'vintage') {
+            if (!('vintage' in ef)) return true;
+            const list = ef.vintage ?? [];
+            if (list.length === 0) return false;
+            const allowed = list.map((v) => v.vintage);
+            const candidate = typeof rawValue === 'number'
+                ? rawValue
+                : Number(rawValue?.vintage ?? rawValue);
+            return allowed.includes(candidate);
+        }
+
+        // category not restricted by facets
+        if (group === 'category') return true;
+
+        return true;
+    }
+
+
+    function buildDisplayFilters(rawCats: any[] = [], ef: EnabledFacets) {
         const groups: Record<
             FilterGroupName,
             { name: FilterGroupName; order: number; options: { label: string; value: any }[] }
@@ -41,47 +124,41 @@
             const orgType = cat.type;
             let label: string | null = null;
             let groupKey: FilterGroupName;
-            let groupName: FilterGroupName;
             let order: number;
 
             if (orgType === 'category') {
                 label = getSpecificCategoryLabel(cat.value);
                 if (!label) return;
                 groupKey = 'category';
-                groupName = 'category';
                 order = 1;
             } else if (orgType === 'location') {
                 label = formatLocation(cat.value);
                 if (!label) return;
                 groupKey = 'region';
-                groupName = 'region';
                 order = 2;
             } else if (orgType === 'vintage') {
                 const vintageNum = Number(cat.value);
                 if (!vintageNum) return;
                 label = String(vintageNum);
                 groupKey = 'vintage';
-                groupName = 'vintage';
                 order = 3;
             } else if (orgType === 'volume') {
                 label = formatVolume(cat.value);
                 if (!label) return;
                 groupKey = 'format';
-                groupName = 'format';
                 order = 4;
             } else if (orgType === 'provider') {
                 const parsed = typeof cat.value === 'string' ? JSON.parse(cat.value) : cat.value;
                 label = parsed?.name;
                 if (!label) return;
                 groupKey = 'producer';
-                groupName = 'producer';
                 order = 5;
             } else {
                 return;
             }
 
             if (!groups[groupKey]) {
-                groups[groupKey] = { name: groupName, order, options: [] };
+                groups[groupKey] = { name: groupKey, order, options: [] };
             }
             groups[groupKey].options.push({ label, value: cat.value });
         });
@@ -89,28 +166,53 @@
         return Object.values(groups)
             .sort((a, b) => a.order - b.order)
             .map((g) => {
-                const deduped = g.options.filter((opt, i, arr) => arr.findIndex((o) => o.value === opt.value) === i);
+                let deduped = g.options.filter(
+                    (opt, i, arr) => arr.findIndex((o) => o.value === opt.value) === i
+                );
+
+                if (g.name === 'category' || g.name === 'region' || g.name === 'producer') {
+                    deduped = deduped.sort((a, b) =>
+                        a.label.localeCompare(b.label as string, 'fr', { sensitivity: 'base' })
+                    );
+                } else if (g.name === 'format') {
+                    const parseVol = (str: string) => {
+                        const num = parseFloat(str);
+                        if (str.includes('l')) return num * 1000;
+                        return num;
+                    };
+                    deduped = deduped.sort(
+                        (a, b) => parseVol(b.label as string) - parseVol(a.label as string)
+                    );
+                }
+
+                const rawMap = Object.fromEntries(
+                    deduped.map((o) => {
+                        let parsed: any = o.value;
+                        if (typeof parsed === 'string') {
+                            try { parsed = JSON.parse(parsed); } catch {}
+                        }
+                        return [o.label, parsed];
+                    })
+                );
+
+                const optionsWithDisabled = deduped.map((o) => {
+                    const raw = rawMap[o.label];
+                    const disabled = !valueAllowedForGroup(g.name as FilterGroupName, raw, ef);
+                    return { label: o.label, value: o.value, disabled };
+                });
+
                 return {
                     name: g.name as FilterGroupName,
                     label: displayNames[g.name as FilterGroupName] ?? g.name,
-                    list: deduped.map((o) => o.label),
-                    rawMap: Object.fromEntries(
-                        deduped.map((o) => {
-                            let parsed: any = o.value;
-                            if (typeof parsed === 'string') {
-                                try {
-                                    parsed = JSON.parse(parsed);
-                                } catch {}
-                            }
-                            return [o.label, parsed];
-                        })
-                    )
+                    rawMap,
+                    options: optionsWithDisabled
                 };
             });
     }
 
+
     // reactive filters derived from raw categories
-    $: filters = buildDisplayFilters(categories);
+    $: filters = buildDisplayFilters(categories, enabledFacets);
 
     const dispatch = createEventDispatcher();
 
@@ -148,88 +250,53 @@
     }
 
     let pendingSetParams = false;
-
+    let pdfUrl = `/download-pdf/liste-des-vins`;
     async function setParams() {
-        if (!isMounted) return;
-        if (pendingSetParams) return; // avoid overlapping invocations
+        if (!isMounted || pendingSetParams) return;
         pendingSetParams = true;
-        await tick(); // defer until after initial microtask so router is ready
+        await tick();
 
         const $page = get(page);
-        const sp = $page.url.searchParams;
+        const url = new URL($page.url); // clone first
+        const sp = url.searchParams; // edit this one
 
-        // clear the short keys first
         ['p', 'r', 'v', 'f', 'cat', 'u', 'pr', 's', 'q', 't'].forEach((k) => sp.delete(k));
 
-        // producer ids -> p
         if (selectedFilters.producer) {
-            const arr = Array.isArray(selectedFilters.producer) ? selectedFilters.producer : [selectedFilters.producer];
-            appendArrayParam(sp, 'p', arr.map(String));
+            appendArrayParam(sp, 'p', [selectedFilters.producer].flat().map(String));
         }
-
-        // region names -> r
         if (selectedFilters.region) {
-            const arr = Array.isArray(selectedFilters.region) ? selectedFilters.region : [selectedFilters.region];
-            appendArrayParam(sp, 'r', arr.map(String));
+            appendArrayParam(sp, 'r', [selectedFilters.region].flat().map(String));
         }
-
-        // vintage years -> v
         if (selectedFilters.vintage) {
-            const arr = Array.isArray(selectedFilters.vintage) ? selectedFilters.vintage : [selectedFilters.vintage];
-            appendArrayParam(sp, 'v', arr.map(String));
+            appendArrayParam(sp, 'v', [selectedFilters.vintage].flat().map(String));
         }
-
-        // format volumes -> f
         if (selectedFilters.format) {
-            const arr = Array.isArray(selectedFilters.format) ? selectedFilters.format : [selectedFilters.format];
-            appendArrayParam(sp, 'f', arr.map(String));
+            appendArrayParam(sp, 'f', [selectedFilters.format].flat().map(String));
         }
-
         if (selectedFilters.category) {
-            const arr = Array.isArray(selectedFilters.category) ? selectedFilters.category : [selectedFilters.category];
-
-            arr.forEach((o) => {
-                let parsed: any = o;
-                if (typeof parsed === 'string') {
-                    try {
-                        parsed = JSON.parse(parsed);
-                    } catch {
-                        // leave as is
-                    }
-                }
-                const categoryVal = parsed?.category;
-                const specificCategory = parsed?.specificCategory;
-                if (categoryVal != null && specificCategory != null) {
-                    sp.append('cat', `${categoryVal}_${specificCategory}`);
-                }
+            [selectedFilters.category].flat().forEach((o) => {
+                let parsed = typeof o === 'string' ? JSON.parse(o ?? '{}') : o;
+                const cat = parsed?.category;
+                const specific = parsed?.specificCategory;
+                if (cat && specific) sp.append('cat', `${cat}_${specific}`);
             });
         }
-
-        // priceRange -> pr
-        if (selectedFilters.priceRange) {
-            sp.set('pr', selectedFilters.priceRange);
-        }
-
-        // sorting -> s (you can normalize values if you want shorter tokens)
-        if (selectedFilters.sorting) {
-            sp.set('s', selectedFilters.sorting);
-        }
-
-        // nameSearch -> q
-        if (nameSearch) {
-            sp.set('q', nameSearch);
-        }
-
-        // tag -> t
-        if (selectedFilters.tag) {
-            sp.set('t', selectedFilters.tag);
-        }
+        if (selectedFilters.priceRange) sp.set('pr', selectedFilters.priceRange);
+        if (selectedFilters.sorting) sp.set('s', selectedFilters.sorting);
+        if (nameSearch) sp.set('q', nameSearch);
+        if (selectedFilters.tag) sp.set('t', selectedFilters.tag);
 
         try {
-            replaceState($page.url, $page.state);
-        } catch (error) {
-            console.error(error);
+            // Update router state and visible URL
+            replaceState(url, $page.state);
+            window.history.replaceState($page.state, '', url);
+        } catch (err) {
+            console.error(err);
         }
+
+        pendingSetParams = false;
+        pdfUrl = `/download-pdf/liste-des-vins?${sp.toString()}`;
     }
 
     // group name -> selected label(s)
@@ -316,7 +383,7 @@
 
 <div class="mt-15 flex flex-col lg:gap-4 md:gap-3 gap-[20px]">
     <div class="flex justify-between">
-        <div class="flex gap-1 items-center w-full">
+        <div class="flex gap-1 items-center md:w-full w-0">
             <label class="search md:flex hidden">
                 <div class="search__button">
                     <IconSearch />
@@ -324,13 +391,9 @@
                 <input type="text" class="search__input" bind:value={nameSearch} />
             </label>
         </div>
-        <div class="flex gap-1 items-center">
+        <div class="flex gap-1 items-center md:w-auto w-full md:justify-normal justify-between">
             <button class="all-button abutton text-" on:click={clearAllFilters}>Liste complète</button>
-            <label class="checkbox">
-                <input type="checkbox" class="checkbox__input" bind:checked={$isPrixResto} />
-                <span class="checkbox__text"> {$isPrixResto ? 'Prix Resto' : 'Prix Perso'}</span>
-                <span class="checkbox__box"></span>
-            </label>
+
             <div class="flex gap-1">
                 <button
                     class="rounded-full w-6 h-6 bg-[#fff] price-button"
@@ -367,7 +430,9 @@
             href={$isPrixResto
                 ? 'https://ward.pockethost.io/api/files/pbc_30851581/93ej7tuns0916g5/products_resto_03b592zlit.pdf'
                 : 'https://ward.pockethost.io/api/files/pbc_30851581/93ej7tuns0916g5/products_perso_qucjutpys2.pdf'}
-            download={$isPrixResto ? 'wardetassocies-prix-resto.pdf' : 'wardetassocies-prix-perso.pdf'}
+            download={$isPrixResto
+                ? 'wardetassocies-prix-resto.download-pdf'
+                : 'wardetassocies-prix-perso.download-pdf'}
             class="md:rounded-none rounded-full button-view button-view--link"
             target="_blank"
         >
@@ -380,16 +445,19 @@
                 <Select
                     multiple
                     class="cusselect"
-                    options={f.list}
+                    options={f.options}
                     placeholder={f.label}
                     defaultOption="Tout afficher"
                     selected={selectedLabelsByGroup[f.name]}
                     on:change={(e) => {
                         const sel = e.detail?.selected;
                         const labels = (() => {
+                            if (e.detail?.selectedLabels) return e.detail.selectedLabels;
                             if (sel == null) return undefined;
-                            if (Array.isArray(sel)) return sel.map(String);
-                            return [String(sel)];
+                            const arr = Array.isArray(sel) ? sel : [sel];
+                            return arr.map((it) =>
+                                typeof it === 'object' && it !== null ? String(it.label ?? it.value) : String(it)
+                            );
                         })();
 
                         const field = f.name;
@@ -412,6 +480,7 @@
             <p>No filters available.</p>
         {/if}
         <Select
+            hideDefault
             class="cusselect self-end"
             options={['Prix croissant', 'Prix décroissant', 'Alphabétique']}
             placeholder="Trier"
@@ -426,14 +495,7 @@
         <button class="button-view" class:active={!$isGrid} on:click={() => isGrid.set(false)}>
             <IconList />
         </button>
-        <a
-            href={$isPrixResto
-                ? 'https://ward.pockethost.io/api/files/pbc_30851581/93ej7tuns0916g5/products_resto_03b592zlit.pdf'
-                : 'https://ward.pockethost.io/api/files/pbc_30851581/93ej7tuns0916g5/products_perso_qucjutpys2.pdf'}
-            download={$isPrixResto ? 'wardetassocies-prix-resto.pdf' : 'wardetassocies-prix-perso.pdf'}
-            target="_blank"
-            class="md:rounded-none rounded-full button-view button-view--link"
-        >
+        <a href={pdfUrl} target="_blank" class="md:rounded-none rounded-full button-view button-view--link">
             <IconDownload />
         </a>
     </div>

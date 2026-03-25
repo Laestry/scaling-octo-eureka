@@ -1,6 +1,4 @@
 <script lang="ts">
-    import type { AlcoholProduct } from '$lib/models/pocketbase';
-
     export let id;
     export let products;
     export let prixResto = false;
@@ -15,7 +13,7 @@
         return '-';
     }
 
-    function priceFormatPDF({ pricing, uvc }: AlcoholProduct, bottle: boolean = true) {
+    function priceFormatPDF({ pricing, uvc }, bottle: boolean = true) {
         let price = prixResto ? pricing.price : pricing.priceTaxIn;
 
         if (bottle) {

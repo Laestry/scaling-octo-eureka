@@ -4,25 +4,17 @@
     import { cart, getItemQuantityStore } from '$lib/cart';
     import { fly } from 'svelte/transition';
     import Plus from '$lib/icons/Plus.svelte';
-    import { getOldestBatch } from './utils';
+    import { getOldestBatch, transformVinsToCartObject } from './utils';
+    import { getVinsImage } from '$lib/utils/images.js';
 
     export let product: any;
     export let size: 's' | 'm' | 'l' | 'v' = 's';
     export let isMain = false;
-
-    const images = new Array(8).fill('').map((_, i) => `/images/example_wines/${i + 1}.jpg`);
-    function getRandomNumber() {
-        const n1 = typeof product.id === 'number' ? product.id : parseInt(String(product.id)) || 0;
-        return n1;
-    }
-    function getImage() {
-        const n = getRandomNumber();
-        return images[n % images.length]!;
-    }
+    // console.log('product', product);
     let img = '';
     $: {
         product;
-        img = getImage();
+        img = getVinsImage(product);
     }
 
     let animations: { id: number }[] = [];
@@ -45,9 +37,15 @@
     }
 
     function handleAdd() {
+        console.log('handleAdd', selectedBatch);
         if (!selectedBatch) return;
         if ($itemQuantity >= maxCases) return;
-        cart.add(product, selectedBatch.id);
+        console.log('handleAdd', $itemQuantity, maxCases);
+
+        const cartItem = transformVinsToCartObject(product);
+        console.log('handleAdd cartItem', cartItem);
+
+        cart.add(cartItem);
         const id = Date.now();
         const duration = 600;
         animations = [...animations, { id }];
@@ -208,10 +206,10 @@
         font-weight: 400;
         line-height: 120%; /* 19.2px */
     }
-    
+
     /* Plus button hover effect - change from blue to pink */
     button:hover {
-        color: #DA5899 !important; /* Pink color */
+        color: #da5899 !important; /* Pink color */
         transition: color 0.2s ease;
     }
     .product-table-counter {
@@ -349,7 +347,7 @@
             font-style: normal;
             font-weight: 400;
             line-height: 150%; /* 18px */
-            text-transform: capitalize;
+            text-transform: capitalize c;
 
             b {
                 font-weight: 700;
@@ -409,7 +407,7 @@
             font-style: normal;
             font-weight: 400;
             line-height: 150%; /* 18px */
-            text-transform: capitalize;
+            text-transform: capitalize !important;
 
             b {
                 font-weight: 700;

@@ -5,24 +5,10 @@
     import { fly, fade } from 'svelte/transition';
     import Plus from '$lib/icons/Plus.svelte';
     import { getOldestBatch } from './utils';
+    import { getVinsImage } from '$lib/utils/images';
 
     export let product: any;
     export let isPDF = false;
-
-    // images
-    const images = new Array(8).fill('').map((_, i) => `/images/example_wines/${i + 1}.jpg`);
-    function getRandomNumber() {
-        const n1 = parseInt(product?.sku); // sku may not exist in view, falls back to id
-        return !Number.isNaN(n1)
-            ? n1
-            : typeof product?.id === 'number'
-              ? product.id
-              : parseInt(String(product?.id)) || 0;
-    }
-    function getImage() {
-        const n = getRandomNumber();
-        return images[n % images.length]!;
-    }
 
     let delayedImage = '';
     let loadImageTimer: ReturnType<typeof setTimeout>;
@@ -49,7 +35,7 @@
     function handleMouseEnter(e: MouseEvent) {
         hovered = true;
         handleMouseMove(e);
-        loadImageTimer = setTimeout(() => (delayedImage = getImage()), 0);
+        loadImageTimer = setTimeout(() => (delayedImage = getVinsImage(product)), 0);
     }
     function handleMouseLeave() {
         hovered = false;
@@ -92,7 +78,7 @@
     function handleAdd() {
         if (!selectedBatch) return;
         if ($itemQuantity >= maxCases) return;
-        cart.add(product, selectedBatch.id);
+        cart.add(product);
 
         const id = Date.now();
         animations = [...animations, { id }];
@@ -113,7 +99,7 @@
     on:mouseleave={handleMouseLeave}
     on:mousemove={handleMouseMove}
     on:click={handleClick}
-    class="relative border-y border-[#181C1C33] cursor-blue-dot {$$props['class']}"
+    class="relative border-b border-[#181C1C33] cursor-blue-dot {$$props['class']}"
 >
     <td>{region}</td>
     <td>{providerName || '-'}</td>
