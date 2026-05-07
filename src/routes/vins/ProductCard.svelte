@@ -6,6 +6,7 @@
     import Plus from '$lib/icons/Plus.svelte';
     import { getOldestBatch, transformVinsToCartObject } from './utils';
     import { getVinsImage } from '$lib/utils/images.js';
+    import NonDispoBadge from '$lib/components/NonDispoBadge.svelte';
 
     export let product: any;
     export let size: 's' | 'm' | 'l' | 'v' = 's';
@@ -67,8 +68,9 @@
 
 {#if isMain}
     <div class="product {size} cursor-blue-dot">
-        <a href="/vin/{product.website_slug ?? 'noslug'}">
+        <a href="/vin/{product.website_slug ?? 'noslug'}" class="relative block">
             <img class="bg-no-repeat object-cover bg-center img" src={img} alt="Wine" />
+            {#if product.total_quantity === 0}<NonDispoBadge />{/if}
         </a>
         <div class="flex justify-between mt-[7px] w-full">
             <a
@@ -120,8 +122,9 @@
     </div>
 {:else}
     <div class="product {size} cursor-blue-dot">
-        <a href="/vin/{product.website_slug ?? 'noslug'}">
+        <a href="/vin/{product.website_slug ?? 'noslug'}" class="relative block">
             <img class="bg-no-repeat object-cover bg-center img mb-[15px]" src={img} alt="Wine" />
+            {#if product.total_quantity === 0}<NonDispoBadge />{/if}
         </a>
         <a href="/vin/{product.website_slug ?? 'noslug'}" class="flex justify-between w-full">
             <div class="flex flex-col w-full product-name" style="width: calc(100% - 100px)">

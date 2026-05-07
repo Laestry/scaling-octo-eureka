@@ -240,36 +240,41 @@
 
                             <!--                            right-->
                             <div class="flex flex-col flex-1">
-                                <div
-                                    class="flex flex-col items-end justify-center
-                                        lg:h-[70px] h-[45px] border-b border-wblue"
-                                >
-                                    <b>
-                                        {$priceFormat(
-                                            {
-                                                price: selectedBatch.price,
-                                                price_tax_in: selectedBatch.price_tax_in,
-                                                uvc: product.uvc
-                                            },
-                                            true
-                                        )}
-                                    </b>
-                                    <b>
-                                        {$priceFormat(
-                                            {
-                                                price: selectedBatch.price,
-                                                price_tax_in: selectedBatch.price_tax_in,
-                                                uvc: product.uvc
-                                            },
-                                            false
-                                        )}
-                                    </b>
-                                </div>
-
-                                <div class="flex flex-1 items-center justify-end text-end">
-                                    Acheter avant <br />
-                                    {sellBeforeDate(selectedBatch.sell_before_date)}
-                                </div>
+                                {#if selectedBatch}
+                                    <div
+                                        class="flex flex-col items-end justify-center
+                                            lg:h-[70px] h-[45px] border-b border-wblue"
+                                    >
+                                        <b>
+                                            {$priceFormat(
+                                                {
+                                                    price: selectedBatch.price,
+                                                    price_tax_in: selectedBatch.price_tax_in,
+                                                    uvc: product.uvc
+                                                },
+                                                true
+                                            )}
+                                        </b>
+                                        <b>
+                                            {$priceFormat(
+                                                {
+                                                    price: selectedBatch.price,
+                                                    price_tax_in: selectedBatch.price_tax_in,
+                                                    uvc: product.uvc
+                                                },
+                                                false
+                                            )}
+                                        </b>
+                                    </div>
+                                    <div class="flex flex-1 items-center justify-end text-end">
+                                        Acheter avant <br />
+                                        {sellBeforeDate(selectedBatch.sell_before_date)}
+                                    </div>
+                                {:else}
+                                    <div class="flex flex-1 items-center justify-end text-end text-[#2D63B0]">
+                                        Non disponible
+                                    </div>
+                                {/if}
                             </div>
                         </div>
                         <!--endregion-->
@@ -282,7 +287,7 @@
                                 </div>
                                 <div class="flex gap-1 items-center">
                                     <div class="text-xs product-table-counter__value">
-                                        {selectedBatch.calculated_quantity > 0 ? in_cart * product.uvc : '/'}
+                                        {selectedBatch?.calculated_quantity > 0 ? in_cart * product.uvc : '/'}
                                     </div>
                                     <div class="md:flex flex-col contents">
                                         <button
@@ -302,7 +307,7 @@
                                     </div>
                                 </div>
 
-                                {#if selectedBatch.calculated_quantity}
+                                {#if selectedBatch?.calculated_quantity}
                                     <button
                                         disabled={availableCases <= 0 || in_cart <= 0}
                                         class="product-table__button abutton md:mt-0 mt-7 lg:mr-[192px]"

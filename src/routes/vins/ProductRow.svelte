@@ -6,6 +6,7 @@
     import Plus from '$lib/icons/Plus.svelte';
     import { getOldestBatch } from './utils';
     import { getVinsImage } from '$lib/utils/images';
+    import NonDispoBadge from '$lib/components/NonDispoBadge.svelte';
 
     export let product: any;
     export let isPDF = false;
@@ -154,6 +155,7 @@
             {#if !isPDF}
                 <img transition:fade={{ duration: 300 }} src={delayedImage} alt={product?.name} />
             {/if}
+            {#if product.total_quantity === 0}<NonDispoBadge />{/if}
         </div>
     {/if}
 </tr>
@@ -170,6 +172,7 @@
         height: auto;
         pointer-events: none;
         z-index: 10;
+        position: relative;
     }
     td {
         height: 48px;

@@ -12,23 +12,25 @@ export function getVinsImage(product) {
     return images[n % images.length]!;
 }
 
+const NO_IMAGE = ALCOHOL_BASE_PATH + 'noImgVine.png';
+
 export function getVinImage(product, order) {
-    // console.log('getVinImage', product);
-    if (
-        product.alcohol_website &&
-        product.alcohol_website[0].alcohol_images &&
-        product.alcohol_website[0].alcohol_images.length > 0
-    ) {
-        const images = product.alcohol_website[0].alcohol_images;
-        return ALCOHOL_BASE_PATH + images[order].files.uuid + '/' + images[order].files.file_name;
+    const allImgs = product.alcohol_website?.[0]?.alcohol_images;
+
+    if (allImgs?.length) {
+        const active = [...allImgs]
+            .filter((i) => !i.is_archived)
+            .sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
+
+        const img = active[order];
+        if (img?.file_uuid && img?.file_name) {
+            return ALCOHOL_BASE_PATH + img.file_uuid + '/' + img.file_name;
+        }
     }
 
-    switch (order) {
-        case 0:
-            return '/images/example_wines/SHOP PAGE/Product Shot - stack.png';
-        case 1:
-            return '/images/example_wines/SHOP PAGE/9x16 Product Shot - stack.png';
-        case 2:
-            return '/images/example_wines/SHOP PAGE/In-situ Product Shot - stack.png';
+    if (product.main_image_file) {
+        return ALCOHOL_BASE_PATH + product.main_image_file;
     }
+
+    return NO_IMAGE;
 }
