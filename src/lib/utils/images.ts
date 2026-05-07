@@ -12,25 +12,3 @@ export function getVinsImage(product) {
     return images[n % images.length]!;
 }
 
-const NO_IMAGE = ALCOHOL_BASE_PATH + 'noImgVine.png';
-
-export function getVinImage(product, order) {
-    const allImgs = product.alcohol_website?.[0]?.alcohol_images;
-
-    if (allImgs?.length) {
-        const active = [...allImgs]
-            .filter((i) => !i.is_archived)
-            .sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
-
-        const img = active[order];
-        if (img?.file_uuid && img?.file_name) {
-            return ALCOHOL_BASE_PATH + img.file_uuid + '/' + img.file_name;
-        }
-    }
-
-    if (product.main_image_file) {
-        return ALCOHOL_BASE_PATH + product.main_image_file;
-    }
-
-    return NO_IMAGE;
-}

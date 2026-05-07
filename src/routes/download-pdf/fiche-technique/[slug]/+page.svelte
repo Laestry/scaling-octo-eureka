@@ -6,7 +6,7 @@
     import Footer from '../../Footer.svelte';
     import { onMount, tick } from 'svelte';
     import { handleGetPDF } from '../../utils';
-    import { getVinImage } from '$lib/utils/images';
+    import { ALCOHOL_BASE_PATH } from '$lib/utils/images';
     export let data;
     console.log('data', data);
     $: product = data.product;
@@ -35,7 +35,7 @@
         </div>
 
         <div class="flex gap-[13px] h-[170.88px] mt-[50.24px]">
-            <img width="128" height="170.88" src={getVinImage(product, 0)} alt="" />
+            <img width="128" height="170.88" src={product.image_paths?.[0] ? ALCOHOL_BASE_PATH + product.image_paths[0] : ''} alt="" />
             <div class="w-[381.44px] h-full flex flex-col justify-between">
                 <div class="title">{product.alcohol_website?.[0]?.name}</div>
 
