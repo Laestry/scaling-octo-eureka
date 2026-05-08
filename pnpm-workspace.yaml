@@ -1,6 +1,0 @@
-allowBuilds:
-  '@parcel/watcher': set this to true or false
-  '@prisma/client': set this to true or false
-  core-js: set this to true or false
-  esbuild: set this to true or false
-  svelte-preprocess: set this to true or false

@@ -1,14 +1,16 @@
 // src/routes/api/submit-order/+server.ts
 import type { RequestHandler } from '@sveltejs/kit';
+import { PUBLIC_USE_LOCAL_SERVER } from '$env/static/public';
 
 export const POST: RequestHandler = async ({ request }) => {
     let payload = await request.json();
     payload.organizationId = 2;
 
+    const base = PUBLIC_USE_LOCAL_SERVER ? 'http://localhost:7777' : 'https://enos.is';
+
     let res: Response;
     try {
-        res = await fetch('https://enos.is/api/c/saq/v1/create-external-sales-order', {
-            // res = await fetch('http://localhost:7777/api/c/saq/v1/create-external-sales-order', {
+        res = await fetch(`${base}/api/c/saq/v1/create-external-sales-order`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)
