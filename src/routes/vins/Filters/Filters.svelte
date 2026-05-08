@@ -6,7 +6,7 @@
     import { isGrid, isPrixResto } from '$lib/store';
     import { createEventDispatcher, onMount, tick } from 'svelte';
     import { page } from '$app/stores';
-    import { replaceState } from '$app/navigation';
+    import { afterNavigate } from '$app/navigation';
     import { formatLocation, formatVolume, getSpecificCategoryLabel } from './utils';
     import { get } from 'svelte/store';
 
@@ -240,8 +240,12 @@
     }
 
     let isMounted = false;
+    let routerReady = false;
     onMount(() => {
         isMounted = true;
+    });
+    afterNavigate(() => {
+        routerReady = true;
     });
 
     function appendArrayParam(sp: URLSearchParams, key: string, values: (string | number)[] | undefined) {
@@ -252,7 +256,7 @@
     let pendingSetParams = false;
     let pdfUrl = `/download-pdf/liste-des-vins`;
     async function setParams() {
-        if (!isMounted || pendingSetParams) return;
+        if (!isMounted || !routerReady || pendingSetParams) return;
         pendingSetParams = true;
         await tick();
 
@@ -288,8 +292,6 @@
         if (selectedFilters.tag) sp.set('t', selectedFilters.tag);
 
         try {
-            // Update router state and visible URL
-            replaceState(url, $page.state);
             window.history.replaceState($page.state, '', url);
         } catch (err) {
             console.error(err);
@@ -371,14 +373,9 @@
         {} as Record<FilterGroupName, any[] | undefined>
     );
 
-    // sync URL when filters change
-    $: {
-        if (isMounted) {
-            setParams();
-        }
+    $: if (selectedFilters || (isMounted && routerReady)) {
+        if (isMounted && routerReady) setParams();
     }
-
-    $: if (selectedFilters) setParams();
 </script>
 
 <div class="mt-15 flex flex-col lg:gap-4 md:gap-3 gap-[20px]">
