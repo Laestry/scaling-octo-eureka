@@ -35,7 +35,12 @@
         </div>
 
         <div class="flex gap-[13px] h-[170.88px] mt-[50.24px]">
-            <img width="128" height="170.88" src={product.image_paths?.[0] ? ALCOHOL_BASE_PATH + product.image_paths[0] : ''} alt="" />
+            <img
+                width="128"
+                height="170.88"
+                src={product.image_paths?.[0] ? ALCOHOL_BASE_PATH + product.image_paths[0] : ''}
+                alt=""
+            />
             <div class="w-[381.44px] h-full flex flex-col justify-between">
                 <div class="title">{product.alcohol_website?.[0]?.name}</div>
 
@@ -62,6 +67,7 @@
                                     price: selectedBatch.price,
                                     price_tax_in: selectedBatch.price_tax_in,
                                     uvc: product.uvc,
+                                    agency_fee_percentage: product.agency_fee_percentage,
                                     isPrixResto: true
                                 },
                                 true
@@ -73,6 +79,7 @@
                                     price: selectedBatch.price,
                                     price_tax_in: selectedBatch.price_tax_in,
                                     uvc: product.uvc,
+                                    agency_fee_percentage: product.agency_fee_percentage,
                                     isPrixResto: true
                                 },
                                 false
@@ -85,6 +92,7 @@
                                     price: selectedBatch.price,
                                     price_tax_in: selectedBatch.price_tax_in,
                                     uvc: product.uvc,
+                                    agency_fee_percentage: product.agency_fee_percentage,
                                     isPrixResto: false
                                 },
                                 true
@@ -96,6 +104,7 @@
                                     price: selectedBatch.price,
                                     price_tax_in: selectedBatch.price_tax_in,
                                     uvc: product.uvc,
+                                    agency_fee_percentage: product.agency_fee_percentage,
                                     isPrixResto: false
                                 },
                                 false

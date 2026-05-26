@@ -90,7 +90,12 @@
                 <div class="product-price">
                     {#if selectedBatch}
                         {$priceFormat(
-                            { price: selectedBatch.price, price_tax_in: selectedBatch.price_tax_in, uvc: product.uvc },
+                            {
+                                price: selectedBatch.price,
+                                price_tax_in: selectedBatch.price_tax_in,
+                                uvc: product.uvc,
+                                agency_fee_percentage: product.oldest_agency_fee_percentage
+                            },
                             true,
                             { none: true }
                         )}
@@ -138,7 +143,8 @@
                         {$priceFormat({
                             price: selectedBatch.price,
                             price_tax_in: selectedBatch.price_tax_in,
-                            uvc: product.uvc
+                            uvc: product.uvc,
+                            agency_fee_percentage: product.oldest_agency_fee_percentage
                         })}
                     {:else}
                         —
@@ -147,7 +153,12 @@
                 <div class="product-price {product.uvc > 1 ? '' : 'text-transparent'}">
                     {#if selectedBatch}
                         {$priceFormat(
-                            { price: selectedBatch.price, price_tax_in: selectedBatch.price_tax_in, uvc: product.uvc },
+                            {
+                                price: selectedBatch.price,
+                                price_tax_in: selectedBatch.price_tax_in,
+                                uvc: product.uvc,
+                                agency_fee_percentage: product.oldest_agency_fee_percentage
+                            },
                             false
                         )}
                     {:else}

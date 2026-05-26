@@ -110,11 +110,22 @@
     <td>{product?.uvc} x {product?.volume}</td>
     <td class="text-right pr-[5px]">
         {#if selectedBatch}
-            {$priceFormat({ price: selectedBatch.price, price_tax_in: selectedBatch.price_tax_in, uvc: product.uvc })}
+            {$priceFormat({
+                price: selectedBatch.price,
+                price_tax_in: selectedBatch.price_tax_in,
+                uvc: product.uvc,
+                agency_fee_percentage: product.oldest_agency_fee_percentage
+            })}
+
             <br />
             <span class="text-[#949494] {product?.uvc === 1 ? 'invisible' : ''}">
                 {$priceFormat(
-                    { price: selectedBatch.price, price_tax_in: selectedBatch.price_tax_in, uvc: product.uvc },
+                    {
+                        price: selectedBatch.price,
+                        price_tax_in: selectedBatch.price_tax_in,
+                        uvc: product.uvc,
+                        agency_fee_percentage: product.oldest_agency_fee_percentage
+                    },
                     false
                 )}
             </span>

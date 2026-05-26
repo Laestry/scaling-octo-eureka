@@ -201,7 +201,7 @@
                              md:flex-shrink-0"
                 >
                     <p class="tasting-note">
-                        {product.alcohol_website[0].subtitle_french ?? 'La courte description va ici'}
+                        {product.alcohol_website[0].subtitle_french ?? ''}
                     </p>
                 </div>
                 <!--endregion-->
@@ -256,7 +256,8 @@
                                                 {
                                                     price: selectedBatch.price,
                                                     price_tax_in: selectedBatch.price_tax_in,
-                                                    uvc: product.uvc
+                                                    uvc: product.uvc,
+                                                    agency_fee_percentage: product.agency_fee_percentage
                                                 },
                                                 true
                                             )}
@@ -266,7 +267,8 @@
                                                 {
                                                     price: selectedBatch.price,
                                                     price_tax_in: selectedBatch.price_tax_in,
-                                                    uvc: product.uvc
+                                                    uvc: product.uvc,
+                                                    agency_fee_percentage: product.agency_fee_percentage
                                                 },
                                                 false
                                             )}

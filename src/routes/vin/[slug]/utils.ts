@@ -8,19 +8,23 @@ export const priceFormat = derived(isPrixResto, ($isPrixResto) => {
             price,
             price_tax_in,
             uvc,
-            isPrixResto
+            isPrixResto,
+            agency_fee_percentage
         }: {
             price: number;
             price_tax_in: number;
             uvc: number;
             isPrixResto?: boolean;
+            agency_fee_percentage?: number | null;
         },
         bottle: boolean = true,
         options: { none?: boolean } = {}
     ) {
-        // console.log('price:', price, 'price_tax_in:', price_tax_in);
         const useResto = isPrixResto ?? $isPrixResto;
-        const p = useResto ? price : price_tax_in;
+        const basePrice = useResto ? price : price_tax_in;
+
+        const fee = agency_fee_percentage ? price_tax_in * agency_fee_percentage : 0;
+        const p = basePrice + fee;
 
         if (options.none) {
             return `${p.toFixed(2)} $`;
@@ -33,7 +37,6 @@ export const priceFormat = derived(isPrixResto, ($isPrixResto) => {
         }
     };
 });
-
 type SubCategory = { label: string; value: number };
 type CategoryItem = {
     label: string;
