@@ -1,5 +1,6 @@
 <script lang="ts">
     import type { PageData } from './$types';
+    import { formatVolume } from '../../vins/Filters/utils';
     import { getCategory, priceFormat, sellBeforeDate, transformVinToCartObject } from './utils';
     import ProductTags from './ProductTags.svelte';
     import { type AlcoholProduct, cart, getItemQuantityStore } from '$lib/cart';
@@ -233,7 +234,7 @@
                                         <br />
                                         {product.vintage ?? ''}
                                         <br />
-                                        {product.uvc} x {product.format}{product.unit === 1 ? 'L' : 'ml'}
+                                        {product.uvc} x {formatVolume({ volume: product.volume, format: product.format })}
                                     </div>
                                 </div>
                             </div>
