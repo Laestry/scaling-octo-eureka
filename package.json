@@ -21,6 +21,7 @@
         "@sveltejs/kit": "^2.7.2",
         "@sveltejs/vite-plugin-svelte": "^3.1.2",
         "@types/node": "^22.7.8",
+        "@types/ws": "^8.18.1",
         "@typescript-eslint/eslint-plugin": "^8.11.0",
         "@typescript-eslint/parser": "^8.11.0",
         "autoprefixer": "^10.4.20",
@@ -56,9 +57,7 @@
         "simplebar": "^6.3.0",
         "stripe": "^18.3.0",
         "svelte-toast": "^1.0.0",
-        "svrollbar": "^0.12.0"
-    },
-    "engines": {
-        "node": "22.x"
+        "svrollbar": "^0.12.0",
+        "ws": "^8.21.0"
     }
 }

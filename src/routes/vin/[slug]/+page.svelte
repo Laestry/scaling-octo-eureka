@@ -349,7 +349,7 @@
                             <div class="flex justify-between items-center">
                                 <span>
                                     Le prix inclut les taxes et
-                                    <span class="text-wblue underline"> le frais d'agent de 16%. </span>
+                                    <span class="text-wblue underline"> le frais d'agent. </span>
                                 </span>
 
                                 <span class="text-wred text-2xl relative top-[-4px]">
@@ -362,7 +362,7 @@
                                 <ol class="list-decimal ml-[17px]">
                                     <li>
                                         Au moment de finaliser votre commande, vous serez chargé pour les frais d’agence
-                                        (soit 16%) sur ce site.
+                                        sur ce site.
                                     </li>
                                     <li>
                                         Rendez-vous à la SAQ de votre choix, pour récupérer votre commande, et payer le
