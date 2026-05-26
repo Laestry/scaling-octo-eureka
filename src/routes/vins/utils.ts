@@ -42,7 +42,7 @@ export function transformVinsToCartObject(product) {
         selected_calculated_quantity: product.oldest_calculated_quantity,
         selected_sell_before_date: product.oldest_sell_before_date,
         selected_agency_fee: product.oldest_agency_fee,
-        selected_agency_fee_percentage: product.oldest_agency_fee_percentage,
+        selected_agency_fee_percentage: product.oldest_agency_fee_percentage * 100,
         selected_agency_fee_is_percentage: product.oldest_agency_fee_is_percentage,
 
         website_slug: product.website_slug,
