@@ -8,7 +8,5 @@ export function getRandomNumber(product) {
 }
 export function getVinsImage(product) {
     if (product.main_image_file) return ALCOHOL_BASE_PATH + product.main_image_file;
-    const n = getRandomNumber(product);
-    return images[n % images.length]!;
+    return 'defaultImages/default-alcohol.png';
 }
-
