@@ -1,3 +1,4 @@
+import { formatVolume } from '../../vins/Filters/utils';
 import { isPrixResto } from '$lib/store';
 import { derived } from 'svelte/store';
 
@@ -206,7 +207,7 @@ export function transformVinToCartObject(product, selectedBatchId) {
         format: product.format,
         unit: product.unit,
         volume: product.volume,
-        volume_and_format: `${product.volume}${product.unit === 1 ? 'ml' : 'L'}`,
+        volume_and_format: formatVolume({ volume: product.volume, format: product.format }),
         organization_id: product.organization_id,
         provider_id: product.provider_id,
         country_id: product.country_id,

@@ -35,17 +35,15 @@ export function formatVolume(raw: string | Record<string, any>): string {
     try {
         const { volume, format } = typeof raw === 'string' ? JSON.parse(raw) : raw;
 
-        if (!volume || !format) return ''; // skip 0 or null values
+        if (!volume || !format) return '';
 
         if (format === 2) {
-            // liters
             const l = Number(volume);
             const display = Number.isInteger(l) ? `${l}` : `${parseFloat(l.toFixed(2))}`;
             return `${display}l`;
         }
 
         if (format === 1) {
-            // milliliters
             const ml = Number(volume);
             const display = Number.isInteger(ml) ? `${ml}` : `${Math.round(ml)}`;
             return `${display}ml`;
