@@ -57,5 +57,8 @@
         "stripe": "^18.3.0",
         "svelte-toast": "^1.0.0",
         "svrollbar": "^0.12.0"
+    },
+    "engines": {
+        "node": "22.x"
     }
 }
