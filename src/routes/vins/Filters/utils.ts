@@ -182,8 +182,8 @@ export async function fetchFilteredProductsForAlcohol(
         }
     } else {
         query = query
-            .order('oldest_sell_before_date', { ascending: true })
-            .order('total_quantity', { ascending: false });
+            .order('provider_display_name', { ascending: true })
+            .order('name', { ascending: true });
     }
 
     // pagination
