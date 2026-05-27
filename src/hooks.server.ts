@@ -1,6 +1,7 @@
 // import { i18n } from '$lib/i18n';
 import { createServerClient } from '@supabase/ssr';
 import { type Handle, redirect } from '@sveltejs/kit';
+import ws from 'ws';
 import { sequence } from '@sveltejs/kit/hooks';
 import { PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY } from '$env/static/public';
 import type { Database } from '$lib/supabase/types';
@@ -23,6 +24,7 @@ const supabase: Handle = async ({ event, resolve }) => {
         PUBLIC_SUPABASE_ANON_KEY,
 
         {
+            realtime: { transport: ws },
             cookies: {
                 getAll: () => event.cookies.getAll(),
                 /**

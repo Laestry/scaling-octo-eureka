@@ -1,8 +1,8 @@
-import { createBrowserClient, createServerClient, isBrowser } from '@supabase/ssr';
+import { createBrowserClient, isBrowser } from '@supabase/ssr';
 import { PUBLIC_SUPABASE_ANON_KEY, PUBLIC_SUPABASE_URL } from '$env/static/public';
 import type { LayoutLoad } from './$types';
 
-export const load: LayoutLoad = async ({ data, depends, fetch }) => {
+export const load: LayoutLoad = async ({ depends, fetch, locals }) => {
 	/**
 	 * Declare a dependency so the layout can be invalidated, for example, on
 	 * session refresh.
@@ -16,17 +16,7 @@ export const load: LayoutLoad = async ({ data, depends, fetch }) => {
 				},
 				auth: { persistSession: true, autoRefreshToken: true }
 			})
-		: createServerClient(PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY, {
-				global: {
-					fetch
-				},
-				cookies: {
-					// @ts-ignore
-					getAll() {
-						return data.cookies;
-					}
-				}
-			});
+		: locals.supabase;
 
 	/**
 	 * It's fine to use `getSession` here, because on the client, `getSession` is
