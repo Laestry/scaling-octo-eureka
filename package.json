@@ -3,6 +3,9 @@
     "version": "0.0.1",
     "private": true,
     "type": "module",
+    "engines": {
+        "node": "20.x"
+    },
     "scripts": {
         "dev": "cross-env-shell NODE_OPTIONS=\"--trace-warnings --trace-uncaught --max-old-space-size=16000 --inspect\" vite dev",
         "build": "cross-env-shell NODE_OPTIONS=\"--trace-warnings --trace-uncaught --max-old-space-size=16000 --inspect\" vite build"
