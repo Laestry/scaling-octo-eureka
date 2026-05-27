@@ -185,19 +185,10 @@
         <div class="md:flex-row flex-col flex gap-x-[10px] mt-[10px] items-start">
             <VinImages {product} />
 
-<<<<<<< HEAD
-            <div class="lg:w-[560px] md:w-[394px]">
-                <div
-                    class="mt-[12px] flex items-end
-                         h-full"
-                >
-                    <h1 class="product-name text-32 leading-42 text-ward-red mt-6 mb-0">{product.name}</h1>
-=======
             <div class="lg:w-[560px] md:w-[442px]">
                 <!--region title-->
                 <div class="mt-[12px] flex items-end h-full">
                     <h1 class="product-name !capitalize lg:text-[42px] text-2xl">{product.name}</h1>
->>>>>>> 45b561a54d64d6657dc8b52ef848e5b0047c6634
                 </div>
                 <!--endregion-->
 
