@@ -3,7 +3,7 @@ import type { TFilters } from '$lib/models/general';
 export function getOldestBatch(product): any | null {
     return (
         product.alcohol_batches
-            ?.filter((b) => !b.is_archived && b.quantity > 0 && b.calculated_quantity > 0)
+            ?.filter((b) => !b.is_archived)
             .sort((a, b) => {
                 const aT = a.sell_before_date ? new Date(a.sell_before_date).getTime() : Infinity;
                 const bT = b.sell_before_date ? new Date(b.sell_before_date).getTime() : Infinity;
@@ -42,7 +42,7 @@ export function transformVinsToCartObject(product) {
         selected_calculated_quantity: product.oldest_calculated_quantity,
         selected_sell_before_date: product.oldest_sell_before_date,
         selected_agency_fee: product.oldest_agency_fee,
-        selected_agency_fee_percentage: product.oldest_agency_fee_percentage,
+        selected_agency_fee_percentage: product.oldest_agency_fee_percentage * 100,
         selected_agency_fee_is_percentage: product.oldest_agency_fee_is_percentage,
 
         website_slug: product.website_slug,

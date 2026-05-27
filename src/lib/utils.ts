@@ -92,7 +92,6 @@ export function agencyFeeWithTaxes(item: any, isPrixResto: boolean) {
     } else {
         agencyRaw = (16 / 100) * basePrice;
     }
-
     return applyTaxes(agencyRaw);
 }
 

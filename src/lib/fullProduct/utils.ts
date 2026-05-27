@@ -1,8 +1,7 @@
 export function getOldestBatch(product): any | null {
     if (!product?.alcohol_batches || !Array.isArray(product.alcohol_batches)) return null;
 
-    // only keep non-archived batches with available stock AND calculated_quantity > 0
-    const valid = product.alcohol_batches.filter((b) => !b.is_archived && b.quantity > 0 && b.calculated_quantity > 0);
+    const valid = product.alcohol_batches.filter((b) => !b.is_archived);
     if (!valid.length) return null;
 
     // sort by earliest sell_before_date

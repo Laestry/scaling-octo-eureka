@@ -1,5 +1,6 @@
 <script lang="ts">
     import type { PageData } from './$types';
+    import { formatVolume } from '../../vins/Filters/utils';
     import { getCategory, priceFormat, sellBeforeDate, transformVinToCartObject } from './utils';
     import ProductTags from './ProductTags.svelte';
     import { type AlcoholProduct, cart, getItemQuantityStore } from '$lib/cart';
@@ -192,13 +193,16 @@
                 </div>
                 <!--endregion-->
 
+                </div>
+                <!--endregion-->
+
                 <!--region subtitle-->
                 <div
                     class="product-description mt-[10px] w-full h-auto pr-[15px]
                              md:flex-shrink-0"
                 >
                     <p class="tasting-note">
-                        {product.alcohol_website[0].subtitle_french ?? 'La courte description va ici'}
+                        {product.alcohol_website[0].subtitle_french ?? ''}
                     </p>
                 </div>
                 <!--endregion-->
@@ -233,43 +237,53 @@
                                         <br />
                                         {product.vintage ?? ''}
                                         <br />
-                                        {product.uvc} x {product.format}{product.unit === 1 ? 'L' : 'ml'}
+                                        {product.uvc} x {formatVolume({
+                                            volume: product.volume,
+                                            format: product.format
+                                        })}
                                     </div>
                                 </div>
                             </div>
 
                             <!--                            right-->
                             <div class="flex flex-col flex-1">
-                                <div
-                                    class="flex flex-col items-end justify-center
-                                        lg:h-[70px] h-[45px] border-b border-wblue"
-                                >
-                                    <b>
-                                        {$priceFormat(
-                                            {
-                                                price: selectedBatch.price,
-                                                price_tax_in: selectedBatch.price_tax_in,
-                                                uvc: product.uvc
-                                            },
-                                            true
-                                        )}
-                                    </b>
-                                    <b>
-                                        {$priceFormat(
-                                            {
-                                                price: selectedBatch.price,
-                                                price_tax_in: selectedBatch.price_tax_in,
-                                                uvc: product.uvc
-                                            },
-                                            false
-                                        )}
-                                    </b>
-                                </div>
-
-                                <div class="flex flex-1 items-center justify-end text-end">
-                                    Acheter avant <br />
-                                    {sellBeforeDate(selectedBatch.sell_before_date)}
-                                </div>
+                                {#if selectedBatch}
+                                    <div
+                                        class="flex flex-col items-end justify-center
+                                            lg:h-[70px] h-[45px] border-b border-wblue"
+                                    >
+                                        <b>
+                                            {$priceFormat(
+                                                {
+                                                    price: selectedBatch.price,
+                                                    price_tax_in: selectedBatch.price_tax_in,
+                                                    uvc: product.uvc,
+                                                    agency_fee_percentage: product.agency_fee_percentage
+                                                },
+                                                true
+                                            )}
+                                        </b>
+                                        <b>
+                                            {$priceFormat(
+                                                {
+                                                    price: selectedBatch.price,
+                                                    price_tax_in: selectedBatch.price_tax_in,
+                                                    uvc: product.uvc,
+                                                    agency_fee_percentage: product.agency_fee_percentage
+                                                },
+                                                false
+                                            )}
+                                        </b>
+                                    </div>
+                                    <div class="flex flex-1 items-center justify-end text-end">
+                                        Acheter avant <br />
+                                        {sellBeforeDate(selectedBatch.sell_before_date)}
+                                    </div>
+                                {:else}
+                                    <div class="flex flex-1 items-center justify-end text-end text-[#2D63B0]">
+                                        Non disponible
+                                    </div>
+                                {/if}
                             </div>
                         </div>
                         <!--endregion-->
@@ -282,7 +296,7 @@
                                 </div>
                                 <div class="flex gap-1 items-center">
                                     <div class="text-xs product-table-counter__value">
-                                        {selectedBatch.calculated_quantity > 0 ? in_cart * product.uvc : '/'}
+                                        {selectedBatch?.calculated_quantity > 0 ? in_cart * product.uvc : '/'}
                                     </div>
                                     <div class="md:flex flex-col contents">
                                         <button
@@ -302,7 +316,7 @@
                                     </div>
                                 </div>
 
-                                {#if selectedBatch.calculated_quantity}
+                                {#if selectedBatch?.calculated_quantity}
                                     <button
                                         disabled={availableCases <= 0 || in_cart <= 0}
                                         class="product-table__button abutton md:mt-0 mt-7 lg:mr-[192px]"
@@ -336,7 +350,7 @@
                             <div class="flex justify-between items-center">
                                 <span>
                                     Le prix inclut les taxes et
-                                    <span class="text-wblue underline"> le frais d'agent de 16%. </span>
+                                    <span class="text-wblue underline"> le frais d'agent. </span>
                                 </span>
 
                                 <span class="text-wred text-2xl relative top-[-4px]">
@@ -349,7 +363,7 @@
                                 <ol class="list-decimal ml-[17px]">
                                     <li>
                                         Au moment de finaliser votre commande, vous serez chargé pour les frais d’agence
-                                        (soit 16%) sur ce site.
+                                        sur ce site.
                                     </li>
                                     <li>
                                         Rendez-vous à la SAQ de votre choix, pour récupérer votre commande, et payer le
@@ -366,7 +380,6 @@
                 </div>
             </div>
         </div>
-    </div>
 
     <!--region  suggestions-->
     <div class="mt-[20px] flex flex-col lg:gap-[22px] gap-[10px]">

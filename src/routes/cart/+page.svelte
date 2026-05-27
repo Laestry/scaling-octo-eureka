@@ -225,19 +225,16 @@
                 if (payload?.error === 'InvalidBatches') {
                     // бизнес-ошибка: не хватает вина / неверные партии
                     notifyFr =
-                        "Certains vins ne sont plus disponibles dans la quantité choisie. Veuillez ajuster votre panier et réessayer.";
+                        'Certains vins ne sont plus disponibles dans la quantité choisie. Veuillez ajuster votre panier et réessayer.';
                     notifyEn =
                         'Some wines are no longer available in the requested quantity. Please adjust your cart and try again.';
                 } else if (payload?.error === 'NetworkError') {
-                    notifyFr =
-                        'Problème de connexion au serveur de commande. Veuillez réessayer plus tard.';
-                    notifyEn =
-                        'Connection problem with the order server. Please try again later.';
+                    notifyFr = 'Problème de connexion au serveur de commande. Veuillez réessayer plus tard.';
+                    notifyEn = 'Connection problem with the order server. Please try again later.';
                 } else {
                     notifyFr =
-                        "Une erreur s’est produite lors de la validation de votre commande. Veuillez réessayer ou modifier votre panier.";
-                    notifyEn =
-                        'An error occurred while validating your order. Please try again or adjust your cart.';
+                        'Une erreur s’est produite lors de la validation de votre commande. Veuillez réessayer ou modifier votre panier.';
+                    notifyEn = 'An error occurred while validating your order. Please try again or adjust your cart.';
                 }
 
                 errorMessage = notifyFr;
@@ -312,9 +309,14 @@
     }
 
     $: total = $cart.reduce((acc, item) => {
-        const { base } = totalsPerUnit(item, $isPrixResto);
-        const unitBase = round2(base);
-        return acc + unitBase * item.quantity * item.uvc;
+        const basePrice = Number($isPrixResto ? item?.selected_price : (item?.selected_price_tax_in ?? 0));
+
+        const agencyFee =
+            (Number(item?.selected_price_tax_in ?? 0) * Number(item?.selected_agency_fee_percentage ?? 0)) / 100;
+
+        const perBottle = round2(basePrice + agencyFee);
+
+        return acc + perBottle * Number(item.quantity ?? 0) * Number(item.uvc ?? 0);
     }, 0);
 
     $: agencyAndTaxesTotal = $cart.reduce((acc, item) => {
@@ -351,8 +353,7 @@
 {/if}
 
 <div class="w-full flex justify-center mt-[53px]">
-        <div class="lg:w-[1136px] md:w-[760px] w-[300px]">
-
+    <div class="lg:w-[1136px] md:w-[760px] w-[300px]">
         {#if isFinalize}
             <div transition:fly={{ y: -100, duration: 300 }}>
                 <!--region login-->

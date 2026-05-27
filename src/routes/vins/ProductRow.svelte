@@ -6,6 +6,7 @@
     import Plus from '$lib/icons/Plus.svelte';
     import { getOldestBatch } from './utils';
     import { getVinsImage } from '$lib/utils/images';
+    import NonDispoBadge from '$lib/components/NonDispoBadge.svelte';
 
     export let product: any;
     export let isPDF = false;
@@ -109,11 +110,22 @@
     <td>{product?.uvc} x {product?.volume}</td>
     <td class="text-right pr-[5px]">
         {#if selectedBatch}
-            {$priceFormat({ price: selectedBatch.price, price_tax_in: selectedBatch.price_tax_in, uvc: product.uvc })}
+            {$priceFormat({
+                price: selectedBatch.price,
+                price_tax_in: selectedBatch.price_tax_in,
+                uvc: product.uvc,
+                agency_fee_percentage: product.oldest_agency_fee_percentage
+            })}
+
             <br />
             <span class="text-[#949494] {product?.uvc === 1 ? 'invisible' : ''}">
                 {$priceFormat(
-                    { price: selectedBatch.price, price_tax_in: selectedBatch.price_tax_in, uvc: product.uvc },
+                    {
+                        price: selectedBatch.price,
+                        price_tax_in: selectedBatch.price_tax_in,
+                        uvc: product.uvc,
+                        agency_fee_percentage: product.oldest_agency_fee_percentage
+                    },
                     false
                 )}
             </span>
@@ -154,6 +166,7 @@
             {#if !isPDF}
                 <img transition:fade={{ duration: 300 }} src={delayedImage} alt={product?.name} />
             {/if}
+            {#if product.total_quantity === 0}<NonDispoBadge />{/if}
         </div>
     {/if}
 </tr>
@@ -170,6 +183,7 @@
         height: auto;
         pointer-events: none;
         z-index: 10;
+        position: relative;
     }
     td {
         height: 48px;

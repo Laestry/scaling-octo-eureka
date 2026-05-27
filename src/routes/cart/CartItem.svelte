@@ -15,6 +15,7 @@
     $: {
         selectedBatch;
         img = getVinsImage(selectedBatch);
+        console.log(selectedBatch);
     }
 
     // selected batch resolution is not needed anymore; we already have the cart item
@@ -112,7 +113,11 @@
             <div>
                 {(
                     (Number($itemQuantity) || 1) *
-                    Number($isPrixResto ? selectedBatch?.selected_price : (selectedBatch?.selected_price_tax_in ?? 0)) *
+                    (Number(
+                        $isPrixResto ? selectedBatch?.selected_price : (selectedBatch?.selected_price_tax_in ?? 0)
+                    ) +
+                        Number(selectedBatch?.selected_price_tax_in ?? 0) *
+                            Number(selectedBatch?.selected_agency_fee_percentage / 100 ?? 0)) *
                     selectedBatch?.uvc
                 ).toFixed(2)} $
             </div>

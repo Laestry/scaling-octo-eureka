@@ -11,7 +11,7 @@
     import { fetchFilteredProductsForAlcohol } from './Filters/utils';
 
     export let data: PageData;
-    let products = data.products.data;
+    let products = data.products.data ?? [];
     let enabledFacets: any = data.enabledFacets.data;
 
     let loaded = 20;
