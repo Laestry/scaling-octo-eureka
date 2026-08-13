@@ -14,11 +14,11 @@
     </p>
     <div class="flex md:flex-row flex-col">
         <img
-            src="/images/vision-img-01.jpg"
+            src="/images/site_web_VVV_cahier.jpg"
             alt=""
             class="vision__img lg:mr-[400px] md:mr-[250px] mr-0 md:mb-0 mb-[40px]"
         />
-        <img src="/images/vision-img-02.jpg" alt="" class="vision__img vision__img--big md:ml-0 ml-auto" />
+        <img src="/images/site_web_vetter_pinot_%23 2.jpg" alt="" class="vision__img vision__img--big md:ml-0 ml-auto" />
     </div>
     <div class="vision-list">
         <p class="vision-list__title mb-[20px]">Éternel étudiants</p>
@@ -68,7 +68,7 @@
         surpris·e.
     </p>
     <div class="flex w-full md:flex-row flex-col md:gap-0 gap-[40px]">
-        <img src="/images/vision-img-03.jpg" alt="" class="vision__img" />
+        <img src="/images/site_web_complexe.jpg" alt="" class="vision__img" />
 
         <div class="w-full lg:ml-[210px] md:ml-[130px]">
             <div class="vision-list__item">
