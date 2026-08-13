@@ -18,7 +18,7 @@
             alt=""
             class="vision__img lg:mr-[400px] md:mr-[250px] mr-0 md:mb-0 mb-[40px]"
         />
-        <img src="/images/site_web_vetter_pinot_%23 2.jpg" alt="" class="vision__img vision__img--big md:ml-0 ml-auto" />
+        <img src="/images/site_web_vetter_pinot_2.jpg" alt="" class="vision__img vision__img--big md:ml-0 ml-auto" />
     </div>
     <div class="vision-list">
         <p class="vision-list__title mb-[20px]">Éternel étudiants</p>
