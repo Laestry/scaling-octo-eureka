@@ -442,7 +442,7 @@
         }
     }
     .backdrop--3 {
-        background-image: url('/images/vision-A.jpg');
+        background-image: url('/images/site_web_balaton.jpg');
         z-index: 1;
     }
     .backdrops--2 .backdrop--1 {

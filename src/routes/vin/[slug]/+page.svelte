@@ -186,28 +186,22 @@
         <div class="md:flex-row flex-col flex gap-x-[10px] mt-[10px] items-start">
             <VinImages {product} />
 
-            <div class="lg:w-[560px] md:w-[442px]">
+            <div class="w-full md:w-[442px] lg:w-[560px] md:flex-shrink-0">
                 <!--region title-->
                 <div class="mt-[12px] flex items-end h-full">
                     <h1 class="product-name !capitalize lg:text-[42px] text-2xl">{product.name}</h1>
                 </div>
                 <!--endregion-->
 
-                </div>
-                <!--endregion-->
-
                 <!--region subtitle-->
-                <div
-                    class="product-description mt-[10px] w-full h-auto pr-[15px]
-                             md:flex-shrink-0"
-                >
+                <div class="product-description mt-[10px] w-full h-auto pr-[15px]">
                     <p class="tasting-note">
                         {product.alcohol_website[0].subtitle_french ?? ''}
                     </p>
                 </div>
                 <!--endregion-->
 
-                <div class="flex flex-col lg:w-[560px] md:w-[442px] h-full">
+                <div class="flex h-full w-full flex-col">
                     <!--region description-->
                     <div class="product-description mt-4 h-[141px] w-full pr-[15px]">
                         <Svroller width="100%" height="100%" margin={{ right: -15 }} alwaysVisible>
@@ -380,6 +374,7 @@
                 </div>
             </div>
         </div>
+    </div>
 
     <!--region  suggestions-->
     <div class="mt-[20px] flex flex-col lg:gap-[22px] gap-[10px]">
