@@ -49,6 +49,7 @@
     class="relative
                 lg:w-[446px] md:w-[308px] w-[280px]
                 lg:h-[661px] md:h-[439px] h-[262px]
+                md:flex-shrink-0
                 mr-[14px]
                 "
 >

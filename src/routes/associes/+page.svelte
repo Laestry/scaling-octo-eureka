@@ -59,27 +59,27 @@
         </div>
         <div class="about__images">
             <div class="about__image">
-                <img src="/images/associes/nos-producteurs/associes-img-01.png" alt="" />
+                <img src="/images/associes-img-01-A.jpg" alt="" />
                 <p class="about__caption">
-                    <b>Bianca & Daniel Schmitt</b> <br /> Country
+                    <b>Slobodne</b> <br /> Slovaquie
                 </p>
             </div>
             <div class="about__image">
-                <img src="/images/associes-img-02.jpg" alt="" />
+                <img src="/images/associes-img-02-A.jpg" alt="" />
                 <p class="about__caption">
-                    <b>Bianca & Daniel Schmitt</b> <br /> Country
+                    <b>Milan Nesterec</b> <br /> Tchequie
                 </p>
             </div>
             <div class="about__image">
-                <img src="/images/associes-img-03.jpg" alt="" />
+                <img src="/images/associes-img-03-A.jpg" alt="" />
                 <p class="about__caption">
-                    <b>Christian</b> <br /> Autriche
+                    <b>Rita et Rudi Trossen</b> <br /> Allemagne
                 </p>
             </div>
             <div class="about__image">
-                <img src="/images/associes-img-04.jpg" alt="" />
+                <img src="/images/associes-img-04-A.jpg" alt="" />
                 <p class="about__caption">
-                    <b>Naboso</b> <br /> Bratislava
+                    <b>Olivier Pithon</b> <br /> France
                 </p>
             </div>
         </div>
@@ -120,27 +120,27 @@
         </div>
         <div class="agency__images">
             <div class="agency__image">
-                <img src="/images/associes-img-05.jpg" alt="" />
+                <img src="/images/site_web_alex.jpg" alt="" />
                 <p class="agency__caption">
-                    <b>Nom, role</b> <br /> <a href="#">@lienversIG</a>
+                    <b>Alexandre Boily, co-fondateur</b> <br /> <a href="#">@boily_alex</a>
                 </p>
             </div>
             <div class="agency__image">
-                <img src="/images/associes-img-06.jpg" alt="" />
+                <img src="/images/site_web_david.jpg" alt="" />
                 <p class="agency__caption">
-                    <b>Nom, role & Nom, role</b> <br /> <a href="#">@lienversIG</a>
+                    <b>David Ward, co-fondateur</b> <br /> <a href="#">@lienversIG</a>
                 </p>
             </div>
             <div class="agency__image">
-                <img src="/images/associes-img-07.jpg" alt="" />
+                <img src="/images/site_web_audrey-ève.jpg" alt="" />
                 <p class="agency__caption">
-                    <b>Nom, role & Nom, role</b> <br /> <a href="#">@lienversIG</a>
+                    <b>Audrey-Ève, photo et média intelligence</b> <br /> <a href="#">@lienversIG</a>
                 </p>
             </div>
             <div class="agency__image">
-                <img src="/images/associes-img-08.jpg" alt="" />
+                <img src="/images/site_web_front_old_team_line_up.jpg" alt="" />
                 <p class="agency__caption">
-                    <b>Nom, role & Nom, role</b> <br /> <a href="#">@lienversIG</a>
+                    <b>L'équipe du temps... mémoire</b> <br /> <a href="#">@lienversIG</a>
                 </p>
             </div>
         </div>
@@ -160,16 +160,16 @@
             <div>
                 <div class=" command__images--pc flex lg:gap-4 md:gap-3">
                     <div class="command__image">
-                        <img src="/images/associes-img-09.jpg" alt="" />
+                        <img src="/images/associes-img-09-A.jpg" alt="" />
                     </div>
                     <div class="command__image">
-                        <img src="/images/associes-img-10.jpg" alt="" />
+                        <img src="/images/associes-img-10-A.jpg" alt="" />
                     </div>
                     <div class="command__image">
-                        <img src="/images/associes-img-11.jpg" alt="" />
+                        <img src="/images/associes-img-11-A.jpg" alt="" />
                     </div>
                     <div class="command__image">
-                        <img src="/images/associes-img-12.jpg" alt="" />
+                        <img src="/images/associes-img-12-A.jpg" alt="" />
                     </div>
                 </div>
 
@@ -222,6 +222,18 @@
         <Carousel
             slides={[
                 {
+                    src: '/images/associes/bars-a-vins/associes-img-13-A.jpg',
+                    name: ''
+                },
+                {
+                    src: '/images/associes/bars-a-vins/associes-img-14-A.jpg',
+                    name: ``
+                },
+                {
+                    src: '/images/associes/bars-a-vins/associes-img-15-A.jpg',
+                    name: ''
+                },
+                {
                     src: '/images/associes/bars-a-vins/associes-img-13.jpg',
                     name: ''
                 },
@@ -230,19 +242,7 @@
                     name: ``
                 },
                 {
-                    src: '/images/associes/bars-a-vins/associes-img-15.jpg',
-                    name: ''
-                },
-                {
-                    src: '/images/associes/bars-a-vins/associes-img-13.jpg',
-                    name: ''
-                },
-                {
-                    src: '/images/associes/bars-a-vins/associes-img-14.jpg',
-                    name: ``
-                },
-                {
-                    src: '/images/associes/bars-a-vins/associes-img-15.jpg',
+                    src: '/images/associes/bars-a-vins/associes-img-15-A.jpg',
                     name: ''
                 }
             ]}
