@@ -175,7 +175,7 @@
            lg:max-w-[1162px] md:max-w-[780px] max-w-[320px]
            lg:mt-[56px] mt-[48px]"
 >
-    <div>
+    <div class="lg:w-[1030px] lg:mx-auto">
         <ProductTags
             {product}
             class="lg:w-[558px] md:w-[440px]
