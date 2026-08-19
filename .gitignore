@@ -134,3 +134,6 @@ dist
 
 .svelte-kit
 .idea
+
+# Vercel build output (adapter-vercel)
+.vercel
