@@ -1,4 +1,4 @@
 import PocketBase from 'pocketbase';
-import { PUBLIC_DB_URL } from '$env/static/public';
+import { env } from '$env/dynamic/public';
 
-export let pb = new PocketBase(PUBLIC_DB_URL);
+export const pb = new PocketBase(env.PUBLIC_DB_URL || 'http://127.0.0.1:8090');

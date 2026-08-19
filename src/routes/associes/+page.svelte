@@ -135,7 +135,7 @@
                 </p>
             </div>
             <div class="agency__image">
-                <img src="/images/site_web_audrey-ève.jpg" alt="" />
+                <img src="/images/site_web_audrey-eve.jpg" alt="" />
                 <p class="agency__caption">
                     <b>Audrey-Ève, photo et média intelligence</b> <br />
                     <a href="https://www.instagram.com/audreyeve.beauchamp/" target="_blank" rel="noopener noreferrer">
