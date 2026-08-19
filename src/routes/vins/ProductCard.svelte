@@ -345,11 +345,14 @@
             }
 
             .img {
+                width: 272px;
                 height: 362px;
                 @media (max-width: 1136px) {
+                    width: 181px;
                     height: 240px;
                 }
                 @media (max-width: 760px) {
+                    width: 145px;
                     height: 193px;
                 }
             }

@@ -128,19 +128,25 @@
             <div class="agency__image">
                 <img src="/images/site_web_david.jpg" alt="" />
                 <p class="agency__caption">
-                    <b>David Ward, co-fondateur</b> <br /> <a href="#">@lienversIG</a>
+                    <b>David Ward, co-fondateur</b> <br />
+                    <a href="https://www.instagram.com/darth_ward/" target="_blank" rel="noopener noreferrer">
+                        @darth_ward
+                    </a>
                 </p>
             </div>
             <div class="agency__image">
                 <img src="/images/site_web_audrey-ève.jpg" alt="" />
                 <p class="agency__caption">
-                    <b>Audrey-Ève, photo et média intelligence</b> <br /> <a href="#">@lienversIG</a>
+                    <b>Audrey-Ève, photo et média intelligence</b> <br />
+                    <a href="https://www.instagram.com/audreyeve.beauchamp/" target="_blank" rel="noopener noreferrer">
+                        @audreyeve.beauchamp
+                    </a>
                 </p>
             </div>
             <div class="agency__image">
                 <img src="/images/site_web_front_old_team_line_up.jpg" alt="" />
                 <p class="agency__caption">
-                    <b>L'équipe du temps... mémoire</b> <br /> <a href="#">@lienversIG</a>
+                    <b>L'équipe du temps... mémoire</b>
                 </p>
             </div>
         </div>
@@ -150,8 +156,15 @@
 <div class="command">
     <div class="container">
         <div class="command__row">
-            <p class="command__title">@wardetassocies</p>
-            <p class="command__text  ">
+            <a
+                class="command__title"
+                href="https://www.instagram.com/wardetassocies/"
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+                @wardetassocies
+            </a>
+            <p class="command__text">
                 Suivez l’équipe, de l’agence aux vignobles, ici et partout dans le monde. Des histoires passionnantes,
                 des moments forts, et toujours une bonne raison d’avoir soif.
             </p>
@@ -370,6 +383,7 @@
         }
         &__title {
             color: #000;
+            text-decoration: none;
             border-radius: 30px;
             padding: 0px 16px;
             background: #fff;
