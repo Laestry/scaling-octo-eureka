@@ -36,7 +36,7 @@ type IncomingCustomer = {
     resto_delivery_type?: number | null;
     billing_address: { street: string; city: string; postal_code: string };
     billing_contact: { first_name: string; last_name: string; email: string; phone: string };
-    /** optional — falls back to the billing address when absent */
+    /** resto orders only — falls back to the billing address when absent */
     shipping_address?: { street: string; city: string; postal_code: string } | null;
 };
 
@@ -260,12 +260,18 @@ export const POST: RequestHandler = async ({ request, locals }) => {
         city: customer.billing_address.city,
         postalCode: customer.billing_address.postal_code
     };
+    // Perso orders are collected in person at an SAQ branch — deliveryBranch is the destination,
+    // so there is no delivery address to send and billing must not be quietly reused as one.
+    // Only resto orders, which pick a delivery type, carry a shipping address.
+    const isRestoOrder = customer.resto_delivery_type != null;
     const shippingSource = customer.shipping_address ?? customer.billing_address;
-    const shipping = {
-        street: shippingSource.street,
-        city: shippingSource.city,
-        postalCode: shippingSource.postal_code
-    };
+    const shipping = isRestoOrder
+        ? {
+              street: shippingSource.street,
+              city: shippingSource.city,
+              postalCode: shippingSource.postal_code
+          }
+        : undefined;
 
     const intentBody = {
         ...calc.body, // lines, prices, taxes, totals and signature, untouched
@@ -275,7 +281,7 @@ export const POST: RequestHandler = async ({ request, locals }) => {
             email: customer.billing_contact.email,
             phone: customer.billing_contact.phone,
             billingAddress: billing,
-            shippingAddress: shipping
+            ...(shipping ? { shippingAddress: shipping } : {})
         },
         ...(deliveryBranch ? { deliveryBranch } : {}),
         portausCompanyId: PORTAUS_COMPANY_ID
