@@ -66,7 +66,6 @@
                    fmd:my-0 my-2"
         >
             <a href="/associes">L’agence</a>
-            <a href="/Rendez-vous">Rendez-vous</a>
             <a href="mailto:info@wardetassocies.com">Questions</a>
             <a
                 target="_blank"
@@ -109,7 +108,6 @@
             <div class="links flex flex-1 w-full justify-between">
                 <div class="flex flex-col w-[140px]">
                     <a href="/associes">L’agence</a>
-                    <a href="/Rendez-vous">Rendez-vous</a>
                 </div>
 
                 <div class="flex flex-col w-[140px]">
