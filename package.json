@@ -4,7 +4,7 @@
     "private": true,
     "type": "module",
     "engines": {
-        "node": "24.x"
+        "node": "20.x"
     },
     "scripts": {
         "dev": "cross-env-shell NODE_OPTIONS=\"--trace-warnings --trace-uncaught --max-old-space-size=16000 --inspect\" vite dev",

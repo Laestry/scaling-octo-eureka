@@ -5,11 +5,20 @@
     import Footer from './Footer.svelte';
     import Header from './Header.svelte';
     import BlueDotCursor from '$lib/BlueDotCursor.svelte';
+    import AgeVerificationDialog from '$lib/components/AgeVerificationDialog.svelte';
+    import Cookies from 'js-cookie';
     import type { PageData } from './$types';
     import { setSupabase } from '$lib/supabase/client';
 
     export let data: PageData;
     setSupabase(data.supabase);
+
+    let ageVerified: boolean = data.ageVerified ?? false;
+
+    function acceptAge() {
+        Cookies.set('age_verified', '1', { expires: 365, path: '/' });
+        ageVerified = true;
+    }
 
     let prevPath = '';
     let currentPath = $page.url.pathname;
@@ -45,6 +54,10 @@
         }
     });
 </script>
+
+{#if !ageVerified && !isDownloadPDF}
+    <AgeVerificationDialog on:accept={acceptAge} on:quit={() => window.close()} />
+{/if}
 
 <div class="flex flex-col min-h-screen">
     {#if !isDownloadPDF}
