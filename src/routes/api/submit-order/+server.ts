@@ -1,12 +1,12 @@
 // src/routes/api/submit-order/+server.ts
 import type { RequestHandler } from '@sveltejs/kit';
-import { PUBLIC_USE_LOCAL_SERVER } from '$env/static/public';
+import { env } from '$env/dynamic/public';
 
 export const POST: RequestHandler = async ({ request }) => {
     let payload = await request.json();
     payload.organizationId = 2;
 
-    const base = PUBLIC_USE_LOCAL_SERVER ? 'http://localhost:7777' : 'https://enos.is';
+    const base = env.PUBLIC_USE_LOCAL_SERVER ? 'http://localhost:7777' : 'https://enos.is';
 
     let res: Response;
     try {

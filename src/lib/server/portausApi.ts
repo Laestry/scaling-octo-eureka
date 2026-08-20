@@ -1,10 +1,10 @@
-import { PORTAUS_BASE, PORTAUS_API_KEY, PORTAUS_JWT_SECRET } from '$env/static/private';
+import { env } from '$env/dynamic/private';
 import jwt from 'jsonwebtoken'; // JWT library
 
 // Helper function to generate a JWT wrapping the API key
 function generateApiKeyJWT(): string {
-    const payload = { API_KEY: PORTAUS_API_KEY.trim() };
-    const secret = PORTAUS_JWT_SECRET;
+    const payload = { API_KEY: env.PORTAUS_API_KEY.trim() };
+    const secret = env.PORTAUS_JWT_SECRET;
     return jwt.sign(payload, secret); // defaults to HS256
 }
 
@@ -15,7 +15,7 @@ function generateApiKeyJWT(): string {
  */
 export async function createPaymentIntent(payload: any): Promise<any> {
     const jwtToken = generateApiKeyJWT();
-    const url = `${PORTAUS_BASE}/api/v1/payments/intents`;
+    const url = `${env.PORTAUS_BASE}/api/v1/payments/intents`;
     const res = await fetch(url, {
         method: 'POST',
         headers: {
@@ -38,7 +38,7 @@ export async function createPaymentIntent(payload: any): Promise<any> {
  */
 export async function getSaqBranches(): Promise<any> {
     const jwtToken = generateApiKeyJWT();
-    const url = `${PORTAUS_BASE}/api/v1/saq-branches`;
+    const url = `${env.PORTAUS_BASE}/api/v1/saq-branches`;
     const res = await fetch(url, {
         method: 'GET',
         headers: {
