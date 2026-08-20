@@ -1,3 +1,4 @@
+<!-- src/routes/cart/+page.svelte-->
 <script lang="ts">
     import { cart } from '$lib/cart';
     import { fade, fly } from 'svelte/transition';
@@ -14,6 +15,7 @@
     import { totalsPerUnit } from '$lib/utils';
     import { page } from '$app/stores';
     import { browser } from '$app/environment';
+    import { stashCheckout } from '$lib/checkout';
 
     // Log the cart for debugging
 
@@ -83,7 +85,7 @@
     let saqSelectComponent: any;
     let deliverTypeSelect: any;
     let deliverTypeSelectComponent: any;
-    const formSchema = {
+    $: formSchema = {
         $schema: 'https://json-schema.org/draft/2019-09/schema',
         type: 'object',
         properties: {
@@ -98,18 +100,30 @@
                 pattern: '^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$',
                 maxLength: 254
             },
-            saqNumber: {
-                type: 'string',
-                pattern: '^[0-9]{8}$',
-                minLength: 8,
-                maxLength: 8
-            }
+            saqNumber: $isPrixResto ? SAQ_NUMBER_REQUIRED : SAQ_NUMBER_OPTIONAL
         },
-        required: ['firstName', 'lastName', 'address', 'city', 'postalCode', 'phone', 'email', 'saqNumber'],
+        required: [
+            'firstName',
+            'lastName',
+            'address',
+            'city',
+            'postalCode',
+            'phone',
+            'email',
+            ...($isPrixResto ? ['saqNumber'] : [])
+        ],
         additionalProperties: false
     };
 
-    const parse = parser(formSchema, { includeErrors: true, allErrors: true });
+    $: parse = parser(formSchema, { includeErrors: true, allErrors: true });
+
+    // Mandatory for restaurants, optional for individuals. These must be *reactive*: Input
+    // only clears a previous error when its validator starts passing, so switching to Prix
+    // Perso has to loosen the schema — otherwise the red hint from a Prix Resto submit sticks
+    // around and the field looks like it is still required.
+    const SAQ_NUMBER_REQUIRED = { type: 'string', pattern: '^[0-9]{8}$', minLength: 8, maxLength: 8 };
+    const SAQ_NUMBER_OPTIONAL = { type: 'string', pattern: '^([0-9]{8})?$' };
+    $: saqNumberSchema = $isPrixResto ? SAQ_NUMBER_REQUIRED : SAQ_NUMBER_OPTIONAL;
 
     let formData = {
         firstName: '',
@@ -157,9 +171,7 @@
         errors.push(postalCodeInput.handleValidate());
         errors.push(phoneInput.handleValidate());
         errors.push(emailInput.handleValidate());
-        if ($isPrixResto || formData.saqNumber.length > 0) {
-            errors.push(saqNumberInput.handleValidate());
-        }
+        errors.push(saqNumberInput.handleValidate());
         if ($isPrixResto) errors.push(deliverTypeSelectComponent.handleValidate());
         if (!$isPrixResto) {
             errors.push(saqSelectComponent.handleValidate());
@@ -187,7 +199,7 @@
         let res;
         loadingHandleSubmit = true;
         try {
-            res = await fetch('api/submit-order', {
+            res = await fetch('/api/portaus/createPersoOrder', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -207,8 +219,7 @@
                             email: formData.email,
                             phone: formData.phone
                         }
-                    },
-                    returnUrl: $page.url.origin
+                    }
                 })
             });
 
@@ -222,15 +233,55 @@
                     payload = null;
                 }
 
-                if (payload?.error === 'InvalidBatches') {
-                    // бизнес-ошибка: не хватает вина / неверные партии
-                    notifyFr =
-                        'Certains vins ne sont plus disponibles dans la quantité choisie. Veuillez ajuster votre panier et réessayer.';
-                    notifyEn =
-                        'Some wines are no longer available in the requested quantity. Please adjust your cart and try again.';
-                } else if (payload?.error === 'NetworkError') {
-                    notifyFr = 'Problème de connexion au serveur de commande. Veuillez réessayer plus tard.';
-                    notifyEn = 'Connection problem with the order server. Please try again later.';
+                if (payload?.error === 'InsufficientQuantity') {
+                    // Portaus answers per line, so name the wines rather than making the
+                    // customer guess which row to fix.
+                    const stale = (payload.lines ?? []).filter((l: any) => l.reason === 'UnknownProduct');
+                    const short = (payload.lines ?? []).filter((l: any) => l.reason !== 'UnknownProduct');
+
+                    if (short.length) {
+                        const details = short
+                            .map((l: any) => {
+                                const item = $cart.find((c) => l.batchIds?.includes(Number(c.selected_batch_id)));
+                                const uvc = Number(item?.uvc) > 0 ? Number(item.uvc) : 1;
+                                const casesLeft = Math.floor(Number(l.quantityLeft ?? 0) / uvc);
+                                return `${l.name} (${casesLeft} caisse${casesLeft === 1 ? '' : 's'} restante${casesLeft === 1 ? '' : 's'})`;
+                            })
+                            .join(', ');
+                        notifyFr = `Stock insuffisant : ${details}. Veuillez ajuster votre panier.`;
+                        notifyEn = `Not enough stock: ${details}. Please adjust your cart.`;
+                    } else {
+                        const names = stale
+                            .map((l: any) => l.name)
+                            .filter(Boolean)
+                            .join(', ');
+                        notifyFr = names
+                            ? `Ces vins ne sont plus disponibles à la commande : ${names}.`
+                            : 'Certains vins ne sont plus disponibles à la commande.';
+                        notifyEn = names
+                            ? `These wines are no longer available to order: ${names}.`
+                            : 'Some wines are no longer available to order.';
+                    }
+                } else if (payload?.error === 'ProductNotSellable') {
+                    const names = (payload.products ?? [])
+                        .map((p: any) => p.name)
+                        .filter(Boolean)
+                        .join(', ');
+                    notifyFr = names
+                        ? `Ces vins ne peuvent pas être commandés en ligne : ${names}.`
+                        : 'Certains vins ne peuvent pas être commandés en ligne.';
+                    notifyEn = names
+                        ? `These wines cannot be ordered online: ${names}.`
+                        : 'Some wines cannot be ordered online.';
+                } else if (payload?.error === 'InvalidBatches') {
+                    notifyFr = 'Certains vins de votre panier n’existent plus. Veuillez les retirer et réessayer.';
+                    notifyEn = 'Some wines in your cart no longer exist. Please remove them and try again.';
+                } else if (payload?.error === 'InvalidBranch') {
+                    notifyFr = 'La succursale choisie est introuvable. Veuillez en sélectionner une autre.';
+                    notifyEn = 'The selected branch could not be found. Please choose another one.';
+                } else if (payload?.error === 'EmptyCart') {
+                    notifyFr = 'Votre panier est vide.';
+                    notifyEn = 'Your cart is empty.';
                 } else {
                     notifyFr =
                         'Une erreur s’est produite lors de la validation de votre commande. Veuillez réessayer ou modifier votre panier.';
@@ -243,9 +294,18 @@
 
             const data = await res.json();
 
-            const { url } = JSON.parse(data.body);
+            // The order now exists in Portaus and Stripe is holding a PaymentIntent for the
+            // agency fee. The cart is deliberately left intact — an abandoned payment should
+            // still find its wines here. /success clears it once payment actually succeeds.
+            stashCheckout({
+                clientSecret: data.clientSecret,
+                amountBillable: data.amountBillable,
+                total: data.total,
+                salesOrderNumber: data.salesOrderNumber,
+                salesOrderId: data.salesOrderId
+            });
 
-            window.location.href = url;
+            await goto('/pay');
         } catch (err) {
             console.error('Order submission failed:', err);
             notifyFr = 'Problème de réseau. Veuillez réessayer plus tard.';
@@ -509,12 +569,7 @@
                         class="lg:max-w-[272px] w-full flex-1 "
                         bind:this={saqNumberInput}
                         bind:value={formData.saqNumber}
-                        validate={{
-                            type: 'string',
-                            pattern: '^[0-9]{8}$',
-                            minLength: 8,
-                            maxLength: 8
-                        }}
+                        validate={saqNumberSchema}
                         hint="Le numéro de SAQ doit contenir 8 chiffres."
                     />
                 </div>
