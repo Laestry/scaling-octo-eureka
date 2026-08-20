@@ -1,10 +1,4 @@
-import {
-    PORTAUS_LOGIN,
-    PORTAUS_PASSWORD,
-    PORTAUS_BASE,
-    PORTAUS_API_KEY,
-    PORTAUS_JWT_SECRET
-} from '$env/static/private';
+import { env } from '$env/dynamic/private';
 import type { ApiTypes } from '$lib/server/portausModels';
 import jwt from 'jsonwebtoken'; // added import for JWT
 
@@ -23,9 +17,9 @@ const methods: Record<keyof ApiTypes.ResMap, 'GET' | 'POST'> = {
 
 // Helper function to generate JWT for the API key
 function generateApiKeyJWT(): string {
-    const payload = { API_KEY: PORTAUS_API_KEY.trim() };
+    const payload = { API_KEY: env.PORTAUS_API_KEY.trim() };
     // A JWT secret is required to sign the token.
-    const secret = PORTAUS_JWT_SECRET;
+    const secret = env.PORTAUS_JWT_SECRET;
     return jwt.sign(payload, secret);
 }
 
@@ -54,7 +48,7 @@ async function request<P extends keyof ApiTypes.ResMap>({
         headers['x-portaus-context'] = tokens!.contextToken;
     }
 
-    const res = await fetch(`${PORTAUS_BASE}${path}${query}`, {
+    const res = await fetch(`${env.PORTAUS_BASE}${path}${query}`, {
         method,
         body: method === 'POST' ? JSON.stringify(body) : undefined,
         headers
@@ -95,8 +89,8 @@ export const PortausApi = {
         const res = await request({
             path: '/auth/login',
             body: {
-                username: PORTAUS_LOGIN,
-                password: PORTAUS_PASSWORD
+                username: env.PORTAUS_LOGIN,
+                password: env.PORTAUS_PASSWORD
             }
         });
         return {
