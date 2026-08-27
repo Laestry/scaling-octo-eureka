@@ -216,6 +216,10 @@
 
     const dispatch = createEventDispatcher();
 
+    function submitSearch() {
+        dispatch('search');
+    }
+
     function clearAllFilters() {
         selectedFilters = {
             producer: undefined,
@@ -381,12 +385,12 @@
 <div class="mt-15 flex flex-col lg:gap-4 md:gap-3 gap-[20px]">
     <div class="flex justify-between">
         <div class="flex gap-1 items-center md:w-full w-0">
-            <label class="search md:flex hidden">
-                <div class="search__button">
+            <form class="search md:flex hidden" on:submit|preventDefault={submitSearch}>
+                <button type="submit" class="search__button" aria-label="Rechercher des vins">
                     <IconSearch />
-                </div>
-                <input type="text" class="search__input" bind:value={nameSearch} />
-            </label>
+                </button>
+                <input type="search" class="search__input" aria-label="Rechercher des vins" bind:value={nameSearch} />
+            </form>
         </div>
         <div class="flex gap-1 items-center md:w-auto w-full md:justify-normal justify-between">
             <button class="all-button abutton text-" on:click={clearAllFilters}>Liste complète</button>
@@ -417,12 +421,12 @@
         </div>
     </div>
     <div class="md:hidden flex gap-[6px]">
-        <label class="search md:hidden flex">
-            <button class="search__button">
+        <form class="search md:hidden flex" on:submit|preventDefault={submitSearch}>
+            <button type="submit" class="search__button" aria-label="Rechercher des vins">
                 <IconSearch />
             </button>
-            <input type="text" class="search__input" />
-        </label>
+            <input type="search" class="search__input" aria-label="Rechercher des vins" bind:value={nameSearch} />
+        </form>
         <a
             href={$isPrixResto
                 ? 'https://ward.pockethost.io/api/files/pbc_30851581/93ej7tuns0916g5/products_resto_03b592zlit.pdf'

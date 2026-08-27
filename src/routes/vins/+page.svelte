@@ -172,6 +172,7 @@
         categories={data.categories.data}
         bind:selectedFilters
         bind:nameSearch
+        on:search={() => updateProducts(true)}
         on:resetFilters={() => updateProducts(true)}
         {enabledFacets}
     />

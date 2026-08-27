@@ -47,10 +47,12 @@
             </div>
             <div
                 class="flex
-                lg:gap-[58px] md:gap-[12px] gap-0
+                lg:gap-[58px] md:gap-[12px] gap-[16px]
                  lg:mt-[51px] mt-[40px]"
             >
-                <p class="about__text lg:w-fit md:w-[181px] w-[104px]">Nos producteurs</p>
+                <p class="about__text about__text--label lg:w-fit md:w-[181px] w-[104px] flex-shrink-0">
+                    Nos producteurs
+                </p>
                 <p class="about__text lg:w-[560px] md:w-[375px]">
                     Nos vigneron·ne·s sont le cœur battant de notre agence. On les choisit pour leur vision, leur
                     sincérité, et la profondeur de leurs vins.
@@ -822,6 +824,9 @@
             }
             &__text {
                 font-size: 18px;
+                &--label {
+                    font-size: 14px;
+                }
             }
             &__images {
                 margin-top: 80px;
