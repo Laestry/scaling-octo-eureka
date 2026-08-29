@@ -135,6 +135,7 @@
         email: '',
         saqNumber: ''
     };
+    let newsletter = false;
     let errorMessage = '';
     let notifyFr = '';
     let notifyEn = '';
@@ -196,6 +197,14 @@
             console.log('Validation errors:', result.errors);
             errorMessage = 'Le formulaire contient des erreurs.';
         }
+        // Temporary resto path: no Portaus sales order, no agency fee charged online. The
+        // request is emailed to the team, who key the order in by hand. Prix perso still goes
+        // through Portaus + Stripe below.
+        if ($isPrixResto) {
+            await sendRestoOrderEmail(selectedBatches);
+            return;
+        }
+
         let res;
         loadingHandleSubmit = true;
         try {
@@ -312,6 +321,66 @@
             notifyEn = 'Network problem. Please try again later.';
             errorMessage = notifyFr;
             return;
+        } finally {
+            loadingHandleSubmit = false;
+        }
+    }
+
+    async function sendRestoOrderEmail(selectedBatches: { id: number; caseQuantity: number }[]) {
+        loadingHandleSubmit = true;
+        try {
+            const res = await fetch('/api/send-resto-order', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    items: selectedBatches,
+                    customer: {
+                        resto_delivery_type: deliverTypeSelect,
+                        saq_number: formData.saqNumber,
+                        newsletter,
+                        billing_address: {
+                            street: formData.address,
+                            city: formData.city,
+                            postal_code: formData.postalCode
+                        },
+                        billing_contact: {
+                            first_name: formData.firstName,
+                            last_name: formData.lastName,
+                            email: formData.email,
+                            phone: formData.phone
+                        }
+                    }
+                })
+            });
+
+            if (!res.ok) {
+                const payload = await res.json().catch(() => null);
+
+                if (payload?.error === 'InvalidBatches') {
+                    notifyFr = 'Certains vins de votre panier n’existent plus. Veuillez les retirer et réessayer.';
+                    notifyEn = 'Some wines in your cart no longer exist. Please remove them and try again.';
+                } else if (payload?.error === 'EmptyCart') {
+                    notifyFr = 'Votre panier est vide.';
+                    notifyEn = 'Your cart is empty.';
+                } else {
+                    notifyFr = 'Votre commande n’a pas pu être envoyée. Veuillez réessayer.';
+                    notifyEn = 'Your order could not be sent. Please try again.';
+                }
+
+                errorMessage = notifyFr;
+                return;
+            }
+
+            const data = await res.json();
+
+            // The order only exists as an email now, so the cart has done its job.
+            cart.clear();
+            await goto(`/success?request=${encodeURIComponent(data.reference ?? '')}`);
+        } catch (err) {
+            console.error('Resto order email failed:', err);
+            notifyFr = 'Problème de réseau. Veuillez réessayer plus tard.';
+            notifyEn = 'Network problem. Please try again later.';
+            errorMessage = notifyFr;
         } finally {
             loadingHandleSubmit = false;
         }
@@ -557,7 +626,7 @@
                         />
                         <div class="flex gap-1.5 items-center lg:flex-1 flex-none lg:w-auto w-fit justify-end">
                             <span class="text-xs">Inscrivez-moi à l’infolettre.</span>
-                            <Toggle onText="Oui!" offText="Non" />
+                            <Toggle bind:checked={newsletter} onText="Oui!" offText="Non" />
                         </div>
                     </form>
                 </div>
@@ -629,7 +698,15 @@
                     </b>
                 </div>
                 <div class="text-xs">Frais d’agence et taxes incluses</div>
-                {#if isFinalize}
+                {#if isFinalize && $isPrixResto}
+                    <div transition:fly={{ y: 100 }}>
+                        <hr class="border-wred mt-[10px] mb-[7px]" />
+                        <div class="text-xs">
+                            Aucun paiement en ligne. Votre demande est transmise à notre équipe, qui vous contactera
+                            pour confirmer la commande.
+                        </div>
+                    </div>
+                {:else if isFinalize}
                     <div transition:fly={{ y: 100 }}>
                         <hr class="border-wred mt-[10px] mb-[7px]" />
                         <div class="flex justify-between">

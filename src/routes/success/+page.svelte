@@ -9,6 +9,8 @@
     import { clearCheckout } from '$lib/checkout';
 
     let orderId: string | null = null;
+    /** set when we got here from the resto flow, which emails the order instead of charging it */
+    let requestReference: string | null = null;
     /** 'ok' once the payment is confirmed, 'pending' while checking, 'failed' if it didn't go through */
     let state: 'ok' | 'pending' | 'failed' = 'pending';
     let failureMessage = '';
@@ -16,6 +18,13 @@
     onMount(async () => {
         const url = get(page).url;
         orderId = url.searchParams.get('orderId');
+
+        // Resto orders are emailed to the team, not paid online — there is no intent to check.
+        requestReference = url.searchParams.get('request');
+        if (requestReference !== null) {
+            state = 'ok';
+            return;
+        }
 
         // Cards that need no extra authentication are confirmed on /pay, which clears the cart
         // and sends us here directly. Flows like 3-D Secure come back through Stripe's
@@ -54,6 +63,21 @@
                     <h1 class="!capitalize text-5xl">Paiement non complété</h1>
                     <div>{failureMessage}</div>
                     <a href="/cart" class="underline text-wblue">Retourner au panier</a>
+                </div>
+            {:else if requestReference !== null}
+                <div>
+                    <h1 class="!capitalize text-5xl">Merci!</h1>
+                    <div>Votre demande de commande a bien été envoyée.</div>
+                </div>
+
+                <div in:fade>
+                    {#if requestReference}
+                        <div>Votre référence est <strong>n°[{requestReference}]</strong>.</div>
+                    {/if}
+                    <div>
+                        Notre équipe vous contactera sous peu pour confirmer la commande et vous indiquer les prochaines
+                        étapes. Aucun paiement n’a été prélevé.
+                    </div>
                 </div>
             {:else}
                 <div>
