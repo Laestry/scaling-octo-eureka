@@ -5,8 +5,8 @@
 //   1. resolves the cart batches to Portaus products (bottles, not cases)
 //   2. finds the customer (resto: SAQ number; perso: SAQ number, then email) or creates it
 //   3. creates the order as "Brouillon - web"
-//   4. opens a Stripe PaymentIntent for the agency fee + its taxes and moves the order to
-//      WAITING_PAYMENT. The webhook records the payment once Stripe confirms it.
+//   4. opens a Stripe PaymentIntent for the agency fee + its taxes. The order stays
+//      DRAFT_EXTERNAL until the webhook notes the payment on it and moves it to TO_PROCESS.
 //
 // Anything that stops the checkout is thrown as CheckoutError with an HTTP status and a JSON
 // body the cart already knows how to display.
@@ -28,13 +28,7 @@ import {
 } from './customers';
 import { OrderValidationError, PortausError } from './errors';
 import { DELIVERY_TYPE } from './reference';
-import {
-    createDraftWebOrder,
-    setOrderStatus,
-    type CalculateResponse,
-    type OrderLineInput,
-    type SalesOrder
-} from './salesOrders';
+import { createDraftWebOrder, type CalculateResponse, type OrderLineInput, type SalesOrder } from './salesOrders';
 
 export const ORGANIZATION_ID = 2;
 
@@ -130,8 +124,8 @@ export type AgencyFeePayment = { clientSecret: string; paymentIntentId: string; 
 
 /**
  * Opens the PaymentIntent for the billable part of the order (agency fee + its taxes) in OUR
- * Stripe account, tagged with the Portaus order so the webhook can find it, then parks the order
- * in WAITING_PAYMENT. Returns null when Stripe is not configured or nothing is billable.
+ * Stripe account, tagged with the Portaus order so the webhook can find it. The order itself is
+ * left untouched (DRAFT_EXTERNAL). Returns null when Stripe is not configured or nothing is billable.
  */
 export async function createAgencyFeeIntent(
     order: SalesOrder,
@@ -162,7 +156,6 @@ export async function createAgencyFeeIntent(
         { idempotencyKey: `portaus-order-${order.id}` }
     );
 
-    await setOrderStatus(order.id, 'WAITING_PAYMENT');
     return { clientSecret: intent.client_secret!, paymentIntentId: intent.id, amountCents };
 }
 
@@ -253,7 +246,7 @@ async function finishCheckout(
         customerCreated,
         salesOrderId: order.id,
         salesOrderNumber: order.soNumber,
-        orderStatus: payment ? 'WAITING_PAYMENT' : (order.status?.code ?? null),
+        orderStatus: order.status?.code ?? null,
         total: calculation.total,
         totalBillable: calculation.totalBillable,
         totalUnbillable: calculation.totalUnbillable,

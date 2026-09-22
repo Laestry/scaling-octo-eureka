@@ -4,10 +4,10 @@
 //   1. price the lines with /calculate
 //   2. POST the order with status DRAFT, then PUT it back with status DRAFT_EXTERNAL
 //      ("Brouillon - web"). Posting DRAFT_EXTERNAL directly is silently turned into TO_PROCESS.
-//   3. once the PaymentIntent exists, PUT status WAITING_PAYMENT
-//   4. when the payment webhook arrives, invoice the order and record the agency-fee payment
-//      against it (see invoices.ts): the invoice becomes PARTIALLY_PAID and the order stays in
-//      WAITING_PAYMENT until the team processes it.
+//   3. the Stripe PaymentIntent is opened; the order stays DRAFT_EXTERNAL meanwhile
+//   4. when the payment webhook arrives, a note with the amount and the Stripe link is appended
+//      to the order and its status becomes TO_PROCESS ("À traiter"). No invoice, no payment
+//      record: the team sees a regular order to process, with the fee noted on it.
 //
 // A full PUT of the order with a new `status` is accepted for every transition we tried.
 // `?action=CONFIRM` is NOT "confirm" in the business sense: it moves a draft to TO_PROCESS and
@@ -277,7 +277,7 @@ export async function getOrder(id: number): Promise<SalesOrder> {
 }
 
 /** The subset of a stored order that PUT /sales-orders/:id expects back (same as the Portaus UI sends). */
-function serializeForPut(o: SalesOrder, status: SalesOrderStatus) {
+function serializeForPut(o: SalesOrder, status: SalesOrderStatus, notes?: string) {
     const body: Record<string, unknown> = {
         id: o.id,
         soNumber: o.soNumber,
@@ -285,7 +285,7 @@ function serializeForPut(o: SalesOrder, status: SalesOrderStatus) {
         date: o.date,
         expectedDeliveryDate: o.expectedDeliveryDate ?? undefined,
         reference: o.reference ?? '',
-        notes: o.notes ?? '',
+        notes: notes ?? o.notes ?? '',
         subTotal: o.subTotal,
         total: o.total,
         discount: o.discount ?? null,
@@ -320,14 +320,78 @@ function serializeForPut(o: SalesOrder, status: SalesOrderStatus) {
     return body;
 }
 
+/** Re-sends the stored order with a new status and/or new notes. */
+export async function updateOrder(
+    id: number,
+    patch: { statusCode?: SalesOrderStatusCode; notes?: string }
+): Promise<SalesOrder> {
+    const current = await getOrder(id);
+    const sameStatus = !patch.statusCode || current.status?.code === patch.statusCode;
+    const sameNotes = patch.notes === undefined || patch.notes === (current.notes ?? '');
+    if (sameStatus && sameNotes) return current;
+    const status = patch.statusCode ? await getSalesOrderStatus(patch.statusCode) : current.status;
+    return portausRequest<SalesOrder>('PUT', `/API/latest/admin/sales-orders/${id}`, {
+        body: serializeForPut(current, status, patch.notes)
+    });
+}
+
 /** Re-sends the stored order with a new status. Idempotent: returns as is when already there. */
 export async function setOrderStatus(id: number, code: SalesOrderStatusCode): Promise<SalesOrder> {
-    const current = await getOrder(id);
-    if (current.status?.code === code) return current;
-    const status = await getSalesOrderStatus(code);
-    return portausRequest<SalesOrder>('PUT', `/API/latest/admin/sales-orders/${id}`, {
-        body: serializeForPut(current, status)
+    return updateOrder(id, { statusCode: code });
+}
+
+export type AgencyFeePaidInput = {
+    /** Stripe PaymentIntent id; also the idempotency key (the note is written once per intent). */
+    paymentIntentId: string;
+    /** amount collected, in dollars */
+    amount: number;
+    currency?: string;
+    /** false for a test-mode payment, which lives under /test/ in the Stripe dashboard */
+    livemode?: boolean;
+    paidAt?: Date;
+};
+
+export function stripePaymentUrl(paymentIntentId: string, livemode = false): string {
+    return `https://dashboard.stripe.com/${livemode ? '' : 'test/'}payments/${paymentIntentId}`;
+}
+
+function agencyFeeNote(p: AgencyFeePaidInput): string {
+    const when = (p.paidAt ?? new Date()).toLocaleString('fr-CA', {
+        timeZone: 'America/Toronto',
+        dateStyle: 'short',
+        timeStyle: 'short'
     });
+    const amount = new Intl.NumberFormat('fr-CA', {
+        style: 'currency',
+        currency: (p.currency ?? 'CAD').toUpperCase()
+    }).format(p.amount);
+    return `Frais d'agence payés en ligne le ${when} : ${amount} (Stripe ${p.paymentIntentId}) ${stripePaymentUrl(p.paymentIntentId, p.livemode)}`;
+}
+
+/** Statuses from which a paid web order moves to TO_PROCESS; anything later is left as is. */
+const PRE_PROCESS_STATUSES: SalesOrderStatusCode[] = ['DRAFT', 'DRAFT_EXTERNAL', 'WAITING_PAYMENT'];
+
+/**
+ * What the payment webhook does: appends "agency fee paid" (amount + Stripe link) to the order's
+ * notes and moves it to TO_PROCESS ("À traiter"). Safe to call twice for the same PaymentIntent:
+ * the note is only written once, and an order already past the draft states keeps its status.
+ */
+export async function markAgencyFeePaid(
+    id: number,
+    payment: AgencyFeePaidInput
+): Promise<{ order: SalesOrder; alreadyNoted: boolean }> {
+    const current = await getOrder(id);
+    const existingNotes = current.notes ?? '';
+    const alreadyNoted = existingNotes.includes(payment.paymentIntentId);
+
+    const notes = alreadyNoted
+        ? existingNotes
+        : [existingNotes.trim(), agencyFeeNote(payment)].filter(Boolean).join('\n');
+    const statusCode = PRE_PROCESS_STATUSES.includes(current.status?.code) ? 'TO_PROCESS' : undefined;
+
+    if (alreadyNoted && !statusCode) return { order: current, alreadyNoted };
+    const order = await updateOrder(id, { statusCode, notes });
+    return { order, alreadyNoted };
 }
 
 /** Status a web order gets once its payment succeeded: "Payé - à traiter". */

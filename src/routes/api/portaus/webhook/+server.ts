@@ -1,10 +1,10 @@
 // POST /api/portaus/webhook  — Stripe webhook
 //
-// Marks the Portaus web order as partially paid once its PaymentIntent succeeds: the order gets
-// an invoice and the amount Stripe collected (agency fee + taxes) is recorded as a payment on it,
-// which sets the invoice to PARTIALLY_PAID. The PaymentIntent is created by
-// /api/portaus/orders/draft with `portausSalesOrderId` in its metadata. Retries are safe: a
-// payment with the same PaymentIntent id is never recorded twice.
+// When a PaymentIntent succeeds, the matching Portaus web order gets a note ("Frais d'agence
+// payés en ligne …" with the amount and a link to the payment in the Stripe dashboard) and
+// moves from "Brouillon - web" to TO_PROCESS ("À traiter"). Nothing else is written in Portaus:
+// no invoice, no payment record. The PaymentIntent is created by the checkout with
+// `portausSalesOrderId` in its metadata. Retries are safe: the note is written once per intent.
 //
 // Local testing:
 //   stripe listen --forward-to localhost:3173/api/portaus/webhook
@@ -16,7 +16,7 @@
 import { json, type RequestHandler } from '@sveltejs/kit';
 import { env } from '$env/dynamic/private';
 import Stripe from 'stripe';
-import { PortausError, markOrderPartiallyPaid } from '$lib/server/portausAdmin';
+import { PortausError, markAgencyFeePaid } from '$lib/server/portausAdmin';
 
 export const POST: RequestHandler = async ({ request }) => {
     const secret = env['STRIPE_WEBHOOK_SECRET'];
@@ -50,30 +50,23 @@ export const POST: RequestHandler = async ({ request }) => {
     }
 
     try {
-        const amountReceived = (intent.amount_received ?? intent.amount) / 100;
-        const result = await markOrderPartiallyPaid(salesOrderId, {
-            reference: intent.id,
-            amount: amountReceived > 0 ? amountReceived : undefined,
-            description: "Frais d'agence payés en ligne (Stripe)"
+        const { order, alreadyNoted } = await markAgencyFeePaid(salesOrderId, {
+            paymentIntentId: intent.id,
+            amount: (intent.amount_received || intent.amount) / 100,
+            currency: intent.currency,
+            livemode: event.livemode,
+            paidAt: new Date(event.created * 1000)
         });
         console.log(
-            `portaus/webhook: order ${result.order.soNumber} (${result.order.id}) -> ${result.order.status?.code}, ` +
-                `invoice ${result.invoice.inv_number} ${result.invoice.status?.code}` +
-                (result.alreadyRecorded ? ' (already recorded)' : '') +
+            `portaus/webhook: order ${order.soNumber} (${order.id}) -> ${order.status?.code}` +
+                (alreadyNoted ? ' (already noted)' : '') +
                 ` for ${intent.id}`
         );
-        return json({
-            received: true,
-            salesOrderId: result.order.id,
-            orderStatus: result.order.status?.code ?? null,
-            invoiceId: result.invoice.id,
-            invoiceStatus: result.invoice.status?.code ?? null,
-            alreadyRecorded: result.alreadyRecorded
-        });
+        return json({ received: true, salesOrderId: order.id, orderStatus: order.status?.code ?? null, alreadyNoted });
     } catch (e) {
         // Non-2xx makes Stripe retry, which is what we want if Portaus was briefly unreachable.
         if (e instanceof PortausError) console.error('portaus/webhook: Portaus error', e.status, e.path, e.body);
-        else console.error('portaus/webhook: confirm failed', e);
-        return json({ error: 'ConfirmFailed', salesOrderId }, { status: 500 });
+        else console.error('portaus/webhook: update failed', e);
+        return json({ error: 'UpdateFailed', salesOrderId }, { status: 500 });
     }
 };

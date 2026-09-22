@@ -2,7 +2,7 @@
 //
 // Creates the order in Portaus as "Brouillon - web" (DRAFT_EXTERNAL) for an EXISTING customer,
 // and when Stripe is configured opens a PaymentIntent for the billable part (agency fee + its
-// taxes) and moves the order to WAITING_PAYMENT. The cart does not call this directly: it goes
+// taxes). The cart does not call this directly: it goes
 // through /api/portaus/checkout/{perso,resto}, which also find or create the customer. This
 // route is the lower-level building block, useful for the admin panel and for testing.
 //
@@ -108,7 +108,7 @@ export const POST: RequestHandler = async ({ request, locals }) => {
             {
                 salesOrderId: order.id,
                 soNumber: order.soNumber,
-                status: payment ? 'WAITING_PAYMENT' : (order.status?.code ?? null),
+                status: order.status?.code ?? null,
                 total: calculation.total,
                 totalBillable: calculation.totalBillable,
                 totalUnbillable: calculation.totalUnbillable,

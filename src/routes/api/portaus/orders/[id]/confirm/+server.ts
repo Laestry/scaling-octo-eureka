@@ -1,24 +1,21 @@
 // POST /api/portaus/orders/:id/confirm
 //
-// Manually marks a web order as partially paid (invoice + agency-fee payment, what the Stripe
-// webhook does), or moves the order to the status given in the body `{ status: 'CONFIRMED' }`.
-// Body for the paid case: `{ reference?: string, amount?: number }` (amount defaults to the
-// order's billable total). Needs dev mode or `Authorization: Bearer <CRON_SECRET>`.
+// Manual version of what the Stripe webhook does: notes the agency-fee payment on the order and
+// moves it to TO_PROCESS. Body: `{ payment_intent_id?, amount?, livemode? }` (amount defaults
+// to the order's billable total). Alternatively `{ status: 'CONFIRMED' }` moves the order to an
+// explicit status. Needs dev mode or `Authorization: Bearer <CRON_SECRET>`.
 
 import { json, type RequestHandler } from '@sveltejs/kit';
 import { dev } from '$app/environment';
 import { env } from '$env/dynamic/private';
 import {
     PortausError,
-    markOrderPartiallyPaid,
+    billableTotal,
+    getOrder,
+    markAgencyFeePaid,
     setOrderStatus,
     type SalesOrderStatusCode
 } from '$lib/server/portausAdmin';
-
-/** Portaus returns unrounded floats (466.06998); present money with two decimals. */
-function round2(v: number | null | undefined): number | null {
-    return v == null ? null : Math.round(v * 100) / 100;
-}
 
 export const POST: RequestHandler = async ({ params, request }) => {
     const auth = request.headers.get('authorization') ?? '';
@@ -28,7 +25,7 @@ export const POST: RequestHandler = async ({ params, request }) => {
     const id = Number(params.id);
     if (!Number.isInteger(id) || id <= 0) return json({ error: 'InvalidId' }, { status: 400 });
 
-    let body: { status?: SalesOrderStatusCode; reference?: string; amount?: number } = {};
+    let body: { status?: SalesOrderStatusCode; payment_intent_id?: string; amount?: number; livemode?: boolean } = {};
     try {
         body = (await request.json()) ?? {};
     } catch {
@@ -40,20 +37,18 @@ export const POST: RequestHandler = async ({ params, request }) => {
             const order = await setOrderStatus(id, body.status);
             return json({ salesOrderId: order.id, soNumber: order.soNumber, status: order.status?.code ?? null });
         }
-        const result = await markOrderPartiallyPaid(id, {
-            reference: body.reference ?? `manual-${Date.now()}`,
-            amount: body.amount
+        const amount = Number(body.amount) > 0 ? Number(body.amount) : billableTotal(await getOrder(id));
+        const { order, alreadyNoted } = await markAgencyFeePaid(id, {
+            paymentIntentId: body.payment_intent_id ?? `manual-${Date.now()}`,
+            amount,
+            livemode: body.livemode ?? false
         });
         return json({
-            salesOrderId: result.order.id,
-            soNumber: result.order.soNumber,
-            status: result.order.status?.code ?? null,
-            invoiceId: result.invoice.id,
-            invNumber: result.invoice.inv_number,
-            invoiceStatus: result.invoice.status?.code ?? null,
-            paid: round2(result.invoice.balance?.paid),
-            outstanding: round2(result.invoice.balance?.outstanding),
-            alreadyRecorded: result.alreadyRecorded
+            salesOrderId: order.id,
+            soNumber: order.soNumber,
+            status: order.status?.code ?? null,
+            notes: order.notes ?? '',
+            alreadyNoted
         });
     } catch (e) {
         if (e instanceof PortausError) {
