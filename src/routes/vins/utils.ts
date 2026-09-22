@@ -41,7 +41,11 @@ export function transformVinsToCartObject(product) {
         selected_price_tax_in: product.oldest_price_tax_in,
         selected_calculated_quantity: product.oldest_calculated_quantity,
         selected_sell_before_date: product.oldest_sell_before_date,
+        // Portaus charges a flat fee per bottle, identical for resto and perso. Carry it as a net
+        // amount so the cart never re-derives it from whichever base price the mode selected.
         selected_agency_fee: product.oldest_agency_fee,
+        selected_agency_fee_net: product.oldest_agency_fee_net ?? product.oldest_agency_fee,
+        selected_agency_fee_with_taxes: product.oldest_agency_fee_with_taxes,
         selected_agency_fee_percentage: product.oldest_agency_fee_percentage * 100,
         selected_agency_fee_is_percentage: product.oldest_agency_fee_is_percentage,
 

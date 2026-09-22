@@ -8,7 +8,7 @@
 //
 // Body:
 //   { customer_id: number,
-//     items: [{ id: <cms_saq.alcohol_batches.id>, caseQuantity: number }],
+//     items: [{ portaus_id: <cms_saq.portaus_wines.portaus_id>, caseQuantity: number }],
 //     delivery?: { resto_delivery_type?: 0 | 3, saq_branch_id?: number },
 //     billing_contact_id?, billing_address_id?, shipping_contact_id?, shipping_address_id?,
 //     reference?, notes?, create_payment_intent?: boolean (default true) }

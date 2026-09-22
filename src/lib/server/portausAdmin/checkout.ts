@@ -2,7 +2,7 @@
 //
 // checkoutPerso() and checkoutResto() are what the cart page calls (through
 // /api/portaus/checkout/perso and /api/portaus/checkout/resto). Each one:
-//   1. resolves the cart batches to Portaus products (bottles, not cases)
+//   1. resolves the cart items against cms_saq.portaus_wines (bottles, not cases)
 //   2. finds the customer (resto: SAQ number; perso: SAQ number, then email) or creates it
 //   3. creates the order as "Brouillon - web"
 //   4. opens a Stripe PaymentIntent for the agency fee + its taxes. The order stays
@@ -59,8 +59,12 @@ export function toCheckoutError(e: unknown, context: string): CheckoutError {
 // ---------- cart lines --------------------------------------------------------------------------
 
 export type CartItemInput = {
-    /** cms_saq.alcohol_batches.id — what the cart stores as selected_batch_id */
-    id: number | string;
+    /**
+     * cms_saq.portaus_wines.portaus_id — the Portaus product id, which the cart already stores as
+     * item.id. Deliberately not called `id`: the cart used to send a batch id here, and both are
+     * plain integers, so a stale client would otherwise order a different wine.
+     */
+    portaus_id: number | string;
     /** number of cases, exactly as the cart counts them */
     caseQuantity: number | string;
 };
@@ -70,52 +74,90 @@ function toInt(v: unknown): number {
     return Number.isFinite(n) ? Math.trunc(n) : 0;
 }
 
+type WineRow = {
+    portaus_id: number;
+    puid: string;
+    name: string;
+    uvc: number;
+    available_bottles: number;
+};
+
 /**
- * Cart batches -> Portaus order lines. The cart speaks in batches and cases; Portaus wants the
- * product puid (cms_saq.alcohol.uuid) and a quantity in bottles.
+ * Cart items -> Portaus order lines, out of cms_saq.portaus_wines. The cart counts cases, Portaus
+ * wants the product puid and a quantity in bottles.
+ *
+ * Stock is checked here against the synced `available_bottles` so a short cart gets a useful
+ * answer without a round trip. Portaus re-checks it at calculate time, which stays the authority:
+ * this table is only as fresh as the last sync.
  */
 export async function resolveCartLines(supabase: SupabaseClient, items: CartItemInput[]): Promise<OrderLineInput[]> {
     const wanted = (items ?? []).filter((i) => toInt(i?.caseQuantity) > 0);
     if (!wanted.length) throw new CheckoutError(400, { error: 'EmptyCart', message: 'No items to order' });
 
-    const batchIds = wanted.map((i) => toInt(i.id));
-    const { data: batches, error } = await supabase
+    if (wanted.some((i) => toInt(i.portaus_id) <= 0)) {
+        throw new CheckoutError(400, {
+            error: 'StaleCart',
+            message: 'Every cart item needs a portaus_id; reload the page and rebuild the cart'
+        });
+    }
+
+    const ids = [...new Set(wanted.map((i) => toInt(i.portaus_id)))];
+    const { data, error } = await supabase
         .schema('cms_saq')
-        .from('alcohol_batches')
-        .select('id, alcohol_id, alcohol!inner(id, uuid, uvc, name)')
-        .in('id', batchIds)
-        .eq('organization_id', ORGANIZATION_ID)
-        .eq('is_archived', false);
+        .from('portaus_wines')
+        .select('portaus_id, puid, name, uvc, available_bottles')
+        .in('portaus_id', ids)
+        .eq('organization_id', ORGANIZATION_ID);
 
     if (error) {
-        console.error('resolveCartLines: batch lookup failed', error);
+        console.error('resolveCartLines: portaus_wines lookup failed', error);
         throw new CheckoutError(500, { error: 'LookupFailed', message: 'Could not resolve cart items' });
     }
 
-    const byBatchId = new Map((batches ?? []).map((b: any) => [Number(b.id), b]));
-    const missing = batchIds.filter((id) => !byBatchId.has(id));
-    if (missing.length) {
+    const wines = new Map((data ?? []).map((w: any) => [Number(w.portaus_id), w as WineRow]));
+    const unknown = ids.filter((id) => !wines.has(id));
+    if (unknown.length) {
         throw new CheckoutError(409, {
-            error: 'InvalidBatches',
-            message: 'Some cart items no longer exist',
-            batchIds: missing
+            error: 'UnknownWines',
+            message: 'Some wines are no longer available to order',
+            portausIds: unknown
         });
     }
 
-    const withoutPuid = (batches ?? []).filter((b: any) => !b.alcohol?.uuid);
-    if (withoutPuid.length) {
+    // Two cart rows can point at the same wine; Portaus wants one line per product.
+    const byPuid = new Map<string, { wine: WineRow; cases: number }>();
+    for (const item of wanted) {
+        const wine = wines.get(toInt(item.portaus_id))!;
+        const existing = byPuid.get(wine.puid);
+        if (existing) existing.cases += toInt(item.caseQuantity);
+        else byPuid.set(wine.puid, { wine, cases: toInt(item.caseQuantity) });
+    }
+
+    const short = [...byPuid.values()]
+        .map(({ wine, cases }) => ({ wine, cases, bottles: cases * (wine.uvc > 0 ? wine.uvc : 1) }))
+        .filter(({ wine, bottles }) => bottles > wine.available_bottles)
+        .map(({ wine, cases, bottles }) => ({
+            portausId: wine.portaus_id,
+            puid: wine.puid,
+            name: wine.name,
+            requestedCases: cases,
+            requested: bottles,
+            quantityLeft: wine.available_bottles,
+            casesLeft: Math.floor(wine.available_bottles / (wine.uvc > 0 ? wine.uvc : 1))
+        }));
+
+    if (short.length) {
         throw new CheckoutError(409, {
-            error: 'ProductNotSellable',
-            message: 'Some wines are not available for online order',
-            products: withoutPuid.map((b: any) => ({ batchId: b.id, name: b.alcohol?.name ?? null }))
+            error: 'InsufficientQuantity',
+            message: 'Some wines are no longer available in the requested quantity',
+            lines: short
         });
     }
 
-    return wanted.map((item) => {
-        const batch: any = byBatchId.get(toInt(item.id));
-        const uvc = toInt(batch.alcohol.uvc) > 0 ? toInt(batch.alcohol.uvc) : 1;
-        return { puid: batch.alcohol.uuid as string, qty: toInt(item.caseQuantity) * uvc };
-    });
+    return [...byPuid.values()].map(({ wine, cases }) => ({
+        puid: wine.puid,
+        qty: cases * (wine.uvc > 0 ? wine.uvc : 1)
+    }));
 }
 
 // ---------- payment -----------------------------------------------------------------------------

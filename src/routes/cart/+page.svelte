@@ -163,13 +163,13 @@
         notifyFr = '';
         notifyEn = '';
 
-        let selectedBatches = $cart.map((i) => ({
-            id: parseInt(i.selected_batch_id),
+        // cms_saq.alcohol.id, which the cart stores as item.id, is the Portaus product id and the
+        // key of cms_saq.portaus_wines. The checkout resolves lines from that table, so it wants
+        // the wine, not the batch.
+        let orderLines = $cart.map((i) => ({
+            portaus_id: Number(i.id),
             caseQuantity: i.quantity
         }));
-        console.log('cart items', $cart);
-        console.log('saqSelect', saqSelect);
-        console.log('selectedBatches', selectedBatches);
 
         // Trigger validation on each input.
         const errors = [];
@@ -222,7 +222,7 @@
         const endpoint = $isPrixResto ? '/api/portaus/checkout/resto' : '/api/portaus/checkout/perso';
         const payload = $isPrixResto
             ? {
-                  items: selectedBatches,
+                  items: orderLines,
                   saq_number: formData.saqNumber,
                   company_name: formData.companyName,
                   resto_delivery_type: deliverTypeSelect,
@@ -232,7 +232,7 @@
                   newsletter
               }
             : {
-                  items: selectedBatches,
+                  items: orderLines,
                   saq_number: formData.saqNumber || null,
                   saq_branch_id: saqSelect,
                   billing_contact: contact,
@@ -260,17 +260,21 @@
                 }
 
                 if (payload?.error === 'InsufficientQuantity') {
-                    // Portaus answers per line, so name the wines rather than making the
-                    // customer guess which row to fix.
+                    // Answered per wine, so name them rather than making the customer guess which
+                    // row to fix. `casesLeft` comes from the server; the Portaus fallback only
+                    // knows bottles, so derive it from the cart's case size in that case.
                     const stale = (payload.lines ?? []).filter((l: any) => l.reason === 'UnknownProduct');
                     const short = (payload.lines ?? []).filter((l: any) => l.reason !== 'UnknownProduct');
 
                     if (short.length) {
                         const details = short
                             .map((l: any) => {
-                                const item = $cart.find((c) => l.batchIds?.includes(Number(c.selected_batch_id)));
-                                const uvc = Number(item?.uvc) > 0 ? Number(item.uvc) : 1;
-                                const casesLeft = Math.floor(Number(l.quantityLeft ?? 0) / uvc);
+                                let casesLeft = l.casesLeft;
+                                if (casesLeft == null) {
+                                    const item = $cart.find((c) => Number(c.id) === Number(l.portausId));
+                                    const uvc = Number(item?.uvc) > 0 ? Number(item.uvc) : 1;
+                                    casesLeft = Math.floor(Number(l.quantityLeft ?? 0) / uvc);
+                                }
                                 return `${l.name} (${casesLeft} caisse${casesLeft === 1 ? '' : 's'} restante${casesLeft === 1 ? '' : 's'})`;
                             })
                             .join(', ');
@@ -299,9 +303,12 @@
                     notifyEn = names
                         ? `These wines cannot be ordered online: ${names}.`
                         : 'Some wines cannot be ordered online.';
-                } else if (payload?.error === 'InvalidBatches') {
-                    notifyFr = 'Certains vins de votre panier n’existent plus. Veuillez les retirer et réessayer.';
-                    notifyEn = 'Some wines in your cart no longer exist. Please remove them and try again.';
+                } else if (payload?.error === 'UnknownWines') {
+                    notifyFr = 'Certains vins de votre panier ne sont plus offerts. Veuillez les retirer et réessayer.';
+                    notifyEn = 'Some wines in your cart are no longer offered. Please remove them and try again.';
+                } else if (payload?.error === 'StaleCart') {
+                    notifyFr = 'Votre panier date d’une version précédente du site. Veuillez rafraîchir la page.';
+                    notifyEn = 'Your cart is from an older version of the site. Please refresh the page.';
                 } else if (payload?.error === 'InvalidBranch') {
                     notifyFr = 'La succursale choisie est introuvable. Veuillez en sélectionner une autre.';
                     notifyEn = 'The selected branch could not be found. Please choose another one.';

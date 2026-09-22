@@ -82,8 +82,62 @@ interface FetchOpts {
 }
 
 /**
- * Query `cms_saq.alcohol_view` instead of base tables.
- * Mirrors the old filters/sorting using view columns.
+ * A row of cms_saq.portaus_wines dressed up as the product shape the cards and the cart
+ * transform already expect.
+ *
+ * That table has no batches, so the "oldest batch" fields collapse onto the wine itself:
+ * one wine, one price, one stock figure. `oldest_batch_id` is kept as the cart's local key and
+ * carries the Portaus product id, which is also what the checkout posts.
+ */
+export function portausWineToProduct(w: any) {
+    const priceTaxIn = Number(w.price_tax_in) || 0;
+    const agencyFee = Number(w.agency_fee) || 0;
+
+    return {
+        id: w.portaus_id,
+        name: w.name,
+        category: w.category,
+        specific_category: w.specific_category,
+        uvc: w.uvc,
+        format: w.format,
+        unit: w.unit,
+        volume: w.volume,
+        volume_and_format: formatVolume({ volume: w.volume, format: w.format }),
+        organization_id: w.organization_id,
+        provider_id: w.provider_id,
+        country_id: w.country_id,
+        region_name: w.region_name,
+        tags: w.tags ?? [],
+        provider_display_name: w.producer ?? '',
+        batch_count: 1,
+        total_quantity: w.available_bottles,
+        vintages: w.vintages ?? [],
+
+        oldest_batch_id: w.portaus_id,
+        oldest_vintage: w.vintage ? Number(w.vintage) : null,
+        oldest_price: Number(w.price) || 0,
+        oldest_price_tax_in: priceTaxIn,
+        oldest_calculated_quantity: w.available_bottles,
+        oldest_sell_before_date: w.availability_date,
+
+        // Portaus charges a flat fee per bottle. The display helpers want a fraction of the
+        // tax-in price, so express the same amount that way; the cart keeps the flat figure too.
+        oldest_agency_fee: agencyFee,
+        oldest_agency_fee_net: agencyFee,
+        oldest_agency_fee_with_taxes: Number(w.agency_fee_with_taxes) || 0,
+        oldest_agency_fee_percentage: priceTaxIn > 0 ? agencyFee / priceTaxIn : 0,
+        oldest_agency_fee_is_percentage: false,
+
+        website_slug: w.website_slug,
+        main_image_file: w.main_image_file ?? null,
+        short_description: w.short_description,
+        updated_at: w.synced_at
+    };
+}
+
+/**
+ * Query `cms_saq.portaus_wines`: the flat catalogue of what Portaus will actually accept on an
+ * order. Same filters and sorting as before, against this table's column names.
  */
 export async function fetchFilteredProductsForAlcohol(
     supabaseClient: typeof supabase,
@@ -112,11 +166,11 @@ export async function fetchFilteredProductsForAlcohol(
 
     let query = supabaseClient
         .schema('cms_saq')
-        .from('alcohol_view')
+        .from('portaus_wines')
         .select('*', { count: 'exact' })
         .eq('organization_id', 2)
-        .gt('oldest_price', 0)
-        .gt('oldest_price_tax_in', 0)
+        .gt('price', 0)
+        .gt('price_tax_in', 0)
         .not('website_slug', 'is', null);
 
     // producer
@@ -144,7 +198,7 @@ export async function fetchFilteredProductsForAlcohol(
         if (format.volume != null) query = query.eq('volume', format.volume);
     }
 
-    // vintage: any overlap with available vintages
+    // vintage: any overlap with the wine's vintages
     if (vintageArr.length) {
         query = query.overlaps('vintages', vintageArr);
     }
@@ -156,38 +210,36 @@ export async function fetchFilteredProductsForAlcohol(
 
     // tag
     if (selected?.tag) {
-        // keep as ilike unless tags is a proper array and you prefer `.contains`
         query = query.ilike('tags', `%${selected?.tag}%`);
     }
 
-    // price range on oldest_price
+    // price range on the bottle price
     if (selected?.priceRange) {
-        if (selected?.priceRange === 'low') query = query.gte('oldest_price', 20).lte('oldest_price', 30);
-        else if (selected?.priceRange === 'mid') query = query.gte('oldest_price', 30).lte('oldest_price', 40);
-        else if (selected?.priceRange === 'high') query = query.gte('oldest_price', 40);
+        if (selected?.priceRange === 'low') query = query.gte('price', 20).lte('price', 30);
+        else if (selected?.priceRange === 'mid') query = query.gte('price', 30).lte('price', 40);
+        else if (selected?.priceRange === 'high') query = query.gte('price', 40);
     }
 
     // sorting
     if (opts.sorting) {
         if (opts.sorting === 'Prix croissant') {
-            query = query.order('oldest_price', { ascending: true });
+            query = query.order('price', { ascending: true });
         } else if (opts.sorting === 'Prix décroissant') {
-            query = query.order('oldest_price', { ascending: false });
+            query = query.order('price', { ascending: false });
         } else if (opts.sorting === 'Alphabétique') {
             query = query.order('name', { ascending: true });
         } else {
             query = query
-                .order('oldest_sell_before_date', { ascending: false })
-                .order('total_quantity', { ascending: false });
+                .order('availability_date', { ascending: false })
+                .order('available_bottles', { ascending: false });
         }
     } else {
-        query = query
-            .order('provider_display_name', { ascending: true })
-            .order('name', { ascending: true });
+        query = query.order('producer', { ascending: true }).order('name', { ascending: true });
     }
 
     // pagination
     query = query.range(opts.offset, opts.offset + opts.limit - 1);
 
-    return await query;
+    const result = await query;
+    return { ...result, data: (result.data ?? []).map(portausWineToProduct) };
 }

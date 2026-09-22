@@ -239,7 +239,7 @@ export async function createDraftWebOrder(
         customer: { id: input.customerId },
         date: (input.date ?? new Date()).toISOString(),
         expectedDeliveryDate: undefined,
-        reference: input.reference ?? '',
+        reference: input.reference ?? WEB_REFERENCE_PENDING,
         notes: input.notes ?? '',
         subTotal: calculation.subTotal,
         total: calculation.total,
@@ -277,14 +277,14 @@ export async function getOrder(id: number): Promise<SalesOrder> {
 }
 
 /** The subset of a stored order that PUT /sales-orders/:id expects back (same as the Portaus UI sends). */
-function serializeForPut(o: SalesOrder, status: SalesOrderStatus, notes?: string) {
+function serializeForPut(o: SalesOrder, status: SalesOrderStatus, notes?: string, reference?: string) {
     const body: Record<string, unknown> = {
         id: o.id,
         soNumber: o.soNumber,
         customer: { id: o.customer.id },
         date: o.date,
         expectedDeliveryDate: o.expectedDeliveryDate ?? undefined,
-        reference: o.reference ?? '',
+        reference: reference ?? o.reference ?? '',
         notes: notes ?? o.notes ?? '',
         subTotal: o.subTotal,
         total: o.total,
@@ -323,15 +323,16 @@ function serializeForPut(o: SalesOrder, status: SalesOrderStatus, notes?: string
 /** Re-sends the stored order with a new status and/or new notes. */
 export async function updateOrder(
     id: number,
-    patch: { statusCode?: SalesOrderStatusCode; notes?: string }
+    patch: { statusCode?: SalesOrderStatusCode; notes?: string; reference?: string }
 ): Promise<SalesOrder> {
     const current = await getOrder(id);
     const sameStatus = !patch.statusCode || current.status?.code === patch.statusCode;
     const sameNotes = patch.notes === undefined || patch.notes === (current.notes ?? '');
-    if (sameStatus && sameNotes) return current;
+    const sameReference = patch.reference === undefined || patch.reference === (current.reference ?? '');
+    if (sameStatus && sameNotes && sameReference) return current;
     const status = patch.statusCode ? await getSalesOrderStatus(patch.statusCode) : current.status;
     return portausRequest<SalesOrder>('PUT', `/API/latest/admin/sales-orders/${id}`, {
-        body: serializeForPut(current, status, patch.notes)
+        body: serializeForPut(current, status, patch.notes, patch.reference)
     });
 }
 
@@ -433,6 +434,21 @@ function agencyFeeNote(order: SalesOrder, p: AgencyFeePaidInput): string {
     return lines.join('\n');
 }
 
+/**
+ * `reference` is the "Numéro de commande" field on the Portaus order screen: free text, shown
+ * next to the SO number. Web orders carry their payment state there so the team can read it at a
+ * glance, without opening the notes. Not to be confused with `soNumber`, which Portaus generates
+ * and labels "Numéro de référence".
+ */
+export const WEB_REFERENCE_PENDING = 'Web - Paiement en attente';
+export const WEB_REFERENCE_PAID = "Web - Frais d'agence payés";
+
+/** True when the reference is ours to overwrite, i.e. nobody typed their own order number in. */
+function isWebReference(reference: string | null | undefined): boolean {
+    const value = (reference ?? '').trim();
+    return value === '' || value.startsWith('Web - ');
+}
+
 /** Statuses from which a paid web order moves to TO_PROCESS; anything later is left as is. */
 const PRE_PROCESS_STATUSES: SalesOrderStatusCode[] = ['DRAFT', 'DRAFT_EXTERNAL', 'WAITING_PAYMENT'];
 
@@ -453,9 +469,12 @@ export async function markAgencyFeePaid(
         ? existingNotes
         : [existingNotes.trim(), agencyFeeNote(current, payment)].filter(Boolean).join('\n\n');
     const statusCode = PRE_PROCESS_STATUSES.includes(current.status?.code) ? 'TO_PROCESS' : undefined;
+    // Leave a reference the team (or the customer) typed themselves alone.
+    const reference =
+        isWebReference(current.reference) && current.reference !== WEB_REFERENCE_PAID ? WEB_REFERENCE_PAID : undefined;
 
-    if (alreadyNoted && !statusCode) return { order: current, alreadyNoted };
-    const order = await updateOrder(id, { statusCode, notes });
+    if (alreadyNoted && !statusCode && !reference) return { order: current, alreadyNoted };
+    const order = await updateOrder(id, { statusCode, notes, reference });
     return { order, alreadyNoted };
 }
 

@@ -1,4 +1,5 @@
 import { createClient, type SupabaseClient } from '@supabase/supabase-js';
+import ws from 'ws';
 import { env as privateEnv } from '$env/dynamic/private';
 import { env as publicEnv } from '$env/dynamic/public';
 
@@ -11,7 +12,11 @@ export function createServiceClient(): SupabaseClient {
     const key = privateEnv['SUPABASE_SERVICE_ROLE'] || publicEnv.PUBLIC_SUPABASE_ANON_KEY;
     if (!publicEnv.PUBLIC_SUPABASE_URL || !key) throw new Error('Supabase URL / key missing');
     return createClient(publicEnv.PUBLIC_SUPABASE_URL, key, {
-        auth: { autoRefreshToken: false, persistSession: false }
+        auth: { autoRefreshToken: false, persistSession: false },
+        // Node 20 has no global WebSocket and supabase-js reaches for one at construction time,
+        // even though these jobs never subscribe. Same shim as hooks.server.ts; the cast is only
+        // because ws's constructor overloads do not line up with the type supabase-js declares.
+        realtime: { transport: ws as unknown as typeof globalThis.WebSocket }
     });
 }
 
