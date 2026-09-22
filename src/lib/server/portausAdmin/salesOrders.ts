@@ -355,17 +355,77 @@ export function stripePaymentUrl(paymentIntentId: string, livemode = false): str
     return `https://dashboard.stripe.com/${livemode ? '' : 'test/'}payments/${paymentIntentId}`;
 }
 
-function agencyFeeNote(p: AgencyFeePaidInput): string {
+function money(value: number, currency = 'CAD'): string {
+    return new Intl.NumberFormat('fr-CA', { style: 'currency', currency: currency.toUpperCase() }).format(value);
+}
+
+function round2(value: number): number {
+    return Math.round(value * 100) / 100;
+}
+
+/**
+ * Agency fee on a stored order, as Portaus priced it. `unitFee` is the per-bottle fee, and is
+ * null when the lines do not all carry the same one (then only the subtotal can be quoted).
+ */
+function agencyFeeBreakdown(order: SalesOrder) {
+    let bottles = 0;
+    let fee = 0;
+    const unitFees = new Set<number>();
+
+    for (const line of order.lines ?? []) {
+        const lineFee = line.prices
+            .filter((price) => price.label === 'PRODUCT_AGENCY_FEE')
+            .reduce((sum, price) => sum + price.price, 0);
+        bottles += line.qty;
+        fee += line.qty * lineFee;
+        if (lineFee > 0) unitFees.add(round2(lineFee));
+    }
+
+    // `billable` on each order tax is that tax charged on the agency fee alone.
+    const taxes = (order.taxes ?? [])
+        .map((tax) => ({ label: tax.label, amount: round2(tax.billable ?? 0) }))
+        .filter((tax) => tax.amount > 0);
+
+    return {
+        bottles,
+        fee: round2(fee),
+        unitFee: unitFees.size === 1 ? [...unitFees][0] : null,
+        taxes,
+        total: round2(round2(fee) + taxes.reduce((sum, tax) => sum + tax.amount, 0))
+    };
+}
+
+/**
+ * The note left on the order. It has to answer, on its own, the question the team will ask when
+ * they see a $39 payment against a $254 order: what the fee covers, and who bills the rest.
+ */
+function agencyFeeNote(order: SalesOrder, p: AgencyFeePaidInput): string {
+    const currency = (p.currency ?? 'CAD').toUpperCase();
     const when = (p.paidAt ?? new Date()).toLocaleString('fr-CA', {
         timeZone: 'America/Toronto',
         dateStyle: 'short',
         timeStyle: 'short'
     });
-    const amount = new Intl.NumberFormat('fr-CA', {
-        style: 'currency',
-        currency: (p.currency ?? 'CAD').toUpperCase()
-    }).format(p.amount);
-    return `Frais d'agence payés en ligne le ${when} : ${amount} (Stripe ${p.paymentIntentId}) ${stripePaymentUrl(p.paymentIntentId, p.livemode)}`;
+
+    const lines = [`Frais d'agence payés en ligne le ${when} : ${money(p.amount, currency)}`];
+
+    // Only quote a breakdown that actually adds up to what Stripe took.
+    const b = agencyFeeBreakdown(order);
+    if (b.bottles > 0 && Math.abs(b.total - p.amount) <= 0.02) {
+        const bottles = `${b.bottles} bouteille${b.bottles > 1 ? 's' : ''}`;
+        const subtotal =
+            b.unitFee != null
+                ? `${bottles} × ${money(b.unitFee, currency)} = ${money(b.fee, currency)} hors taxes`
+                : `${bottles} : ${money(b.fee, currency)} hors taxes`;
+        const taxes = b.taxes.map((tax) => `${tax.label} ${money(tax.amount, currency)}`).join(' + ');
+        lines.push(`  ${subtotal}${taxes ? `, plus ${taxes}` : ''}`);
+
+        const balance = round2(order.total - p.amount);
+        if (balance > 0) lines.push(`  Solde de la commande, facturé par la SAQ : ${money(balance, currency)}`);
+    }
+
+    lines.push(`  Stripe ${p.paymentIntentId} — ${stripePaymentUrl(p.paymentIntentId, p.livemode)}`);
+    return lines.join('\n');
 }
 
 /** Statuses from which a paid web order moves to TO_PROCESS; anything later is left as is. */
@@ -386,7 +446,7 @@ export async function markAgencyFeePaid(
 
     const notes = alreadyNoted
         ? existingNotes
-        : [existingNotes.trim(), agencyFeeNote(payment)].filter(Boolean).join('\n');
+        : [existingNotes.trim(), agencyFeeNote(current, payment)].filter(Boolean).join('\n\n');
     const statusCode = PRE_PROCESS_STATUSES.includes(current.status?.code) ? 'TO_PROCESS' : undefined;
 
     if (alreadyNoted && !statusCode) return { order: current, alreadyNoted };
