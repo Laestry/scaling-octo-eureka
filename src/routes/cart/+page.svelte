@@ -81,6 +81,7 @@
     let phoneInput: Input;
     let emailInput: Input;
     let saqNumberInput: Input;
+    let companyNameInput: Input;
     let saqSelect: any;
     let saqSelectComponent: any;
     let deliverTypeSelect: any;
@@ -100,7 +101,8 @@
                 pattern: '^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$',
                 maxLength: 254
             },
-            saqNumber: $isPrixResto ? SAQ_NUMBER_REQUIRED : SAQ_NUMBER_OPTIONAL
+            saqNumber: $isPrixResto ? SAQ_NUMBER_REQUIRED : SAQ_NUMBER_OPTIONAL,
+            companyName: $isPrixResto ? COMPANY_NAME_REQUIRED : COMPANY_NAME_OPTIONAL
         },
         required: [
             'firstName',
@@ -110,7 +112,7 @@
             'postalCode',
             'phone',
             'email',
-            ...($isPrixResto ? ['saqNumber'] : [])
+            ...($isPrixResto ? ['saqNumber', 'companyName'] : [])
         ],
         additionalProperties: false
     };
@@ -124,6 +126,11 @@
     const SAQ_NUMBER_REQUIRED = { type: 'string', pattern: '^[0-9]{8}$', minLength: 8, maxLength: 8 };
     const SAQ_NUMBER_OPTIONAL = { type: 'string', pattern: '^([0-9]{8})?$' };
     $: saqNumberSchema = $isPrixResto ? SAQ_NUMBER_REQUIRED : SAQ_NUMBER_OPTIONAL;
+    // The establishment name is what Portaus files a new resto under; existing restos are found by SAQ number.
+    const COMPANY_NAME_REQUIRED = { type: 'string', minLength: 1, pattern: '^[\\s\\S]*$' };
+    // schemasafe insists on a pattern for every string, even an optional one.
+    const COMPANY_NAME_OPTIONAL = { type: 'string', pattern: '^[\\s\\S]*$' };
+    $: companyNameSchema = $isPrixResto ? COMPANY_NAME_REQUIRED : COMPANY_NAME_OPTIONAL;
 
     let formData = {
         firstName: '',
@@ -133,7 +140,8 @@
         postalCode: '',
         phone: '',
         email: '',
-        saqNumber: ''
+        saqNumber: '',
+        companyName: ''
     };
     let newsletter = false;
     let errorMessage = '';
@@ -173,9 +181,13 @@
         errors.push(phoneInput.handleValidate());
         errors.push(emailInput.handleValidate());
         errors.push(saqNumberInput.handleValidate());
-        if ($isPrixResto) errors.push(deliverTypeSelectComponent.handleValidate());
-        if (!$isPrixResto) {
-            errors.push(saqSelectComponent.handleValidate());
+        if ($isPrixResto) {
+            errors.push(companyNameInput.handleValidate());
+            errors.push(deliverTypeSelectComponent.handleValidate());
+        }
+        // Perso always picks up at a branch; a resto only when it chose "Livraison en succursale".
+        if (!$isPrixResto || Number(deliverTypeSelect) === 3) {
+            errors.push(saqSelectComponent ? saqSelectComponent.handleValidate() : false);
         }
 
         // If any input returns an error (non-empty string), don't submit.
@@ -197,39 +209,44 @@
             console.log('Validation errors:', result.errors);
             errorMessage = 'Le formulaire contient des erreurs.';
         }
-        // Temporary resto path: no Portaus sales order, no agency fee charged online. The
-        // request is emailed to the team, who key the order in by hand. Prix perso still goes
-        // through Portaus + Stripe below.
-        if ($isPrixResto) {
-            await sendRestoOrderEmail(selectedBatches);
-            return;
-        }
+        // Both price modes go through Portaus + Stripe now: the customer is found or created in
+        // Portaus, the order is created as "Brouillon - web" and only the agency fee (+ taxes) is
+        // charged online. The webhook records that payment on the order's invoice.
+        const contact = {
+            first_name: formData.firstName,
+            last_name: formData.lastName,
+            email: formData.email,
+            phone: formData.phone
+        };
+        const address = { street: formData.address, city: formData.city, postal_code: formData.postalCode };
+        const endpoint = $isPrixResto ? '/api/portaus/checkout/resto' : '/api/portaus/checkout/perso';
+        const payload = $isPrixResto
+            ? {
+                  items: selectedBatches,
+                  saq_number: formData.saqNumber,
+                  company_name: formData.companyName,
+                  resto_delivery_type: deliverTypeSelect,
+                  saq_branch_id: Number(deliverTypeSelect) === 3 ? saqSelect : null,
+                  billing_contact: contact,
+                  billing_address: address,
+                  newsletter
+              }
+            : {
+                  items: selectedBatches,
+                  saq_number: formData.saqNumber || null,
+                  saq_branch_id: saqSelect,
+                  billing_contact: contact,
+                  billing_address: address,
+                  newsletter
+              };
 
         let res;
         loadingHandleSubmit = true;
         try {
-            res = await fetch('/api/portaus/createPersoOrder', {
+            res = await fetch(endpoint, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    items: selectedBatches,
-                    customer: {
-                        resto_delivery_type: $isPrixResto ? deliverTypeSelect : undefined,
-                        saq_store_id: !$isPrixResto ? saqSelect : undefined,
-                        saq_number: formData.saqNumber,
-                        billing_address: {
-                            street: formData.address,
-                            city: formData.city,
-                            postal_code: formData.postalCode
-                        },
-                        billing_contact: {
-                            first_name: formData.firstName,
-                            last_name: formData.lastName,
-                            email: formData.email,
-                            phone: formData.phone
-                        }
-                    }
-                })
+                body: JSON.stringify(payload)
             });
 
             if (!res.ok) {
@@ -291,6 +308,22 @@
                 } else if (payload?.error === 'EmptyCart') {
                     notifyFr = 'Votre panier est vide.';
                     notifyEn = 'Your cart is empty.';
+                } else if (payload?.error === 'MissingCompany') {
+                    notifyFr =
+                        'Ce numéro de SAQ est nouveau pour nous : veuillez indiquer le nom de votre établissement.';
+                    notifyEn = 'This SAQ number is new to us: please enter the name of your establishment.';
+                } else if (payload?.error === 'MissingBranch') {
+                    notifyFr = 'Veuillez choisir une succursale SAQ.';
+                    notifyEn = 'Please choose an SAQ branch.';
+                } else if (payload?.error === 'IncompleteCustomer') {
+                    notifyFr = 'Votre fiche client est incomplète. Veuillez nous contacter pour finaliser la commande.';
+                    notifyEn = 'Your customer record is incomplete. Please contact us to complete the order.';
+                } else if (payload?.error === 'PaymentUnavailable') {
+                    notifyFr = 'Le paiement en ligne est momentanément indisponible. Veuillez réessayer plus tard.';
+                    notifyEn = 'Online payment is temporarily unavailable. Please try again later.';
+                } else if (payload?.error === 'PortausError') {
+                    notifyFr = 'Notre système de commandes ne répond pas. Veuillez réessayer dans quelques minutes.';
+                    notifyEn = 'Our order system is not responding. Please try again in a few minutes.';
                 } else {
                     notifyFr =
                         'Une erreur s’est produite lors de la validation de votre commande. Veuillez réessayer ou modifier votre panier.';
@@ -302,6 +335,15 @@
             }
 
             const data = await res.json();
+
+            if (!data.clientSecret) {
+                // Order created but no PaymentIntent: Stripe is not configured on the server.
+                console.error('checkout: no clientSecret returned', data);
+                notifyFr = 'Le paiement en ligne est momentanément indisponible. Veuillez réessayer plus tard.';
+                notifyEn = 'Online payment is temporarily unavailable. Please try again later.';
+                errorMessage = notifyFr;
+                return;
+            }
 
             // The order now exists in Portaus and Stripe is holding a PaymentIntent for the
             // agency fee. The cart is deliberately left intact — an abandoned payment should
@@ -321,66 +363,6 @@
             notifyEn = 'Network problem. Please try again later.';
             errorMessage = notifyFr;
             return;
-        } finally {
-            loadingHandleSubmit = false;
-        }
-    }
-
-    async function sendRestoOrderEmail(selectedBatches: { id: number; caseQuantity: number }[]) {
-        loadingHandleSubmit = true;
-        try {
-            const res = await fetch('/api/send-resto-order', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    items: selectedBatches,
-                    customer: {
-                        resto_delivery_type: deliverTypeSelect,
-                        saq_number: formData.saqNumber,
-                        newsletter,
-                        billing_address: {
-                            street: formData.address,
-                            city: formData.city,
-                            postal_code: formData.postalCode
-                        },
-                        billing_contact: {
-                            first_name: formData.firstName,
-                            last_name: formData.lastName,
-                            email: formData.email,
-                            phone: formData.phone
-                        }
-                    }
-                })
-            });
-
-            if (!res.ok) {
-                const payload = await res.json().catch(() => null);
-
-                if (payload?.error === 'InvalidBatches') {
-                    notifyFr = 'Certains vins de votre panier n’existent plus. Veuillez les retirer et réessayer.';
-                    notifyEn = 'Some wines in your cart no longer exist. Please remove them and try again.';
-                } else if (payload?.error === 'EmptyCart') {
-                    notifyFr = 'Votre panier est vide.';
-                    notifyEn = 'Your cart is empty.';
-                } else {
-                    notifyFr = 'Votre commande n’a pas pu être envoyée. Veuillez réessayer.';
-                    notifyEn = 'Your order could not be sent. Please try again.';
-                }
-
-                errorMessage = notifyFr;
-                return;
-            }
-
-            const data = await res.json();
-
-            // The order only exists as an email now, so the cart has done its job.
-            cart.clear();
-            await goto(`/success?request=${encodeURIComponent(data.reference ?? '')}`);
-        } catch (err) {
-            console.error('Resto order email failed:', err);
-            notifyFr = 'Problème de réseau. Veuillez réessayer plus tard.';
-            notifyEn = 'Network problem. Please try again later.';
-            errorMessage = notifyFr;
         } finally {
             loadingHandleSubmit = false;
         }
@@ -564,6 +546,16 @@
                 <div id="userdata" class="flex lg:flex-row flex-col w-full md:gap-4 gap-0" bind:this={formEl}>
                     <div class="text-base text-nowrap w-[176px] md:mb-0 mb-2">Pour la commande</div>
                     <form class="flex flex-1 flex-wrap gap-y-2 gap-x-4">
+                        {#if $isPrixResto}
+                            <Input
+                                placeholder="Nom de l’établissement"
+                                class="w-full"
+                                bind:this={companyNameInput}
+                                bind:value={formData.companyName}
+                                validate={companyNameSchema}
+                                hint="Nom de l’établissement requis"
+                            />
+                        {/if}
                         <Input
                             placeholder="Prénom"
                             class="w-full"
@@ -646,31 +638,34 @@
                 <div class="flex md:flex-row flex-col w-full md:gap-4 gap-0 md:mt-[40px] mt-[20px]">
                     <div class="text-base text-nowrap w-[176px]">Pour la cueillette</div>
 
-                    {#if !$isPrixResto && options}
-                        <Select
-                            fontSize="16px"
-                            bind:value={saqSelect}
-                            class="w-full lg:max-w-[464px] !border-wblue "
-                            inputClass="!text-wblack !placeholder-wblue"
-                            {options}
-                            placeholder="Choisir votre SAQ"
-                            hint="Veuillez sélectionner une succursale SAQ"
-                            validate={{ type: ['string', 'number'], minLength: 1 }}
-                            bind:this={saqSelectComponent}
-                        />
-                    {:else if $isPrixResto}
-                        <Select
-                            fontSize="16px"
-                            bind:value={deliverTypeSelect}
-                            class="w-full lg:max-w-[464px] !border-wblue "
-                            inputClass="!text-wblack !placeholder-wblue"
-                            options={restoDeliveryOptions}
-                            placeholder="Type de livraison"
-                            hint="Veuillez sélectionner une type de livraison"
-                            validate={{ type: ['string', 'number'], minLength: 1 }}
-                            bind:this={deliverTypeSelectComponent}
-                        />
-                    {/if}
+                    <div class="flex flex-col gap-2 w-full lg:max-w-[464px]">
+                        {#if $isPrixResto}
+                            <Select
+                                fontSize="16px"
+                                bind:value={deliverTypeSelect}
+                                class="w-full !border-wblue "
+                                inputClass="!text-wblack !placeholder-wblue"
+                                options={restoDeliveryOptions}
+                                placeholder="Type de livraison"
+                                hint="Veuillez sélectionner une type de livraison"
+                                validate={{ type: ['string', 'number'], minLength: 1 }}
+                                bind:this={deliverTypeSelectComponent}
+                            />
+                        {/if}
+                        {#if options && (!$isPrixResto || Number(deliverTypeSelect) === 3)}
+                            <Select
+                                fontSize="16px"
+                                bind:value={saqSelect}
+                                class="w-full !border-wblue "
+                                inputClass="!text-wblack !placeholder-wblue"
+                                {options}
+                                placeholder="Choisir votre SAQ"
+                                hint="Veuillez sélectionner une succursale SAQ"
+                                validate={{ type: ['string', 'number'], minLength: 1 }}
+                                bind:this={saqSelectComponent}
+                            />
+                        {/if}
+                    </div>
                 </div>
 
                 <div class="text-base text-nowrap w-[176px] md:mt-[40px] mt-[20px]">La commande</div>
@@ -698,15 +693,7 @@
                     </b>
                 </div>
                 <div class="text-xs">Frais d’agence et taxes incluses</div>
-                {#if isFinalize && $isPrixResto}
-                    <div transition:fly={{ y: 100 }}>
-                        <hr class="border-wred mt-[10px] mb-[7px]" />
-                        <div class="text-xs">
-                            Aucun paiement en ligne. Votre demande est transmise à notre équipe, qui vous contactera
-                            pour confirmer la commande.
-                        </div>
-                    </div>
-                {:else if isFinalize}
+                {#if isFinalize}
                     <div transition:fly={{ y: 100 }}>
                         <hr class="border-wred mt-[10px] mb-[7px]" />
                         <div class="flex justify-between">
@@ -715,7 +702,10 @@
                                 <b>${agencyAndTaxesTotal.toFixed(2)}</b>
                             </b>
                         </div>
-                        <div class="text-xs">*La différence sera chargée au moment de la cueillette</div>
+                        <div class="text-xs">
+                            {#if $isPrixResto}*Le solde de la commande vous sera facturé par la SAQ{:else}*La différence
+                                sera chargée au moment de la cueillette{/if}
+                        </div>
                     </div>
                 {/if}
             </div>

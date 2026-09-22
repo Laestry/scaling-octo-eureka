@@ -1,8 +1,8 @@
 <script lang="ts">
     import { onMount, onDestroy } from 'svelte';
     import { loadStripe, type Stripe, type StripeElements } from '@stripe/stripe-js';
-    // Portaus opened the PaymentIntent in THEIR Stripe account, so this key must be Portaus's
-    // publishable key — a key for any other account will not find this intent.
+    // The PaymentIntent is opened in OUR Stripe account by /api/portaus/checkout, so this is our
+    // own publishable key (same account as STRIPE_SK / STRIPE_SK_TEST on the server).
     import { PUBLIC_STRIPE_PK_TEST } from '$env/static/public';
     import { readCheckout, clearCheckout, type Checkout } from '$lib/checkout';
     import { cart } from '$lib/cart';
