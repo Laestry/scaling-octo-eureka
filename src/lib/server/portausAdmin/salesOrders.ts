@@ -407,7 +407,10 @@ function agencyFeeNote(order: SalesOrder, p: AgencyFeePaidInput): string {
         timeStyle: 'short'
     });
 
-    const lines = [`Frais d'agence payés en ligne le ${when} : ${money(p.amount, currency)}`];
+    const lines = [
+        'Commande passée sur le site web.',
+        `Frais d'agence payés en ligne le ${when} : ${money(p.amount, currency)}`
+    ];
 
     // Only quote a breakdown that actually adds up to what Stripe took.
     const b = agencyFeeBreakdown(order);
@@ -424,7 +427,9 @@ function agencyFeeNote(order: SalesOrder, p: AgencyFeePaidInput): string {
         if (balance > 0) lines.push(`  Solde de la commande, facturé par la SAQ : ${money(balance, currency)}`);
     }
 
-    lines.push(`  Stripe ${p.paymentIntentId} — ${stripePaymentUrl(p.paymentIntentId, p.livemode)}`);
+    // The link carries the PaymentIntent id, which is also what makes a repeated webhook a no-op
+    // (markAgencyFeePaid looks for that id in the existing notes).
+    lines.push(`  Paiement Stripe : ${stripePaymentUrl(p.paymentIntentId, p.livemode)}`);
     return lines.join('\n');
 }
 
