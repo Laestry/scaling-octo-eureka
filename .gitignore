@@ -137,3 +137,4 @@ dist
 
 # Vercel build output (adapter-vercel)
 .vercel
+/portaus-test-api

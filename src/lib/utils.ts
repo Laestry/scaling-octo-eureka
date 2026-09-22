@@ -77,22 +77,47 @@ export function baseWithTaxes(item: any, isPrixResto: boolean) {
     // return basePrice + applyTaxes(basePrice);
 }
 
-/** agency fee (raw) and with its taxes */
-export function agencyFeeWithTaxes(item: any, isPrixResto: boolean) {
+/**
+ * Agency fee for one bottle, before taxes.
+ *
+ * Portaus charges a flat amount per bottle, the same for resto and perso, and the catalogue
+ * carries it as `selected_agency_fee_net`. The percentage path is only a fallback for items
+ * that predate that.
+ */
+export function agencyFeeRaw(item: any, isPrixResto: boolean) {
     const batch = item;
-    // const batch = getSelectedBatch(item);
     if (!batch) return 0;
-    const basePrice = isPrixResto ? batch.selected_price : batch.selected_price_tax_in;
 
-    let agencyRaw = 0;
-    if (batch.selected_agency_fee_is_percentage !== undefined || batch.selected_agency_fee_percentage !== null) {
-        if (batch.selected_agency_fee_is_percentage)
-            agencyRaw = ((batch.selected_agency_fee_percentage ?? 0) / 100) * basePrice;
-        else agencyRaw = batch.selected_agency_fee_net ?? 0;
-    } else {
-        agencyRaw = (16 / 100) * basePrice;
+    if (batch.selected_agency_fee_is_percentage === false && batch.selected_agency_fee_net != null) {
+        return Number(batch.selected_agency_fee_net) || 0;
     }
-    return applyTaxes(agencyRaw);
+
+    const basePrice = Number(isPrixResto ? batch.selected_price : batch.selected_price_tax_in) || 0;
+    const pct = batch.selected_agency_fee_percentage ?? 16;
+    return (Number(pct) / 100) * basePrice;
+}
+
+/**
+ * Agency fee for one bottle with its taxes. For display only: multiplying this by a bottle count
+ * drifts from what is charged, because Portaus totals the fee first and taxes the subtotal.
+ * Use agencyFeeTotal() for a cart total.
+ */
+export function agencyFeeWithTaxes(item: any, isPrixResto: boolean) {
+    return applyTaxes(agencyFeeRaw(item, isPrixResto));
+}
+
+/**
+ * What the customer is actually charged online for a whole cart: the fee summed across every
+ * bottle, then GST and QST applied to that subtotal and rounded once each. This is the same
+ * order of operations Portaus uses, so the figure matches the Stripe amount to the cent.
+ */
+export function agencyFeeTotal(items: any[], isPrixResto: boolean) {
+    const subtotal = (items ?? []).reduce(
+        (sum, item) => sum + agencyFeeRaw(item, isPrixResto) * (Number(item?.quantity) || 0) * (Number(item?.uvc) || 0),
+        0
+    );
+    const round2 = (v: number) => Math.round(v * 100) / 100;
+    return round2(subtotal + round2(subtotal * 0.05) + round2(subtotal * 0.09975));
 }
 
 /** totals for a single item (per unit) */

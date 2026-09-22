@@ -12,7 +12,7 @@
     import { pb } from '$lib/pocketbase';
     import { supabase } from '$lib/supabase/client';
     import { isPrixResto } from '$lib/store';
-    import { totalsPerUnit } from '$lib/utils';
+    import { agencyFeeRaw, agencyFeeTotal } from '$lib/utils';
     import { page } from '$app/stores';
     import { browser } from '$app/environment';
     import { stashCheckout } from '$lib/checkout';
@@ -429,19 +429,13 @@
     $: total = $cart.reduce((acc, item) => {
         const basePrice = Number($isPrixResto ? item?.selected_price : (item?.selected_price_tax_in ?? 0));
 
-        const agencyFee =
-            (Number(item?.selected_price_tax_in ?? 0) * Number(item?.selected_agency_fee_percentage ?? 0)) / 100;
-
-        const perBottle = round2(basePrice + agencyFee);
+        const perBottle = round2(basePrice + agencyFeeRaw(item, $isPrixResto));
 
         return acc + perBottle * Number(item.quantity ?? 0) * Number(item.uvc ?? 0);
     }, 0);
 
-    $: agencyAndTaxesTotal = $cart.reduce((acc, item) => {
-        const { agencyWithTaxes } = totalsPerUnit(item, $isPrixResto);
-        const perBottle = round2(agencyWithTaxes);
-        return acc + perBottle * item.quantity * item.uvc;
-    }, 0);
+    // Taxed on the cart-wide fee subtotal, not per bottle, so this equals the Stripe charge.
+    $: agencyAndTaxesTotal = agencyFeeTotal($cart, $isPrixResto);
 </script>
 
 <!--Courriel-->
