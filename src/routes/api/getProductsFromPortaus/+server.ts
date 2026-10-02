@@ -1,10 +1,15 @@
 import { PortausApi } from '$lib/server/portaus';
+import { rejectUnlessInternal } from '$lib/server/internalAuth';
 import { upsertAlcoholProductBatch } from '$lib/server/pocketbase';
 import { getPocketBaseAdmin } from '$lib/server/pocketbaseAdmin';
 
 export async function POST({ request }): Promise<Response> {
-    // Extract tokens and page from the request body
-    const { tokens, page } = await request.json();
+    const denied = rejectUnlessInternal(request);
+    if (denied) return denied;
+
+    // Portaus tokens never come from (or go to) the browser
+    const { page } = await request.json();
+    const tokens = await PortausApi.getTokens();
 
     // Create a new authenticated PocketBase admin instance
     const pbAdmin = await getPocketBaseAdmin();

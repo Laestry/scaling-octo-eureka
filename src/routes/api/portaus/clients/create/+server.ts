@@ -1,5 +1,7 @@
 // POST /api/portaus/clients/create
 //
+// Server-side only: needs dev mode or `Authorization: Bearer <CRON_SECRET>`.
+//
 // perso body:
 //   { type: 'perso', saq_number?, saq_branch_id?,
 //     billing_contact: { first_name, last_name, email, phone? },
@@ -30,6 +32,7 @@ import {
     type AddressInput,
     type ContactInput
 } from '$lib/server/portausAdmin';
+import { rejectUnlessInternal } from '$lib/server/internalAuth';
 
 type WireContact = { first_name?: string; last_name?: string; email?: string; phone?: string | null };
 type WireAddress = { street?: string; city?: string; postal_code?: string };
@@ -58,6 +61,9 @@ function restoDeliveryType(v: unknown, hasBranch: boolean): number {
 }
 
 export const POST: RequestHandler = async ({ request }) => {
+    const denied = rejectUnlessInternal(request);
+    if (denied) return denied;
+
     let body: any;
     try {
         body = await request.json();

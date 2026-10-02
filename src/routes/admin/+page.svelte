@@ -5,8 +5,6 @@
     import { pb } from '$lib/pocketbase';
     import Accordion from '$lib/components/Accordion.svelte';
 
-    export let data;
-    const tokens = data.tokens;
 
     let currentPage = 1;
     let totalPages = 1;
@@ -29,7 +27,6 @@
                 headers: { 'Content-Type': 'application/json' },
                 signal: abortControllerProducts.signal,
                 body: JSON.stringify({
-                    tokens,
                     page
                 })
             });
@@ -128,7 +125,6 @@
                 headers: { 'Content-Type': 'application/json' },
                 signal: abortControllerClients.signal,
                 body: JSON.stringify({
-                    tokens,
                     page
                 })
             });

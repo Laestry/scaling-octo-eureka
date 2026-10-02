@@ -1,5 +1,7 @@
 // POST /api/portaus/orders/draft
 //
+// Server-side only: needs dev mode or `Authorization: Bearer <CRON_SECRET>`.
+//
 // Creates the order in Portaus as "Brouillon - web" (DRAFT_EXTERNAL) for an EXISTING customer,
 // and when Stripe is configured opens a PaymentIntent for the billable part (agency fee + its
 // taxes). The cart does not call this directly: it goes
@@ -27,6 +29,7 @@ import {
     summarizeCustomer,
     toCheckoutError
 } from '$lib/server/portausAdmin';
+import { rejectUnlessInternal } from '$lib/server/internalAuth';
 
 function toInt(v: unknown): number {
     const n = Number(v);
@@ -34,6 +37,9 @@ function toInt(v: unknown): number {
 }
 
 export const POST: RequestHandler = async ({ request, locals }) => {
+    const denied = rejectUnlessInternal(request);
+    if (denied) return denied;
+
     let body: any;
     try {
         body = await request.json();

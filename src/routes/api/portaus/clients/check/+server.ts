@@ -1,5 +1,7 @@
 // POST /api/portaus/clients/check
 //
+// Server-side only: needs dev mode or `Authorization: Bearer <CRON_SECRET>`.
+//
 // Body: { type: 'resto' | 'perso', saq_number?: string, email?: string }
 //
 // resto: always identified by SAQ number.
@@ -16,8 +18,12 @@ import {
     isEmailTaken,
     summarizeCustomer
 } from '$lib/server/portausAdmin';
+import { rejectUnlessInternal } from '$lib/server/internalAuth';
 
 export const POST: RequestHandler = async ({ request }) => {
+    const denied = rejectUnlessInternal(request);
+    if (denied) return denied;
+
     let body: { type?: string; saq_number?: string | null; email?: string | null };
     try {
         body = await request.json();

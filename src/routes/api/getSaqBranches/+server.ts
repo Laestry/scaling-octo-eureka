@@ -1,8 +1,11 @@
+import { json } from '@sveltejs/kit';
 import { PortausApi } from '$lib/server/portaus';
+import { rejectUnlessInternal } from '$lib/server/internalAuth';
 
-export async function GET({ locals }) {
+export async function GET({ request }) {
+    const denied = rejectUnlessInternal(request);
+    if (denied) return denied;
+
     const tokens = await PortausApi.getTokens();
-
-    const res = await PortausApi.getSaqBranches(tokens);
-    console.log(res);
+    return json(await PortausApi.getSaqBranches(tokens));
 }
