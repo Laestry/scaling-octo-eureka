@@ -7,6 +7,7 @@
 //   3. creates the order as "Brouillon - web"
 //   4. opens a Stripe PaymentIntent for the agency fee + its taxes. The order stays
 //      DRAFT_EXTERNAL until the webhook notes the payment on it and moves it to TO_PROCESS.
+//   5. emails the order to the team (MAIL_TO); a mail failure is logged, never thrown.
 //
 // Anything that stops the checkout is thrown as CheckoutError with an HTTP status and a JSON
 // body the cart already knows how to display.
@@ -29,6 +30,7 @@ import {
 import { OrderValidationError, PortausError } from './errors';
 import { DELIVERY_TYPE } from './reference';
 import { createDraftWebOrder, type CalculateResponse, type OrderLineInput, type SalesOrder } from './salesOrders';
+import { sendCheckoutMail } from '../checkoutMail';
 
 export const ORGANIZATION_ID = 2;
 
@@ -356,7 +358,21 @@ export async function checkoutPerso(supabase: SupabaseClient, input: PersoChecko
             notes: input.notes ?? null
         });
 
-        return await finishCheckout(customer, created, order, calculation);
+        const result = await finishCheckout(customer, created, order, calculation);
+        await sendCheckoutMail(supabase, {
+            kind: 'perso',
+            customer,
+            customerCreated: created,
+            order,
+            calculation,
+            result,
+            billingContact: input.billing_contact,
+            billingAddress: input.billing_address,
+            saqNumber,
+            deliveryTypeId: DELIVERY_TYPE.SAQ_BRANCH,
+            saqBranchId
+        });
+        return result;
     } catch (e) {
         throw toCheckoutError(e, 'checkoutPerso');
     }
@@ -453,7 +469,22 @@ export async function checkoutResto(supabase: SupabaseClient, input: RestoChecko
             notes: input.notes ?? null
         });
 
-        return await finishCheckout(customer, created, order, calculation);
+        const result = await finishCheckout(customer, created, order, calculation);
+        await sendCheckoutMail(supabase, {
+            kind: 'resto',
+            customer,
+            customerCreated: created,
+            order,
+            calculation,
+            result,
+            billingContact: input.billing_contact,
+            billingAddress: input.billing_address,
+            companyName: input.company_name,
+            saqNumber,
+            deliveryTypeId,
+            saqBranchId: deliveryTypeId === DELIVERY_TYPE.SAQ_BRANCH ? saqBranchId : null
+        });
+        return result;
     } catch (e) {
         throw toCheckoutError(e, 'checkoutResto');
     }
