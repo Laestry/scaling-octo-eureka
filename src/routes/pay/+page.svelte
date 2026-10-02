@@ -1,9 +1,13 @@
 <script lang="ts">
     import { onMount, onDestroy } from 'svelte';
     import { loadStripe, type Stripe, type StripeElements } from '@stripe/stripe-js';
-    // The PaymentIntent is opened in OUR Stripe account by /api/portaus/checkout, so this is our
-    // own publishable key (same account as STRIPE_SK / STRIPE_SK_TEST on the server).
+    // The two checkouts open the intent in different Stripe accounts, so the publishable key is
+    // not fixed. Resto goes through our own account (STRIPE_SK / STRIPE_SK_TEST on the server).
+    // Perso goes through Portaus's public API, which opens the intent in PORTAUS's account, so it
+    // needs Portaus's publishable key in PUBLIC_STRIPE_PK_PORTAUS. Read dynamically so a missing
+    // one is a runtime message rather than a build failure.
     import { PUBLIC_STRIPE_PK_TEST } from '$env/static/public';
+    import { env as publicEnv } from '$env/dynamic/public';
     import { readCheckout, clearCheckout, type Checkout } from '$lib/checkout';
     import { cart } from '$lib/cart';
     import { goto } from '$app/navigation';
@@ -24,7 +28,18 @@
             return;
         }
 
-        stripe = await loadStripe(PUBLIC_STRIPE_PK_TEST);
+        const portausKey = publicEnv['PUBLIC_STRIPE_PK_PORTAUS']?.trim();
+        const usesPortausAccount = checkout.stripeAccount === 'portaus';
+
+        if (usesPortausAccount && !portausKey) {
+            // Loading our key against Portaus's intent fails deep inside Stripe with an opaque
+            // error, so say what is actually missing instead.
+            console.error('pay: checkout came from Portaus but PUBLIC_STRIPE_PK_PORTAUS is not set');
+            errorMessage = 'Le paiement est momentanément indisponible. Veuillez nous contacter.';
+            return;
+        }
+
+        stripe = await loadStripe(usesPortausAccount ? portausKey! : PUBLIC_STRIPE_PK_TEST);
         if (!stripe) {
             errorMessage = 'Le module de paiement n’a pas pu être chargé. Veuillez réessayer.';
             return;

@@ -1,12 +1,12 @@
 // src/routes/api/send-resto-order/+server.ts
 //
-// Temporary ordering path for restaurants. Restos do not pay the agency fee online yet, so
-// this route deliberately skips Portaus and Stripe entirely: it re-prices the cart from the
-// database and emails the request to the team, who key the order in by hand.
+// Ordering path for restaurants. Restos do not pay the agency fee online on this branch, so
+// this route skips Portaus and Stripe entirely: it re-prices the cart from cms_saq.portaus_wines
+// and emails the request to the team, who key the order into Portaus by hand.
 //
-// Nothing priced by the browser is trusted — batch ids are the only thing the client is
-// believed about, everything else (names, formats, prices, stock) is read back from Supabase
-// so the mail always reflects the catalogue rather than a stale or tampered cart.
+// Nothing priced by the browser is trusted. The wine ids are the only thing the client is
+// believed about; names, formats, prices, fees and stock are read back from the catalogue, so
+// the mail always reflects what was synced rather than a stale or tampered cart.
 
 import type { RequestHandler } from '@sveltejs/kit';
 import { json } from '@sveltejs/kit';
@@ -21,8 +21,8 @@ const DELIVERY_TYPES: Record<number, string> = {
 };
 
 type IncomingItem = {
-    /** cms_saq.alcohol_batches.id — what the cart stores as selected_batch_id */
-    id: number | string;
+    /** cms_saq.portaus_wines.portaus_id — the Portaus product id the cart stores as item.id */
+    portaus_id: number | string;
     /** number of cases, exactly as the cart counts them */
     caseQuantity: number | string;
 };
@@ -30,13 +30,17 @@ type IncomingItem = {
 type IncomingCustomer = {
     resto_delivery_type?: number | string | null;
     saq_number?: string | null;
+    /** establishment name, as typed in the cart */
+    company_name?: string | null;
+    /** cms_saq.saq_branches.id, only when the resto chose branch delivery */
+    saq_branch_id?: number | string | null;
     newsletter?: boolean;
     billing_address: { street: string; city: string; postal_code: string };
     billing_contact: { first_name: string; last_name: string; email: string; phone: string };
 };
 
 type OrderLine = {
-    batchId: number;
+    portausId: number;
     name: string;
     producer: string;
     vintage: string;
@@ -85,23 +89,10 @@ function orderReference(now: Date): string {
     return `RESTO-${day}-${suffix}`;
 }
 
-/**
- * The two tables disagree on units: alcohol_batches stores a percentage (16) while alcohol
- * stores a fraction (0.16). Normalise to percent so the mail never shows "0.16 %".
- */
-function agencyFeeLabel(batch: any): string {
-    const alcohol = batch.alcohol ?? {};
-    const isPercentage = batch.agency_fee_is_percentage ?? alcohol.agency_fee_is_percentage;
-
-    if (isPercentage === false) {
-        const net = batch.agency_fee_net ?? alcohol.agency_fee_net;
-        return net == null ? 'n/d' : `${money.format(Number(net))} / bouteille`;
-    }
-
-    const percentage =
-        batch.agency_fee_percentage ??
-        (alcohol.agency_fee_percentage != null ? Number(alcohol.agency_fee_percentage) * 100 : null);
-    return percentage == null ? 'n/d' : `${Number(percentage)} %`;
+/** Portaus prices the agency fee as a flat amount per bottle, identical for resto and perso. */
+function agencyFeeLabel(wine: any): string {
+    const fee = wine.agency_fee == null ? null : Number(wine.agency_fee);
+    return fee == null ? 'n/d' : `${money.format(fee)} / bouteille`;
 }
 
 export const POST: RequestHandler = async ({ request, locals }) => {
@@ -124,65 +115,63 @@ export const POST: RequestHandler = async ({ request, locals }) => {
     }
 
     // ---- 1. re-read every cart line from the catalogue -----------------------------------------
-    const batchIds = items.map((i) => toInt(i.id));
+    if (items.some((i) => toInt(i.portaus_id) <= 0)) {
+        return json(
+            { error: 'StaleCart', message: 'Every cart item needs a portaus_id; please refresh the page' },
+            { status: 400 }
+        );
+    }
+    const portausIds = items.map((i) => toInt(i.portaus_id));
 
-    const { data: batches, error: batchError } = await locals.supabase
+    const { data: catalogue, error: lookupError } = await locals.supabase
         .schema('cms_saq')
-        .from('alcohol_batches')
+        .from('portaus_wines')
         .select(
-            `id, vintage, price, price_tax_in, calculated_quantity, sell_before_date,
-             agency_fee_net, agency_fee_percentage, agency_fee_is_percentage,
-             alcohol!inner(
-                id, uuid, name, sku, saq_id, uvc, volume,
-                agency_fee_net, agency_fee_percentage, agency_fee_is_percentage,
-                parties(display_name),
-                alcohol_website(name, slug)
-             )`
+            `portaus_id, puid, name, sku, saq_code, producer, vintage, uvc, volume,
+             price, price_tax_in, agency_fee, available_bottles`
         )
-        .in('id', batchIds)
-        .eq('organization_id', ORGANIZATION_ID)
-        .eq('is_archived', false);
+        .in('portaus_id', portausIds)
+        .eq('organization_id', ORGANIZATION_ID);
 
-    if (batchError) {
-        console.error('send-resto-order: batch lookup failed', batchError);
+    if (lookupError) {
+        console.error('send-resto-order: portaus_wines lookup failed', lookupError);
         return json({ error: 'LookupFailed', message: 'Could not resolve cart items' }, { status: 500 });
     }
 
-    const byBatchId = new Map((batches ?? []).map((b: any) => [Number(b.id), b]));
+    const byId = new Map((catalogue ?? []).map((w: any) => [Number(w.portaus_id), w]));
 
-    const missing = batchIds.filter((id) => !byBatchId.has(id));
+    const missing = portausIds.filter((id) => !byId.has(id));
     if (missing.length) {
         return json(
-            { error: 'InvalidBatches', message: 'Some cart items no longer exist', batchIds: missing },
+            { error: 'UnknownWines', message: 'Some wines are no longer offered', portausIds: missing },
             { status: 409 }
         );
     }
 
     const lines: OrderLine[] = items.map((item) => {
-        const batch: any = byBatchId.get(toInt(item.id));
-        const alcohol = batch.alcohol ?? {};
-        const uvc = toInt(alcohol.uvc) > 0 ? toInt(alcohol.uvc) : 1;
+        const wine: any = byId.get(toInt(item.portaus_id));
+        const uvc = toInt(wine.uvc) > 0 ? toInt(wine.uvc) : 1;
         const cases = toInt(item.caseQuantity);
         const bottles = cases * uvc;
         // Resto price is the pre-tax bottle price; price_tax_in is the consumer one.
-        const unitPrice = batch.price == null ? null : Number(batch.price);
-        const stockBottles = toInt(batch.calculated_quantity);
+        const unitPrice = wine.price == null ? null : Number(wine.price);
+        const stockBottles = toInt(wine.available_bottles);
 
         return {
-            batchId: Number(batch.id),
-            name: alcohol.alcohol_website?.[0]?.name ?? alcohol.name ?? '(sans nom)',
-            producer: alcohol.parties?.display_name ?? '—',
-            vintage: batch.vintage ? String(batch.vintage) : '—',
-            format: `${uvc} × ${alcohol.volume ?? '?'} ml`,
+            portausId: Number(wine.portaus_id),
+            name: wine.name ?? '(sans nom)',
+            producer: wine.producer ?? '—',
+            vintage: wine.vintage ? String(wine.vintage) : '—',
+            format: `${uvc} × ${wine.volume ?? '?'} ml`,
             uvc,
             cases,
             bottles,
             unitPrice,
             lineTotal: unitPrice == null ? null : unitPrice * bottles,
-            agencyFee: agencyFeeLabel(batch),
-            saqCode: alcohol.saq_id ?? '—',
-            sku: alcohol.sku ?? '—',
-            puid: alcohol.uuid ?? '—',
+            agencyFee: agencyFeeLabel(wine),
+            saqCode: wine.saq_code ?? '—',
+            sku: wine.sku ?? '—',
+            puid: wine.puid ?? '—',
             stockBottles,
             shortStock: bottles > stockBottles
         };
@@ -198,6 +187,21 @@ export const POST: RequestHandler = async ({ request, locals }) => {
     const address = customer.billing_address;
     const fullName = `${contact.first_name ?? ''} ${contact.last_name ?? ''}`.trim() || '(sans nom)';
     const deliveryType = customer.resto_delivery_type == null ? null : toInt(customer.resto_delivery_type);
+    // Branch delivery needs the branch named, or the team cannot action the request.
+    let branchLabel = '—';
+    const branchId = toInt(customer.saq_branch_id);
+    if (branchId) {
+        const { data: branch } = await locals.supabase
+            .schema('cms_saq')
+            .from('saq_branches')
+            .select('number, city, address')
+            .eq('id', branchId)
+            .single();
+        branchLabel = branch
+            ? [branch.number, branch.address, branch.city].filter(Boolean).join(' — ')
+            : `introuvable (#${branchId})`;
+    }
+
     const deliveryLabel =
         deliveryType == null ? 'Non précisé' : (DELIVERY_TYPES[deliveryType] ?? `Type ${deliveryType}`);
     const now = new Date();
@@ -213,11 +217,13 @@ export const POST: RequestHandler = async ({ request, locals }) => {
     const detailRows: [string, string][] = [
         ['Référence', reference],
         ['Reçue le', placedAt],
+        ['Établissement', customer.company_name?.trim() || '—'],
         ['Contact', fullName],
         ['Courriel', contact.email ?? '—'],
         ['Téléphone', contact.phone ?? '—'],
         ['No de SAQ', customer.saq_number || '—'],
         ['Livraison', deliveryLabel],
+        ['Succursale', branchLabel],
         ['Adresse', [address.street, address.city, address.postal_code].filter(Boolean).join(', ') || '—'],
         ['Infolettre', customer.newsletter ? 'Oui' : 'Non']
     ];
@@ -233,7 +239,7 @@ export const POST: RequestHandler = async ({ request, locals }) => {
             (l) =>
                 `- ${l.name} — ${l.producer} — ${l.vintage} — ${l.format}\n` +
                 `  ${l.cases} caisse(s) = ${l.bottles} bouteille(s) @ ${price(l.unitPrice)} = ${price(l.lineTotal)}\n` +
-                `  lot #${l.batchId} · code SAQ ${l.saqCode} · SKU ${l.sku} · puid ${l.puid} · frais d’agence ${l.agencyFee} · stock ${l.stockBottles} bouteille(s)${l.shortStock ? ' — STOCK INSUFFISANT' : ''}`
+                `  produit #${l.portausId} · code SAQ ${l.saqCode} · SKU ${l.sku} · puid ${l.puid} · frais d’agence ${l.agencyFee} · stock ${l.stockBottles} bouteille(s)${l.shortStock ? ' — STOCK INSUFFISANT' : ''}`
         ),
         '',
         `Total: ${totalCases} caisse(s), ${totalBottles} bouteille(s) — ${money.format(subtotal)}`,
@@ -272,7 +278,7 @@ export const POST: RequestHandler = async ({ request, locals }) => {
                 <th style="${head}">Bouteilles</th>
                 <th style="${head}">Prix resto / bt</th>
                 <th style="${head}">Total</th>
-                <th style="${head}">Lot / SAQ / SKU</th>
+                <th style="${head}">Produit / SAQ / SKU</th>
                 <th style="${head}">Frais d’agence</th>
                 <th style="${head}">Stock</th>
             </tr>
@@ -289,7 +295,7 @@ export const POST: RequestHandler = async ({ request, locals }) => {
                 <td style="${cell}">${l.bottles}</td>
                 <td style="${cell}">${esc(price(l.unitPrice))}</td>
                 <td style="${cell}">${esc(price(l.lineTotal))}</td>
-                <td style="${cell}color:#666">#${l.batchId} · ${esc(l.saqCode)} · ${esc(l.sku)}</td>
+                <td style="${cell}color:#666">#${l.portausId} · ${esc(l.saqCode)} · ${esc(l.sku)}</td>
                 <td style="${cell}">${esc(l.agencyFee)}</td>
                 <td style="${cell}${l.shortStock ? 'color:#de350b;font-weight:bold' : ''}">${l.stockBottles}${l.shortStock ? ' ⚠' : ''}</td>
             </tr>`

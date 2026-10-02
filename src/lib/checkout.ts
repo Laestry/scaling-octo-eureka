@@ -12,6 +12,12 @@ export type Checkout = {
     total: number;
     salesOrderNumber: string | null;
     salesOrderId: number | null;
+    /**
+     * Which Stripe account holds the intent. Perso goes through Portaus's public API, which opens
+     * it in Portaus's account; resto goes through our own. The publishable key differs per
+     * account, so /pay needs to know which one to load.
+     */
+    stripeAccount?: 'portaus' | 'ours';
 };
 
 export function stashCheckout(c: Checkout) {

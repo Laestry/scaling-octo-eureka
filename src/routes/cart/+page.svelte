@@ -209,9 +209,9 @@
             console.log('Validation errors:', result.errors);
             errorMessage = 'Le formulaire contient des erreurs.';
         }
-        // Both price modes go through Portaus + Stripe now: the customer is found or created in
-        // Portaus, the order is created as "Brouillon - web" and only the agency fee (+ taxes) is
-        // charged online. The webhook records that payment on the order's invoice.
+        // The two modes diverge here. Perso goes through Portaus's public ordering API and pays
+        // the agency fee online. Resto is not ordered online at all: the request is emailed to the
+        // team, who key it into Portaus by hand, so nothing is charged and no order is created.
         const contact = {
             first_name: formData.firstName,
             last_name: formData.lastName,
@@ -219,17 +219,19 @@
             phone: formData.phone
         };
         const address = { street: formData.address, city: formData.city, postal_code: formData.postalCode };
-        const endpoint = $isPrixResto ? '/api/portaus/checkout/resto' : '/api/portaus/checkout/perso';
+        const endpoint = $isPrixResto ? '/api/send-resto-order' : '/api/portaus/checkout/perso';
         const payload = $isPrixResto
             ? {
                   items: orderLines,
-                  saq_number: formData.saqNumber,
-                  company_name: formData.companyName,
-                  resto_delivery_type: deliverTypeSelect,
-                  saq_branch_id: Number(deliverTypeSelect) === 3 ? saqSelect : null,
-                  billing_contact: contact,
-                  billing_address: address,
-                  newsletter
+                  customer: {
+                      resto_delivery_type: deliverTypeSelect,
+                      saq_number: formData.saqNumber,
+                      company_name: formData.companyName,
+                      saq_branch_id: Number(deliverTypeSelect) === 3 ? saqSelect : null,
+                      newsletter,
+                      billing_contact: contact,
+                      billing_address: address
+                  }
               }
             : {
                   items: orderLines,
@@ -328,6 +330,9 @@
                 } else if (payload?.error === 'PaymentUnavailable') {
                     notifyFr = 'Le paiement en ligne est momentanément indisponible. Veuillez réessayer plus tard.';
                     notifyEn = 'Online payment is temporarily unavailable. Please try again later.';
+                } else if (payload?.error === 'MailFailed') {
+                    notifyFr = 'Votre demande n’a pas pu être envoyée. Veuillez réessayer dans quelques minutes.';
+                    notifyEn = 'Your request could not be sent. Please try again in a few minutes.';
                 } else if (payload?.error === 'PortausError') {
                     notifyFr = 'Notre système de commandes ne répond pas. Veuillez réessayer dans quelques minutes.';
                     notifyEn = 'Our order system is not responding. Please try again in a few minutes.';
@@ -342,6 +347,13 @@
             }
 
             const data = await res.json();
+
+            if ($isPrixResto) {
+                // Emailed, not ordered: nothing was charged, so the cart has done its job.
+                cart.clear();
+                await goto(`/success?request=${encodeURIComponent(data.reference ?? '')}`);
+                return;
+            }
 
             if (!data.clientSecret) {
                 // Order created but no PaymentIntent: Stripe is not configured on the server.
@@ -360,7 +372,8 @@
                 amountBillable: data.amountBillable,
                 total: data.total,
                 salesOrderNumber: data.salesOrderNumber,
-                salesOrderId: data.salesOrderId
+                salesOrderId: data.salesOrderId,
+                stripeAccount: data.stripeAccount ?? 'ours'
             });
 
             await goto('/pay');
@@ -694,7 +707,15 @@
                     </b>
                 </div>
                 <div class="text-xs">Frais d’agence et taxes incluses</div>
-                {#if isFinalize}
+                {#if isFinalize && $isPrixResto}
+                    <div transition:fly={{ y: 100 }}>
+                        <hr class="border-wred mt-[10px] mb-[7px]" />
+                        <div class="text-xs">
+                            Aucun paiement en ligne. Votre demande est transmise à notre équipe, qui vous contactera
+                            pour confirmer la commande.
+                        </div>
+                    </div>
+                {:else if isFinalize}
                     <div transition:fly={{ y: 100 }}>
                         <hr class="border-wred mt-[10px] mb-[7px]" />
                         <div class="flex justify-between">
@@ -703,10 +724,7 @@
                                 <b>${agencyAndTaxesTotal.toFixed(2)}</b>
                             </b>
                         </div>
-                        <div class="text-xs">
-                            {#if $isPrixResto}*Le solde de la commande vous sera facturé par la SAQ{:else}*La différence
-                                sera chargée au moment de la cueillette{/if}
-                        </div>
+                        <div class="text-xs">*La différence sera chargée au moment de la cueillette</div>
                     </div>
                 {/if}
             </div>

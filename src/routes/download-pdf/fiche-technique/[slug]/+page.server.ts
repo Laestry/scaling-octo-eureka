@@ -1,4 +1,5 @@
 import { error } from '@sveltejs/kit';
+import { alcoholWebsiteEmbed } from '$lib/alcoholWebsite';
 
 export async function load({ locals, params }) {
     const { data, error: serror } = await locals.supabase
@@ -6,10 +7,7 @@ export async function load({ locals, params }) {
         .from('alcohol')
         .select(
             `*, alcohol_batches(*),
-            alcohol_website!inner(
-                *,
-                alcohol_images(id, alcohol_id, file_uuid, order, is_archived)
-            ), parties(*)`
+            ${alcoholWebsiteEmbed('*, alcohol_images(id, alcohol_id, file_uuid, order, is_archived)')}, parties(*)`
         )
         .eq('alcohol_website.slug', params.slug)
         .single();

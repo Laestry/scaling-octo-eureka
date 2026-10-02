@@ -22,6 +22,7 @@ import { env } from '$env/dynamic/private';
 import { INVENTORY_ID, PortausError, portausRequest } from '$lib/server/portausAdmin';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { createServiceClient, upsertChunked } from '$lib/server/supabase';
+import { ALCOHOL_WEBSITE_TABLE } from '$lib/alcoholWebsite';
 
 const ORGANIZATION_ID = 2;
 const PAGE_SIZE = 100;
@@ -135,13 +136,13 @@ async function readCmsFields(supabase: SupabaseClient, portausIds: number[]): Pr
             .in('id', portausIds),
         supabase
             .schema('cms_saq')
-            .from('alcohol_website')
+            .from(ALCOHOL_WEBSITE_TABLE)
             .select('alcohol_id, slug, is_archived')
             .in('alcohol_id', portausIds)
     ]);
 
     if (alcohols.error) console.error('sync/wines: could not read alcohol for enrichment', alcohols.error);
-    if (sites.error) console.error('sync/wines: could not read alcohol_website for enrichment', sites.error);
+    if (sites.error) console.error(`sync/wines: could not read ${ALCOHOL_WEBSITE_TABLE} for enrichment`, sites.error);
 
     const slug = new Map<number, string>();
     for (const site of sites.data ?? []) {

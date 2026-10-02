@@ -1,14 +1,19 @@
 // POST /api/portaus/checkout/perso
 //
-// The cart's perso checkout: finds or creates the individual customer in Portaus, creates the
-// order as "Brouillon - web" and opens the Stripe PaymentIntent for the agency fee.
+// The cart's perso checkout, over Portaus's public API only. Nothing here signs in to Portaus:
+// the two Portaus calls are calculate and payments/intents, both carrying the API key. No
+// customer is searched for or created, and Portaus opens the Stripe PaymentIntent in its own
+// account. See src/lib/server/portausPublic.ts.
 //
-// Body: { items: [{ id: <batch id>, caseQuantity }], saq_branch_id, saq_number?,
-//         billing_contact: { first_name, last_name, email, phone }, billing_address: { street, city, postal_code } }
-// Answers with the CheckoutResult (clientSecret, amountBillable, total, salesOrderNumber, salesOrderId…).
+// The resto checkout still goes through portausAdmin, which does sign in.
+//
+// Body: { items: [{ portaus_id, caseQuantity }], saq_branch_id,
+//         billing_contact: { first_name, last_name, email, phone },
+//         billing_address: { street, city, postal_code } }
 
 import { json, type RequestHandler } from '@sveltejs/kit';
-import { CheckoutError, checkoutPerso } from '$lib/server/portausAdmin';
+import { CheckoutError } from '$lib/server/portausAdmin';
+import { checkoutPersoPublic } from '$lib/server/portausPublic';
 
 export const POST: RequestHandler = async ({ request, locals }) => {
     let body: any;
@@ -19,7 +24,7 @@ export const POST: RequestHandler = async ({ request, locals }) => {
     }
 
     try {
-        return json(await checkoutPerso(locals.supabase, body), { status: 201 });
+        return json(await checkoutPersoPublic(locals.supabase, body), { status: 201 });
     } catch (e) {
         if (e instanceof CheckoutError) return json(e.body, { status: e.status });
         console.error('checkout/perso failed', e);

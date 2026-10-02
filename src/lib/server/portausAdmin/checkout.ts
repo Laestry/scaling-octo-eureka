@@ -82,15 +82,29 @@ type WineRow = {
     available_bottles: number;
 };
 
+export type ResolvedCartWine = {
+    portausId: number;
+    puid: string;
+    name: string;
+    uvc: number;
+    /** cases as the cart counts them */
+    cases: number;
+    /** cases x uvc, which is the quantity Portaus wants */
+    bottles: number;
+};
+
 /**
- * Cart items -> Portaus order lines, out of cms_saq.portaus_wines. The cart counts cases, Portaus
- * wants the product puid and a quantity in bottles.
+ * Cart items -> wines, out of cms_saq.portaus_wines. The cart counts cases, Portaus wants the
+ * product puid and a quantity in bottles.
  *
- * Stock is checked here against the synced `available_bottles` so a short cart gets a useful
- * answer without a round trip. Portaus re-checks it at calculate time, which stays the authority:
- * this table is only as fresh as the last sync.
+ * Only Supabase is touched here, so this is shared by both Portaus paths: the admin one that
+ * signs in and the public one that uses the API key.
+ *
+ * Stock is checked against the synced `available_bottles` so a short cart gets a useful answer
+ * without a round trip. Portaus re-checks at calculate time and stays the authority: this table
+ * is only as fresh as the last sync.
  */
-export async function resolveCartLines(supabase: SupabaseClient, items: CartItemInput[]): Promise<OrderLineInput[]> {
+export async function resolveCartWines(supabase: SupabaseClient, items: CartItemInput[]): Promise<ResolvedCartWine[]> {
     const wanted = (items ?? []).filter((i) => toInt(i?.caseQuantity) > 0);
     if (!wanted.length) throw new CheckoutError(400, { error: 'EmptyCart', message: 'No items to order' });
 
@@ -110,7 +124,7 @@ export async function resolveCartLines(supabase: SupabaseClient, items: CartItem
         .eq('organization_id', ORGANIZATION_ID);
 
     if (error) {
-        console.error('resolveCartLines: portaus_wines lookup failed', error);
+        console.error('resolveCartWines: portaus_wines lookup failed', error);
         throw new CheckoutError(500, { error: 'LookupFailed', message: 'Could not resolve cart items' });
     }
 
@@ -133,17 +147,29 @@ export async function resolveCartLines(supabase: SupabaseClient, items: CartItem
         else byPuid.set(wine.puid, { wine, cases: toInt(item.caseQuantity) });
     }
 
-    const short = [...byPuid.values()]
-        .map(({ wine, cases }) => ({ wine, cases, bottles: cases * (wine.uvc > 0 ? wine.uvc : 1) }))
-        .filter(({ wine, bottles }) => bottles > wine.available_bottles)
-        .map(({ wine, cases, bottles }) => ({
+    const resolved = [...byPuid.values()].map(({ wine, cases }) => {
+        const uvc = wine.uvc > 0 ? wine.uvc : 1;
+        return {
             portausId: wine.portaus_id,
             puid: wine.puid,
             name: wine.name,
-            requestedCases: cases,
-            requested: bottles,
-            quantityLeft: wine.available_bottles,
-            casesLeft: Math.floor(wine.available_bottles / (wine.uvc > 0 ? wine.uvc : 1))
+            uvc,
+            cases,
+            bottles: cases * uvc,
+            availableBottles: wine.available_bottles
+        };
+    });
+
+    const short = resolved
+        .filter((r) => r.bottles > r.availableBottles)
+        .map((r) => ({
+            portausId: r.portausId,
+            puid: r.puid,
+            name: r.name,
+            requestedCases: r.cases,
+            requested: r.bottles,
+            quantityLeft: r.availableBottles,
+            casesLeft: Math.floor(r.availableBottles / r.uvc)
         }));
 
     if (short.length) {
@@ -154,10 +180,13 @@ export async function resolveCartLines(supabase: SupabaseClient, items: CartItem
         });
     }
 
-    return [...byPuid.values()].map(({ wine, cases }) => ({
-        puid: wine.puid,
-        qty: cases * (wine.uvc > 0 ? wine.uvc : 1)
-    }));
+    return resolved.map(({ availableBottles: _ignored, ...wine }) => wine);
+}
+
+/** The same resolution, reduced to what the admin order API posts on a line. */
+export async function resolveCartLines(supabase: SupabaseClient, items: CartItemInput[]): Promise<OrderLineInput[]> {
+    const wines = await resolveCartWines(supabase, items);
+    return wines.map((w) => ({ puid: w.puid, qty: w.bottles }));
 }
 
 // ---------- payment -----------------------------------------------------------------------------
