@@ -12,10 +12,7 @@
     import { pb } from '$lib/pocketbase';
     import { supabase } from '$lib/supabase/client';
     import { isPrixResto } from '$lib/store';
-    import { agencyFeeRaw, agencyFeeTotal } from '$lib/utils';
-    import { page } from '$app/stores';
-    import { browser } from '$app/environment';
-    import { stashCheckout } from '$lib/checkout';
+    import { agencyFeeRaw } from '$lib/utils';
 
     // Log the cart for debugging
 
@@ -32,44 +29,6 @@
         console.log('branches', options);
         // console.log('cart', $cart);
     });
-
-    let cancelHandled = false;
-
-    async function cancelOrder(orderIdParam: string | null) {
-        try {
-            const organizationId = 2; // same org as used when creating the order
-            const body: Record<string, any> = { organizationId };
-            if (orderIdParam) {
-                const parsed = parseInt(orderIdParam, 10);
-                if (!Number.isNaN(parsed)) body.orderId = parsed;
-            }
-
-            const res = await fetch('/api/cancel-external-sales-order', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(body)
-            });
-
-            if (!res.ok) {
-                console.error('Failed to cancel external sales order', await res.text());
-            } else {
-                console.log('External sales order cancelled successfully');
-            }
-        } catch (e) {
-            console.error('Error while cancelling external sales order', e);
-        }
-    }
-
-    $: if (browser && !cancelHandled) {
-        const url = $page.url;
-        const cancelPayment = url.searchParams.get('cancelPayment');
-        const orderIdParam = url.searchParams.get('orderId');
-
-        if (cancelPayment === '1') {
-            cancelHandled = true;
-            cancelOrder(orderIdParam);
-        }
-    }
 
     const items = Array.from({ length: 500 }).map((_, i) => `item ${i}`);
 
@@ -209,41 +168,32 @@
             console.log('Validation errors:', result.errors);
             errorMessage = 'Le formulaire contient des erreurs.';
         }
-        // Both price modes go through Portaus + Stripe now: the customer is found or created in
-        // Portaus, the order is created as "Brouillon - web" and only the agency fee (+ taxes) is
-        // charged online. The webhook records that payment on the order's invoice.
-        const contact = {
-            first_name: formData.firstName,
-            last_name: formData.lastName,
-            email: formData.email,
-            phone: formData.phone
+        // No payment and no Portaus order: both price modes email the request to the team, who
+        // key it into Portaus by hand and contact the customer. /api/send-order re-prices the
+        // cart from the catalogue, so only the wine ids and case counts are sent.
+        const payload = {
+            type: $isPrixResto ? 'resto' : 'perso',
+            items: orderLines,
+            customer: {
+                resto_delivery_type: $isPrixResto ? deliverTypeSelect : null,
+                saq_number: formData.saqNumber || null,
+                company_name: $isPrixResto ? formData.companyName : null,
+                saq_branch_id: !$isPrixResto || Number(deliverTypeSelect) === 3 ? saqSelect : null,
+                newsletter,
+                billing_contact: {
+                    first_name: formData.firstName,
+                    last_name: formData.lastName,
+                    email: formData.email,
+                    phone: formData.phone
+                },
+                billing_address: { street: formData.address, city: formData.city, postal_code: formData.postalCode }
+            }
         };
-        const address = { street: formData.address, city: formData.city, postal_code: formData.postalCode };
-        const endpoint = $isPrixResto ? '/api/portaus/checkout/resto' : '/api/portaus/checkout/perso';
-        const payload = $isPrixResto
-            ? {
-                  items: orderLines,
-                  saq_number: formData.saqNumber,
-                  company_name: formData.companyName,
-                  resto_delivery_type: deliverTypeSelect,
-                  saq_branch_id: Number(deliverTypeSelect) === 3 ? saqSelect : null,
-                  billing_contact: contact,
-                  billing_address: address,
-                  newsletter
-              }
-            : {
-                  items: orderLines,
-                  saq_number: formData.saqNumber || null,
-                  saq_branch_id: saqSelect,
-                  billing_contact: contact,
-                  billing_address: address,
-                  newsletter
-              };
 
         let res;
         loadingHandleSubmit = true;
         try {
-            res = await fetch(endpoint, {
+            res = await fetch('/api/send-order', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
@@ -259,59 +209,15 @@
                     payload = null;
                 }
 
-                if (payload?.error === 'InsufficientQuantity') {
-                    // Answered per wine, so name them rather than making the customer guess which
-                    // row to fix. `casesLeft` comes from the server; the Portaus fallback only
-                    // knows bottles, so derive it from the cart's case size in that case.
-                    const stale = (payload.lines ?? []).filter((l: any) => l.reason === 'UnknownProduct');
-                    const short = (payload.lines ?? []).filter((l: any) => l.reason !== 'UnknownProduct');
-
-                    if (short.length) {
-                        const details = short
-                            .map((l: any) => {
-                                let casesLeft = l.casesLeft;
-                                if (casesLeft == null) {
-                                    const item = $cart.find((c) => Number(c.id) === Number(l.portausId));
-                                    const uvc = Number(item?.uvc) > 0 ? Number(item.uvc) : 1;
-                                    casesLeft = Math.floor(Number(l.quantityLeft ?? 0) / uvc);
-                                }
-                                return `${l.name} (${casesLeft} caisse${casesLeft === 1 ? '' : 's'} restante${casesLeft === 1 ? '' : 's'})`;
-                            })
-                            .join(', ');
-                        notifyFr = `Stock insuffisant : ${details}. Veuillez ajuster votre panier.`;
-                        notifyEn = `Not enough stock: ${details}. Please adjust your cart.`;
-                    } else {
-                        const names = stale
-                            .map((l: any) => l.name)
-                            .filter(Boolean)
-                            .join(', ');
-                        notifyFr = names
-                            ? `Ces vins ne sont plus disponibles à la commande : ${names}.`
-                            : 'Certains vins ne sont plus disponibles à la commande.';
-                        notifyEn = names
-                            ? `These wines are no longer available to order: ${names}.`
-                            : 'Some wines are no longer available to order.';
-                    }
-                } else if (payload?.error === 'ProductNotSellable') {
-                    const names = (payload.products ?? [])
-                        .map((p: any) => p.name)
-                        .filter(Boolean)
-                        .join(', ');
-                    notifyFr = names
-                        ? `Ces vins ne peuvent pas être commandés en ligne : ${names}.`
-                        : 'Certains vins ne peuvent pas être commandés en ligne.';
-                    notifyEn = names
-                        ? `These wines cannot be ordered online: ${names}.`
-                        : 'Some wines cannot be ordered online.';
+                if (payload?.error === 'MailFailed') {
+                    notifyFr = 'Votre commande n’a pas pu être envoyée. Veuillez réessayer dans quelques minutes.';
+                    notifyEn = 'Your order could not be sent. Please try again in a few minutes.';
                 } else if (payload?.error === 'UnknownWines') {
                     notifyFr = 'Certains vins de votre panier ne sont plus offerts. Veuillez les retirer et réessayer.';
                     notifyEn = 'Some wines in your cart are no longer offered. Please remove them and try again.';
                 } else if (payload?.error === 'StaleCart') {
                     notifyFr = 'Votre panier date d’une version précédente du site. Veuillez rafraîchir la page.';
                     notifyEn = 'Your cart is from an older version of the site. Please refresh the page.';
-                } else if (payload?.error === 'InvalidBranch') {
-                    notifyFr = 'La succursale choisie est introuvable. Veuillez en sélectionner une autre.';
-                    notifyEn = 'The selected branch could not be found. Please choose another one.';
                 } else if (payload?.error === 'EmptyCart') {
                     notifyFr = 'Votre panier est vide.';
                     notifyEn = 'Your cart is empty.';
@@ -319,18 +225,12 @@
                     notifyFr =
                         'Ce numéro de SAQ est nouveau pour nous : veuillez indiquer le nom de votre établissement.';
                     notifyEn = 'This SAQ number is new to us: please enter the name of your establishment.';
+                } else if (payload?.error === 'MissingSaqNumber') {
+                    notifyFr = 'Veuillez indiquer votre numéro de client SAQ.';
+                    notifyEn = 'Please enter your SAQ customer number.';
                 } else if (payload?.error === 'MissingBranch') {
                     notifyFr = 'Veuillez choisir une succursale SAQ.';
                     notifyEn = 'Please choose an SAQ branch.';
-                } else if (payload?.error === 'IncompleteCustomer') {
-                    notifyFr = 'Votre fiche client est incomplète. Veuillez nous contacter pour finaliser la commande.';
-                    notifyEn = 'Your customer record is incomplete. Please contact us to complete the order.';
-                } else if (payload?.error === 'PaymentUnavailable') {
-                    notifyFr = 'Le paiement en ligne est momentanément indisponible. Veuillez réessayer plus tard.';
-                    notifyEn = 'Online payment is temporarily unavailable. Please try again later.';
-                } else if (payload?.error === 'PortausError') {
-                    notifyFr = 'Notre système de commandes ne répond pas. Veuillez réessayer dans quelques minutes.';
-                    notifyEn = 'Our order system is not responding. Please try again in a few minutes.';
                 } else {
                     notifyFr =
                         'Une erreur s’est produite lors de la validation de votre commande. Veuillez réessayer ou modifier votre panier.';
@@ -343,27 +243,9 @@
 
             const data = await res.json();
 
-            if (!data.clientSecret) {
-                // Order created but no PaymentIntent: Stripe is not configured on the server.
-                console.error('checkout: no clientSecret returned', data);
-                notifyFr = 'Le paiement en ligne est momentanément indisponible. Veuillez réessayer plus tard.';
-                notifyEn = 'Online payment is temporarily unavailable. Please try again later.';
-                errorMessage = notifyFr;
-                return;
-            }
-
-            // The order now exists in Portaus and Stripe is holding a PaymentIntent for the
-            // agency fee. The cart is deliberately left intact — an abandoned payment should
-            // still find its wines here. /success clears it once payment actually succeeds.
-            stashCheckout({
-                clientSecret: data.clientSecret,
-                amountBillable: data.amountBillable,
-                total: data.total,
-                salesOrderNumber: data.salesOrderNumber,
-                salesOrderId: data.salesOrderId
-            });
-
-            await goto('/pay');
+            // The request is in the team's inbox and nothing was charged: the cart has done its job.
+            cart.clear();
+            await goto(`/success?request=${encodeURIComponent(data.reference ?? '')}`);
         } catch (err) {
             console.error('Order submission failed:', err);
             notifyFr = 'Problème de réseau. Veuillez réessayer plus tard.';
@@ -433,9 +315,6 @@
 
         return acc + perBottle * Number(item.quantity ?? 0) * Number(item.uvc ?? 0);
     }, 0);
-
-    // Taxed on the cart-wide fee subtotal, not per bottle, so this equals the Stripe charge.
-    $: agencyAndTaxesTotal = agencyFeeTotal($cart, $isPrixResto);
 </script>
 
 <!--Courriel-->
@@ -697,15 +576,9 @@
                 {#if isFinalize}
                     <div transition:fly={{ y: 100 }}>
                         <hr class="border-wred mt-[10px] mb-[7px]" />
-                        <div class="flex justify-between">
-                            <div class="text-xs">Montant chargé maintenant</div>
-                            <b>
-                                <b>${agencyAndTaxesTotal.toFixed(2)}</b>
-                            </b>
-                        </div>
                         <div class="text-xs">
-                            {#if $isPrixResto}*Le solde de la commande vous sera facturé par la SAQ{:else}*La différence
-                                sera chargée au moment de la cueillette{/if}
+                            Aucun paiement en ligne. Votre commande est transmise à notre équipe, qui vous contactera
+                            pour la confirmer.
                         </div>
                     </div>
                 {/if}
