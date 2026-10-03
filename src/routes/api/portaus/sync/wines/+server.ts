@@ -57,13 +57,28 @@ function saqCode(product: any): string | null {
     return null;
 }
 
-/** Distinct vintages across the product's lots, for the listing's vintage filter. */
+/**
+ * Bottles still on hand in one lot. `qty` is what the lot started with; Portaus keeps sold-out
+ * lots on the product with their original qty, so only quantity.onHand says what is left.
+ */
+function lotBottles(item: any): number {
+    return Number(item?.quantity?.onHand ?? item?.qty) || 0;
+}
+
+/**
+ * Vintages that can actually be bought, for the listing's vintage filter: the lots that still
+ * have bottles. Portaus keeps sold-out lots on the product, and counting them listed a wine under
+ * years it no longer sells. Falls back to the current vintage when no lot carries one.
+ */
 function vintages(p: any): number[] {
     const years = new Set<number>();
     for (const item of p.items ?? []) {
+        if (lotBottles(item) <= 0) continue;
         const year = Number(item?.extraInfo?.vintage ?? item?.vintage);
         if (Number.isInteger(year) && year > 1900) years.add(year);
     }
+    const current = Number(p.currentVintage);
+    if (!years.size && Number.isInteger(current) && current > 1900) years.add(current);
     return [...years].sort((a, b) => b - a);
 }
 
@@ -75,7 +90,54 @@ function availabilityDate(p: any): string | null {
     return dates.length ? new Date(Math.max(...dates)).toISOString() : null;
 }
 
-function mapWine(p: any, syncedAt: string) {
+type Countries = { byCode: Map<string, number>; byName: Map<string, number> };
+
+/** Canadian provinces Portaus tags like countries. */
+const PROVINCES: Record<string, string> = { QUEBEC: 'Québec', ONTARIO: 'Ontario' };
+
+/** "Tchéquie " -> "TCHEQUIE": how tags and unicode_countries French names are compared. */
+function normName(s: string): string {
+    return s
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .trim()
+        .toUpperCase();
+}
+
+/** unicode_countries, keyed by ISO code and by French name, for wineOrigin(). */
+async function readCountries(supabase: SupabaseClient): Promise<Countries> {
+    const { data, error } = await supabase.schema('cms_saq').from('unicode_countries').select('id, code, name');
+    if (error) console.error('sync/wines: could not read unicode_countries', error);
+    const countries: Countries = { byCode: new Map(), byName: new Map() };
+    for (const c of data ?? []) {
+        if (c.code) countries.byCode.set(String(c.code).toUpperCase(), c.id);
+        if (c.name?.fr) countries.byName.set(normName(c.name.fr), c.id);
+    }
+    return countries;
+}
+
+/**
+ * Country (a unicode_countries id) and region of a wine, from Portaus: its structured origin when
+ * set (matched by ISO code, Portaus's own country ids differ), otherwise the country tag
+ * ("ALLEMAGNE", "QUÉBEC"…). Provinces count as Canada with the province as region.
+ */
+function wineOrigin(p: any, countries: Countries): { country_id: number | null; region_name: string | null } {
+    const origin = p.origins?.[0];
+    const code = str(origin?.country?.code)?.toUpperCase();
+    if (code && countries.byCode.has(code)) {
+        return { country_id: countries.byCode.get(code)!, region_name: str(origin?.region?.name) };
+    }
+    const tags: string[] = (p.tags ?? [])
+        .map((t: any) => str(t?.code))
+        .filter(Boolean)
+        .map(normName);
+    const province = tags.find((t) => PROVINCES[t]);
+    if (province) return { country_id: countries.byCode.get('CA') ?? null, region_name: PROVINCES[province]! };
+    const country = tags.find((t) => countries.byName.has(t));
+    return { country_id: country ? countries.byName.get(country)! : null, region_name: null };
+}
+
+function mapWine(p: any, syncedAt: string, countries: Countries) {
     const pricing = p.pricing ?? {};
     return {
         portaus_id: p.id,
@@ -85,6 +147,9 @@ function mapWine(p: any, syncedAt: string) {
         extended_name: str(p.extendedName),
         vintage: str(p.currentVintage),
         producer: str(p.provider?.displayName) || str(p.provider?.usualName) || str(p.provider?.name),
+        // Portaus provider ids are the CMS parties ids (checked: identical for every wine that has both).
+        provider_id: (p.provider?.id as number | undefined) ?? null,
+        ...wineOrigin(p, countries),
         uvc: int(p.uvc) > 0 ? int(p.uvc) : 1,
         volume: num(p.volume),
         format: p.format ?? null,
@@ -106,7 +171,10 @@ function mapWine(p: any, syncedAt: string) {
         availability_date: availabilityDate(p),
         sell_before: sellBefore(p, Date.parse(syncedAt)),
         organization_id: ORGANIZATION_ID,
-        synced_at: syncedAt
+        synced_at: syncedAt,
+        // CMS-owned, filled from alcohol_website by readCmsFields() before writing.
+        website_slug: null as string | null,
+        main_image_file: null as string | null
     };
 }
 
@@ -117,7 +185,7 @@ function mapWine(p: any, syncedAt: string) {
  */
 function sellBefore(p: any, now: number): string | null {
     const dates = (p.items ?? [])
-        .filter((item: any) => Number(item?.qty ?? item?.quantity?.onHand) > 0)
+        .filter((item: any) => lotBottles(item) > 0)
         .map((item: any) => (item?.sellBefore ? new Date(item.sellBefore).getTime() : NaN))
         .filter((t: number) => Number.isFinite(t) && t >= now);
     return dates.length ? new Date(Math.min(...dates)).toISOString() : null;
@@ -128,14 +196,17 @@ type CmsFields = {
     provider_id: number | null;
     country_id: number | null;
     region_name: string | null;
+    main_image_file: string | null;
 };
 
 /**
- * Website slug and origin are CMS data that Portaus does not serve. They live in the existing
- * tables under the same product id (portaus_id = cms_saq.alcohol.id, verified to hold for every
- * row), so they get folded into the wine rows before writing.
+ * Website slug and images are CMS data that Portaus does not serve; producer and origin come from
+ * Portaus first, and the CMS values only fill in what Portaus leaves empty. They live in the
+ * existing tables under the same product id (portaus_id = cms_saq.alcohol.id, verified to hold for
+ * every row), so they get folded into the wine rows before writing.
  *
- * Images are deliberately not copied: main_image_file stays null for now.
+ * main_image_file is the wine page's first image (lowest `order`, not archived), as the
+ * "<file uuid>/<file name>" path the catalogue cards append to the storage bucket URL.
  */
 async function readCmsFields(supabase: SupabaseClient, portausIds: number[]): Promise<Map<number, CmsFields>> {
     const out = new Map<number, CmsFields>();
@@ -150,7 +221,8 @@ async function readCmsFields(supabase: SupabaseClient, portausIds: number[]): Pr
         supabase
             .schema('cms_saq')
             .from('alcohol_website')
-            .select('alcohol_id, slug, is_archived')
+            .select('alcohol_id, slug, is_archived, alcohol_images(file_uuid, order, is_archived)')
+            .eq('organization_id', ORGANIZATION_ID)
             .in('alcohol_id', portausIds)
     ]);
 
@@ -158,9 +230,27 @@ async function readCmsFields(supabase: SupabaseClient, portausIds: number[]): Pr
     if (sites.error) console.error('sync/wines: could not read alcohol_website for enrichment', sites.error);
 
     const slug = new Map<number, string>();
-    for (const site of sites.data ?? []) {
-        if (!site.is_archived && site.slug && !slug.has(site.alcohol_id)) slug.set(site.alcohol_id, site.slug);
+    const firstImage = new Map<number, string>();
+    for (const site of (sites.data ?? []) as any[]) {
+        if (site.is_archived) continue;
+        if (site.slug && !slug.has(site.alcohol_id)) slug.set(site.alcohol_id, site.slug);
+        const image = (site.alcohol_images ?? [])
+            .filter((i: any) => !i.is_archived && i.file_uuid)
+            .sort((a: any, b: any) => (a.order ?? 0) - (b.order ?? 0))[0];
+        if (image && !firstImage.has(site.alcohol_id)) firstImage.set(site.alcohol_id, image.file_uuid);
     }
+
+    const fileNames = new Map<string, string>();
+    if (firstImage.size) {
+        const { data: files, error } = await supabase
+            .schema('cms_saq')
+            .from('files')
+            .select('uuid, file_name')
+            .in('uuid', [...new Set(firstImage.values())]);
+        if (error) console.error('sync/wines: could not read files for images', error);
+        for (const f of files ?? []) fileNames.set(f.uuid, f.file_name);
+    }
+
     const origin = new Map((alcohols.data ?? []).map((a: any) => [a.id, a]));
 
     for (const id of portausIds) {
@@ -168,7 +258,12 @@ async function readCmsFields(supabase: SupabaseClient, portausIds: number[]): Pr
             website_slug: slug.get(id) ?? null,
             provider_id: origin.get(id)?.provider_id ?? null,
             country_id: origin.get(id)?.country_id ?? null,
-            region_name: origin.get(id)?.region_name ?? null
+            region_name: origin.get(id)?.region_name ?? null,
+            main_image_file: (() => {
+                const uuid = firstImage.get(id);
+                const name = uuid ? fileNames.get(uuid) : null;
+                return uuid && name ? `${uuid}/${name}` : null;
+            })()
         });
     }
     return out;
@@ -202,10 +297,13 @@ export const GET: RequestHandler = async ({ request, url }) => {
             }
         }
 
+        const supabase = createServiceClient();
+        const countries = await readCountries(supabase);
+
         const wines = pages
             .flat()
             .filter((p) => p?.puid)
-            .map((p) => mapWine(p, syncedAt));
+            .map((p) => mapWine(p, syncedAt, countries));
 
         if (url.searchParams.get('dry')) {
             return json({
@@ -217,15 +315,23 @@ export const GET: RequestHandler = async ({ request, url }) => {
             });
         }
 
-        const supabase = createServiceClient();
-
         // Fold in the CMS columns first: a second pass writing only those would be an upsert with
         // no puid, and PostgREST upserts insert-on-conflict, so NOT NULL would reject it.
         const cms = await readCmsFields(
             supabase,
             wines.map((w) => w.portaus_id)
         );
-        for (const wine of wines) Object.assign(wine, cms.get(wine.portaus_id as number) ?? {});
+        for (const wine of wines) {
+            const c = cms.get(wine.portaus_id as number);
+            if (!c) continue;
+            wine.website_slug = c.website_slug;
+            wine.main_image_file = c.main_image_file;
+            wine.provider_id ??= c.provider_id;
+            if (wine.country_id == null) {
+                wine.country_id = c.country_id;
+                wine.region_name = c.region_name;
+            }
+        }
         const enriched = [...cms.values()].filter((c) => c.website_slug).length;
 
         const result = await upsertChunked(supabase, 'cms_saq', 'portaus_wines', wines);

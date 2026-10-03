@@ -174,6 +174,8 @@
                     deduped = deduped.sort((a, b) =>
                         a.label.localeCompare(b.label as string, 'fr', { sensitivity: 'base' })
                     );
+                } else if (g.name === 'vintage') {
+                    deduped = deduped.sort((a, b) => Number(b.label) - Number(a.label));
                 } else if (g.name === 'format') {
                     const parseVol = (str: string) => {
                         const num = parseFloat(str);

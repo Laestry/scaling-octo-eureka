@@ -57,7 +57,7 @@
                 }
             );
 
-            const facetsPromise = supabase.schema('cms_saq').rpc('search_alcohol_facets', {
+            const facetsPromise = supabase.schema('cms_saq').rpc('search_portaus_wine_facets', {
                 payload: {
                     organization_id: 2,
                     limit: 20,
@@ -81,7 +81,7 @@
             // Update facets regardless of product result; log facet error but don't hard-fail listing.
             enabledFacets = facets;
             console.log('selectedFilters', selectedFilters);
-            console.log('search_alcohol_facets', facets, facetsError);
+            console.log('search_portaus_wine_facets', facets, facetsError);
             if (facetsError) {
                 console.error('Facets error:', facetsError);
             }

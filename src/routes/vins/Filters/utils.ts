@@ -59,6 +59,9 @@ import { supabase } from '$lib/supabase/client';
 import type { TFilters } from '$lib/models/general';
 
 function parseMaybeJson<T = any>(v: any): T {
+    // parseFiltersFromUrl hands single-choice filters (producer, region, format) over as a
+    // one-element array of JSON strings; without this a reloaded or shared URL drops the filter.
+    if (Array.isArray(v)) return parseMaybeJson<T>(v[0]);
     if (typeof v === 'string') {
         try {
             return JSON.parse(v) as T;
@@ -210,8 +213,11 @@ export async function fetchFilteredProductsForAlcohol(
     }
 
     // tag
+    // tags is a text[] (codes like "BULLES", "FRANCE", some lower-case), so match whole tags
+    // rather than ilike, which never matches against an array.
     if (selected?.tag) {
-        query = query.ilike('tags', `%${selected?.tag}%`);
+        const tag = String(selected.tag).trim();
+        query = query.overlaps('tags', [...new Set([tag, tag.toUpperCase(), tag.toLowerCase()])]);
     }
 
     // price range on the bottle price
@@ -221,7 +227,9 @@ export async function fetchFilteredProductsForAlcohol(
         else if (selected?.priceRange === 'high') query = query.gte('price', 40);
     }
 
-    // sorting
+    // sorting: wines with at least one case in stock first, whatever the chosen order; the rest
+    // ("Non dispo!") after them, in the same order.
+    query = query.order('orderable', { ascending: false });
     if (opts.sorting) {
         if (opts.sorting === 'Prix croissant') {
             query = query.order('price', { ascending: true });

@@ -16,9 +16,11 @@
      * ------------------------------------------------------------------*/
 
     // Producer
-    $: producerHref = product?.parties
-        ? `/vins?p=${j({ id: product.parties.id, name: product.parties.display_name })}`
-        : undefined;
+    // Wines added from Portaus after the CMS import have no producer id to filter on.
+    $: producerHref =
+        product?.parties?.id != null
+            ? `/vins?p=${j({ id: product.parties.id, name: product.parties.display_name })}`
+            : undefined;
 
     // Region
     $: regionHref =
@@ -39,7 +41,8 @@
             : undefined;
 
     // Vintage
-    $: vintageHref = product?.vintage ? `/vins?v=${product.vintage}` : undefined;
+    // "N.V." (non-vintage) is shown but not linked: the vintage filter only takes years.
+    $: vintageHref = Number(product?.vintage) > 0 ? `/vins?v=${product.vintage}` : undefined;
 </script>
 
 <div class="flex justify-between md:flex-row flex-col md:gap-0 gap-2.5 {$$props.class}">
@@ -48,6 +51,8 @@
 
         {#if producerHref}
             <a href={producerHref}>{product.parties?.display_name}</a>
+        {:else if product.parties?.display_name}
+            <span>{product.parties.display_name}</span>
         {/if}
 
         {#if regionHref}
@@ -60,6 +65,8 @@
 
         {#if vintageHref}
             <a target="_blank" href={vintageHref}>{product.vintage}</a>
+        {:else if product.vintage}
+            <span>{product.vintage}</span>
         {/if}
     </p>
 
@@ -73,7 +80,8 @@
 </div>
 
 <style lang="scss">
-    .tags a {
+    .tags a,
+    .tags span {
         text-transform: capitalize;
         white-space: nowrap;
     }

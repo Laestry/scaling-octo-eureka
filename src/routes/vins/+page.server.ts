@@ -14,9 +14,14 @@ export async function load({ locals, url }) {
         sorting: selectedFilters.sorting
     });
 
-    // categories list (for buildDisplayFilters)
-    const categoriesPromise = locals.supabase.schema('cms_saq').from('alcohol_categories').select('*');
-    const enabledFacetsPromise = locals.supabase.schema('cms_saq').rpc('search_alcohol_facets', {
+    // Filter options and which of them still lead somewhere, both from the synced Portaus
+    // catalogue (cms_saq.portaus_wines), like the product list itself.
+    const categoriesPromise = locals.supabase
+        .schema('cms_saq')
+        .from('portaus_wine_filter_options')
+        .select('*')
+        .eq('organization_id', 2);
+    const enabledFacetsPromise = locals.supabase.schema('cms_saq').rpc('search_portaus_wine_facets', {
         payload: {
             organization_id: 2,
             limit: 20,
