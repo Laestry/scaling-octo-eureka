@@ -13,6 +13,9 @@
 // Wines that dropped out of the "available" list keep their row but are zeroed, so nothing
 // stale stays orderable.
 //
+// Each wine's Portaus image is copied into its CMS gallery when no image there has the same file
+// name (see importPortausImages).
+//
 // Auth: `Authorization: Bearer <CRON_SECRET>`, or dev mode.
 // Query: ?dry=1 maps without writing, ?page=N&limit=N to sync a single page.
 
@@ -269,6 +272,127 @@ async function readCmsFields(supabase: SupabaseClient, portausIds: number[]): Pr
     return out;
 }
 
+const IMAGE_BUCKET = 'public-organization-files';
+const PARALLEL_IMAGES = 3;
+
+type ImageImport = { imported: number; replaced: number; failed: { portaus_id: number; error: string }[] };
+
+/**
+ * Copies each wine's Portaus image (one per product, hosted on Cloudinary) into the CMS gallery,
+ * the same way the CMS stores an upload: the file in the storage bucket under
+ * "<org>/cms_saq/alcohol_images/<uuid>/<name>", a cms_saq.files row, and an alcohol_images row on
+ * the wine's alcohol_website row.
+ *
+ * Images are matched on file name: Cloudinary names are content ids, so a new picture in Portaus
+ * comes with a new name. Archived images count too, so a Portaus image removed in the CMS is not
+ * brought back. A new image takes the place of the previous Portaus import (archived, not
+ * deleted); without one it becomes the main image, or goes after the curated photos.
+ *
+ * Wines with no alcohol_website row yet are left for the run after sync/website creates it.
+ */
+async function importPortausImages(supabase: SupabaseClient, products: any[], dry: boolean): Promise<ImageImport> {
+    const out: ImageImport = { imported: 0, replaced: 0, failed: [] };
+    const wanted = new Map<number, { link: string; imageId: unknown; fileName: string }>();
+    for (const p of products) {
+        const link = str(p.image?.link);
+        const fileName = link ? decodeURIComponent(link.split('?')[0]!.split('/').pop() ?? '') : '';
+        if (link && fileName) wanted.set(p.id, { link, imageId: p.image.id ?? null, fileName });
+    }
+    if (!wanted.size) return out;
+
+    const { data: sites, error } = await supabase
+        .schema('cms_saq')
+        .from('alcohol_website')
+        .select('id, alcohol_id, is_archived, alcohol_images(id, order, is_archived, files(file_name, meta))')
+        .eq('organization_id', ORGANIZATION_ID)
+        .in('alcohol_id', [...wanted.keys()]);
+    if (error) {
+        console.error('sync/wines: could not read alcohol_website for images', error);
+        return out;
+    }
+
+    const todo = ((sites ?? []) as any[]).filter((site) => {
+        const image = wanted.get(site.alcohol_id);
+        return (
+            image &&
+            !site.is_archived &&
+            !(site.alcohol_images ?? []).some((i: any) => i.files?.file_name === image.fileName)
+        );
+    });
+    if (dry) {
+        out.imported = todo.length;
+        return out;
+    }
+
+    const addImage = async (site: any) => {
+        const image = wanted.get(site.alcohol_id)!;
+        const live = (site.alcohol_images ?? []).filter((i: any) => !i.is_archived);
+        const previous = live.filter((i: any) => i.files?.meta?.source === 'portaus');
+        const order = previous.length
+            ? Math.min(...previous.map((i: any) => i.order ?? 0))
+            : live.length
+              ? Math.max(...live.map((i: any) => i.order ?? 0)) + 1
+              : 0;
+
+        const res = await fetch(image.link);
+        if (!res.ok) throw new Error(`download failed: ${res.status}`);
+        const body = new Uint8Array(await res.arrayBuffer());
+        const mimeType = res.headers.get('content-type') || 'image/jpeg';
+        const uuid = crypto.randomUUID();
+        const path = `${ORGANIZATION_ID}/cms_saq/alcohol_images/${uuid}/${image.fileName}`;
+
+        const upload = await supabase.storage.from(IMAGE_BUCKET).upload(path, body, { contentType: mimeType });
+        if (upload.error) throw new Error(`upload failed: ${upload.error.message}`);
+
+        const file = await supabase
+            .schema('cms_saq')
+            .from('files')
+            .insert({
+                uuid,
+                organization_id: ORGANIZATION_ID,
+                bucket_id: IMAGE_BUCKET,
+                file_path: path,
+                file_name: image.fileName,
+                file_size: body.byteLength,
+                mime_type: mimeType,
+                meta: { source: 'portaus', portaus_image_id: image.imageId, url: image.link }
+            });
+        if (file.error) throw new Error(`files insert failed: ${file.error.message}`);
+
+        const row = await supabase
+            .schema('cms_saq')
+            .from('alcohol_images')
+            .insert({ organization_id: ORGANIZATION_ID, alcohol_id: site.id, order, file_uuid: uuid });
+        if (row.error) throw new Error(`alcohol_images insert failed: ${row.error.message}`);
+
+        if (previous.length) {
+            const archived = await supabase
+                .schema('cms_saq')
+                .from('alcohol_images')
+                .update({ is_archived: true })
+                .in(
+                    'id',
+                    previous.map((i: any) => i.id)
+                );
+            if (archived.error) throw new Error(`archiving the previous image failed: ${archived.error.message}`);
+            out.replaced++;
+        }
+        out.imported++;
+    };
+
+    for (let i = 0; i < todo.length; i += PARALLEL_IMAGES) {
+        await Promise.all(
+            todo.slice(i, i + PARALLEL_IMAGES).map((site) =>
+                addImage(site).catch((e) => {
+                    console.error('sync/wines: image import failed', site.alcohol_id, e);
+                    out.failed.push({ portaus_id: site.alcohol_id, error: (e as Error).message });
+                })
+            )
+        );
+    }
+    return out;
+}
+
 export const GET: RequestHandler = async ({ request, url }) => {
     const auth = request.headers.get('authorization') ?? '';
     if (!(dev || (env['CRON_SECRET'] && auth === `Bearer ${env['CRON_SECRET']}`))) {
@@ -300,10 +424,8 @@ export const GET: RequestHandler = async ({ request, url }) => {
         const supabase = createServiceClient();
         const countries = await readCountries(supabase);
 
-        const wines = pages
-            .flat()
-            .filter((p) => p?.puid)
-            .map((p) => mapWine(p, syncedAt, countries));
+        const products = pages.flat().filter((p) => p?.puid);
+        const wines = products.map((p) => mapWine(p, syncedAt, countries));
 
         if (url.searchParams.get('dry')) {
             return json({
@@ -311,9 +433,13 @@ export const GET: RequestHandler = async ({ request, url }) => {
                 available: first.count,
                 pages: onlyPage ? 1 : first.pages,
                 mapped: wines.length,
+                images_to_import: (await importPortausImages(supabase, products, true)).imported,
                 sample: wines.slice(0, 3)
             });
         }
+
+        // Before reading the CMS fields, so main_image_file already sees the new images.
+        const images = await importPortausImages(supabase, products, false);
 
         // Fold in the CMS columns first: a second pass writing only those would be an upsert with
         // no puid, and PostgREST upserts insert-on-conflict, so NOT NULL would reject it.
@@ -361,6 +487,7 @@ export const GET: RequestHandler = async ({ request, url }) => {
             pages: onlyPage ? 1 : first.pages,
             synced: result.ok,
             enriched,
+            images,
             retired,
             failed: result.failed,
             ms: Date.now() - started
