@@ -12,6 +12,12 @@
             "runtimeExecutable": "npx",
             "runtimeArgs": ["vite", "dev", "--port", "3174", "--strictPort"],
             "port": 3174
+        },
+        {
+            "name": "dev-3181",
+            "runtimeExecutable": "npx",
+            "runtimeArgs": ["vite", "dev", "--port", "3181", "--strictPort"],
+            "port": 3181
         }
     ]
 }

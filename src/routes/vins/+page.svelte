@@ -45,6 +45,7 @@
     async function loadMoreProducts() {
         if (isLoading || !hasMore) return;
         isLoading = true;
+        let appended = false;
 
         try {
             const productsPromise = fetchFilteredProductsForAlcohol(
@@ -98,6 +99,7 @@
 
             products = [...products, ...newProducts];
             loaded += newProducts.length;
+            appended = true;
 
             if (count !== null) {
                 if (loaded >= count) hasMore = false;
@@ -108,6 +110,7 @@
             console.error('Error fetching products/facets:', err);
         } finally {
             isLoading = false;
+            if (appended && hasMore) recheckSentinel();
         }
     }
 
@@ -136,30 +139,34 @@
 
     onMount(() => {
         console.log('products data', data);
+    });
 
-        const observer = new IntersectionObserver(
+    // Attached to the sentinel itself, so a sentinel re-created by {#if hasMore} gets observed too
+    let observer: IntersectionObserver | undefined;
+    function infiniteScroll(node: HTMLElement) {
+        observer = new IntersectionObserver(
             (entries) => {
-                entries.forEach((entry) => {
-                    if (entry.isIntersecting) {
-                        loadMoreProducts();
-                    }
-                });
+                if (entries.some((entry) => entry.isIntersecting)) loadMoreProducts();
             },
-            {
-                rootMargin: isGrid ? '500px' : '300px'
-            }
+            { rootMargin: $isGrid ? '500px' : '300px' }
         );
+        observer.observe(node);
 
-        if (sentinel) {
-            observer.observe(sentinel);
-        }
-
-        return () => {
-            if (sentinel) {
-                observer.unobserve(sentinel);
+        return {
+            destroy() {
+                observer?.disconnect();
+                observer = undefined;
             }
         };
-    });
+    }
+
+    // The observer only fires on visibility changes; re-observing makes it report the current
+    // state, so we keep loading if the sentinel is still in view after a page was appended
+    function recheckSentinel() {
+        if (!observer || !sentinel) return;
+        observer.unobserve(sentinel);
+        observer.observe(sentinel);
+    }
 
     $: outerWidth = 0;
     $: if (outerWidth < 1162) isGrid.set(true);
@@ -187,6 +194,6 @@
     {/if}
 
     {#if hasMore}
-        <div bind:this={sentinel} class="h-1" />
+        <div bind:this={sentinel} use:infiniteScroll class="h-1" />
     {/if}
 </div>
