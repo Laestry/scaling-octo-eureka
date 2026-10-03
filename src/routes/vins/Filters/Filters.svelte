@@ -261,6 +261,13 @@
 
     let pendingSetParams = false;
     let pdfUrl = `/download-pdf/liste-des-vins`;
+    // The PDF is built on the server, which cannot see the Resto/Perso toggle: pass the mode along.
+    $: pdfHref = (() => {
+        const [path, query = ''] = pdfUrl.split('?');
+        const sp = new URLSearchParams(query);
+        sp.set('mode', $isPrixResto ? 'resto' : 'perso');
+        return `${path}?${sp}`;
+    })();
     async function setParams() {
         if (!isMounted || !routerReady || pendingSetParams) return;
         pendingSetParams = true;
@@ -430,14 +437,10 @@
             <input type="search" class="search__input" aria-label="Rechercher des vins" bind:value={nameSearch} />
         </form>
         <a
-            href={$isPrixResto
-                ? 'https://ward.pockethost.io/api/files/pbc_30851581/93ej7tuns0916g5/products_resto_03b592zlit.pdf'
-                : 'https://ward.pockethost.io/api/files/pbc_30851581/93ej7tuns0916g5/products_perso_qucjutpys2.pdf'}
-            download={$isPrixResto
-                ? 'wardetassocies-prix-resto.download-pdf'
-                : 'wardetassocies-prix-perso.download-pdf'}
+            href={pdfHref}
+            download
+            aria-label="Télécharger la liste des vins en PDF"
             class="md:rounded-none rounded-full button-view button-view--link"
-            target="_blank"
         >
             <IconDownload />
         </a>
@@ -498,7 +501,12 @@
         <button class="button-view" class:active={!$isGrid} on:click={() => isGrid.set(false)}>
             <IconList />
         </button>
-        <a href={pdfUrl} target="_blank" class="md:rounded-none rounded-full button-view button-view--link">
+        <a
+            href={pdfHref}
+            download
+            aria-label="Télécharger la liste des vins en PDF"
+            class="md:rounded-none rounded-full button-view button-view--link"
+        >
             <IconDownload />
         </a>
     </div>
