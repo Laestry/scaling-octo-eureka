@@ -102,7 +102,30 @@
     on:click={handleClick}
     class="relative border-b border-[#181C1C33] cursor-blue-dot {$$props['class']}"
 >
-    <td>{region}</td>
+    <!-- The hover preview lives in the first cell: a <div> directly in a <tr> is not valid table
+         content, and the browser laid it out as part of the row, stretching it. The first cell
+         starts at the row's top-left corner, so the row-relative mouse position applies as is. -->
+    <td class="preview-anchor">
+        {region}
+        {#if hovered && imgLoaded && delayedImage}
+            <div class="product-row-image" style="left: {mouseX}px; top: {mouseY}px; transform: translate(-50%, -50%);">
+                {#each animations as anim (anim.id)}
+                    <div
+                        class="fly-animation !text-wblack"
+                        in:fly={{ y: 25, duration: 600 }}
+                        out:fly={{ y: -30, duration: 600 }}
+                        style="position: absolute; left: 50%; top: -20px; transform: translateX(-50%); pointer-events: none; z-index: 10;"
+                    >
+                        {$itemQuantity > 0 ? $itemQuantity * product.uvc : ''}
+                    </div>
+                {/each}
+                {#if !isPDF}
+                    <img transition:fade={{ duration: 300 }} src={delayedImage} alt={product?.name} />
+                {/if}
+                {#if product.total_quantity === 0}<NonDispoBadge />{/if}
+            </div>
+        {/if}
+    </td>
     <td>{providerName || '-'}</td>
     <td class="truncate">{product?.name || '-'}</td>
     <td>{selectedBatch?.vintage ?? '-'}</td>
@@ -147,28 +170,6 @@
             </button>
         </td>
     {/if}
-
-    {#if hovered && imgLoaded && delayedImage}
-        <div
-            class="absolute pointer-events-none product-row-image"
-            style="left: {mouseX}px; top: {mouseY}px; transform: translate(-50%, -50%);"
-        >
-            {#each animations as anim (anim.id)}
-                <div
-                    class="fly-animation !text-wblack"
-                    in:fly={{ y: 25, duration: 600 }}
-                    out:fly={{ y: -30, duration: 600 }}
-                    style="position: absolute; left: 50%; top: -20px; transform: translateX(-50%); pointer-events: none; z-index: 10;"
-                >
-                    {$itemQuantity > 0 ? $itemQuantity * product.uvc : ''}
-                </div>
-            {/each}
-            {#if !isPDF}
-                <img transition:fade={{ duration: 300 }} src={delayedImage} alt={product?.name} />
-            {/if}
-            {#if product.total_quantity === 0}<NonDispoBadge />{/if}
-        </div>
-    {/if}
 </tr>
 
 <style>
@@ -178,12 +179,15 @@
     tr.relative {
         position: relative;
     }
+    .preview-anchor {
+        position: relative;
+    }
     .product-row-image {
+        position: absolute;
         width: 100px;
         height: auto;
         pointer-events: none;
         z-index: 10;
-        position: relative;
     }
     td {
         height: 48px;
