@@ -1,6 +1,6 @@
 {
     "crons": [
-        { "path": "/api/portaus/sync/products", "schedule": "*/30 * * * *" },
-        { "path": "/api/portaus/sync/clients", "schedule": "15 * * * *" }
+        { "path": "/api/portaus/sync/website", "schedule": "0 7 * * *" },
+        { "path": "/api/portaus/sync/wines", "schedule": "10 7 * * *" }
     ]
 }

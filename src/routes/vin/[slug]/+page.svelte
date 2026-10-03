@@ -1,6 +1,6 @@
 <script lang="ts">
     import type { PageData } from './$types';
-    import { formatVolume } from '../../vins/Filters/utils';
+    import { formatVolume, portausWineToProduct } from '../../vins/Filters/utils';
     import { getCategory, priceFormat, sellBeforeDate, transformVinToCartObject } from './utils';
     import ProductTags from './ProductTags.svelte';
     import { type AlcoholProduct, cart, getItemQuantityStore } from '$lib/cart';
@@ -104,66 +104,34 @@
         console.log('vin data', data, selectedBatch);
         product = data.product;
 
-        const requestString = `
-            id,
-            website_slug,
-            name,
-            category,
-            specific_category,
-            provider_display_name,
-            uvc,
-            volume,
-            format,
-            unit,
-            oldest_batch_id,
-            oldest_vintage,
-            oldest_price,
-            oldest_price_tax_in,
-            oldest_calculated_quantity,
-            main_image_file
-            `;
+        // Suggestions come from the same synced catalogue as /vins, so they are always orderable.
+        const related = () =>
+            supabase
+                .schema('cms_saq')
+                .from('portaus_wines')
+                .select('*')
+                .eq('organization_id', 2)
+                .gt('available_bottles', 0)
+                .gt('price', 0)
+                .neq('portaus_id', product.id)
+                .order('availability_date', { ascending: false })
+                .limit(4);
 
-        let queryRegion = supabase
-            .schema('cms_saq')
-            .from('alcohol_view')
-            .select(requestString)
-            .gt('oldest_price', 0)
-            .gt('oldest_price_tax_in', 0)
-            .eq('region_name', product.region_name)
-            .neq('id', product.id)
-            .order('oldest_sell_before_date', { ascending: true })
-            .order('total_quantity', { ascending: false })
-            .limit(4);
-
-        let queryCountry = supabase
-            .schema('cms_saq')
-            .from('alcohol_view')
-            .select(requestString)
-            .gt('oldest_price', 0)
-            .gt('oldest_price_tax_in', 0)
-            .eq('country_id', product.country_id)
-            .neq('id', product.id)
-            .order('oldest_sell_before_date', { ascending: true })
-            .order('total_quantity', { ascending: false })
-            .limit(4);
-
-        let queryParties = supabase
-            .schema('cms_saq')
-            .from('alcohol_view')
-            .select(requestString)
-            .gt('oldest_price', 0)
-            .gt('oldest_price_tax_in', 0)
-            .eq('provider_id', product.parties?.id)
-            .neq('id', product.id)
-            .order('oldest_sell_before_date', { ascending: true })
-            .order('total_quantity', { ascending: false })
-            .limit(4);
+        // An empty filter value would match nothing useful; skip the query instead.
+        const none = Promise.resolve({ data: [] as any[] });
+        const queryRegion = product.region_name ? related().eq('region_name', product.region_name) : none;
+        const queryCountry = product.country_id ? related().eq('country_id', product.country_id) : none;
+        const queryParties = product.parties?.id ? related().eq('provider_id', product.parties.id) : none;
 
         const queryResponses = await Promise.all([queryRegion, queryCountry, queryParties]);
         console.log('query responses', queryResponses);
         const [regionResponse, countryResponse, partiesResponse] = queryResponses;
-        sameRegionProducts = [...(regionResponse.data ?? []), ...(countryResponse.data ?? [])].slice(0, 3);
-        sameProducerProducts = partiesResponse.data;
+        const regionWines = [...(regionResponse.data ?? []), ...(countryResponse.data ?? [])];
+        sameRegionProducts = regionWines
+            .filter((w, i) => regionWines.findIndex((x) => x.portaus_id === w.portaus_id) === i)
+            .slice(0, 3)
+            .map(portausWineToProduct);
+        sameProducerProducts = (partiesResponse.data ?? []).map(portausWineToProduct);
 
         console.log('related products', sameProducerProducts, sameRegionProducts);
     });
@@ -269,10 +237,12 @@
                                             )}
                                         </b>
                                     </div>
-                                    <div class="flex flex-1 items-center justify-end text-end">
-                                        Acheter avant <br />
-                                        {sellBeforeDate(selectedBatch.sell_before_date)}
-                                    </div>
+                                    {#if selectedBatch.sell_before_date}
+                                        <div class="flex flex-1 items-center justify-end text-end">
+                                            Acheter avant <br />
+                                            {sellBeforeDate(selectedBatch.sell_before_date)}
+                                        </div>
+                                    {/if}
                                 {:else}
                                     <div class="flex flex-1 items-center justify-end text-end text-[#2D63B0]">
                                         Non disponible

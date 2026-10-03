@@ -104,9 +104,23 @@ function mapWine(p: any, syncedAt: string) {
         unit: p.unit ?? null,
         vintages: vintages(p),
         availability_date: availabilityDate(p),
+        sell_before: sellBefore(p, Date.parse(syncedAt)),
         organization_id: ORGANIZATION_ID,
         synced_at: syncedAt
     };
+}
+
+/**
+ * Earliest sell-before among the lots that still have bottles: the "Acheter avant" date on the
+ * wine page. Lots past their date can still hold stock; a deadline already gone means nothing to
+ * a customer, so those are skipped (null when every lot is past).
+ */
+function sellBefore(p: any, now: number): string | null {
+    const dates = (p.items ?? [])
+        .filter((item: any) => Number(item?.qty ?? item?.quantity?.onHand) > 0)
+        .map((item: any) => (item?.sellBefore ? new Date(item.sellBefore).getTime() : NaN))
+        .filter((t: number) => Number.isFinite(t) && t >= now);
+    return dates.length ? new Date(Math.min(...dates)).toISOString() : null;
 }
 
 type CmsFields = {

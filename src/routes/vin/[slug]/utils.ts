@@ -229,6 +229,9 @@ export function transformVinToCartObject(product, selectedBatchId) {
         selected_calculated_quantity: selectedBatch.calculated_quantity,
         selected_sell_before_date: selectedBatch.sell_before_date,
         selected_agency_fee: selectedBatch.agency_fee,
+        // Flat per-bottle fee, as the catalogue cards carry it, so the cart prices both the same.
+        selected_agency_fee_net: selectedBatch.agency_fee_net ?? selectedBatch.agency_fee,
+        selected_agency_fee_with_taxes: selectedBatch.agency_fee_with_taxes,
         selected_agency_fee_percentage: selectedBatch.agency_fee_percentage,
         selected_agency_fee_is_percentage: selectedBatch.agency_fee_is_percentage,
 

@@ -114,7 +114,8 @@ export function portausWineToProduct(w: any) {
         vintages: w.vintages ?? [],
 
         oldest_batch_id: w.portaus_id,
-        oldest_vintage: w.vintage ? Number(w.vintage) : null,
+        // Non-vintage wines come through as "N.V.", which would otherwise render as NaN.
+        oldest_vintage: Number.isFinite(Number(w.vintage)) && w.vintage ? Number(w.vintage) : null,
         oldest_price: Number(w.price) || 0,
         oldest_price_tax_in: priceTaxIn,
         oldest_calculated_quantity: w.available_bottles,
