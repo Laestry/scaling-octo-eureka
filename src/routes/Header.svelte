@@ -5,7 +5,6 @@
     import { fade } from 'svelte/transition';
     import { totalItems } from '$lib/cart';
     import { onMount } from 'svelte';
-    import { isPrixResto } from '$lib/store';
 
     $: currentPath = $page.url.pathname;
     let prevPath = '';
@@ -82,11 +81,7 @@
         md:gap-1 gap-2.5"
         style="z-index: 10000"
     >
-        <label class="checkbox pointer-events-auto">
-            <input type="checkbox" class="checkbox__input" bind:checked={$isPrixResto} />
-            <span class="checkbox__text"> {$isPrixResto ? 'Prix Resto' : 'Prix Perso'}</span>
-            <span class="checkbox__box"></span>
-        </label>
+        <!-- Portaus only takes perso orders from the website: no Resto/Perso switch, perso prices only. -->
         <div class="md:flex-0 md:hidden block flex-1"></div>
         {#if showGoBack}
             <a transition:fade class="abutton circle" href="#logo">

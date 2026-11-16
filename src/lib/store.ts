@@ -1,8 +1,6 @@
-import { get, writable } from 'svelte/store';
+import { writable } from 'svelte/store';
 
-export let isPrixResto = writable(true);
+// Portaus only takes perso orders from the website, so the site always shows perso prices. Kept as a
+// store so the price components keep one switch if resto ever comes back.
+export let isPrixResto = writable(false);
 export let isGrid = writable(true);
-
-isPrixResto.subscribe(() => {
-    console.log(get(isPrixResto));
-});

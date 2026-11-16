@@ -4,33 +4,30 @@
 // batches. Ordering only needs the puid, the case size and the bottles left, so the batch table
 // is not involved here.
 //
-// Source: /API/latest/admin/inventories/1/products?active=true&available=true
+// Source: GET /api/v1/products/ on the official Portaus API (apikey JWT, see $lib/server/portausApi).
+// It answers every product at once; only the ones with bottles in stock are kept.
 //   - quantity.inStock is the orderable amount. Verified against sales-orders/calculate: asking
 //     for more than inStock comes back with quantityLeft equal to it.
 //   - pricing.agencyFee / agencyFeeWTaxes are per bottle, and match the PRODUCT_AGENCY_FEE line
 //     the order API prices. agencyFeeWTaxes × bottles is what Stripe charges.
 //
-// Wines that dropped out of the "available" list keep their row but are zeroed, so nothing
+// Wines that are no longer in stock keep their row but are zeroed, so nothing
 // stale stays orderable.
 //
 // Each wine's Portaus image is copied into its CMS gallery when no image there has the same file
 // name (see importPortausImages).
 //
 // Auth: `Authorization: Bearer <CRON_SECRET>`, or dev mode.
-// Query: ?dry=1 maps without writing, ?page=N&limit=N to sync a single page.
+// Query: ?dry=1 maps without writing.
 
 import { json, type RequestHandler } from '@sveltejs/kit';
 import { dev } from '$app/environment';
 import { env } from '$env/dynamic/private';
-import { INVENTORY_ID, PortausError, portausRequest } from '$lib/server/portausAdmin';
+import { PortausApiError, getProducts } from '$lib/server/portausApi';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { createServiceClient, upsertChunked } from '$lib/server/supabase';
 
 const ORGANIZATION_ID = 2;
-const PAGE_SIZE = 100;
-const PARALLEL_PAGES = 4;
-
-type ProductsPage = { list: any[]; count: number; pages: number; page: number };
 
 function str(v: unknown): string | null {
     if (typeof v === 'string') return v.trim() || null;
@@ -399,39 +396,30 @@ export const GET: RequestHandler = async ({ request, url }) => {
         return json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const onlyPage = Number(url.searchParams.get('page')) || null;
-    const limit = Number(url.searchParams.get('limit')) || PAGE_SIZE;
     const started = Date.now();
     const syncedAt = new Date(started).toISOString();
 
     try {
-        const list = (page: number) =>
-            portausRequest<ProductsPage>('GET', `/API/latest/admin/inventories/${INVENTORY_ID}/products`, {
-                query: { limit, page, active: 'true', available: 'true', orderBy: 'age' }
-            });
-
-        const first = await list(onlyPage ?? 1);
-        const pages: any[][] = [first.list];
-        if (!onlyPage) {
-            for (let p = 2; p <= first.pages; p += PARALLEL_PAGES) {
-                const batch = Array.from({ length: Math.min(PARALLEL_PAGES, first.pages - p + 1) }, (_, i) =>
-                    list(p + i)
-                );
-                for (const res of await Promise.all(batch)) pages.push(res.list);
-            }
+        const all = await getProducts();
+        const products = all.filter((p) => Number(p?.quantity?.inStock) > 0);
+        if (!products.length) {
+            // An empty answer is far more likely a Portaus hiccup than an empty cellar; zeroing the
+            // whole catalogue on it would be the wrong call.
+            return json(
+                { error: 'NoProducts', message: 'Portaus returned no wine in stock; nothing written' },
+                { status: 502 }
+            );
         }
 
         const supabase = createServiceClient();
         const countries = await readCountries(supabase);
 
-        const products = pages.flat().filter((p) => p?.puid);
         const wines = products.map((p) => mapWine(p, syncedAt, countries));
 
         if (url.searchParams.get('dry')) {
             return json({
                 dry: true,
-                available: first.count,
-                pages: onlyPage ? 1 : first.pages,
+                products: all.length,
                 mapped: wines.length,
                 images_to_import: (await importPortausImages(supabase, products, true)).imported,
                 sample: wines.slice(0, 3)
@@ -462,12 +450,12 @@ export const GET: RequestHandler = async ({ request, url }) => {
 
         const result = await upsertChunked(supabase, 'cms_saq', 'portaus_wines', wines);
 
-        // A wine that sold out drops off the "available" list entirely, so it would otherwise keep
-        // whatever stock it had at its last sync. Only meaningful on a full run.
+        // A wine that sold out is not in this run's list, so it would otherwise keep whatever stock
+        // it had at its last sync.
         // Matching on the run's timestamp rather than listing every id kept in this run: the id
         // list would go into the query string and grow with the catalogue.
         let retired = 0;
-        if (!onlyPage && wines.length) {
+        if (wines.length) {
             const { data, error } = await supabase
                 .schema('cms_saq')
                 .from('portaus_wines')
@@ -483,8 +471,8 @@ export const GET: RequestHandler = async ({ request, url }) => {
 
         return json({
             ok: result.failed.length === 0,
-            available: first.count,
-            pages: onlyPage ? 1 : first.pages,
+            products: all.length,
+            inStock: products.length,
             synced: result.ok,
             enriched,
             images,
@@ -493,7 +481,7 @@ export const GET: RequestHandler = async ({ request, url }) => {
             ms: Date.now() - started
         });
     } catch (e) {
-        if (e instanceof PortausError) {
+        if (e instanceof PortausApiError) {
             console.error('sync/wines: Portaus error', e.status, e.path, e.body);
             return json({ error: 'PortausError', message: e.detail, status: e.status }, { status: 502 });
         }

@@ -12,6 +12,7 @@
     import { pb } from '$lib/pocketbase';
     import { supabase } from '$lib/supabase/client';
     import { isPrixResto } from '$lib/store';
+    import { stashCheckout } from '$lib/checkout';
     import { agencyFeeRaw } from '$lib/utils';
 
     // Log the cart for debugging
@@ -168,18 +169,13 @@
             console.log('Validation errors:', result.errors);
             errorMessage = 'Le formulaire contient des erreurs.';
         }
-        // No payment and no Portaus order: both price modes email the request to the team, who
-        // key it into Portaus by hand and contact the customer. /api/send-order re-prices the
-        // cart from the catalogue, so only the wine ids and case counts are sent.
+        // Portaus only takes perso orders from the website: the order is created in Portaus as a
+        // draft with a Stripe PaymentIntent for the agency fee, and /pay collects the payment.
+        // The server re-prices everything; only the wine ids and case counts are sent.
         const payload = {
-            type: $isPrixResto ? 'resto' : 'perso',
             items: orderLines,
             customer: {
-                resto_delivery_type: $isPrixResto ? deliverTypeSelect : null,
-                saq_number: formData.saqNumber || null,
-                company_name: $isPrixResto ? formData.companyName : null,
-                saq_branch_id: !$isPrixResto || Number(deliverTypeSelect) === 3 ? saqSelect : null,
-                newsletter,
+                saq_branch_id: saqSelect,
                 billing_contact: {
                     first_name: formData.firstName,
                     last_name: formData.lastName,
@@ -193,7 +189,7 @@
         let res;
         loadingHandleSubmit = true;
         try {
-            res = await fetch('/api/send-order', {
+            res = await fetch('/api/portaus/createPersoOrder', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
@@ -209,9 +205,13 @@
                     payload = null;
                 }
 
-                if (payload?.error === 'MailFailed') {
-                    notifyFr = 'Votre commande n’a pas pu être envoyée. Veuillez réessayer dans quelques minutes.';
-                    notifyEn = 'Your order could not be sent. Please try again in a few minutes.';
+                if (payload?.error === 'InsufficientQuantity') {
+                    const names = (payload.lines ?? [])
+                        .map((l: any) => (l.name ?? '').trim())
+                        .filter(Boolean)
+                        .join(', ');
+                    notifyFr = `Certains vins ne sont plus disponibles dans la quantité demandée${names ? ` : ${names}` : ''}. Veuillez ajuster votre panier.`;
+                    notifyEn = `Some wines are no longer available in the requested quantity${names ? `: ${names}` : ''}. Please adjust your cart.`;
                 } else if (payload?.error === 'UnknownWines') {
                     notifyFr = 'Certains vins de votre panier ne sont plus offerts. Veuillez les retirer et réessayer.';
                     notifyEn = 'Some wines in your cart are no longer offered. Please remove them and try again.';
@@ -243,9 +243,15 @@
 
             const data = await res.json();
 
-            // The request is in the team's inbox and nothing was charged: the cart has done its job.
-            cart.clear();
-            await goto(`/success?request=${encodeURIComponent(data.reference ?? '')}`);
+            // The cart is cleared by /pay once Stripe confirms, so a failed payment keeps it.
+            stashCheckout({
+                clientSecret: data.clientSecret,
+                amountBillable: data.amountBillable,
+                total: data.total,
+                salesOrderNumber: data.salesOrderNumber,
+                salesOrderId: data.salesOrderId
+            });
+            await goto('/pay');
         } catch (err) {
             console.error('Order submission failed:', err);
             notifyFr = 'Problème de réseau. Veuillez réessayer plus tard.';

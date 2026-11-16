@@ -12,7 +12,7 @@
 // are not written here — Portaus has no English text, and its shortDescription is not the
 // curated subtitle.
 //
-// Source: /API/latest/admin/inventories/1/products?active=true&available=true
+// Source: GET /api/v1/products/ on the official Portaus API (see $lib/server/portausApi).
 //
 // Auth: `Authorization: Bearer <CRON_SECRET>`, or dev mode.
 // Query: ?dry=1 reports what would change without writing.
@@ -20,16 +20,12 @@
 import { json, type RequestHandler } from '@sveltejs/kit';
 import { dev } from '$app/environment';
 import { env } from '$env/dynamic/private';
-import { INVENTORY_ID, PortausError, portausRequest } from '$lib/server/portausAdmin';
+import { PortausApiError, getProducts } from '$lib/server/portausApi';
 import { createServiceClient, upsertChunked } from '$lib/server/supabase';
 
 const ORGANIZATION_ID = 2;
-const PAGE_SIZE = 100;
-const PARALLEL_PAGES = 4;
 /** PostgREST caps a select at 1000 rows by default. */
 const READ_PAGE = 1000;
-
-type ProductsPage = { list: any[]; count: number; pages: number; page: number };
 
 function str(v: unknown): string | null {
     if (typeof v === 'string') return v.trim() || null;
@@ -102,22 +98,10 @@ function alcoholFields(p: any, slug: string) {
 }
 
 async function fetchAvailableProducts(): Promise<{ products: any[]; count: number }> {
-    const list = (page: number) =>
-        portausRequest<ProductsPage>('GET', `/API/latest/admin/inventories/${INVENTORY_ID}/products`, {
-            query: { limit: PAGE_SIZE, page, active: 'true', available: 'true', orderBy: 'age' }
-        });
-
-    const first = await list(1);
-    const pages: any[][] = [first.list];
-    for (let p = 2; p <= first.pages; p += PARALLEL_PAGES) {
-        const batch = Array.from({ length: Math.min(PARALLEL_PAGES, first.pages - p + 1) }, (_, i) => list(p + i));
-        for (const res of await Promise.all(batch)) pages.push(res.list);
-    }
-
-    // "available" in Portaus also lists wines whose stock is fully reserved; only keep what can
-    // actually be added to an order.
-    const products = pages.flat().filter((p) => p?.id && p?.puid && Number(p?.quantity?.inStock) > 0);
-    return { products, count: first.count };
+    const all = await getProducts();
+    // Only what can actually be added to an order.
+    const products = all.filter((p) => Number(p?.quantity?.inStock) > 0);
+    return { products, count: all.length };
 }
 
 export const GET: RequestHandler = async ({ request, url }) => {
@@ -206,7 +190,7 @@ export const GET: RequestHandler = async ({ request, url }) => {
         );
 
         const summary = {
-            portausAvailable: count,
+            portausProducts: count,
             inStock: products.length,
             updated: updates.length,
             inserted: inserts.length,
@@ -262,7 +246,7 @@ export const GET: RequestHandler = async ({ request, url }) => {
             ms: Date.now() - started
         });
     } catch (e) {
-        if (e instanceof PortausError) {
+        if (e instanceof PortausApiError) {
             console.error('sync/website: Portaus error', e.status, e.path, e.body);
             return json({ error: 'PortausError', message: e.detail, status: e.status }, { status: 502 });
         }
