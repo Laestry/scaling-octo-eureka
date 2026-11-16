@@ -583,8 +583,8 @@
                     <div transition:fly={{ y: 100 }}>
                         <hr class="border-wred mt-[10px] mb-[7px]" />
                         <div class="text-xs">
-                            Aucun paiement en ligne. Votre commande est transmise à notre équipe, qui vous contactera
-                            pour la confirmer.
+                            Seuls les frais d’agence et leurs taxes sont payés en ligne. Le solde de la commande vous
+                            sera facturé par la SAQ, à la cueillette.
                         </div>
                     </div>
                 {/if}

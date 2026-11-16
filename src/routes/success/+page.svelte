@@ -26,7 +26,7 @@
             return;
         }
 
-        const stripe = await loadStripe(PUBLIC_STRIPE_PK_TEST);
+        const stripe = await loadStripe(PUBLIC_STRIPE_PK_TEST, { locale: 'fr-CA' });
         const result = await stripe?.retrievePaymentIntent(clientSecret);
         const intent = result?.paymentIntent;
 

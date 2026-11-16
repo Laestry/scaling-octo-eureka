@@ -24,7 +24,7 @@
             return;
         }
 
-        stripe = await loadStripe(PUBLIC_STRIPE_PK_TEST);
+        stripe = await loadStripe(PUBLIC_STRIPE_PK_TEST, { locale: 'fr-CA' });
         if (!stripe) {
             errorMessage = 'Le module de paiement n’a pas pu être chargé. Veuillez réessayer.';
             return;
