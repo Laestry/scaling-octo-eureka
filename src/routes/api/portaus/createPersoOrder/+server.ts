@@ -18,6 +18,7 @@
 import type { RequestHandler } from '@sveltejs/kit';
 import { json } from '@sveltejs/kit';
 import { PORTAUS_COMPANY_ID, calculateSalesOrder, createPaymentIntent } from '$lib/server/portausApi';
+import { createServiceClient } from '$lib/server/supabase';
 
 const ORGANIZATION_ID = 2;
 
@@ -135,7 +136,9 @@ export const POST: RequestHandler = async ({ request, locals }) => {
     }
 
     // ---- 3. pickup branch ---------------------------------------------------------------------
-    const { data: branch, error: branchError } = await locals.supabase
+    // saq_branches is only readable by signed-in CMS users (RLS), so not with the visitor's
+    // anonymous client: read it with the service client.
+    const { data: branch, error: branchError } = await createServiceClient()
         .schema('cms_saq')
         .from('saq_branches')
         .select('id, number, city, phone, address')

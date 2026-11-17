@@ -4,7 +4,6 @@
     import { fade, fly } from 'svelte/transition';
     import Input from '$lib/components/Input.svelte';
     import Select from '$lib/components/Select.svelte';
-    import { onMount } from 'svelte';
     import { parser } from '@exodus/schemasafe';
     import Toggle from '$lib/components/Toggle.svelte';
     import { goto } from '$app/navigation';
@@ -17,19 +16,14 @@
 
     // Log the cart for debugging
 
-    // Declare options; you may type these if needed.
-    let options;
+    // SAQ pickup branches, read on the server (+page.server.ts): the table is not readable with
+    // the browser's anonymous Supabase key.
+    export let data: { branches: { value: number; label: string }[] };
+    $: options = data.branches;
     let restoDeliveryOptions = [
         { label: "Livraison à l'établissement", value: 0 },
         { label: 'Livraison en succursale', value: 3 }
     ];
-
-    onMount(async () => {
-        const { data, error } = await supabase.schema('cms_saq').from('saq_branches').select('*');
-        options = data.map((x) => ({ value: x.id, label: `${x.city}, ${x.address}` }));
-        console.log('branches', options);
-        // console.log('cart', $cart);
-    });
 
     const items = Array.from({ length: 500 }).map((_, i) => `item ${i}`);
 
