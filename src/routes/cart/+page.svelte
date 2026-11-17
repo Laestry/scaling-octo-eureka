@@ -9,7 +9,6 @@
     import { goto } from '$app/navigation';
     import CartItem from './CartItem.svelte';
     import { pb } from '$lib/pocketbase';
-    import { supabase } from '$lib/supabase/client';
     import { isPrixResto } from '$lib/store';
     import { stashCheckout } from '$lib/checkout';
     import { agencyFeeRaw } from '$lib/utils';
@@ -163,27 +162,45 @@
             console.log('Validation errors:', result.errors);
             errorMessage = 'Le formulaire contient des erreurs.';
         }
-        // Portaus only takes perso orders from the website: the order is created in Portaus as a
-        // draft with a Stripe PaymentIntent for the agency fee, and /pay collects the payment.
-        // The server re-prices everything; only the wine ids and case counts are sent.
-        const payload = {
-            items: orderLines,
-            customer: {
-                saq_branch_id: saqSelect,
-                billing_contact: {
-                    first_name: formData.firstName,
-                    last_name: formData.lastName,
-                    email: formData.email,
-                    phone: formData.phone
-                },
-                billing_address: { street: formData.address, city: formData.city, postal_code: formData.postalCode }
-            }
+        // Two checkouts, picked by the Resto/Perso switch. The server re-prices everything either
+        // way; only the wine ids and case counts are sent.
+        //   - perso: the official Portaus API only takes orders from individuals. The order is
+        //     created in Portaus as a draft with a Stripe PaymentIntent for the agency fee, and /pay
+        //     collects the payment.
+        //   - resto: nothing is ordered in Portaus and nothing is charged. /api/send-order emails
+        //     the request to the team (MAIL_TO), who key it in by hand and contact the customer.
+        const isResto = $isPrixResto;
+        const contact = {
+            first_name: formData.firstName,
+            last_name: formData.lastName,
+            email: formData.email,
+            phone: formData.phone
         };
+        const address = { street: formData.address, city: formData.city, postal_code: formData.postalCode };
+        const endpoint = isResto ? '/api/send-order' : '/api/portaus/createPersoOrder';
+        const payload = isResto
+            ? {
+                  type: 'resto',
+                  items: orderLines,
+                  customer: {
+                      resto_delivery_type: deliverTypeSelect,
+                      saq_number: formData.saqNumber || null,
+                      company_name: formData.companyName,
+                      saq_branch_id: Number(deliverTypeSelect) === 3 ? saqSelect : null,
+                      newsletter,
+                      billing_contact: contact,
+                      billing_address: address
+                  }
+              }
+            : {
+                  items: orderLines,
+                  customer: { saq_branch_id: saqSelect, billing_contact: contact, billing_address: address }
+              };
 
         let res;
         loadingHandleSubmit = true;
         try {
-            res = await fetch('/api/portaus/createPersoOrder', {
+            res = await fetch(endpoint, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
@@ -206,6 +223,9 @@
                         .join(', ');
                     notifyFr = `Certains vins ne sont plus disponibles dans la quantité demandée${names ? ` : ${names}` : ''}. Veuillez ajuster votre panier.`;
                     notifyEn = `Some wines are no longer available in the requested quantity${names ? `: ${names}` : ''}. Please adjust your cart.`;
+                } else if (payload?.error === 'MailFailed') {
+                    notifyFr = 'Votre commande n’a pas pu être envoyée. Veuillez réessayer dans quelques minutes.';
+                    notifyEn = 'Your order could not be sent. Please try again in a few minutes.';
                 } else if (payload?.error === 'UnknownWines') {
                     notifyFr = 'Certains vins de votre panier ne sont plus offerts. Veuillez les retirer et réessayer.';
                     notifyEn = 'Some wines in your cart are no longer offered. Please remove them and try again.';
@@ -236,6 +256,13 @@
             }
 
             const data = await res.json();
+
+            if (isResto) {
+                // The request is in the team's inbox and nothing was charged: the cart has done its job.
+                cart.clear();
+                await goto(`/success?request=${encodeURIComponent(data.reference ?? '')}`);
+                return;
+            }
 
             // The cart is cleared by /pay once Stripe confirms, so a failed payment keeps it.
             stashCheckout({
@@ -577,8 +604,13 @@
                     <div transition:fly={{ y: 100 }}>
                         <hr class="border-wred mt-[10px] mb-[7px]" />
                         <div class="text-xs">
-                            Seuls les frais d’agence et leurs taxes sont payés en ligne. Le solde de la commande vous
-                            sera facturé par la SAQ, à la cueillette.
+                            {#if $isPrixResto}
+                                Aucun paiement en ligne. Votre commande est transmise à notre équipe, qui vous
+                                contactera pour la confirmer.
+                            {:else}
+                                Seuls les frais d’agence et leurs taxes sont payés en ligne. Le solde de la commande
+                                vous sera facturé par la SAQ, à la cueillette.
+                            {/if}
                         </div>
                     </div>
                 {/if}

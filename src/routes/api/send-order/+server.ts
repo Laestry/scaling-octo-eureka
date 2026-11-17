@@ -1,8 +1,9 @@
 // src/routes/api/send-order/+server.ts
 //
-// The cart's only ordering path, perso and resto alike. Nothing is ordered in Portaus and nothing
-// is charged: the cart is re-priced from cms_saq.portaus_wines and emailed to the team (MAIL_TO),
-// who key the order into Portaus by hand and contact the customer.
+// The cart's resto ordering path (perso orders go through Portaus: /api/portaus/createPersoOrder,
+// since the official Portaus API only takes orders from individuals). Nothing is ordered in Portaus
+// and nothing is charged: the cart is re-priced from cms_saq.portaus_wines and emailed to the team
+// (MAIL_TO), who key the order into Portaus by hand and contact the customer.
 //
 // Nothing priced by the browser is trusted. The wine ids are the only thing the client is
 // believed about; names, formats, prices, fees and stock are read back from the catalogue, so
@@ -14,6 +15,7 @@
 import type { RequestHandler } from '@sveltejs/kit';
 import { json } from '@sveltejs/kit';
 import { sendMail } from '$lib/server/mail';
+import { createServiceClient } from '$lib/server/supabase';
 
 const ORGANIZATION_ID = 2;
 
@@ -107,7 +109,11 @@ export const POST: RequestHandler = async ({ request, locals }) => {
     }
 
     const type = payload.type;
-    if (type !== 'perso' && type !== 'resto') return bad('InvalidType', "type must be 'perso' or 'resto'");
+    if (type === 'perso') {
+        // Perso orders are created and paid through Portaus (/api/portaus/createPersoOrder).
+        return bad('PersoGoesThroughPortaus', 'Perso orders go through /api/portaus/createPersoOrder');
+    }
+    if (type !== 'resto') return bad('InvalidType', "type must be 'resto'");
 
     const items = (payload.items ?? []).filter((i) => toInt(i.caseQuantity) > 0);
     const customer = payload.customer;
@@ -202,7 +208,8 @@ export const POST: RequestHandler = async ({ request, locals }) => {
     // Branch pickup needs the branch named, or the team cannot action the request.
     let branchLabel = '—';
     if (deliveryType === 3) {
-        const { data: branch } = await locals.supabase
+        // saq_branches is only readable by signed-in CMS users (RLS): use the service client.
+        const { data: branch } = await createServiceClient()
             .schema('cms_saq')
             .from('saq_branches')
             .select('number, city, address')
@@ -213,8 +220,7 @@ export const POST: RequestHandler = async ({ request, locals }) => {
             : `introuvable (#${branchId})`;
     }
 
-    const deliveryLabel =
-        type === 'perso' ? 'Cueillette en succursale' : (RESTO_DELIVERY_TYPES[deliveryType] ?? `Type ${deliveryType}`);
+    const deliveryLabel = RESTO_DELIVERY_TYPES[deliveryType] ?? `Type ${deliveryType}`;
     const now = new Date();
     const reference = orderReference(type, now);
     const placedAt = now.toLocaleString('fr-CA', {
